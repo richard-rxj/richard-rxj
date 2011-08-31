@@ -6,45 +6,26 @@
 \usepackage{graphicx}
 \usepackage{epsfig}
 \usepackage[ruled,vlined]{algorithm2e}
+
 \begin{document}
-\title{Simulation Report}
-\author{Richard Ren}
-\maketitle
-\section{Network Model}
-\begin{itemize}
-\item $G(V,E)$ denote a rechargable wireless sensor network, in which contains $k$ source nodes $s_i$ and one sink node $T$, $1\leq i \leq k$ 
-\item Vertex $v$ denote a sensor node or sink, e.g. $v_i$ contains following properties:
-\begin{itemize}
-\item $axisx_i$, $axisy_i$ denote the physical location
-\item $d_i$ denote the maxrate limit
-\item $w_i$ denote the weight value
-\item $B_{v_i}(t+1)$ denote the budget energy limit  
-\end{itemize}
-\item Edge $e$ denote a communication link from node $u$ to node $v$, which contains following properties:
-\begin{itemize}
-\item $start(e)$ denote node $u$
-\item $end(e)$ denote node $v$
-\item $c(e)$ denote the energy limit of $e$
-\end{itemize}
-\end{itemize}
 
-\section{Linear Programming Formulation}
-\begin{center}
-$Max$ $\lambda $\\
-s. t. $\forall e\in E: \sum_{p\in P_e}{x(p)}\leq c(e) $\\
-s. t. $\forall v_j\in V: \sum_{p\in P_j }{x(p)}-\lambda d_j\geq 0  $\\
-s. t. $\forall p\in P: x(p)\geq 0$\\
-\end{center}
-\textbf{Comments:}\\
-\begin{itemize}
-\item $P$ denote the universal set of path $p$ \\
-\item $x(p)$ denote the rate value on path $p$ \\
-\item $P_e$ denote the subset of path $p$ which contains $e$\\
-\item $P_j$ denote the subset of path $p$ which from source node $s_j$ to sink $T$\\
-\end{itemize}
 
-\include{performance}
-\include{complexity}
+\section{Simulation studies}
+\subsection{Experimental setup}
+We evaluate the performance of our algorithm via simulation in this section.
+Our simulation setting is as follows. We randomly create $n$(ranged from $10$ to $100$) nodes
+on a $100*100$ $m^2$ square. The data sinks are also randomly located within this square. The data generating rate of each sensor is $0.5 Kbps$. The maximum transmission range of each sensor is $25 m$. For power consumption model, we set $e_{Rx} = 50$ $nJ/b$, $e_{Tx}$ $=$ $100$ $nJ/b$ Since nodes in our protocol do not 
+consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example \cite{E00P}. The total energy collected from a $37 * 33 mm^2$ solar cell over a 48-h period is $655.15 mWh$ for the sunny day and $313.70 mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19 J$ and $3.92 J$ with every $10 mins$ for a timeslot. We run each experiment over 20 different random topologies. For example when evaluating the impact of $\epsilon$, we create 20 different topologies with both nodes number and location at random, then run algorithms on each of them.\\
+We compare the performance and complexity of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}), in addition with limited Matlab linear programming solve(\textbf{Matlab}).
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{E00P.bib}
+\bibliography{E00M.bib}
+
+
 
 
 \end{document}
