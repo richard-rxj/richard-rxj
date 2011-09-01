@@ -267,7 +267,7 @@ public class WfMaxFlow {
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
-			double tRate=s.getMaxRate()*s.getWeight()/this.getSlotNum();
+			double tRate=s.getMaxRate()*s.getWeight()*this.getWfScaleFactor()/this.getSlotNum();
 			s.setMaxRate(tRate);
 		}
 		
@@ -357,7 +357,7 @@ public class WfMaxFlow {
 						 tRate=tRate+addRate;
 						 mRate=mRate-addRate;
 						 mSource.setRate(tRate);
-						 //mSource.setMaxRate(mRate);
+						 mSource.setMaxRate(mRate);
 					/*
 					 * end of update rates and length for next loop
 					 */

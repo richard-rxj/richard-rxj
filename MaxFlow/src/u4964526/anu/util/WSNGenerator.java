@@ -10,16 +10,16 @@ import java.util.Random;
 
 public class WSNGenerator {
 
-	private int gLength=5;                             //m
-	private int gWidth=5;                              //m
-	private double gTransRange=3;                           //m
+	private int gLength=100;                             //m
+	private int gWidth=100;                              //m
+	private double gTransRange=25;                           //m
 	private double gBaseNodeEnergy=50;                      //J
-	private double gFactorSend=0.02;                      //J/(b*m^4)
-	private double gFactorRecv=0.01;                      //J/b
-	private double[] gBaseMaxRate={1500};             //b/s
+	private double gFactorSend=0.00003;                      //J/b
+	private double gFactorRecv=0.00002;                      //J/b
+	private double[] gBaseMaxRate={100000};                     //bps
 	private double[] gBaseWeight={1,0.5,0.2};
-	private double[] gBaseBudgetEnergy={30};
-	private int gNodeNum=6;
+	private double[] gBaseBudgetEnergy={0.01365,0.00653};
+	private int gNodeNum=100;
 	
 	
 	public int getgLength() {
@@ -216,25 +216,21 @@ public class WSNGenerator {
 		this.gBaseBudgetEnergy = gBaseEdgeCapacity;
 	}
 
-
-
-
-
-
-
-	public Graph generateGraph() throws FileNotFoundException
+    
+	public Graph generateGraph(String f) throws FileNotFoundException
 	{
 		Graph g=new Graph();
 		Random r=new Random();
-		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+this.getgNodeNum()+".txt")));
-		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+this.getgNodeNum()+".txt")));
+		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
+		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
 		
 		for(int i=0;i<this.getgNodeNum();i++)
 		{
 			Vertex v=new Vertex(String.valueOf(i+1));
 			v.setMaxRate(this.getgBaseMaxRate()[r.nextInt(this.getgBaseMaxRate().length)]);
 			v.setWeight(this.getgBaseWeight()[r.nextInt(this.getgBaseWeight().length)]);
-			v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
+			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
+			v.setBudgetEnergy(this.gBaseBudgetEnergy[1]+r.nextDouble()*(this.gBaseBudgetEnergy[0]-this.gBaseBudgetEnergy[1]));
 			v.setxLabel(this.getgWidth()*r.nextDouble());
 			v.setyLabel(this.getgLength()*r.nextDouble());
 			g.addVertex(v);
@@ -311,14 +307,13 @@ public class WSNGenerator {
 			int[] tXSet={5,10,10,20,20,100,100};
 			int[] tYSet={5,10,10,20,20,100,100};
 			int[] tRangeSet={3,5,5,10,10,30,30};
-			for(int i=0;i<tNodeSet.length;i++)
+			Random r=new Random();
+			
+			for(int i=0;i<20;i++)
 			{
 				WSNGenerator tGenerator=new WSNGenerator();
-				tGenerator.setgNodeNum(tNodeSet[i]);
-				tGenerator.setgWidth(tXSet[i]);
-				tGenerator.setgLength(tYSet[i]);
-				tGenerator.setgTransRange(tRangeSet[i]);
-				tGenerator.generateGraph();
+				tGenerator.setgNodeNum((int)(10+r.nextDouble()*90));
+				tGenerator.generateGraph(String.valueOf(i));
 			}
 		}
 		catch(Exception e)
