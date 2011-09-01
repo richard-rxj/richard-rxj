@@ -14,17 +14,15 @@
 \subsection{Experimental setup}
 We evaluate the performance of our algorithm via simulation in this section.
 Our simulation setting is as follows. We randomly create $n$(ranged from $10$ to $100$) nodes
-on a $100*100$ $m^2$ square. The data sinks are also randomly located within this square. The maximum rate for each sensor is $100 Kbps$. The maximum transmission range of each sensor is $25 m$. For power consumption model, we set $e_{Rx} = 0.00002$ $J/b$, $e_{Tx}$ $=$ $0.00003$ $nJ/b$ \cite{Wire} Since nodes in our protocol do not 
-consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example \cite{Ste}. The total energy collected from a $37 * 33 mm^2$ solar cell over a 48-h period is $655.15 mWh$ for the sunny day and $313.70 mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19 J$ and $3.92 J$ with every $10 mins$ for a timeslot. We run each experiment over 20 different random topologies. For example when evaluating the impact of $\epsilon$, we create 20 different topologies with both nodes number and location at random, then run algorithms on each of them.\\
+on a $100*100$ $m^2$ square. The data sinks are also randomly located within this square. The maximum rate for each sensor is $100 Kbps$. The maximum transmission range of each sensor is $25 m$. For power consumption model, we set $e_{Rx} = 0.00002$ $J/b$, $e_{Tx}$ $=$ $0.00003$ $nJ/b$ Since nodes in our protocol do not 
+consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example . The total energy collected from a $37 * 33 mm^2$ solar cell over a 48-h period is $655.15 mWh$ for the sunny day and $313.70 mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19 J$ and $3.92 J$ with every $10 mins$ for a timeslot. We run each experiment over 20 different random topologies. For example when evaluating the impact of $\epsilon$, we create 20 different topologies with both nodes number and location at random, then run algorithms on each of them.\\
 We compare the performance and complexity of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}).
 
+\subsection{Impact of $\epsilon$ on Performance}
+
+\subsection{Convergence time}
 
 
-
-\bibliographystyle{plain}
-\bibliography{Maxi.bib}
-\bibliography{Wire.bib}
-\bibliography{Ste.bib}
 
 
 
