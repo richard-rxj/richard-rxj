@@ -303,17 +303,17 @@ public class WSNGenerator {
 	{
 		try
 		{
-			int[] tNodeSet={6,10,15,20,50,100,150};
+			int[] tNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
 			int[] tXSet={5,10,10,20,20,100,100};
 			int[] tYSet={5,10,10,20,20,100,100};
 			int[] tRangeSet={3,5,5,10,10,30,30};
 			Random r=new Random();
 			
-			for(int i=0;i<20;i++)
+			for(int i=0;i<tNodeSet.length;i++)
 			{
 				WSNGenerator tGenerator=new WSNGenerator();
-				tGenerator.setgNodeNum((int)(10+r.nextDouble()*90));
-				tGenerator.generateGraph(String.valueOf(i));
+				tGenerator.setgNodeNum(tNodeSet[i]);
+				tGenerator.generateGraph(String.valueOf(tNodeSet[i]));
 			}
 		}
 		catch(Exception e)

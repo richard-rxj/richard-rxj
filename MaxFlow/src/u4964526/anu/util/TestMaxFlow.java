@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +30,7 @@ public class TestMaxFlow {
 	 */
 	private static double eTx=0.00003;  //dB
 	private static double eRx=0.00002;  //dB
-	private static double apprFactor=0.2;
+	private static double apprFactor=0.1;
 
 	
 	public static double getApprFactor() {
@@ -248,195 +251,7 @@ public class TestMaxFlow {
 		
 	}
 	
-	private static void initRealData(String fileName1, String fileName2, String fileName3, Graph g, int wOption)
-	/*
-	 *  set all weight according to the weight file
-	 */
-	{
-		Logger logger=Logger.getLogger("MaxFlow");
-		String tempString=null;
-		BufferedReader reader=null;
-		
-		/*
-		 * begin of initial Vertices
-		 */
-		try
-		{
-		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName1)));
-		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null)
-		   {
-			   String[] b=tempString.split(" ");
-			   /*
-			    * begin of debug info
-			    */
-			   ++lineNum;
-			   logger.fine(String.valueOf(lineNum));
-			   logger.fine(tempString);
-			   String detail="detail:(";
-			   for(int i=0;i<b.length;i++)
-			   {
-				   detail=detail+"<"+i+"-"+b[i]+">";
-			   }
-			   detail=detail+")\n";
-			   logger.fine(detail);
-			   /*
-			    * end of debug info
-			    */
-			   Vertex v1=new Vertex(b[0]);
-			   v1.setxLabel(Double.parseDouble(b[1]));
-			   v1.setyLabel(Double.parseDouble(b[2]));
-			   v1.setMaxRate(TestMaxFlow.getVertexMaxRate());
-			   v1.setRate(0);
-			   g.addVertex(v1);
-			   if(Integer.parseInt(b[0])==4)
-			   {
-				   g.addSink(v1);
-			   }
-			   else
-			   {
-				   g.addSource(v1);
-			   }
-			   
-		   }
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			if(reader!=null)
-			{
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e)
-				{
-				}
-			}
-		}
-		/*
-		 * end of initial Vertices
-		 */
-		
-		/*
-		 * begin of initial Edges
-		 */
-		try
-		{
-		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName2)));
-		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null)
-		   {
-			   String[] b=tempString.split(" ");
-			   /*
-			    * begin of debug info
-			    */
-			   ++lineNum;
-			   logger.fine(String.valueOf(lineNum));
-			   logger.fine(tempString);
-			   String detail="detail:(";
-			   for(int i=0;i<b.length;i++)
-			   {
-				   detail=detail+"<"+i+"-"+b[i]+">";
-			   }
-			   detail=detail+")\n";
-			   logger.fine(detail);
-			   /*
-			    * end of debug info
-			    */
-			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0])-1);
-			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1])-1);
-			   double c1=TestMaxFlow.getEdgeCapacity();
-			   Edge e1=new Edge(s1,t1,c1);
-			   g.addEdge(e1);
-			   
-		   }
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			if(reader!=null)
-			{
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e)
-				{
-				}
-			}
-		}
-		/*
-		 * end of initial Edges
-		 */
-		
-		
-		/*
-		 * begin of initial Weights
-		 */
-		try
-		{
-		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
-		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null)
-		   {
-			   String[] b=tempString.split(" ");
-			   /*
-			    * begin of debug info
-			    */
-			   ++lineNum;
-			   logger.fine(String.valueOf(lineNum));
-			   logger.fine(tempString);
-			   String detail="detail:(";
-			   for(int i=0;i<b.length;i++)
-			   {
-				   detail=detail+"<"+i+"-"+b[i]+">";
-			   }
-			   detail=detail+")\n";
-			   logger.fine(detail);
-			   /*
-			    * end of debug info
-			    */
-			   Vertex v1=g.getVertexList().get(lineNum-1);
-			   if(wOption>0)
-			   {
-				   v1.setWeight(1);
-			   }
-			   else
-			   {
-				   v1.setWeight(Double.parseDouble(b[0]));   
-			   }
-			   
-			   
-		   }
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			if(reader!=null)
-			{
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e)
-				{
-				}
-			}
-		}
-		/*
-		 * end of initial Weights
-		 */
-	}
+	
 	
 	private static void mainTaskGrag(Graph g, PrintWriter pw) throws FileNotFoundException
 	{
@@ -636,118 +451,64 @@ public class TestMaxFlow {
 	}
 	
 	
-	private void storeRoom() throws SecurityException, IOException
+	public static void runningTask() throws SecurityException, IOException
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		FileHandler fh=new FileHandler("m.log");
 		fh.setFormatter(new SimpleFormatter());
 		fh.setLevel(Level.INFO);
-		logger.addHandler(fh);
+		//logger.addHandler(fh);
 		
-		
-		/*
-        *     real data
-        *
-		
-		String fileName1="/home/u4964526/workspace/MaxFlow/input/RealData/coordinate.txt";
-		String fileName2="/home/u4964526/workspace/MaxFlow/input/RealData/neighbor.txt";
-		String fileName3="/home/u4964526/workspace/MaxFlow/input/RealData/weight.txt";
-		
-		
-		PrintWriter pwGrag=new PrintWriter(new OutputStreamWriter(new FileOutputStream("/home/u4964526/workspace/MaxFlow/output/Grag_Real_rate1.txt")));  
-		Graph gGrag=new Graph();
-		TestMaxFlow.initRealData(fileName1, fileName2, fileName3, gGrag, pwDebug,1);
-		TestMaxFlow.mainTaskGrag(gGrag, pwGrag, pwDebug);
-	
-		PrintWriter pwWf=new PrintWriter(new OutputStreamWriter(new FileOutputStream("/home/u4964526/workspace/MaxFlow/output/WF_Real_rate1.txt")));  
-		Graph gWf=new Graph();
-		TestMaxFlow.initRealData(fileName1, fileName2, fileName3, gWf, pwDebug,1);
-		TestMaxFlow.mainTaskWF(gWf, pwWf, pwDebug);
-		/*
-		 * 
-		 */
-		
+				
 		/*
          *     random data
          */
-		int[] gNodeSet={6,10,15,20,50,100,150};
-		double[] gApprFactorSet={0.2,0.1,0.05};
-		//Calendar calendar=Calendar.getInstance();
-		String filePre="test/RandomNoWeight/";
-		PrintWriter pwGragRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"Grag_Random_Run.txt")));
-		PrintWriter pwWfRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"Wf_Random_Run.txt")));
+		PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running1.txt")));
 		long startTime=0;
 		long endTime=0;
-		int tLoop=0;
+		int gNode=0;
+		int[] gNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
 		
-		for(int i=0;i<gNodeSet.length;i++)
+		for(int i=10;i<gNodeSet.length;i++)
 		{
 			
-			int gNode=gNodeSet[i];
-			String fileName1="test/topology/vertex_"+gNode+".txt";
-			String fileName2="test/topology/edge_"+gNode+".txt";
-			
-			/*
-			 *  begin of matlab solve
-			 *
-			Graph gMatlab=new Graph();
-			TestMaxFlow.initRandomData(fileName1, fileName2, gMatlab,1);
-			MatlabMaxFlow matlabMaxFlow=new MatlabMaxFlow();
-			matlabMaxFlow.seteRx(eRx);
-			matlabMaxFlow.seteTx(eTx);
-			matlabMaxFlow.setMaxG(gMatlab);
-			matlabMaxFlow.computeLPMatlab("test/RandomNoWeight/");
-            /*
-             *  end of matlab solve
-             */
+			String fileName1="test/topology/vertex_"+gNodeSet[i]+".txt";
+			String fileName2="test/topology/edge_"+gNodeSet[i]+".txt";
 			
 			
-			/*
-			 * 
-			 */
-			for(int j=0;j<gApprFactorSet.length;j++)
-			{
-				//calendar.setTime(new Date());
-				int gApprFactor=(int)(gApprFactorSet[j]*1000);
-				TestMaxFlow.setApprFactor(gApprFactorSet[j]);
-
-
-			    /*
-				Graph gGrag=new Graph();
-				TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,1);
-				PrintWriter pwGrag=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"Grag_Random_rate_"+gNode+"_"+gApprFactor+".txt")));
-				TestMaxFlow.mainTaskGrag(gGrag, pwGrag);
-		        */
+			
+			
+			
 				
 				Graph gCon=new Graph();
 				TestMaxFlow.initRandomData(fileName1, fileName2, gCon,1);
-				PrintWriter pwCon=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"Concurrent_Random_rate_"+gNode+"_"+gApprFactor+".txt")));
+				GragMaxFlow mFlow=new GragMaxFlow();
+				mFlow.setMaxG(gCon);
+				mFlow.seteRx(eRx);
+				mFlow.seteTx(eTx);
+				mFlow.setApprFactor(apprFactor);
 				startTime=System.currentTimeMillis();
-				tLoop=TestMaxFlow.mainTaskConcurrent(gCon, pwCon);
+				mFlow.computeConcurrentFlow();
 				endTime=System.currentTimeMillis();
-				pwGragRun.println(gNode+" "+gApprFactor+" "+tLoop+" "+(endTime-startTime));
-				pwGragRun.flush();
+				pwRun.print(gNodeSet[i]+" "+(endTime-startTime));
+				pwRun.flush();
 				
-			    /*
+
+				
+				
 				Graph gWf=new Graph();
 				TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
-				PrintWriter pwWf=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"WF_Random_rate_"+gNode+"_"+gApprFactor+".txt")));
-				TestMaxFlow.mainTaskWF(gWf, pwWf);
-				*/
-				
-				
-				Graph gWf=new Graph();
-				TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
-				PrintWriter pwWf=new PrintWriter(new OutputStreamWriter(new FileOutputStream(filePre+"DWF_Random_rate_"+gNode+"_"+gApprFactor+".txt")));
+				WfMaxFlow wFlow=new WfMaxFlow();
+				wFlow.setMaxG(gWf);
+				wFlow.seteRx(eRx);
+				wFlow.seteTx(eTx);
+				wFlow.setApprFactor(apprFactor);
 				startTime=System.currentTimeMillis();
-				tLoop=TestMaxFlow.mainTaskDWF(gWf, pwWf);
+				wFlow.computeDWFFLow();
 				endTime=System.currentTimeMillis();
-				pwWfRun.println(gNode+" "+gApprFactor+" "+tLoop+" "+(endTime-startTime)+" ");
-				pwWfRun.flush();
-			}
-			/*
-			 * 
-			 */
+				pwRun.println(" "+(endTime-startTime)+" ");
+				pwRun.flush();
+			
 		}
 		/*
 		 * 
@@ -757,25 +518,36 @@ public class TestMaxFlow {
 		
 	}
 	
-	
-	public static void main(String[] args) {
+	private static void performanceTask()
+	{
+		class Performance
+		{
+			int nodeNum;
+		    double gragRate;
+		    double wfRate;
+		}
 		
 		try
 		{
-			double[] apprFactorSet={0.2,0.1,0.05};
+			double[] apprFactorSet={0.5,0.45,0.4,0.35,0.3,0.25,0.2,0.15,0.1,0.05};
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance.txt")));
 			for(int i=0;i<apprFactorSet.length;i++)
 			{
 				apprFactor=apprFactorSet[i];
-				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+apprFactorSet[i]+".txt")));
-				for(int j=0;j<20;j++)
+				ArrayList<Performance> gPSet=new ArrayList<Performance>();
+				//PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+apprFactorSet[i]+".txt")));
+				for(int j=100;j<101;j++)
 				{
+					//Performance gP=new Performance();
 					String fileName1="test/topology/vertex_"+j+".txt";
 					String fileName2="test/topology/edge_"+j+".txt";
 					GragMaxFlow gGrag=new GragMaxFlow();
 					Graph g1=new Graph();
 					TestMaxFlow.initRandomData(fileName1, fileName2, g1, 1);
-					pw.print(g1.getSourceList().size()+" ");
+					pw.print(apprFactorSet[i]+" ");
+					//pw.print(g1.getSourceList().size()+" ");
 					pw.flush();
+					//gP.nodeNum=g1.getSourceList().size();
 					gGrag.setMaxG(g1);
 					gGrag.seteRx(eRx);
 					gGrag.seteTx(eTx);
@@ -783,6 +555,7 @@ public class TestMaxFlow {
 					gGrag.computeConcurrentFlow();
 					pw.print(gGrag.getMaxG().getSourceList().get(0).getRate()+" ");
 					pw.flush();
+					//gP.gragRate=gGrag.getMaxG().getSourceList().get(0).getRate();
 					WfMaxFlow gWf=new WfMaxFlow();
 					Graph g2=new Graph();
 					TestMaxFlow.initRandomData(fileName1, fileName2, g2, 1);
@@ -793,7 +566,10 @@ public class TestMaxFlow {
 					gWf.computeDWFFLow();
 					pw.println(gWf.getMaxG().getSourceList().get(0).getRate());
 					pw.flush();
+					//gP.wfRate=gWf.getMaxG().getSourceList().get(0).getRate();
 				}
+				
+			
 			}
 		}
 		catch(Exception e)
@@ -801,7 +577,14 @@ public class TestMaxFlow {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	
 	
+	public static void main(String[] args) throws SecurityException, IOException {
+		
+		TestMaxFlow.runningTask();
+
+	}
 }

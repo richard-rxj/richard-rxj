@@ -220,7 +220,7 @@ public class Graph {
 	
 	public Path getSingleShortPath(Vertex source, Vertex sink)
 	{
-		HashMap<Vertex,Path> pSet=this.getShortPath(sink);
+		HashMap<Vertex,Path> pSet=this.getShortPathAndDSNode(sink);
 		Path p=pSet.get(source);
 		return p;
 	}

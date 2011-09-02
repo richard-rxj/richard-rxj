@@ -83,7 +83,7 @@ public class GragMaxFlow {
 	 * update the minpath length every loop
 	 */
 	{
-		//maxG.transit();
+		maxG.transit();
 		ArrayList<Edge> edgeList=maxG.getEdgeList();
 		ArrayList<Vertex> sourceList=maxG.getSourceList();
 		Vertex sink=maxG.getSinkList().get(0);
@@ -247,6 +247,10 @@ public class GragMaxFlow {
 
 				Vertex mSource=sourceList.get(i);
 				Path mPath=this.maxG.getSingleShortPath(mSource, sink);
+				if (mPath.getEdges().size()==0)
+				{
+					continue;
+				}
 				//double wd=mPath.getwULength();
 				
 				
