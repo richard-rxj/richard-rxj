@@ -4,8 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{epsfig}
-\usepackage[ruled,vlined]{algorithm2e}
+
 
 \begin{document}
 
@@ -14,30 +13,35 @@
 \subsection{Experimental setup}
 We evaluate the performance of our algorithm via simulation in this section.
 Our simulation setting is as follows. We randomly create $n$(ranged from $50$ to $150$) nodes
-on a $100*100$ $m^2$ square. The data sinks are also randomly located within this square. The maximum rate for each sensor is $100 Kbps$. The maximum transmission range of each sensor is $25 m$. For power consumption model, we set $e_{Rx} = 0.00002$ $J/b$, $e_{Tx}$ $=$ $0.00003$ $nJ/b$. Since nodes in our protocol do not 
-consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example . The total energy collected from a $37 * 33 mm^2$ solar cell over a 48-h period is $655.15 mWh$ for the sunny day and $313.70 mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19 J$ and $3.92 J$ with every $10 mins$ for a timeslot. We run each experiment over 20 different random topologies. For example when evaluating the impact of $\epsilon$, we create 20 different topologies with both nodes number and location at random, then run algorithms on each of them.\\
-We compare the performance and complexity of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}).
+on a $100*100\,m^2$ square ~\cite{Maxi}. The data sinks are also randomly located within this square. The maximum rate for each sensor is $100\,Kbps$. The maximum transmission range of each sensor is $25\,m$. For power consumption model, we set $e_{Rx} = 0.00002\,J/b$, $e_{Tx} = 0.00003\,nJ/b$ ~\cite{Wire}. Since nodes in our protocol do not 
+consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example ~\cite{Ste} . The total energy collected from a $37 * 33\,mm^2$ solar cell over a 48-h period is $655.15\,mWh$ for the sunny day and $313.70\,mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19\,J$ and $3.92\,J$ with every $10\,mins$ for a timeslot. We run each experiment over 20 different random topologies. For example when evaluating the impact of $\epsilon$, we create 20 different topologies randomly, then run algorithms on each of them.\\
+We compare the performance and running time of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}).
 
 \subsection{Impact of $\epsilon$ on Performance}
+
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{performance.pdf} 
+\includegraphics[scale=0.6]{performance.pdf} 
 \caption{Impact of $\epsilon$}
 \label{f1}
 \end{figure}
-First we show the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. From figure ~\ref{f1}, we observe that with the $\epsilon$ fall from 0.5 to 0.05, the performance between two algorithms are smaller. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter.
+
+First we show the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. From figure~\ref{f1}, we observe that with the $\epsilon$ fall from 0.5 to 0.05, the performance between two algorithms are smaller. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter.
 
 \subsection{Running time}
+
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.5]{running.pdf} 
+\includegraphics[scale=0.6]{running.pdf} 
 \caption{Comparison of running time}
 \label{f2}
 \end{figure}
-Figure ~\ref{f2} shows that the running time growth of both algorithms when the sensor nodes increaseing from 50 to 150. The result is obvious, the Garg and K\"{o}nemann's framework algorithm 
-grows much faster than our algorithm. Our explanation for such a phenomenon is as follow. the Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance.
+Figure~\ref{f2} shows that the running time growth of both algorithms when the sensor nodes increaseing from 50 to 150. Obviously, running time is a key feature especially in large-scale network. The result shows that the Garg and K\"{o}nemann's framework algorithm 
+grows much faster than our algorithm. Our explanation for such a phenomenon is as follow. The Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance. 
 
 
+\bibliographystyle{plain}
+\bibliography{Maxi,Ste,Wire}
 
 
 \end{document}
