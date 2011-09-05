@@ -52,8 +52,8 @@ public class GragMaxFlow {
 
 	public double getGragMinLength()
 	{
-		double z=(1+this.getApprFactor())*this.getMaxG().getEdgeList().size();
-		double x=(this.getApprFactor()+1)/Math.pow(z,(1/this.getApprFactor()));
+		double z=this.getMaxG().getEdgeList().size()/(1-this.getApprFactor());
+		double x=Math.pow(z,(-1/this.getApprFactor()));
 		return x;
 	}
 
