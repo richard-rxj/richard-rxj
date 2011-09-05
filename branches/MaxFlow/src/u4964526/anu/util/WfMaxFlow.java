@@ -10,20 +10,20 @@ public class WfMaxFlow {
 	 */
 	private double eTx;
 	private double eRx;
-	private double apprFactor;
+	private double epsilon;
 	private double wfScaleFactor;
-	private double wfMinLength;
-	private double slotNum=1;
-	private Graph maxG;
-	private HashMap<Vertex,Flow> maxFlow;
+	private double delta;
+	private double tau=1;
+	private Graph topology;
+	private HashMap<Vertex,Flow> fSolution;
 	
 	
 	
 
 	public WfMaxFlow() {
 		// TODO Auto-generated constructor stub
-		maxG=new Graph();
-		maxFlow=new HashMap<Vertex,Flow>();
+		topology=new Graph();
+		fSolution=new HashMap<Vertex,Flow>();
 	}
 
 	public double geteTx() {
@@ -43,24 +43,24 @@ public class WfMaxFlow {
 	}
 
 
-	public double getApprFactor() {
-		return apprFactor;
+	public double getEpsilon() {
+		return epsilon;
 	}
 
 
 
-	public void setApprFactor(double apprFactor) {
-		this.apprFactor = apprFactor;
-		double z=(1+apprFactor)*maxG.getEdgeList().size();
+	public void setEpsilon(double apprFactor) {
+		this.epsilon = apprFactor;
+		double z=(1+apprFactor)*topology.getEdgeList().size();
 		double x=(apprFactor+1)/Math.pow(z,(1/apprFactor));
 		double y=Math.log((1+apprFactor)/x)/Math.log(1+apprFactor);
         wfScaleFactor=y;
-		wfMinLength=x;
+		delta=x;
 	}
 
 	public double getWfMinlength()
 	{	
-		return wfMinLength;
+		return delta;
 	}
 
 
@@ -69,35 +69,35 @@ public class WfMaxFlow {
 	}
 
 
-	public double getSlotNum() {
-		return slotNum;
+	public double getTau() {
+		return tau;
 	}
 
-	public void setSlotNum(double slotNum) {
-		this.slotNum = slotNum;
+	public void setTau(double slotNum) {
+		this.tau = slotNum;
 	}
 
-	public HashMap<Vertex, Flow> getMaxFlow() {
-		return maxFlow;
+	public HashMap<Vertex, Flow> getFSolution() {
+		return fSolution;
 	}
 
 	
-	public void setMaxG(Graph maxG) {
-		this.maxG = maxG;
+	public void setTopology(Graph maxG) {
+		this.topology = maxG;
 	}
 
-	public Graph getMaxG() {
-		return maxG;
+	public Graph getTopology() {
+		return topology;
 	}
 	
 	
 	
 	public void computeWFFLow()
 	{
-		maxG.transit();
-		ArrayList<Edge> edgeList=maxG.getEdgeList();
-		ArrayList<Vertex> sourceList=maxG.getSourceList();
-		Vertex sink=maxG.getSinkList().get(0);
+		topology.transit();
+		ArrayList<Edge> edgeList=topology.getEdgeList();
+		ArrayList<Vertex> sourceList=topology.getSourceList();
+		Vertex sink=topology.getSinkList().get(0);
 		double gD=0;
 		
 		for(int i=0;i<edgeList.size();i++)
@@ -113,9 +113,9 @@ public class WfMaxFlow {
 			Vertex s=sourceList.get(i);
 			f.setStart(s);
 			f.setEnd(sink);
-			f.setMaxRate(s.getMaxRate()*s.getWeight()/this.getSlotNum());  //??????????????????????
+			f.setMaxRate(s.getMaxRate()*s.getWeight()/this.getTau());  //??????????????????????
 			f.setRate(0);
-			maxFlow.put(s, f);
+			fSolution.put(s, f);
 		}
 		
 		boolean w=false;
@@ -127,11 +127,11 @@ public class WfMaxFlow {
 		while(w)
 		{
 			w=false;
-			HashMap<Vertex,Path> tPathSet=this.maxG.getShortPathAndDSNode(sink);
-			double wfFactor=1;
-			for(int i=0;i<maxG.getEdgeList().size();i++)
+			HashMap<Vertex,Path> tPathSet=this.topology.getShortPathAndDSNode(sink);
+			double gLamda=1;
+			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
-				Edge te=maxG.getEdgeList().get(i);
+				Edge te=topology.getEdgeList().get(i);
 				if(te.isWasTreed())
 				{
 					double tsumMaxRate=0;
@@ -153,9 +153,9 @@ public class WfMaxFlow {
 					te.setWfFactor(tsumMaxRate);
 					if(te.isWasFaked())
 					{
-						if(wfFactor>twfFactor)
+						if(gLamda>twfFactor)
 						{
-							wfFactor=twfFactor;
+							gLamda=twfFactor;
 						}
 					}
 				}
@@ -167,20 +167,20 @@ public class WfMaxFlow {
 			++loopSum;
 			System.out.println("********Wfloop--"+loopSum+"*******\n");
 			System.out.println("********WfgD--"+gD+"*******\n");
-			System.out.println("********WfFactor--"+wfFactor+"*******\n");
+			System.out.println("********WfFactor--"+gLamda+"*******\n");
 			//System.out.println(this.getMaxG());
 			/*
 			 * end of debug info
 			 */
 			double gD1=gD;
 			gD=0;
-			for(int i=0;i<maxG.getEdgeList().size();i++)
+			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
-				Edge te=maxG.getEdgeList().get(i);
+				Edge te=topology.getEdgeList().get(i);
 				if(te.isWasTreed())
 				{
 					double tLength=te.getLength();
-					tLength=tLength*(1+this.getApprFactor()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfFactor()/te.getCapacity());
+					tLength=tLength*(1+this.getEpsilon()*(this.geteRx()+this.geteTx())*gLamda*te.getWfFactor()/te.getCapacity());
 					te.setLength(tLength);
 					te.setWasTreed(false);
 					te.getWfNodeSet().clear();
@@ -199,7 +199,7 @@ public class WfMaxFlow {
 				
 				
 
-				Flow f=maxFlow.get(mSource);
+				Flow f=fSolution.get(mSource);
 				if((gD1<1)&&(f.getMaxRate()>0))
 				{
 					/*
@@ -207,7 +207,7 @@ public class WfMaxFlow {
 					 */
 					 
 						 f.addPath(mPath);
-						 double addRate=wfFactor*f.getMaxRate();
+						 double addRate=gLamda*f.getMaxRate();
 						 w=true;
 						 double tRate=f.getRate();
 						 double mRate=f.getMaxRate();
@@ -236,9 +236,9 @@ public class WfMaxFlow {
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
-		    Flow f=maxFlow.get(s);	
+		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
-		    r=r*this.getSlotNum()/this.getWfScaleFactor();
+		    r=r*this.getTau()/this.getWfScaleFactor();
 		    f.setRate(r);
 		}
 		
@@ -250,10 +250,10 @@ public class WfMaxFlow {
 	
 	public int computeDWFFLow()
 	{
-		maxG.transit();
-		ArrayList<Edge> edgeList=maxG.getEdgeList();
-		ArrayList<Vertex> sourceList=maxG.getVertexList();
-		Vertex sink=maxG.getSinkList().get(0);
+		topology.transit();
+		ArrayList<Edge> edgeList=topology.getEdgeList();
+		ArrayList<Vertex> sourceList=topology.getVertexList();
+		Vertex sink=topology.getSinkList().get(0);
 		double gD=0;
 		
 		for(int i=0;i<edgeList.size();i++)
@@ -267,7 +267,7 @@ public class WfMaxFlow {
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
-			double tRate=s.getMaxRate()*s.getWeight()*this.getWfScaleFactor()/this.getSlotNum();
+			double tRate=s.getMaxRate()*s.getWeight()*this.getWfScaleFactor()/this.getTau();
 			s.setMaxRate(tRate);
 		}
 		
@@ -280,11 +280,11 @@ public class WfMaxFlow {
 		while(w)
 		{
 			w=false;
-			HashMap<Vertex,Path> tPathSet=this.maxG.getShortPathAndDSNode(sink);
+			HashMap<Vertex,Path> tPathSet=this.topology.getShortPathAndDSNode(sink);
 			double wfFactor=1;
-			for(int i=0;i<maxG.getEdgeList().size();i++)
+			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
-				Edge te=maxG.getEdgeList().get(i);
+				Edge te=topology.getEdgeList().get(i);
 				if(te.isWasTreed())
 				{
 					double tsumMaxRate=te.getWfFactor();
@@ -323,13 +323,13 @@ public class WfMaxFlow {
 			 */
 			double gD1=gD;
 			gD=0;
-			for(int i=0;i<maxG.getEdgeList().size();i++)
+			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
-				Edge te=maxG.getEdgeList().get(i);
+				Edge te=topology.getEdgeList().get(i);
 				if(te.isWasTreed())
 				{
 					double tLength=te.getLength();
-					tLength=tLength*(1+this.getApprFactor()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfFactor()/te.getCapacity());
+					tLength=tLength*(1+this.getEpsilon()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfFactor()/te.getCapacity());
 					te.setLength(tLength);
 					te.setWasTreed(false);
 					te.getWfNodeSet().clear();
@@ -378,7 +378,7 @@ public class WfMaxFlow {
 		{
 			Vertex s=sourceList.get(i);
 		    double r=s.getRate();
-		    r=r*this.getSlotNum()/this.getWfScaleFactor();
+		    r=r*this.getTau()/this.getWfScaleFactor();
 		    s.setRate(r);
 		}
 		return loopSum;
