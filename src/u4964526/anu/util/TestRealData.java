@@ -555,16 +555,16 @@ public class TestRealData {
 	    Graph g=new Graph();
 		TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
 		WfMaxFlow wFlow=new WfMaxFlow();
-	    wFlow.setMaxG(g);
+	    wFlow.setTopology(g);
 	    wFlow.seteRx(eRx);
 	    wFlow.seteTx(eTx);
-	    wFlow.setApprFactor(apprFactor);
-	    log.info(String.valueOf(wFlow.getMaxG()));
+	    wFlow.setEpsilon(apprFactor);
+	    log.info(String.valueOf(wFlow.getTopology()));
 	    wFlow.computeDWFFLow();
 	    
-	    for(int i=0;i<wFlow.getMaxG().getSourceList().size();i++)
+	    for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
         {
-        	Vertex tVertex=wFlow.getMaxG().getSourceList().get(i);
+        	Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
         	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
         	pw.flush();
         }
@@ -578,16 +578,16 @@ public class TestRealData {
 	    	g=new Graph();
 	    	TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
 	    	wFlow=new WfMaxFlow();
-	    	wFlow.setMaxG(g);
+	    	wFlow.setTopology(g);
 	    	wFlow.seteRx(eRx);
 	    	wFlow.seteTx(eTx);
-	    	wFlow.setApprFactor(apprFactor);
-	    	log.info(String.valueOf(wFlow.getMaxG()));
+	    	wFlow.setEpsilon(apprFactor);
+	    	log.info(String.valueOf(wFlow.getTopology()));
 	    	wFlow.computeDWFFLow();
 	    
-	    	for(int i=0;i<wFlow.getMaxG().getSourceList().size();i++)
+	    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
 	    	{
-	    		Vertex tVertex=wFlow.getMaxG().getSourceList().get(i);
+	    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
 	    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
 	    		pw.flush();
 	    	}

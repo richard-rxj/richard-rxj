@@ -257,10 +257,10 @@ public class TestMaxFlow {
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		GragMaxFlow mFlow=new GragMaxFlow();
-		mFlow.setMaxG(g);
+		mFlow.setTopology(g);
 				      
         
-        mFlow.setApprFactor(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -289,14 +289,14 @@ public class TestMaxFlow {
         /*
 		 * begin of debug info
 		 */
-		logger.info(String.valueOf(mFlow.getMaxG()));
+		logger.info(String.valueOf(mFlow.getTopology()));
         /*
          * end of debug info
          */
       
-        for(int i=0;i<mFlow.getMaxG().getSourceList().size();i++)
+        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
         {
-        	Vertex tVertex=mFlow.getMaxG().getSourceList().get(i);
+        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
         	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
         	pw.flush();
         }
@@ -306,10 +306,10 @@ public class TestMaxFlow {
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		GragMaxFlow mFlow=new GragMaxFlow();
-		mFlow.setMaxG(g);
+		mFlow.setTopology(g);
 				      
         
-        mFlow.setApprFactor(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -343,9 +343,9 @@ public class TestMaxFlow {
          * end of debug info
          */
       
-        for(int i=0;i<mFlow.getMaxG().getSourceList().size();i++)
+        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
         {
-        	Vertex tVertex=mFlow.getMaxG().getSourceList().get(i);
+        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
         	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
         	pw.flush();
         }
@@ -357,11 +357,11 @@ public class TestMaxFlow {
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		WfMaxFlow mFlow=new WfMaxFlow();
-    	mFlow.setMaxG(g);		
+    	mFlow.setTopology(g);		
 		
   
         
-        mFlow.setApprFactor(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -386,15 +386,15 @@ public class TestMaxFlow {
         /*
 		 * begin of debug info
 		 */
-		logger.info("!!!!!!!!!!!!!!!"+String.valueOf(mFlow.getMaxG()));
+		logger.info("!!!!!!!!!!!!!!!"+String.valueOf(mFlow.getTopology()));
         //pwDebug.flush();
         /*
          * end of debug info
          */
       
-        for(int i=0;i<mFlow.getMaxG().getSourceList().size();i++)
+        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
         {
-        	Vertex tVertex=mFlow.getMaxG().getSourceList().get(i);
+        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
         	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
         	pw.flush();
         }  
@@ -405,11 +405,11 @@ public class TestMaxFlow {
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		WfMaxFlow mFlow=new WfMaxFlow();
-    	mFlow.setMaxG(g);		
+    	mFlow.setTopology(g);		
 		
   
         
-        mFlow.setApprFactor(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -434,15 +434,15 @@ public class TestMaxFlow {
         /*
 		 * begin of debug info
 		 */
-		logger.info("!!!!!!!!!!!!!!!"+String.valueOf(mFlow.getMaxG()));
+		logger.info("!!!!!!!!!!!!!!!"+String.valueOf(mFlow.getTopology()));
         //pwDebug.flush();
         /*
          * end of debug info
          */
       
-        for(int i=0;i<mFlow.getMaxG().getSourceList().size();i++)
+        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
         {
-        	Vertex tVertex=mFlow.getMaxG().getSourceList().get(i);
+        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
         	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
         	pw.flush();
         }  
@@ -483,10 +483,10 @@ public class TestMaxFlow {
 				Graph gCon=new Graph();
 				TestMaxFlow.initRandomData(fileName1, fileName2, gCon,1);
 				GragMaxFlow mFlow=new GragMaxFlow();
-				mFlow.setMaxG(gCon);
+				mFlow.setTopology(gCon);
 				mFlow.seteRx(eRx);
 				mFlow.seteTx(eTx);
-				mFlow.setApprFactor(apprFactor);
+				mFlow.setEpsilon(apprFactor);
 				startTime=System.currentTimeMillis();
 				mFlow.computeConcurrentFlow();
 				endTime=System.currentTimeMillis();
@@ -499,10 +499,10 @@ public class TestMaxFlow {
 				Graph gWf=new Graph();
 				TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
 				WfMaxFlow wFlow=new WfMaxFlow();
-				wFlow.setMaxG(gWf);
+				wFlow.setTopology(gWf);
 				wFlow.seteRx(eRx);
 				wFlow.seteTx(eTx);
-				wFlow.setApprFactor(apprFactor);
+				wFlow.setEpsilon(apprFactor);
 				startTime=System.currentTimeMillis();
 				wFlow.computeDWFFLow();
 				endTime=System.currentTimeMillis();
@@ -548,23 +548,23 @@ public class TestMaxFlow {
 					//pw.print(g1.getSourceList().size()+" ");
 					pw.flush();
 					//gP.nodeNum=g1.getSourceList().size();
-					gGrag.setMaxG(g1);
+					gGrag.setTopology(g1);
 					gGrag.seteRx(eRx);
 					gGrag.seteTx(eTx);
-					gGrag.setApprFactor(apprFactor);
+					gGrag.setEpsilon(apprFactor);
 					gGrag.computeConcurrentFlow();
-					pw.print(gGrag.getMaxG().getSourceList().get(0).getRate()+" ");
+					pw.print(gGrag.getTopology().getSourceList().get(0).getRate()+" ");
 					pw.flush();
 					//gP.gragRate=gGrag.getMaxG().getSourceList().get(0).getRate();
 					WfMaxFlow gWf=new WfMaxFlow();
 					Graph g2=new Graph();
 					TestMaxFlow.initRandomData(fileName1, fileName2, g2, 1);
-					gWf.setMaxG(g2);
+					gWf.setTopology(g2);
 					gWf.seteRx(eRx);
 					gWf.seteTx(eTx);
-					gWf.setApprFactor(apprFactor);
+					gWf.setEpsilon(apprFactor);
 					gWf.computeDWFFLow();
-					pw.println(gWf.getMaxG().getSourceList().get(0).getRate());
+					pw.println(gWf.getTopology().getSourceList().get(0).getRate());
 					pw.flush();
 					//gP.wfRate=gWf.getMaxG().getSourceList().get(0).getRate();
 				}

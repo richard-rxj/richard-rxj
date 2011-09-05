@@ -10,17 +10,17 @@ public class GragMaxFlow {
 	 */
 	private double eTx;
 	private double eRx;
-	private double apprFactor;
-	private Graph maxG;
-	private HashMap<Vertex,Flow> maxFlow;
+	private double epsilon;
+	private Graph topology;
+	private HashMap<Vertex,Flow> fSolution;
 	
 	
 	
 
 	public GragMaxFlow() {
 		// TODO Auto-generated constructor stub
-		maxG=new Graph();
-		maxFlow=new HashMap<Vertex,Flow>();
+		topology=new Graph();
+		fSolution=new HashMap<Vertex,Flow>();
 	}
 
 	public double geteTx() {
@@ -40,41 +40,41 @@ public class GragMaxFlow {
 	}
 
 
-	public double getApprFactor() {
-		return apprFactor;
+	public double getEpsilon() {
+		return epsilon;
 	}
 
 
 
-	public void setApprFactor(double apprFactor) {
-		this.apprFactor = apprFactor;
+	public void setEpsilon(double apprFactor) {
+		this.epsilon = apprFactor;
 	}
 
-	public double getGragMinLength()
+	public double getDelta()
 	{
-		double z=this.getMaxG().getEdgeList().size()/(1-this.getApprFactor());
-		double x=Math.pow(z,(-1/this.getApprFactor()));
+		double z=this.getTopology().getEdgeList().size()/(1-this.getEpsilon());
+		double x=Math.pow(z,(-1/this.getEpsilon()));
 		return x;
 	}
 
 
 	public double getGragScaleFactor() {
-		double y=Math.log(1/this.getGragMinLength())/Math.log(1+this.getApprFactor());
+		double y=Math.log(1/this.getDelta())/Math.log(1+this.getEpsilon());
 		return y;
 	}
 
 
-	public HashMap<Vertex, Flow> getMaxFlow() {
-		return maxFlow;
+	public HashMap<Vertex, Flow> getFSolution() {
+		return fSolution;
 	}
 
 	
-	public void setMaxG(Graph maxG) {
-		this.maxG = maxG;
+	public void setTopology(Graph maxG) {
+		this.topology = maxG;
 	}
 
-	public Graph getMaxG() {
-		return maxG;
+	public Graph getTopology() {
+		return topology;
 	}
 	
 	
@@ -83,14 +83,14 @@ public class GragMaxFlow {
 	 * update the minpath length every loop
 	 */
 	{
-		maxG.transit();
-		ArrayList<Edge> edgeList=maxG.getEdgeList();
-		ArrayList<Vertex> sourceList=maxG.getSourceList();
-		Vertex sink=maxG.getSinkList().get(0);
+		topology.transit();
+		ArrayList<Edge> edgeList=topology.getEdgeList();
+		ArrayList<Vertex> sourceList=topology.getSourceList();
+		Vertex sink=topology.getSinkList().get(0);
 		
 		for(int i=0;i<edgeList.size();i++)
 		{
-			double mlTemp=this.getGragMinLength()/edgeList.get(i).getCapacity();
+			double mlTemp=this.getDelta()/edgeList.get(i).getCapacity();
 			edgeList.get(i).setLength(mlTemp);
 		}
 		
@@ -102,7 +102,7 @@ public class GragMaxFlow {
 			f.setEnd(sink);
 			f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());
 			f.setRate(0);
-			maxFlow.put(s, f);
+			fSolution.put(s, f);
 		}
 		
 		boolean w=true;
@@ -114,8 +114,8 @@ public class GragMaxFlow {
 			{
 
 				Vertex mSource=sourceList.get(i);
-                Flow f=maxFlow.get(mSource);
-				Path mPath=this.maxG.getSingleShortPath(mSource, sink);
+                Flow f=fSolution.get(mSource);
+				Path mPath=this.topology.getSingleShortPath(mSource, sink);
 				double wd=mPath.getwULength();;
 				while((wd<1)&&(f.getMaxRate()>0))
 				{
@@ -149,7 +149,7 @@ public class GragMaxFlow {
 							 if(addRate<f.getMaxRate())
 							 {
 								 w=true;
-								 double tFactor=this.getApprFactor()*mPath.getBottleNeck();
+								 double tFactor=this.getEpsilon()*mPath.getBottleNeck();
 								 mPath.updateLength(tFactor);
 								 mPath.updateRealCap(mPath.getBottleNeck()/this.getGragScaleFactor());    //only for debug
 								 double tRate=f.getRate();
@@ -163,7 +163,7 @@ public class GragMaxFlow {
 							 {
 								 
 								 w=true;
-								 double tFactor=this.getApprFactor()*f.getMaxRate()*(this.geteRx()+this.geteTx());
+								 double tFactor=this.getEpsilon()*f.getMaxRate()*(this.geteRx()+this.geteTx());
 								 mPath.updateLength(tFactor);
 								 mPath.updateRealCap(f.getMaxRate()*(this.geteRx()+this.geteTx())/this.getGragScaleFactor());   //only for debug
 								 double tRate=f.getRate();
@@ -181,7 +181,7 @@ public class GragMaxFlow {
 						 */
 					
 					
-					mPath=this.maxG.getSingleShortPath(mSource, sink);
+					mPath=this.topology.getSingleShortPath(mSource, sink);
 					wd=mPath.getwULength();
 				}
 			}
@@ -193,7 +193,7 @@ public class GragMaxFlow {
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
-		    Flow f=maxFlow.get(s);	
+		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
 		    r=r/this.getGragScaleFactor();
 		    f.setRate(r);
@@ -210,17 +210,17 @@ public class GragMaxFlow {
 	 * concurrent!!!!!!!!   
 	 */
 	{
-		maxG.transit();
-		ArrayList<Edge> edgeList=maxG.getEdgeList();
-		ArrayList<Vertex> sourceList=maxG.getSourceList();
-		Vertex sink=maxG.getSinkList().get(0);
+		topology.transit();
+		ArrayList<Edge> edgeList=topology.getEdgeList();
+		ArrayList<Vertex> sourceList=topology.getSourceList();
+		Vertex sink=topology.getSinkList().get(0);
 		double gD=0;
 		
 		for(int i=0;i<edgeList.size();i++)
 		{
-			double mlTemp=this.getGragMinLength()/edgeList.get(i).getCapacity();
+			double mlTemp=this.getDelta()/edgeList.get(i).getCapacity();
 			edgeList.get(i).setLength(mlTemp);
-			gD=gD+this.getGragMinLength();
+			gD=gD+this.getDelta();
 		}
 		
 		for(int i=0;i<sourceList.size();i++)
@@ -231,7 +231,7 @@ public class GragMaxFlow {
 			f.setEnd(sink);
 			f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());
 			f.setRate(0);
-			maxFlow.put(s, f);
+			fSolution.put(s, f);
 		}
 		boolean w=false;
 		if(gD<1)
@@ -246,7 +246,7 @@ public class GragMaxFlow {
 			{
 
 				Vertex mSource=sourceList.get(i);
-				Path mPath=this.maxG.getSingleShortPath(mSource, sink);
+				Path mPath=this.topology.getSingleShortPath(mSource, sink);
 				if (mPath.getEdges().size()==0)
 				{
 					continue;
@@ -265,7 +265,7 @@ public class GragMaxFlow {
 				 * end of debug info
 				 */
 				
-                Flow f=maxFlow.get(mSource);
+                Flow f=fSolution.get(mSource);
 				if((gD<1)&&(f.getMaxRate()>0))
 				{
 					/*
@@ -281,7 +281,7 @@ public class GragMaxFlow {
 							 /*
 							  * begin of update length and gD
 							  */
-							 double tFactor=this.getApprFactor()*mPath.getBottleNeck();
+							 double tFactor=this.getEpsilon()*mPath.getBottleNeck();
 							 mPath.updateLength(tFactor);
 							 for(int ti=0;ti<edgeList.size();ti++)
 							 {
@@ -307,7 +307,7 @@ public class GragMaxFlow {
 								 /*
 								  * begin of update length and gD
 								  */
-								 double tFactor=this.getApprFactor()*f.getMaxRate()*(this.geteRx()+this.geteTx());
+								 double tFactor=this.getEpsilon()*f.getMaxRate()*(this.geteRx()+this.geteTx());
 								 mPath.updateLength(tFactor);
 								 for(int ti=0;ti<edgeList.size();ti++)
 								 {
@@ -346,7 +346,7 @@ public class GragMaxFlow {
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
-		    Flow f=maxFlow.get(s);	
+		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
 		    r=r/this.getGragScaleFactor();
 		    f.setRate(r);
