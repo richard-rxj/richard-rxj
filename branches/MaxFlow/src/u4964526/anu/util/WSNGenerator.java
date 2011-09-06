@@ -14,8 +14,8 @@ public class WSNGenerator {
 	private int gWidth=100;                              //m
 	private double gTransRange=25;                           //m
 	private double gBaseNodeEnergy=50;                      //J
-	private double gFactorSend=0.00003;                      //J/b
-	private double gFactorRecv=0.00002;                      //J/b
+	private double gFactorSend=0.0000144;                      //J/b
+	private double gFactorRecv=0.00000576;                      //J/b
 	private double[] gBaseMaxRate={100000};                     //bps
 	private double[] gBaseWeight={1,0.5,0.2};
 	private double[] gBaseBudgetEnergy={0.01365,0.00653};
