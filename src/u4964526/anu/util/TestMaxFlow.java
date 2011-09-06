@@ -28,17 +28,17 @@ public class TestMaxFlow {
 	/**
 	 * @param args
 	 */
-	private static double eTx=0.00003;  //dB
-	private static double eRx=0.00002;  //dB
-	private static double apprFactor=0.1;
+	private static double eTx=0.0000144;  //dB
+	private static double eRx=0.00000576;  //dB
+	private static double epsilon=0.1;
 
 	
-	public static double getApprFactor() {
-		return apprFactor;
+	public static double getEpsilon() {
+		return epsilon;
 	}
 
-	public static void setApprFactor(double apprFactor) {
-		TestMaxFlow.apprFactor = apprFactor;
+	public static void setEpsilon(double apprFactor) {
+		TestMaxFlow.epsilon = apprFactor;
 	}
 
 	private static double getEdgeCapacity()
@@ -260,7 +260,7 @@ public class TestMaxFlow {
 		mFlow.setTopology(g);
 				      
         
-        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -309,7 +309,7 @@ public class TestMaxFlow {
 		mFlow.setTopology(g);
 				      
         
-        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -361,7 +361,7 @@ public class TestMaxFlow {
 		
   
         
-        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -409,7 +409,7 @@ public class TestMaxFlow {
 		
   
         
-        mFlow.setEpsilon(TestMaxFlow.getApprFactor());
+        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
         mFlow.seteRx(eRx);
         mFlow.seteTx(eTx);
         
@@ -486,7 +486,7 @@ public class TestMaxFlow {
 				mFlow.setTopology(gCon);
 				mFlow.seteRx(eRx);
 				mFlow.seteTx(eTx);
-				mFlow.setEpsilon(apprFactor);
+				mFlow.setEpsilon(epsilon);
 				startTime=System.currentTimeMillis();
 				mFlow.computeConcurrentFlow();
 				endTime=System.currentTimeMillis();
@@ -502,7 +502,7 @@ public class TestMaxFlow {
 				wFlow.setTopology(gWf);
 				wFlow.seteRx(eRx);
 				wFlow.seteTx(eTx);
-				wFlow.setEpsilon(apprFactor);
+				wFlow.setEpsilon(epsilon);
 				startTime=System.currentTimeMillis();
 				wFlow.computeDWFFLow();
 				endTime=System.currentTimeMillis();
@@ -533,7 +533,7 @@ public class TestMaxFlow {
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance.txt")));
 			for(int i=0;i<apprFactorSet.length;i++)
 			{
-				apprFactor=apprFactorSet[i];
+				epsilon=apprFactorSet[i];
 				ArrayList<Performance> gPSet=new ArrayList<Performance>();
 				//PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+apprFactorSet[i]+".txt")));
 				for(int j=100;j<101;j++)
@@ -551,7 +551,7 @@ public class TestMaxFlow {
 					gGrag.setTopology(g1);
 					gGrag.seteRx(eRx);
 					gGrag.seteTx(eTx);
-					gGrag.setEpsilon(apprFactor);
+					gGrag.setEpsilon(epsilon);
 					gGrag.computeConcurrentFlow();
 					pw.print(gGrag.getTopology().getSourceList().get(0).getRate()+" ");
 					pw.flush();
@@ -562,7 +562,7 @@ public class TestMaxFlow {
 					gWf.setTopology(g2);
 					gWf.seteRx(eRx);
 					gWf.seteTx(eTx);
-					gWf.setEpsilon(apprFactor);
+					gWf.setEpsilon(epsilon);
 					gWf.computeDWFFLow();
 					pw.println(gWf.getTopology().getSourceList().get(0).getRate());
 					pw.flush();

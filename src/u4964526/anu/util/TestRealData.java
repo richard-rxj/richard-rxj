@@ -17,20 +17,20 @@ public class TestRealData {
 	/**
 	 * @param args
 	 */
-	private static double eTx=0.00003;  //dB
-	private static double eRx=0.00002;  //dB
-	private static double apprFactor=0.1;
+	private static double eTx=0.0000144;  //dB
+	private static double eRx=0.00000576;  //dB
+	private static double epsilon=0.1;
 	private static double[] gBaseBudgetEnergy={0.01365,0.00653};
 	private static double[] gBaseMaxRate={100000};
 	private static double transRange=25;
 
 	
-	public static double getApprFactor() {
-		return apprFactor;
+	public static double getEpsilon() {
+		return epsilon;
 	}
 
-	public static void setApprFactor(double apprFactor) {
-		apprFactor = apprFactor;
+	public static void setEpsilon(double apprFactor) {
+		epsilon = apprFactor;
 	}
 
 	private static double getBudgetEnergy()
@@ -558,7 +558,7 @@ public class TestRealData {
 	    wFlow.setTopology(g);
 	    wFlow.seteRx(eRx);
 	    wFlow.seteTx(eTx);
-	    wFlow.setEpsilon(apprFactor);
+	    wFlow.setEpsilon(epsilon);
 	    log.info(String.valueOf(wFlow.getTopology()));
 	    wFlow.computeDWFFLow();
 	    
