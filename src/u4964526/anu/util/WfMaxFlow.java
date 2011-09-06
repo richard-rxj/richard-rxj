@@ -94,7 +94,7 @@ public class WfMaxFlow {
 	
 	public void computeWFFLow()
 	{
-		topology.transit();
+		//topology.transit();
 		ArrayList<Edge> edgeList=topology.getEdgeList();
 		ArrayList<Vertex> sourceList=topology.getSourceList();
 		Vertex sink=topology.getSinkList().get(0);
@@ -298,7 +298,7 @@ public class WfMaxFlow {
 					}
 					
 					
-					
+					/*
 					if(te.isWasFaked())
 					{
 						if(wfFactor>twfFactor)
@@ -306,7 +306,7 @@ public class WfMaxFlow {
 							wfFactor=twfFactor;
 						}
 					}
-					
+					*/
 				}
 			}
 			

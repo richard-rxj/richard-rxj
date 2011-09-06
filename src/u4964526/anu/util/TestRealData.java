@@ -35,9 +35,9 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		Random r=new Random();
-		return gBaseBudgetEnergy[1]+r.nextDouble()*(gBaseBudgetEnergy[0]-gBaseBudgetEnergy[1]);
-		
+		//Random r=new Random();
+		//return gBaseBudgetEnergy[1]+r.nextDouble()*(gBaseBudgetEnergy[0]-gBaseBudgetEnergy[1]);
+		return 0.00653;
 	}
 
    private static double getVertexMaxRate()
@@ -526,9 +526,9 @@ public class TestRealData {
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		Logger log=Logger.getLogger("TestReal");
-		String fileName1="test/real/topology.txt";
-	    String fileName2="test/real/neighbor.txt";
-	    String fileName3="test/real/weight.txt";
+		String fileName1="test/real/topology-20.txt";
+	    String fileName2="test/real/neighbor-20.txt";
+	    String fileName3="test/real/weight-20.txt";
 		
 	    /*
 	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/Grate-0.txt")));
@@ -551,7 +551,7 @@ public class TestRealData {
         */
 	    
 
-	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-10.txt")));
+	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-1.txt")));
 	    Graph g=new Graph();
 		TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
 		WfMaxFlow wFlow=new WfMaxFlow();
@@ -569,7 +569,8 @@ public class TestRealData {
         	pw.flush();
         }
 	    
-	    double[] rouSet={0.9};
+	    
+	    double[] rouSet={0.9,0.8,0.7,0.6,0.5};
 	    
 	    for (int r=0;r<rouSet.length;r++)
 	    {
@@ -577,11 +578,11 @@ public class TestRealData {
 	    	pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-"+rou+".txt")));
 	    	g=new Graph();
 	    	TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
-	    	wFlow=new WfMaxFlow();
+	    	//wFlow=new WfMaxFlow();
 	    	wFlow.setTopology(g);
-	    	wFlow.seteRx(eRx);
-	    	wFlow.seteTx(eTx);
-	    	wFlow.setEpsilon(apprFactor);
+	    	//wFlow.seteRx(eRx);
+	    	//wFlow.seteTx(eTx);
+	    	//wFlow.setEpsilon(apprFactor);
 	    	log.info(String.valueOf(wFlow.getTopology()));
 	    	wFlow.computeDWFFLow();
 	    
@@ -592,6 +593,7 @@ public class TestRealData {
 	    		pw.flush();
 	    	}
 	    }
+	    
 	}
 
 }
