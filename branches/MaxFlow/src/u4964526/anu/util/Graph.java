@@ -399,7 +399,7 @@ public class Graph {
 			
 			/*
 			 * begin of debug info
-			 *
+			 */
 			System.out.println(p1);
 			/*
 			 * end of debug info
