@@ -12,13 +12,13 @@ public class WSNGenerator {
 
 	private int gLength=100;                             //m
 	private int gWidth=100;                              //m
-	private double gTransRange=25;                           //m
-	private double gBaseNodeEnergy=50;                      //J
-	private double gFactorSend=0.0000144;                      //J/b
-	private double gFactorRecv=0.00000576;                      //J/b
-	private double[] gBaseMaxRate={100000};                     //bps
-	private double[] gBaseWeight={1,0.5,0.2};
-	private double[] gBaseBudgetEnergy={0.01365,0.00653};
+	private double gRadius=25;                           //m
+	private double gInitialEnergy=50;                      //J
+	private double gETx=0.0000144;                      //J/b
+	private double gERx=0.00000576;                      //J/b
+	private double[] gMaxRate={100000};                     //bps
+	private double[] gWeight={1,0.5,0.2};
+	private double[] gBudgetEnergy={0.01365,0.00653};
 	private int gNodeNum=100;
 	
 	
@@ -62,8 +62,8 @@ public class WSNGenerator {
 
 
 
-	public double getgTransRange() {
-		return gTransRange;
+	public double getgRadius() {
+		return gRadius;
 	}
 
 
@@ -72,8 +72,8 @@ public class WSNGenerator {
 
 
 
-	public void setgTransRange(double gTransRange) {
-		this.gTransRange = gTransRange;
+	public void setgRadius(double gTransRange) {
+		this.gRadius = gTransRange;
 	}
 
 
@@ -82,8 +82,8 @@ public class WSNGenerator {
 
 
 
-	public double getgBaseNodeEnergy() {
-		return gBaseNodeEnergy;
+	public double getgInitialEnergy() {
+		return gInitialEnergy;
 	}
 
 
@@ -92,8 +92,8 @@ public class WSNGenerator {
 
 
 
-	public void setgBaseNodeEnergy(double gBaseNodeEnergy) {
-		this.gBaseNodeEnergy = gBaseNodeEnergy;
+	public void setgInitialEnergy(double gBaseNodeEnergy) {
+		this.gInitialEnergy = gBaseNodeEnergy;
 	}
 
 
@@ -102,8 +102,8 @@ public class WSNGenerator {
 
 
 
-	public double getgFactorSend() {
-		return gFactorSend;
+	public double getgETx() {
+		return gETx;
 	}
 
 
@@ -112,8 +112,8 @@ public class WSNGenerator {
 
 
 
-	public void setgFactorSend(double gFactorSend) {
-		this.gFactorSend = gFactorSend;
+	public void setgETx(double gFactorSend) {
+		this.gETx = gFactorSend;
 	}
 
 
@@ -122,8 +122,8 @@ public class WSNGenerator {
 
 
 
-	public double getgFactorRecv() {
-		return gFactorRecv;
+	public double getgERx() {
+		return gERx;
 	}
 
 
@@ -132,8 +132,8 @@ public class WSNGenerator {
 
 
 
-	public void setgFactorRecv(double gFactorRecv) {
-		this.gFactorRecv = gFactorRecv;
+	public void setgERx(double gFactorRecv) {
+		this.gERx = gFactorRecv;
 	}
 
 
@@ -142,8 +142,8 @@ public class WSNGenerator {
 
 
 
-	public double[] getgBaseMaxRate() {
-		return gBaseMaxRate;
+	public double[] getgMaxRate() {
+		return gMaxRate;
 	}
 
 
@@ -152,8 +152,8 @@ public class WSNGenerator {
 
 
 
-	public void setgBaseMaxRate(double[] gBaseMaxRate) {
-		this.gBaseMaxRate = gBaseMaxRate;
+	public void setgMaxRate(double[] gBaseMaxRate) {
+		this.gMaxRate = gBaseMaxRate;
 	}
 
 
@@ -162,8 +162,8 @@ public class WSNGenerator {
 
 
 
-	public double[] getgBaseWeight() {
-		return gBaseWeight;
+	public double[] getgWeight() {
+		return gWeight;
 	}
 
 
@@ -172,8 +172,8 @@ public class WSNGenerator {
 
 
 
-	public void setgBaseWeight(double[] gBaseWeight) {
-		this.gBaseWeight = gBaseWeight;
+	public void setgWeight(double[] gBaseWeight) {
+		this.gWeight = gBaseWeight;
 	}
 
 
@@ -202,8 +202,8 @@ public class WSNGenerator {
 
 
 
-	public double[] getgBaseEdgeCapacity() {
-		return gBaseBudgetEnergy;
+	public double[] getgBudgetEnergy() {
+		return gBudgetEnergy;
 	}
 
 
@@ -212,8 +212,8 @@ public class WSNGenerator {
 
 
 
-	public void setgBaseEdgeCapacity(double[] gBaseEdgeCapacity) {
-		this.gBaseBudgetEnergy = gBaseEdgeCapacity;
+	public void setgBudgetEnergy(double[] gBaseEdgeCapacity) {
+		this.gBudgetEnergy = gBaseEdgeCapacity;
 	}
 
     
@@ -227,10 +227,10 @@ public class WSNGenerator {
 		for(int i=0;i<this.getgNodeNum();i++)
 		{
 			Vertex v=new Vertex(String.valueOf(i+1));
-			v.setMaxRate(this.getgBaseMaxRate()[r.nextInt(this.getgBaseMaxRate().length)]);
-			v.setWeight(this.getgBaseWeight()[r.nextInt(this.getgBaseWeight().length)]);
+			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
+			v.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
-			v.setBudgetEnergy(this.gBaseBudgetEnergy[1]+r.nextDouble()*(this.gBaseBudgetEnergy[0]-this.gBaseBudgetEnergy[1]));
+			v.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
 			v.setxLabel(this.getgWidth()*r.nextDouble());
 			v.setyLabel(this.getgLength()*r.nextDouble());
 			g.addVertex(v);
@@ -290,7 +290,7 @@ public class WSNGenerator {
 		double result=0;
 		double c1=Math.pow((v1.getxLabel()-v2.getxLabel()),2);
 		double c2=Math.pow((v1.getyLabel()-v2.getyLabel()),2);
-		double o=Math.pow(this.getgTransRange(),2);
+		double o=Math.pow(this.getgRadius(),2);
 		if(c1+c2<o)
 		{
 			result=c1+c2;
