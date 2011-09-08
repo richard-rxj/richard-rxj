@@ -17,7 +17,7 @@ public class WSNGenerator {
 	private double gETx=0.0000144;                      //J/b
 	private double gERx=0.00000576;                      //J/b
 	private double[] gMaxRate={100000};                     //bps
-	private double[] gWeight={1,0.5,0.2};
+	private double[] gWeight={1,0.7,0.5};
 	private double[] gBudgetEnergy={0.01365,0.00653};
 	private int gNodeNum=100;
 	
@@ -221,8 +221,8 @@ public class WSNGenerator {
 	{
 		Graph g=new Graph();
 		Random r=new Random();
-		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
-		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
+		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/Rvertex_"+f+".txt")));
+		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/Redge_"+f+".txt")));
 		
 		for(int i=0;i<this.getgNodeNum();i++)
 		{
@@ -304,10 +304,10 @@ public class WSNGenerator {
 		try
 		{
 			int[] tNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
-			int[] tXSet={5,10,10,20,20,100,100};
-			int[] tYSet={5,10,10,20,20,100,100};
-			int[] tRangeSet={3,5,5,10,10,30,30};
-			Random r=new Random();
+			//int[] tXSet={100,100,100};
+			//int[] tYSet={100,100,100};
+			//int[] tRangeSet={25,25,25};
+			//Random r=new Random();
 			
 			for(int i=0;i<tNodeSet.length;i++)
 			{
