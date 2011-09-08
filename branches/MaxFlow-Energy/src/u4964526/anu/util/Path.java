@@ -39,6 +39,7 @@ public class Path {
     	if(e!=null)
     	{
     	  edges.add(e);
+    	  vertexs.add(e.getSource());
     	  ++nStep;
     	  this.length=this.length+e.getLength();
     	  this.wLength=this.length/this.getWeight();
@@ -145,11 +146,17 @@ public class Path {
 	
 	public String toString()
 	{
-		String result="@p<"+this.start+"-"+this.end+"-l"+this.length+"-wl"+this.weight+"-c"+this.bottleNeck+"> : ";
+		String result="@p<"+this.start+"-"+this.end+"-l"+this.length+"-wl"+this.weight+"-c"+this.bottleNeck+"> : \n\t@Edges: ";
 		for(int i=0;i<edges.size();i++)
 		{
 			result=result+edges.get(i)+"  ";
 		}
+		result=result+"\n\t@Vertexs:";
+		for(int i=0;i<vertexs.size();i++)
+		{
+			result=result+vertexs.get(i)+" ";
+		}
+		
 		return result;
 	}
 	
