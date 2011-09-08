@@ -224,9 +224,21 @@ public class WSNGenerator {
 		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/Rvertex_"+f+".txt")));
 		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/Redge_"+f+".txt")));
 		
+		Vertex s=new Vertex(String.valueOf(1));
+		s.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
+		s.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
+		s.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+		s.setxLabel(1);
+		s.setyLabel(1);
+		g.addVertex(s);
+		g.addSink(s);
+		s.setWasSink(true);
+		pwVertex.println(s+" "+s.getxLabel()+" "+s.getyLabel()+" "+s.getWeight()+" "+s.getMaxRate()+" "+s.getBudgetEnergy());
+		pwVertex.flush();
+		
 		for(int i=0;i<this.getgNodeNum();i++)
 		{
-			Vertex v=new Vertex(String.valueOf(i+1));
+			Vertex v=new Vertex(String.valueOf(i+2));
 			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 			v.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
@@ -234,19 +246,12 @@ public class WSNGenerator {
 			v.setxLabel(this.getgWidth()*r.nextDouble());
 			v.setyLabel(this.getgLength()*r.nextDouble());
 			g.addVertex(v);
-			if(g.getVertexList().size()==1)
-			{
-				g.addSink(v);
-				v.setWasSink(true);
-			}
-			else
-			{
-				g.addSource(v);
-				v.setWasSource(true);
-			}
+			g.addSource(v);
+			v.setWasSource(true);
 			pwVertex.println(v+" "+v.getxLabel()+" "+v.getyLabel()+" "+v.getWeight()+" "+v.getMaxRate()+" "+v.getBudgetEnergy());
 			pwVertex.flush();
 		}
+		
 		
 		ArrayList<Vertex> vSet=g.getVertexList();
 		Iterator<Vertex> slowI=vSet.iterator();
@@ -303,7 +308,7 @@ public class WSNGenerator {
 	{
 		try
 		{
-			int[] tNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
+			int[] tNodeSet={50,60,70,80,90,100,110,110,120,130,140,150,200};
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
