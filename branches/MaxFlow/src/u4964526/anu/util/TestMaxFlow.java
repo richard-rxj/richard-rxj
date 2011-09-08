@@ -468,7 +468,7 @@ public class TestMaxFlow {
 		int gNode=0;
 		int[] gNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
 		
-		double[] apprFactorSet={0.05};
+		double[] apprFactorSet={0.3,0.25,0.2,0.15,0.1};
 		for(int j=0;j<apprFactorSet.length;j++)
 		{
 			PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+apprFactorSet[j]*100+".txt")));
@@ -533,13 +533,13 @@ public class TestMaxFlow {
 		
 		try
 		{
-			double[] apprFactorSet={0.05};
+			double[] apprFactorSet={0.3,0.25,0.2,0.15,0.1};
 			PrintWriter pw=null;
-			for(int j=150;j<201;)
+			for(int j=50;j<201;)
 			{
-				String fileName1="test/topology/vertex_"+j+".txt";
-				String fileName2="test/topology/edge_"+j+".txt";
-				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/5performance_"+j+".txt")));
+				String fileName1="test/topology/Rvertex_"+j+".txt";
+				String fileName2="test/topology/Redge_"+j+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+j+".txt")));
 				j=j+50;
 				
 				for(int i=0;i<apprFactorSet.length;i++)
@@ -558,12 +558,14 @@ public class TestMaxFlow {
 					gGrag.setEpsilon(epsilon);
 					gGrag.computeConcurrentFlow();
 					double tFlow=0;
+					double tRate=0;
 					for(int tS=0;tS<gGrag.getTopology().getSourceList().size();tS++)
 					{
 						Vertex tV=gGrag.getTopology().getSourceList().get(tS);
-						tFlow=tFlow+tV.getRate();
+						tFlow=tFlow+tV.getRate()*(eRx+eTx);
+						tRate=tRate+tV.getRate();
 					}
-					pw.print(tFlow+" ");
+					pw.print(tFlow+" "+tRate+" ");
 					pw.flush();
 					//gP.gragRate=gGrag.getMaxG().getSourceList().get(0).getRate();
 					WfMaxFlow gWf=new WfMaxFlow();
@@ -575,12 +577,14 @@ public class TestMaxFlow {
 					gWf.setEpsilon(epsilon);
 					gWf.computeDWFFLow();
 					tFlow=0;
+					tRate=0;
 					for(int tS=0;tS<gWf.getTopology().getSourceList().size();tS++)
 					{
 						Vertex tV=gWf.getTopology().getSourceList().get(tS);
-						tFlow=tFlow+tV.getRate();
+						tFlow=tFlow+tV.getRate()*(eRx+eTx);
+						tRate=tRate+tV.getRate();
 					}
-					pw.println(tFlow);
+					pw.println(tFlow+" "+tRate);
 					pw.flush();
 					
 				}
