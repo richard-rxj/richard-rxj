@@ -102,6 +102,7 @@ public class GragMaxFlow {
 			f.setEnd(sink);
 			f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());
 			f.setRate(0);
+			s.setRate(0);
 			fSolution.put(s, f);
 		}
 		
@@ -210,7 +211,7 @@ public class GragMaxFlow {
 	 * concurrent!!!!!!!!   
 	 */
 	{
-		topology.transit();
+		//topology.transit();
 		ArrayList<Edge> edgeList=topology.getEdgeList();
 		ArrayList<Vertex> sourceList=topology.getSourceList();
 		Vertex sink=topology.getSinkList().get(0);
@@ -292,12 +293,32 @@ public class GragMaxFlow {
 							  * end of update length of gD
 							  */
 							 mPath.updateRealCap(mPath.getBottleNeck()/this.getGragScaleFactor());    //only for debug
-							 double tRate=f.getRate();
-							 double mRate=f.getMaxRate();
+							 double tRate=mSource.getRate();
+							 double mRate=mSource.getMaxRate();
 							 tRate=tRate+addRate;
 							 mRate=mRate-addRate;
-							 f.setRate(tRate);
-							 f.setMaxRate(mRate);
+							 mSource.setRate(tRate);
+							 mSource.setMaxRate(mRate);
+							 
+							 /*
+							  * begin of calculate total sum 
+							  */
+							 ArrayList<Vertex> pVertexSet=mPath.getVertexs();
+							 for (int ti=0;ti<pVertexSet.size();ti++ )
+							 {
+							 	 Vertex tV=pVertexSet.get(ti);
+							 	 if(tV!=mSource)
+							 	 {
+							 		 tRate=tV.getRate();
+							 		 tRate=tRate+addRate;
+							 		 tV.setRate(tRate);
+							 	 }
+							 }
+							 /*
+							  * end of calculate total sum
+							  */
+							 
+							 
 						 }
 						 else
 						 {
@@ -347,9 +368,9 @@ public class GragMaxFlow {
 		{
 			Vertex s=sourceList.get(i);
 		    Flow f=fSolution.get(s);	
-		    double r=f.getRate();
+		    double r=s.getRate();
 		    r=r/this.getGragScaleFactor();
-		    f.setRate(r);
+		    s.setRate(r);
 		}
 		
 		/*

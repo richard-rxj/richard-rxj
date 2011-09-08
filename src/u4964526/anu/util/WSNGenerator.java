@@ -303,16 +303,19 @@ public class WSNGenerator {
 	{
 		try
 		{
-			int[] tNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
-			int[] tXSet={5,10,10,20,20,100,100};
-			int[] tYSet={5,10,10,20,20,100,100};
-			int[] tRangeSet={3,5,5,10,10,30,30};
+			int[] tNodeSet={50};
+			int[] tXSet={50};
+			int[] tYSet={50};
+			int[] tRadiusSet={25};
 			Random r=new Random();
 			
 			for(int i=0;i<tNodeSet.length;i++)
 			{
 				WSNGenerator tGenerator=new WSNGenerator();
 				tGenerator.setgNodeNum(tNodeSet[i]);
+				tGenerator.setgTransRange(tRadiusSet[i]);
+				tGenerator.setgLength(tXSet[i]);
+				tGenerator.setgWidth(tYSet[i]);
 				tGenerator.generateGraph(String.valueOf(tNodeSet[i]));
 			}
 		}
