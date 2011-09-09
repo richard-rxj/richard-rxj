@@ -535,7 +535,7 @@ public class TestMaxFlow {
 		{
 			double[] apprFactorSet={0.3,0.25,0.2,0.15,0.1};
 			PrintWriter pw=null;
-			for(int j=50;j<201;)
+			for(int j=300;j<301;)
 			{
 				String fileName1="test/topology/Rvertex_"+j+".txt";
 				String fileName2="test/topology/Redge_"+j+".txt";
@@ -605,6 +605,6 @@ public class TestMaxFlow {
 	public static void main(String[] args) throws SecurityException, IOException {
 		
 		TestMaxFlow.performanceTask();
-		TestMaxFlow.runningTask();
+		//TestMaxFlow.runningTask();
 	}
 }

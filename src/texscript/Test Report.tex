@@ -4,6 +4,8 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{subfigure}
+
 
 
 \begin{document}
@@ -18,27 +20,37 @@ consume more energy than they can collect, the rate nodes are directly related t
 We compare the performance and running time of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}). We run each experiment over 20 different topologies.
 
 \subsection{Impact of $\epsilon$ on Performance}
+First we investigate the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. Figure~\ref{f1} depict the performance delivered by both algorithms with different $\epsilon$ when the number of nodes in the network is 50, 100, 150 and 200 respectively. From figure~\ref{f1}, we observe that with the $\epsilon$ fall from 0.3 to 0.1, the performance gap between two algorithms are smaller and smaller. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter(e.g. $\epsilon = 0.1$).
 
-\begin{figure}[H]
+\subsection{Running Time}
+We then analyse the running time differences between both algorithms with different $\epsilon$ in a test-bed with a processor running at $2.40\,GHz$ and $3.86\,GB$ RAM when the nodes number ranged from 50 to 150.
+Figure~\ref{f2} shows that the running time growth trend of both algorithms when the sensor nodes increaseing from 50 to 150. Obviously, running time is a key feature especially in large-scale network. The result shows that the Garg and K\"{o}nemann's framework algorithm 
+grows much faster than our algorithm. Our explanation for such a phenomenon is as follows. The Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance. 
+
+
+\begin{figure}[htbp]
+
+
 \centering
-\includegraphics[scale=0.6]{performance.pdf} 
-\caption{Impact of $\epsilon$}
+\includegraphics[scale=0.6]{performance.pdf}
+\caption{fig1}
 \label{f1}
 \end{figure}
 
-First we investigate the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. Figure~\ref{f1} $(a)-(d)$ depict the performance delivered by both algorithms with different $\epsilon$ when the number of nodes in the network is 50, 100, 150 and 200 respectively. From figure~\ref{f1}, we observe that with the $\epsilon$ fall from 0.3 to 0.1, the performance gap between two algorithms are smaller and smaller. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter(e.g. $\epsilon = 0.1$).
 
-\subsection{Running Time}
-
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
-\includegraphics[scale=0.6]{running.pdf} 
-\caption{Comparison of running time}
+\includegraphics[scale=0.6]{running.pdf}
+\caption{fig2}
 \label{f2}
+\end{minipage}
+
+
 \end{figure}
-We then analyse the running time differences between both algorithms with different $\epsilon$ in a test-bed with a processor running at $2.40\,GHz$ and $3.86\,GB$ RAM when the nodes number ranged from 50 to 150.
-Figure~\ref{f2} (a)-(d) shows that the running time growth trend of both algorithms when the sensor nodes increaseing from 50 to 150. Obviously, running time is a key feature especially in large-scale network. The result shows that the Garg and K\"{o}nemann's framework algorithm 
-grows much faster than our algorithm. Our explanation for such a phenomenon is as follows. The Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance. 
+
+
+
+
 
 
 \bibliographystyle{plain}
