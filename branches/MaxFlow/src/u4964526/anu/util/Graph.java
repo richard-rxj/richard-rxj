@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class Graph {
 
-	private static int MAX_VERTS=500;
+	private static int MAX_VERTS=1000;
 	private ArrayList<Vertex> vertexList;
 	private Edge adjMat[][];
 	private ArrayList<Edge> edgeList;
