@@ -51,7 +51,7 @@ public class TestMaxFlow {
 
    private static double getVertexMaxRate()
    {
-	    double[] result={1000};
+	    double[] result={100000,75000,50000};
 		int i=new Random().nextInt(3);
 		return result[i];
    }
@@ -157,7 +157,8 @@ public class TestMaxFlow {
 			   {
 				   v1.setWeight(Double.parseDouble(b[3]));
 			   }
-			   v1.setMaxRate(Double.parseDouble(b[4]));
+			   //v1.setMaxRate(Double.parseDouble(b[4]));
+			   v1.setMaxRate(TestMaxFlow.getVertexMaxRate());
 			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 			   g.addVertex(v1);
 			   if(g.getVertexList().size()==1)
@@ -534,13 +535,14 @@ public class TestMaxFlow {
 		try
 		{
 			double[] apprFactorSet={0.3,0.25,0.2,0.15,0.1};
+			int [] nodeSet={50,150,200,300};
 			PrintWriter pw=null;
-			for(int j=300;j<301;)
+			for(int m=0;m<nodeSet.length;m++)
 			{
+				int j=nodeSet[m];
 				String fileName1="test/topology/Rvertex_"+j+".txt";
 				String fileName2="test/topology/Redge_"+j+".txt";
 				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+j+".txt")));
-				j=j+50;
 				
 				for(int i=0;i<apprFactorSet.length;i++)
 				{
@@ -605,6 +607,6 @@ public class TestMaxFlow {
 	public static void main(String[] args) throws SecurityException, IOException {
 		
 		TestMaxFlow.performanceTask();
-		//TestMaxFlow.runningTask();
+		TestMaxFlow.runningTask();
 	}
 }
