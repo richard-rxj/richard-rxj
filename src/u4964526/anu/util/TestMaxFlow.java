@@ -467,12 +467,12 @@ public class TestMaxFlow {
 		long startTime=0;
 		long endTime=0;
 		int gNode=0;
-		int[] gNodeSet={50,60,70,80,90,100,110,110,120,130,140,150};
+		int[] gNodeSet={50,100,150,200,300};
 		
 		double[] apprFactorSet={0.3,0.25,0.2,0.15,0.1};
 		for(int j=0;j<apprFactorSet.length;j++)
 		{
-			PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+apprFactorSet[j]*100+".txt")));
+			PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+(int)(apprFactorSet[j]*100)+".txt")));
 			for(int i=0;i<gNodeSet.length;i++)
 			{
 				
@@ -606,7 +606,7 @@ public class TestMaxFlow {
 	
 	public static void main(String[] args) throws SecurityException, IOException {
 		
-		TestMaxFlow.performanceTask();
+		//TestMaxFlow.performanceTask();
 		TestMaxFlow.runningTask();
 	}
 }
