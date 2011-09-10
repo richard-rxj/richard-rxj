@@ -308,13 +308,15 @@ public class WSNGenerator {
 	{
 		try
 		{
-			int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,300};
+			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
+			int[] tNodeSet={250};
+
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
 			//Random r=new Random();
 			
-			for(int i=12;i<tNodeSet.length;i++)
+			for(int i=0;i<tNodeSet.length;i++)
 			{
 				WSNGenerator tGenerator=new WSNGenerator();
 				tGenerator.setgNodeNum(tNodeSet[i]);
