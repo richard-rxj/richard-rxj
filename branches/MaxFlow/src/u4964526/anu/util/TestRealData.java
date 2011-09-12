@@ -37,7 +37,7 @@ public class TestRealData {
 	{
 		//Random r=new Random();
 		//return gBaseBudgetEnergy[1]+r.nextDouble()*(gBaseBudgetEnergy[0]-gBaseBudgetEnergy[1]);
-		return 0.00653*1.2;
+		return 0.00653*1.7;
 	}
 
    private static double getVertexMaxRate()
