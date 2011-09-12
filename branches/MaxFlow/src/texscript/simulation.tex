@@ -14,31 +14,48 @@
 \section{Simulation Studies}
 \subsection{Experimental Setup}
 We evaluate the performance of our algorithm via simulation in this section.
-Our simulation setting is as follows. We randomly create $n$(ranged from $50$ to $200$) sensor nodes
-on a $100*100\,m^2$ square ~\cite{Maxi}. The base station is located at the square lower left corner this. The maximum rate for each sensor is $100\,Kbps$. The maximum transmission range of each sensor is $25\,m$. For power consumption model, we set $e_{Rx} = 0.00576\,mJ/b$, $e_{Tx} = 0.0144\,mJ/b$ ~\cite{Ene}. Since nodes in our protocol do not
-consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example ~\cite{Ste} . The total energy collected from a $37 * 33\,mm^2$ solar cell over a 48-h period is $655.15\,mWh$ for the sunny day and $313.70\,mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19\,J$ and $3.92\,J$ with every $10\,mins$ for a timeslot. We also set each sensor with a $AA$ Battery for initial.\\
+Our simulation setting is as follows. We randomly create $n$(ranged from $50$ to $300$) sensor nodes
+on a $100*100\,m^2$ square ~\cite{Maxi}. The base station is located at the square lower left corner. The maximum rate for each sensor is $100\,Kbps$. The maximum transmission range of each sensor is $25\,m$. For power consumption model, we set $e_{Rx} = 0.00576\,mJ/b$, $e_{Tx} = 0.0144\,mJ/b$ ~\cite{Ene}. Since nodes in our protocol do not
+consume more energy than they can collect, the rate nodes are directly related to the amount of energy that they collect. Take solar energy as an example ~\cite{Ste} . The total energy collected from a $37 * 33\,mm^2$ solar cell over a 48-h period is $655.15\,mWh$ for the sunny day and $313.70\,mWh$ for the partly cloudy day. Thus we generate $B_V(t+1)$ for every sensor node randomly between $8.19\,J$ and $3.92\,J$ with every $10\,mins$ for a timeslot. We also set each sensor with a $AAA$ Battery for initial.\\
 We compare the performance and running time of our algorithm(\textbf{TPath}) with the Garg and K\"{o}nemann's framework algorithm(\textbf{Garg and K\"{o}nemann}). We run each experiment over 20 different topologies.
 
 \subsection{Impact of $\epsilon$ on Performance}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.6]{performance.pdf}
-\caption{The total flow solution by both algorithms with different $\epsilon$ ranged from 0.25 to 0.1 in a wireless sensor network consisting of n sensor nodes with same MaxRate and random BudgetEnergy in 100*100 square}
+\caption{The total flow solution by both algorithms with different $\epsilon$ ranged from 0.3 to 0.1 in a wireless sensor network consisting of n sensor nodes with same MaxRate(100Kbps) and random BudgetEnergy in 100*100 square}
 \label{fig:performance}
 \end{figure}
 
-First we investigate the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. Figure~\ref{fig:performance} depict the performance delivered by both algorithms with different $\epsilon$ when the number of nodes in the network is 50, 150, 200 and 300 respectively. From figure~\ref{fig:performance}, we observe that with the $\epsilon$ fall from 0.3 to 0.1, the performance gap between two algorithms are smaller and smaller. To be specific, our algorithm generate better solution than the Garg and K\"{o}nemann's framework algorithm when nodes number is 200 and 300. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter(e.g. $\epsilon = 0.1$) even better.
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.6]{performance.pdf}
+\caption{The total flow solution by both algorithms with different $\epsilon$ ranged from 0.3 to 0.1 in a wireless sensor network consisting of n sensor nodes with random MaxRate(random selected in 50Kbps 75Kbps 100Kbps) and random BudgetEnergy in 100*100 square}
+\label{fig:Rperformance}
+\end{figure}
+
+First we investigate the impact of $\epsilon$, the parameter of the approximation algorithm, on the network performance. Figure~\ref{fig:performance} and~\ref{fig:Rperformance} depict the performance delivered by both algorithms with different $\epsilon$ when the number of nodes in the network is 50, 150, 200 and 300 respectively. From figure~\ref{fig:performance} and~\ref{fig:Rperformance}, we observe that with the $\epsilon$ fall from 0.3 to 0.1, the performance gap between two algorithms are smaller and smaller. To be specific, our algorithm generate better solution than the Garg and K\"{o}nemann's framework algorithm when nodes number is 200 and 300. The interesting result shows that our algorithm could performance as well as the Garg and K\"{o}nemann's framework algorithm with proper approximation parameter(e.g. $\epsilon = 0.1$) , in large scale network even better.
 
 \subsection{Running Time Analysis}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.6]{running.pdf}
-\caption{The running time of both algorithms with specific $\epsilon$ in different wireless sensor network consisting of n sensor (n ranged form 50 to 150) nodes with same MaxRate and random BudgetEnergy in 100*100 square}
+\caption{The running time of both algorithms with specific $\epsilon$ in different wireless sensor network consisting of n sensor (n ranged form 50 to 300) nodes with same MaxRate(100Kbps) and random BudgetEnergy in 100*100 square}
 \label{fig:running}
 \end{figure}
-We then analyse the running time differences between both algorithms with different $\epsilon$ in a test-bed with a processor running at $2.40\,GHz$ and $3.86\,GB$ RAM when the nodes number ranged from 50 to 150.
-Figure~\ref{fig:running} shows that the running time growth trend of both algorithms when the sensor nodes increaseing from 50 to 150. Obviously, running time is a key feature especially in large-scale network. The result shows that the Garg and K\"{o}nemann's framework algorithm
-grows much faster than our algorithm. Our explanation for such a phenomenon is as follows. The Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.6]{Rrunning.pdf}
+\caption{The running time of both algorithms with specific $\epsilon$ in different wireless sensor network consisting of n sensor (n ranged form 50 to 300) nodes with random MaxRate(random selected in 50Kbps 75Kbps 100Kbps) and random BudgetEnergy in 100*100 square}
+\label{fig:Rrunning}
+\end{figure}
+
+We then analyse the running time differences between both algorithms with different $\epsilon$ in a test-bed with a processor running at $2.40\,GHz$ and $3.86\,GB$ RAM when the nodes number ranged from 50 to 300.
+Figure~\ref{fig:running} and~\ref{fig:Rrunning} shows that the running time growth trend of both algorithms when the sensor nodes increased. Obviously, running time is a key feature especially in large-scale network. The result shows that the Garg and K\"{o}nemann's framework algorithm
+grows much faster than our algorithm in larger scale network. Our explanation for such a phenomenon is as follows. The Garg and K\"{o}nemann's framework algorithm compute shortest path per node per loop, while our algorithm only do shortest path computing one time per loop through the $DS(e)$ assistance.
 
 
 
