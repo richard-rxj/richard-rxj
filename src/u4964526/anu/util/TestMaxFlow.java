@@ -663,8 +663,8 @@ public class TestMaxFlow {
 		fh.setLevel(Level.INFO);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
-		//TestMaxFlow.runningTask();
-		TestMaxFlow.mainTaskDWF();
-		TestMaxFlow.mainTaskConcurrent();
+		TestMaxFlow.runningTask();
+		//TestMaxFlow.mainTaskDWF();
+		//TestMaxFlow.mainTaskConcurrent();
 	}
 }
