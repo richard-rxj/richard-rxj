@@ -223,6 +223,7 @@ public class WSNGenerator {
 		Random r=new Random();
 		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
 		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
+		int i=0;
 		
 		Vertex s=new Vertex(String.valueOf(1));
 		s.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
@@ -235,10 +236,46 @@ public class WSNGenerator {
 		s.setWasSink(true);
 		pwVertex.println(s+" "+s.getxLabel()+" "+s.getyLabel()+" "+s.getWeight()+" "+s.getMaxRate()+" "+s.getBudgetEnergy());
 		pwVertex.flush();
+		i=i+1;	
 		
-		for(int i=0;i<this.getgNodeNum();i++)
+		Vertex s1=new Vertex(String.valueOf(2));
+		s1.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
+		s1.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
+		s1.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+		s1.setxLabel(5);
+		s1.setyLabel(5);
+		g.addVertex(s1);
+		g.addSource(s1);
+		s1.setWasSource(true);
+		pwVertex.println(s1+" "+s1.getxLabel()+" "+s1.getyLabel()+" "+s1.getWeight()+" "+s1.getMaxRate()+" "+s1.getBudgetEnergy());
+		pwVertex.flush();
+		i=i+1;
+		
+		for(int m=0; m<=9;m++)
 		{
-			Vertex v=new Vertex(String.valueOf(i+2));
+			for(int n=0;n<=9;n++)
+			{
+				Vertex s2=new Vertex(String.valueOf(i+1));
+				s2.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
+				s2.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
+				s2.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+				s2.setxLabel(m*10);
+				s2.setyLabel(n*10);
+				g.addVertex(s2);
+				g.addSource(s2);
+				s2.setWasSource(true);
+				pwVertex.println(s2+" "+s2.getxLabel()+" "+s2.getyLabel()+" "+s2.getWeight()+" "+s2.getMaxRate()+" "+s2.getBudgetEnergy());
+				pwVertex.flush();
+				i=i+1;
+			}
+		}
+		
+		
+		
+		
+		for(;i<this.getgNodeNum();i++)
+		{
+			Vertex v=new Vertex(String.valueOf(i+1));
 			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 			v.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
@@ -296,7 +333,7 @@ public class WSNGenerator {
 		double c1=Math.pow((v1.getxLabel()-v2.getxLabel()),2);
 		double c2=Math.pow((v1.getyLabel()-v2.getyLabel()),2);
 		double o=Math.pow(this.getgRadius(),2);
-		if(c1+c2<o)
+		if(c1+c2<=o)
 		{
 			result=c1+c2;
 		}

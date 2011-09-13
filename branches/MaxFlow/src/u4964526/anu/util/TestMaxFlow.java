@@ -158,8 +158,8 @@ public class TestMaxFlow {
 			   {
 				   v1.setWeight(Double.parseDouble(b[3]));
 			   }
-			   //v1.setMaxRate(Double.parseDouble(b[4]));
-			   v1.setMaxRate(TestMaxFlow.getVertexMaxRate());
+			   v1.setMaxRate(Double.parseDouble(b[4]));
+			   //v1.setMaxRate(TestMaxFlow.getVertexMaxRate());
 			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 			   g.addVertex(v1);
 			   if(g.getVertexList().size()==1)
@@ -260,7 +260,8 @@ public class TestMaxFlow {
 		Logger logger=Logger.getLogger("MaxFlow");
 		GragMaxFlow mFlow=new GragMaxFlow();
 		mFlow.setTopology(g);
-				      
+		
+		logger.info(String.valueOf(mFlow.getTopology()));
         
         mFlow.setEpsilon(TestMaxFlow.getEpsilon());
         mFlow.seteRx(eRx);
@@ -320,6 +321,7 @@ public class TestMaxFlow {
 				TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
 				GragMaxFlow mFlow=new GragMaxFlow();
 				mFlow.setTopology(g);
+				//logger.info(String.valueOf(mFlow.getTopology()));
 		        mFlow.seteRx(eRx);
 		        mFlow.seteTx(eTx);		      
 		        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
@@ -481,8 +483,8 @@ public class TestMaxFlow {
 		FileHandler fh=new FileHandler("m.log");
 		fh.setFormatter(new SimpleFormatter());
 		fh.setLevel(Level.INFO);
-		//logger.addHandler(fh);
-		DecimalFormat   df   =new   java.text.DecimalFormat("#.0000");  
+		logger.addHandler(fh);
+		DecimalFormat df=new DecimalFormat("#.0000");  
 				
 		/*
          *     random data
@@ -655,6 +657,11 @@ public class TestMaxFlow {
 	
 	public static void main(String[] args) throws SecurityException, IOException {
 		
+		Logger logger=Logger.getLogger("MaxFlow");
+		FileHandler fh=new FileHandler("m.log");
+		fh.setFormatter(new SimpleFormatter());
+		fh.setLevel(Level.INFO);
+		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
 		//TestMaxFlow.runningTask();
 		TestMaxFlow.mainTaskDWF();

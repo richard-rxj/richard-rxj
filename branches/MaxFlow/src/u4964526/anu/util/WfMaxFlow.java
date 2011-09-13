@@ -312,7 +312,7 @@ public class WfMaxFlow {
 			
 			/*
 			 * begin of debug info
-			 */
+			 *
 			++loopSum;
 			System.out.println("********Wfloop--"+loopSum+"*******\n");
 			System.out.println("********WfgD--"+gD+"*******\n");
