@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 import java.util.Set;
 
 public class Graph {
@@ -400,7 +401,8 @@ public class Graph {
 			/*
 			 * begin of debug info
 			 *
-			System.out.println(p1);
+			Logger logger=Logger.getLogger("MaxFlow");
+			logger.info(String.valueOf(p1));
 			/*
 			 * end of debug info
 			 */

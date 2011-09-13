@@ -256,7 +256,7 @@ public class GragMaxFlow {
 				
 				/*
 				 * begin of debug info
-				 */
+				 *
 				++loopSum;
 				System.out.println("********Gragloop--"+loopSum+"*******\n");
 				System.out.println("********GraggD--"+gD+"*******\n");
@@ -291,7 +291,7 @@ public class GragMaxFlow {
 							 /*
 							  * end of update length of gD
 							  */
-							 mPath.updateRealCap(mPath.getBottleNeck()/this.getGragScaleFactor());    //only for debug
+							// mPath.updateRealCap(mPath.getBottleNeck()/this.getGragScaleFactor());    //only for debug
 							 double tRate=f.getRate();
 							 double mRate=f.getMaxRate();
 							 tRate=tRate+addRate;
@@ -317,7 +317,7 @@ public class GragMaxFlow {
 								 /*
 								  * end of update length of gD
 								  */
-								 mPath.updateRealCap(f.getMaxRate()*(this.geteRx()+this.geteTx())/this.getGragScaleFactor());   //only for debug
+								 //mPath.updateRealCap(f.getMaxRate()*(this.geteRx()+this.geteTx())/this.getGragScaleFactor());   //only for debug
 								 double tRate=f.getRate();
 								 double mRate=f.getMaxRate();
 								 tRate=tRate+mRate;
