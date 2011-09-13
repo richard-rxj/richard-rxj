@@ -1,7 +1,7 @@
-cd D:\PhDWork\Jspace\MaxFlow\test\loopanalysis\topology;
-conSet = load('test-config.txt');
+cd D:\PhDWork\Jspace\MaxFlowSVN\test\topology;
+%conSet = load('test-config.txt');
 p=1;
-for i=conSet
+for i=150
     v = strcat(strcat('vertex_',int2str(i)),'.txt');
     V = load(v);
     [x,y]=size(V);
@@ -13,5 +13,5 @@ for i=conSet
     %legend('sensor node','sink node',-1);
     p=p+1;
 end
-v = 'Ctopology';
-saveas(gcf,v,'pdf');
+%v = 'Ctopology';
+%saveas(gcf,v,'pdf');
