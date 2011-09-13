@@ -20,8 +20,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1;
-	private static double[] gBaseBudgetEnergy={0.01365,0.00653};
-	private static double[] gBaseMaxRate={100000};
+	private static double[] gBaseBudgetEnergy={0.00653*1.2,0.00653*1.5,0.00653*1.7};
+	private static double[] gBaseMaxRate={100000, 75000, 50000};
 	private static double transRange=25;
 
 	
@@ -35,14 +35,12 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		//Random r=new Random();
-		//return gBaseBudgetEnergy[1]+r.nextDouble()*(gBaseBudgetEnergy[0]-gBaseBudgetEnergy[1]);
-		return 0.00653*1.7;
+		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)];
 	}
 
    private static double getVertexMaxRate()
    {
-		return gBaseMaxRate[0];
+		return gBaseMaxRate[new Random().nextInt(gBaseMaxRate.length)];
    }
 	
    private static double validTransRangePlusEdgeCapacity(Vertex v1, Vertex v2)
@@ -329,8 +327,8 @@ public class TestRealData {
 			   Vertex v1=new Vertex(b[0]);
 			   v1.setxLabel(Double.parseDouble(b[1]));
 			   v1.setyLabel(Double.parseDouble(b[2]));
-			   v1.setMaxRate(getVertexMaxRate());
-			   v1.setBudgetEnergy(getBudgetEnergy());
+			   v1.setMaxRate(Double.parseDouble(b[4]));
+			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 			   v1.setRate(0);
 			   g.addVertex(v1);
 			   if(Integer.parseInt(b[0])==1)
@@ -528,7 +526,7 @@ public class TestRealData {
 		Logger log=Logger.getLogger("TestReal");
 		String fileName1="test/real/topology-20.txt";
 	    String fileName2="test/real/neighbor-20.txt";
-	    String fileName3="test/real/weight-20.txt";
+	    String fileName3="test/real/weight-1.txt";
 		
 	    /*
 	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/Grate-0.txt")));
@@ -551,11 +549,14 @@ public class TestRealData {
         */
 	    
 
-	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-1.txt")));
+	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-0.txt")));
 	    Graph g=new Graph();
 		TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
+		String fVertex="test/real/vertex.txt";
+		String fEdge="test/real/edge.txt";
+		g.outputFile(fVertex, fEdge);
 		WfMaxFlow wFlow=new WfMaxFlow();
-	    wFlow.setTopology(g);
+		wFlow.setTopology(g);
 	    wFlow.seteRx(eRx);
 	    wFlow.seteTx(eTx);
 	    wFlow.setEpsilon(epsilon);
@@ -563,37 +564,43 @@ public class TestRealData {
 	    wFlow.computeDWFFLow();
 	    
 	    for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
-        {
-        	Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-        	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
-        	pw.flush();
-        }
+    	{
+    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
+    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
+    		pw.flush();
+    	} 
 	    
+	    double[] rouSet={0.7,0.8,0.9};
 	    
-	    double[] rouSet={0.9,0.8,0.7,0.6,0.5};
-	    
-	    for (int r=0;r<rouSet.length;r++)
+	    for(int rr=0;rr<rouSet.length;rr++)
 	    {
-	    	double rou=rouSet[r];
-	    	pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-"+rou+".txt")));
-	    	g=new Graph();
-	    	TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
-	    	//wFlow=new WfMaxFlow();
-	    	wFlow.setTopology(g);
-	    	//wFlow.seteRx(eRx);
-	    	//wFlow.seteTx(eTx);
-	    	//wFlow.setEpsilon(apprFactor);
-	    	log.info(String.valueOf(wFlow.getTopology()));
-	    	wFlow.computeDWFFLow();
-	    
-	    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
-	    	{
-	    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-	    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
-	    		pw.flush();
-	    	}
+	    	double rou=rouSet[rr];
+	    	for (int r=1;r<=10;r++)
+		    {
+		    	//double rou=rouSet[r];
+		    	
+		    	pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-"+r+"-"+rou+".txt")));
+		    	g=new Graph();
+		    	fileName1="test/real/vertex.txt";
+		    	fileName2="test/real/edge.txt";
+		    	fileName3="test/real/weight-"+r+".txt";
+		    	TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
+		    	//wFlow=new WfMaxFlow();
+		    	wFlow.setTopology(g);
+			    wFlow.seteRx(eRx);
+			    wFlow.seteTx(eTx);
+			    wFlow.setEpsilon(epsilon);
+		    	log.info(String.valueOf(wFlow.getTopology()));
+		    	wFlow.computeDWFFLow();
+		    
+		    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
+		    	{
+		    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
+		    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
+		    		pw.flush();
+		    	}
+		    }
 	    }
-	    
 	}
 
 }

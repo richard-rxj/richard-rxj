@@ -489,6 +489,23 @@ public class Graph {
 		return pSet;
 	}
 	
+	public void outputFile(String fVertex, String fEdge) throws FileNotFoundException
+	{
+		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fVertex)));
+		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fEdge)));
+		for(int i=0;i<this.getVertexList().size();i++)
+		{
+			Vertex v=this.getVertexList().get(i);
+			pwVertex.println(v+" "+v.getxLabel()+" "+v.getyLabel()+" "+v.getWeight()+" "+v.getMaxRate()+" "+v.getBudgetEnergy());
+			pwVertex.flush();
+		}
+		for(int i=0;i<this.getEdgeList().size();i++)
+		{
+			Edge e=this.getEdgeList().get(i);
+			pwEdge.println(e.getSource()+" "+e.getTarget()+" "+e.getCapacity());
+			pwEdge.flush();
+		}
+	}
 	
 	
 	public static void main(String[] args) {
