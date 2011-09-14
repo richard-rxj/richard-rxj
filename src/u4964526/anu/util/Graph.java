@@ -283,7 +283,7 @@ public class Graph {
 		for (int i=0;i<sourceList.size();i++)
 		{
 			Vertex v1=sourceList.get(i);
-			result=result+v1.getName()+"<"+"(x-"+v1.getxLabel()+")"+"(y-"+v1.getyLabel()+")"+"(weight-"+v1.getWeight()+")"+"(rate-"+v1.getRate()+")"+">\n";
+			result=result+v1.getName()+"Connected"+v1.isWasConnected()+"<"+"(x-"+v1.getxLabel()+")"+"(y-"+v1.getyLabel()+")"+"(weight-"+v1.getWeight()+")"+"(rate-"+v1.getRate()+")"+">\n";
 		}
 		
 		result=result+"********4.Sink********\n";
@@ -388,15 +388,20 @@ public class Graph {
 			while(se1!=sink.getVerValue())
 			{
 				int j=sDist[se1].getPreviousVer();
+				if(sDist[se1].getShortDist()>1000000)
+				{
+					s1.setWasConnected(false);
+				}
 				if(adjMat[se1][j]!=null)
 				{
 					p1.addEdge(adjMat[se1][j]);
 					adjMat[se1][j].setWasTreed(true);
 					adjMat[se1][j].addWfNode(s1);
-					p1.getStart().setWasConnected(true);
+					
 				}
 				se1=j;
 			}
+			
 			result.put(s1, p1);
 			
 			/*
@@ -513,62 +518,24 @@ public class Graph {
 	
 	public static void main(String[] args) {
 		
-		Graph g=new Graph();
-		Vertex aV=new Vertex("A");
-        Vertex bV=new Vertex("B");
-        //Vertex cV=new Vertex("C");
-        //Vertex dV=new Vertex("D");
-        //Vertex tV=new Vertex("T");
-        //Vertex kV=new Vertex("K");
-        Vertex sV=new Vertex("S");
-        Edge asE=new Edge(aV,sV,2);
-        Edge bsE=new Edge(bV,sV,2);
-        //Edge tsE=new Edge(tV,sV,2);
-        //Edge ksE=new Edge(kV,sV,2);
-        //Edge atE=new Edge(aV,tV,2);
-        //Edge btE=new Edge(bV,tV,2);
-        //Edge ctE=new Edge(cV,tV,2);
-        //Edge ckE=new Edge(cV,kV,2);
-        //Edge dkE=new Edge(dV,kV,2);
-        asE.setLength(10);
-        bsE.setLength(5);
-        //tsE.setLength(2);
-        //ksE.setLength(1);
-        //atE.setLength(2);
-        //btE.setLength(4);
-        //ctE.setLength(4);
-        //ckE.setLength(3);
-        //dkE.setLength(1);
-        g.addVertex(aV);
-        g.addVertex(bV);
-        //g.addVertex(cV);
-        //g.addVertex(dV);
-        //g.addVertex(tV);
-        //g.addVertex(kV);
-        g.addVertex(sV);
-        g.addEdge(asE);
-        g.addEdge(bsE);
-        //g.addEdge(tsE);
-        //g.addEdge(ksE);
-        //g.addEdge(atE);
-        //g.addEdge(btE);
-        //g.addEdge(ctE);
-        //g.addEdge(ckE);
-        //g.addEdge(dkE);
-        g.addSource(aV);
-        g.addSource(bV);
-        //g.addSource(cV);
-        //g.addSource(dV);
-        //g.addSource(tV);
-        //g.addSource(kV);
-        g.addSink(sV);
+		String fileName1="test/topology/vertex_450_0.txt";
+		String fileName2="test/topology/edge_450_0.txt";
+		
+		
+		
+		
+		
+			
+	    Graph g=new Graph();
+	    TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
 		
 		
 		
 		System.out.println(g);
 		g.transit();
 		System.out.println(g);
-		g.getShortPathAndDSNode(g.getSinkList().get(0));
+		//g.getShortPathAndDSNode(g.getSinkList().get(0));
+		System.out.println(g);
 	}
 	
 }
