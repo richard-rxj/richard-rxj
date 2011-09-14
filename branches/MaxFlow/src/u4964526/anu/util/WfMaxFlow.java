@@ -344,7 +344,7 @@ public class WfMaxFlow {
 
 				Vertex mSource=sourceList.get(i);
 				
-				if((gD1<1)&&(mSource.getMaxRate()>0)&&(mSource.isWasConnected()))
+				if((gD1<1)&&(mSource.getMaxRate()>0)&&mSource.isWasConnected())
 				{
 					/*
 					 * begin of update rates and length for next loop
