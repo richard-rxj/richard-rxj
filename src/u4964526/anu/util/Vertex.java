@@ -22,6 +22,7 @@ public class Vertex implements Comparable<Vertex> {
     private double yLabel=0;
     private boolean wasSource=false;
     private boolean wasSink=false;
+    private boolean wasConnected=false;
     private double budgetEnergy=1000;
     
     public Vertex(String name) 
@@ -136,6 +137,14 @@ public class Vertex implements Comparable<Vertex> {
 
 	public void setBudgetEnergy(double budgetEnergy) {
 		this.budgetEnergy = budgetEnergy;
+	}
+
+	public boolean isWasConnected() {
+		return wasConnected;
+	}
+
+	public void setWasConnected(boolean wasConnected) {
+		this.wasConnected = wasConnected;
 	}
 	
 }

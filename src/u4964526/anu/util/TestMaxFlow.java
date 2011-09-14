@@ -310,7 +310,7 @@ public class TestMaxFlow {
 		int[] gNodeSet={100,150,200,250,300,350,400,450,500};
 		double[] apprFactorSet={0.3};
 		Logger logger=Logger.getLogger("MaxFlow");
-		for(int m=4;m<gNodeSet.length;m++)
+		for(int m=0;m<gNodeSet.length;m++)
 		{
 			for(int n=0;n<apprFactorSet.length;n++)
 			{
