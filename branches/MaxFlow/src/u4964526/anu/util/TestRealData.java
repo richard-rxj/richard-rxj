@@ -575,13 +575,13 @@ public class TestRealData {
 	    */
 	    
 	    
-	    double[] rouSet={0.5,0.6,0.7,0.8,0.9,1};
+	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
 	    
 	    
-	    for(int r=0;r<50;r++)
+	    for(int r=0;r<100;r++)
 	    {
 	    	Graph g=new Graph();
-	    	fileName1="test/real/topology-20.txt";
+	    	fileName1="test/real/vertex_100_0.txt";
 	    	fileName2="test/real/neighbor/neighbor-"+r+".txt";
 	    	fileName3="test/real/weight/weight-"+r+".txt";
 			TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
