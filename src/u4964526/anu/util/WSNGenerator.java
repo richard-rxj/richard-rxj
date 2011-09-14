@@ -346,18 +346,22 @@ public class WSNGenerator {
 		try
 		{
 			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
-			int[] tNodeSet={150,200,250};
-
+			int[] tNodeSet={100,150,200,250,300,350,400,450,500};
+			double[] tRadiusSet={15,13,10.5,10,9,8.5,8,7.5,7};
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
 			//Random r=new Random();
 			
-			for(int i=0;i<tNodeSet.length;i++)
+			for(int j=0;j<20;j++)
 			{
-				WSNGenerator tGenerator=new WSNGenerator();
-				tGenerator.setgNodeNum(tNodeSet[i]);
-				tGenerator.generateGraph(String.valueOf(tNodeSet[i]));
+				for(int i=0;i<tNodeSet.length;i++)
+				{
+					WSNGenerator tGenerator=new WSNGenerator();
+					tGenerator.setgNodeNum(tNodeSet[i]);
+					tGenerator.setgRadius(tRadiusSet[i]);
+					tGenerator.generateGraph(String.valueOf(tNodeSet[i])+"_"+j);
+				}
 			}
 		}
 		catch(Exception e)
