@@ -393,6 +393,7 @@ public class Graph {
 					p1.addEdge(adjMat[se1][j]);
 					adjMat[se1][j].setWasTreed(true);
 					adjMat[se1][j].addWfNode(s1);
+					p1.getStart().setWasConnected(true);
 				}
 				se1=j;
 			}
