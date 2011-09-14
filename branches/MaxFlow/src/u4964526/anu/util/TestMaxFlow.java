@@ -307,61 +307,65 @@ public class TestMaxFlow {
 	
 	private static int mainTaskConcurrent() throws FileNotFoundException
 	{
-		int[] gNodeSet={150,200,250};
-		double[] apprFactorSet={0.3,0.2,0.1};
+		int[] gNodeSet={100,150,200,250,300,350,400,450,500};
+		double[] apprFactorSet={0.3};
 		Logger logger=Logger.getLogger("MaxFlow");
-		for(int m=0;m<gNodeSet.length;m++)
+		for(int m=4;m<gNodeSet.length;m++)
 		{
 			for(int n=0;n<apprFactorSet.length;n++)
 			{
-				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/Gragtask_"+gNodeSet[m]+"_"+(int)(apprFactorSet[n]*100)+".txt")));
-				String fileName1="test/topology/vertex_"+gNodeSet[m]+".txt";
-				String fileName2="test/topology/edge_"+gNodeSet[m]+".txt";
-				Graph g=new Graph();
-				TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
-				GragMaxFlow mFlow=new GragMaxFlow();
-				mFlow.setTopology(g);
-				//logger.info(String.valueOf(mFlow.getTopology()));
-		        mFlow.seteRx(eRx);
-		        mFlow.seteTx(eTx);		      
-		        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
-		
-		       
-		        int result=mFlow.computeConcurrentFlow();
-		        
-		        /*
-		        *output the flow information
-		        *
-		        Map fFlow=mFlow.getMaxFlow();
-		        Iterator iter=fFlow.entrySet().iterator();
-		        while(iter.hasNext())
-		        {
-		     	   Map.Entry<Vertex,Flow> entry=(Map.Entry<Vertex, Flow>)iter.next();
-		     	   Vertex v=entry.getKey();
-		     	   Flow f=entry.getValue();
-		     	   pw.println(v);
-		     	   pw.println(f);
-		     	   pw.flush();
-		        }
-		        /*
-		         * 
-		         */
-		
-		        
-		        /*
-				 * begin of debug info
-				 *
-				logger.info(String.valueOf(mFlow.getMaxG()));
-		        /*
-		         * end of debug info
-		         */
-		      
-		        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
-		        {
-		        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
-		        	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
-		        	pw.flush();
-		        }
+				for(int l=0;l<20;l++)
+				{
+					PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/temp/Gragtask_"+gNodeSet[m]+"_"+l+".txt")));
+					String fileName1="test/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
+					String fileName2="test/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
+					Graph g=new Graph();
+					TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
+					GragMaxFlow mFlow=new GragMaxFlow();
+					mFlow.setTopology(g);
+					//logger.info(String.valueOf(mFlow.getTopology()));
+			        mFlow.seteRx(eRx);
+			        mFlow.seteTx(eTx);		      
+			        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
+			
+			       
+			        int result=mFlow.computeConcurrentFlow();
+			        
+			        /*
+			        *output the flow information
+			        *
+			        Map fFlow=mFlow.getMaxFlow();
+			        Iterator iter=fFlow.entrySet().iterator();
+			        while(iter.hasNext())
+			        {
+			     	   Map.Entry<Vertex,Flow> entry=(Map.Entry<Vertex, Flow>)iter.next();
+			     	   Vertex v=entry.getKey();
+			     	   Flow f=entry.getValue();
+			     	   pw.println(v);
+			     	   pw.println(f);
+			     	   pw.flush();
+			        }
+			        /*
+			         * 
+			         */
+			
+			        
+			        /*
+					 * begin of debug info
+					 *
+					logger.info(String.valueOf(mFlow.getMaxG()));
+			        /*
+			         * end of debug info
+			         */
+			      
+			        for(int i=0;i<mFlow.getTopology().getSourceList().size();i++)
+			        {
+			        	Vertex tVertex=mFlow.getTopology().getSourceList().get(i);
+			        	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
+			        	pw.flush();
+			        }
+			        pw.close();
+				}
 			}
 		}
         return 0;
@@ -599,7 +603,7 @@ public class TestMaxFlow {
 		try
 		{
 			double[] apprFactorSet={0.3,0.2,0.1};
-			int [] nodeSet={150,200,250};
+			int [] nodeSet={100,150,200,250,300,350,400,450,500};
 			PrintWriter pw=null;
 			for(int m=0;m<nodeSet.length;m++)
 			{
@@ -676,8 +680,8 @@ public class TestMaxFlow {
 		fh.setLevel(Level.INFO);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
-		TestMaxFlow.runningTask();
+		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
-		//TestMaxFlow.mainTaskConcurrent();
+		TestMaxFlow.mainTaskConcurrent();
 	}
 }
