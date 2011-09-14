@@ -497,74 +497,87 @@ public class TestMaxFlow {
 		double[] apprFactorSet={0.3,0.2,0.1};
 		for(int j=0;j<apprFactorSet.length;j++)
 		{
-			PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+(int)(apprFactorSet[j]*100)+".txt")));
+			PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+(int)(apprFactorSet[j]*100)+".txt")));
 			for(int i=0;i<gNodeSet.length;i++)
 			{
-				
-				String fileName1="test/topology/vertex_"+gNodeSet[i]+".txt";
-				String fileName2="test/topology/edge_"+gNodeSet[i]+".txt";
-				
-				
-				
-				
-				
-					
-					Graph gGrag=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,1);
-					GragMaxFlow mFlow=new GragMaxFlow();
-					mFlow.setTopology(gGrag);
-					mFlow.seteRx(eRx);
-					mFlow.seteTx(eTx);
-					mFlow.setEpsilon(apprFactorSet[j]);
-					startTime=System.currentTimeMillis();
-					mFlow.computeConcurrentFlow();
-					endTime=System.currentTimeMillis();
-					double tGTime=endTime-startTime;
-					pwRun.print(gNodeSet[i]+" "+df.format(tGTime)+" ");
-					pwRun.flush();
-					
-					double tGFlow=0;
-					double tGRate=0;
-					for(int tS=0;tS<mFlow.getTopology().getSourceList().size();tS++)
-					{
-						Vertex tV=mFlow.getTopology().getSourceList().get(tS);
-						tGFlow=tGFlow+tV.getRate()*(eRx+eTx);
-						tGRate=tGRate+tV.getRate();
-					}
-					pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" ");
-					pwRun.flush();
-	
+				double pRatio=0;
+				double rRatio=0;
+				for(int l=0;l<20;l++)
+				{
+					PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running/running_"+(int)(apprFactorSet[j]*100)+"_"+l+".txt",true)));
+
+					String fileName1="test/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName2="test/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
 					
 					
-					Graph gWf=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
-					WfMaxFlow wFlow=new WfMaxFlow();
-					wFlow.setTopology(gWf);
-					wFlow.seteRx(eRx);
-					wFlow.seteTx(eTx);
-					wFlow.setEpsilon(apprFactorSet[j]);
-					startTime=System.currentTimeMillis();
-					wFlow.computeDWFFLow();
-					endTime=System.currentTimeMillis();
-					double tWTime=endTime-startTime;
-					pwRun.print(df.format(tWTime)+" ");
-					pwRun.flush();
+					
+					
+					
+						
+						Graph gGrag=new Graph();
+						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,1);
+						GragMaxFlow mFlow=new GragMaxFlow();
+						mFlow.setTopology(gGrag);
+						mFlow.seteRx(eRx);
+						mFlow.seteTx(eTx);
+						mFlow.setEpsilon(apprFactorSet[j]);
+						startTime=System.currentTimeMillis();
+						mFlow.computeConcurrentFlow();
+						endTime=System.currentTimeMillis();
+						double tGTime=endTime-startTime;
+						pwRun.print(gNodeSet[i]+" "+df.format(tGTime)+" ");
+						pwRun.flush();
+						
+						double tGFlow=0;
+						double tGRate=0;
+						for(int tS=0;tS<mFlow.getTopology().getSourceList().size();tS++)
+						{
+							Vertex tV=mFlow.getTopology().getSourceList().get(tS);
+							tGFlow=tGFlow+tV.getRate()*(eRx+eTx);
+							tGRate=tGRate+tV.getRate();
+						}
+						pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" ");
+						pwRun.flush();
+		
+						
+						
+						Graph gWf=new Graph();
+						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
+						WfMaxFlow wFlow=new WfMaxFlow();
+						wFlow.setTopology(gWf);
+						wFlow.seteRx(eRx);
+						wFlow.seteTx(eTx);
+						wFlow.setEpsilon(apprFactorSet[j]);
+						startTime=System.currentTimeMillis();
+						wFlow.computeDWFFLow();
+						endTime=System.currentTimeMillis();
+						double tWTime=endTime-startTime;
+						pwRun.print(df.format(tWTime)+" ");
+						pwRun.flush();
+					
+						double tWFlow=0;
+						double tWRate=0;
+						for(int tS=0;tS<wFlow.getTopology().getSourceList().size();tS++)
+						{
+							Vertex tV=wFlow.getTopology().getSourceList().get(tS);
+							tWFlow=tWFlow+tV.getRate()*(eRx+eTx);
+							tWRate=tWRate+tV.getRate();
+						}
+						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
+						pwRun.flush();
+						
+						pRatio=pRatio+tWRate/tGRate;
+						rRatio=rRatio+tWTime/tGTime;
+						pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime));
+						pwRun.flush();
+						pwRun.close();
+						
+				}
+				pwGRun.println(gNodeSet[i]+" "+df.format(pRatio/20)+" "+df.format(rRatio/20));
+				pwGRun.flush();
 				
-					double tWFlow=0;
-					double tWRate=0;
-					for(int tS=0;tS<wFlow.getTopology().getSourceList().size();tS++)
-					{
-						Vertex tV=wFlow.getTopology().getSourceList().get(tS);
-						tWFlow=tWFlow+tV.getRate()*(eRx+eTx);
-						tWRate=tWRate+tV.getRate();
-					}
-					pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
-					pwRun.flush();
-					
-					pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime));
-					pwRun.flush();
-					
 			}
+			pwGRun.close();
 		}
 		/*
 		 * 
