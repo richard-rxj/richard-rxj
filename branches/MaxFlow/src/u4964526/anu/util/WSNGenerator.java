@@ -223,6 +223,7 @@ public class WSNGenerator {
 		Random r=new Random();
 		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
 		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
+		PrintWriter pwWFEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/wfedge_"+f+".txt")));
 		int i=0;
 		
 		Vertex s=new Vertex(String.valueOf(1));
@@ -307,7 +308,7 @@ public class WSNGenerator {
 			while(fastI.hasNext())
 			{
 				v2=fastI.next();
-				double tRange=this.validTransRangePlusEdgeCapacity(v1, v2);
+				double tRange=this.validTransRangePlusEdgeCapacity(v1, v2,this.gRadius);
 				if(tRange>0)
 				{
 					//double tV1=this.getgFactorRecv()*v1.getMaxRate()+this.getgFactorSend()*v1.getMaxRate()*Math.pow((tRange), 2);
@@ -317,9 +318,30 @@ public class WSNGenerator {
 					//double tV2=this.getgFactorRecv()*v2.getMaxRate()+this.getgFactorSend()*v2.getMaxRate()*Math.pow((tRange), 2);
 					Edge e2=new Edge(v2,v1,v2.getBudgetEnergy());
 					g.addEdge(e2);
-					pwEdge.println(v2+" "+v1+" "+e1.getCapacity());
+					pwEdge.println(v2+" "+v1+" "+e2.getCapacity());
 					pwEdge.flush();
 				}
+				
+				double tWFRange=this.validTransRangePlusEdgeCapacity(v1, v2,this.gRadius*v1.getBudgetEnergy()/this.gBudgetEnergy[1]);
+				if(tWFRange>0)
+				{
+					//double tV1=this.getgFactorRecv()*v1.getMaxRate()+this.getgFactorSend()*v1.getMaxRate()*Math.pow((tRange), 2);
+					Edge e1=new Edge(v1,v2,v1.getBudgetEnergy());
+					g.addEdge(e1);
+					pwWFEdge.println(v1+" "+v2+" "+e1.getCapacity());
+					
+				}
+				
+				tWFRange=this.validTransRangePlusEdgeCapacity(v1, v2,this.gRadius*v2.getBudgetEnergy()/this.gBudgetEnergy[1]);
+				if(tWFRange>0)
+				{
+					//double tV2=this.getgFactorRecv()*v2.getMaxRate()+this.getgFactorSend()*v2.getMaxRate()*Math.pow((tRange), 2);
+					Edge e2=new Edge(v2,v1,v2.getBudgetEnergy());
+					g.addEdge(e2);
+					pwWFEdge.println(v2+" "+v1+" "+e2.getCapacity());
+					pwWFEdge.flush();
+				}
+				
 			}
 			
 		}
@@ -327,12 +349,12 @@ public class WSNGenerator {
 		return g;
 	}
 	
-	private double validTransRangePlusEdgeCapacity(Vertex v1, Vertex v2)
+	private double validTransRangePlusEdgeCapacity(Vertex v1, Vertex v2, double tRadius)
 	{
 		double result=0;
 		double c1=Math.pow((v1.getxLabel()-v2.getxLabel()),2);
 		double c2=Math.pow((v1.getyLabel()-v2.getyLabel()),2);
-		double o=Math.pow(this.getgRadius(),2);
+		double o=Math.pow(tRadius,2);
 		if(c1+c2<=o)
 		{
 			result=c1+c2;

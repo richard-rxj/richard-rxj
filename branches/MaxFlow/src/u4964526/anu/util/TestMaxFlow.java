@@ -510,12 +510,15 @@ public class TestMaxFlow {
 			{
 				double pRatio=0;
 				double rRatio=0;
+				double pRRatio=0;
+				double rRRatio=0;
 				for(int l=0;l<20;l++)
 				{
 					PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running/running_"+(int)(apprFactorSet[j]*100)+"_"+l+".txt",true)));
 
 					String fileName1="test/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
 					String fileName2="test/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName3="test/topology/wfedge_"+gNodeSet[i]+"_"+l+".txt";
 					
 					
 					
@@ -573,15 +576,48 @@ public class TestMaxFlow {
 						}
 						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
 						pwRun.flush();
+						/*
+						 * begin of changable radius
+						 */
+						Graph gRWf=new Graph();
+						TestMaxFlow.initRandomData(fileName1, fileName3, gRWf,1);
+						WfMaxFlow wRFlow=new WfMaxFlow();
+						wRFlow.setTopology(gRWf);
+						wRFlow.seteRx(eRx);
+						wRFlow.seteTx(eTx);
+						wRFlow.setEpsilon(apprFactorSet[j]);
+						startTime=System.currentTimeMillis();
+						wRFlow.computeDWFFLow();
+						endTime=System.currentTimeMillis();
+						double tRWTime=endTime-startTime;
+						pwRun.print(df.format(tRWTime)+" ");
+						pwRun.flush();
+					
+						double tRWFlow=0;
+						double tRWRate=0;
+						for(int tS=0;tS<wRFlow.getTopology().getSourceList().size();tS++)
+						{
+							Vertex tV=wRFlow.getTopology().getSourceList().get(tS);
+							tRWFlow=tRWFlow+tV.getRate()*(eRx+eTx);
+							tRWRate=tRWRate+tV.getRate();
+						}
+						pwRun.print(df.format(tRWFlow)+" "+df.format(tRWRate)+" ");
+						pwRun.flush();
+						/*
+						 * end of changable radius
+						 */
+						
 						
 						pRatio=pRatio+tWRate/tGRate;
 						rRatio=rRatio+tWTime/tGTime;
-						pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime));
+						pRRatio=pRRatio+tRWRate/tGRate;
+						rRRatio=rRRatio+tRWTime/tGTime;
+						pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime)+" "+df.format(tRWRate/tGRate)+" "+df.format(tRWTime/tGTime));
 						pwRun.flush();
 						pwRun.close();
 						
 				}
-				pwGRun.println(gNodeSet[i]+" "+df.format(pRatio/20)+" "+df.format(rRatio/20));
+				pwGRun.println(gNodeSet[i]+" "+df.format(pRatio/20)+" "+df.format(rRatio/20)+" "+df.format(pRRatio/20)+" "+df.format(rRRatio/20));
 				pwGRun.flush();
 				
 			}
@@ -684,8 +720,8 @@ public class TestMaxFlow {
 		fh.setLevel(Level.INFO);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
-		//TestMaxFlow.runningTask();
-		TestMaxFlow.mainTaskDWF();
+		TestMaxFlow.runningTask();
+		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
 	}
 }
