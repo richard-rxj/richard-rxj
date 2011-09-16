@@ -223,7 +223,7 @@ public class WSNGenerator {
 		Random r=new Random();
 		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
 		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
-		PrintWriter pwWFEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/wfedge_"+f+".txt")));
+		//PrintWriter pwWFEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/wfedge_"+f+".txt")));
 		int i=0;
 		
 		Vertex s=new Vertex(String.valueOf(1));
@@ -322,6 +322,7 @@ public class WSNGenerator {
 					pwEdge.flush();
 				}
 				
+				/*
 				double tWFRange=this.validTransRangePlusEdgeCapacity(v1, v2,this.gRadius*v1.getBudgetEnergy()/this.gBudgetEnergy[1]);
 				if(tWFRange>0)
 				{
@@ -341,10 +342,52 @@ public class WSNGenerator {
 					pwWFEdge.println(v2+" "+v1+" "+e2.getCapacity());
 					pwWFEdge.flush();
 				}
+				*/
+				
 				
 			}
-			
+						
 		}
+		
+		boolean w=true;
+		double tRadius=this.gRadius;
+		while(w)
+		{
+			tRadius=tRadius+1;
+			w=false;
+			g.getShortPathAndDSNode(g.getSinkList().get(0));
+			for(int m=0;m<g.getSourceList().size();m++)
+			{
+				Vertex v1=g.getSourceList().get(m);
+				if(!v1.isWasConnected())
+				{
+					
+					v1.setWasConnected(true);
+					w=true;
+					slowI=vSet.iterator();
+					while(slowI.hasNext())
+					{
+						Vertex v2=slowI.next();
+						double tRange=this.validTransRangePlusEdgeCapacity(v1, v2,tRadius);
+						if(tRange>0)
+						{
+							//double tV1=this.getgFactorRecv()*v1.getMaxRate()+this.getgFactorSend()*v1.getMaxRate()*Math.pow((tRange), 2);
+							Edge e1=new Edge(v1,v2,v1.getBudgetEnergy());
+							g.addEdge(e1);
+							pwEdge.println(v1+" "+v2+" "+e1.getCapacity());
+							//double tV2=this.getgFactorRecv()*v2.getMaxRate()+this.getgFactorSend()*v2.getMaxRate()*Math.pow((tRange), 2);
+							Edge e2=new Edge(v2,v1,v2.getBudgetEnergy());
+							g.addEdge(e2);
+							pwEdge.println(v2+" "+v1+" "+e2.getCapacity());
+							pwEdge.flush();
+						}
+					}
+				}
+			}
+		}
+		pwVertex.close();
+		pwEdge.close();
+		//pwWFEdge.close();
 		
 		return g;
 	}
@@ -368,14 +411,14 @@ public class WSNGenerator {
 		try
 		{
 			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
-			int[] tNodeSet={100,150,200,250,300,350,400,450,500};
-			double[] tRadiusSet={15,13,10.5,10,9,8.5,8,7.5,7};
+			int[] tNodeSet={10,15,20,100,150,200,250,300,350,400,450,500};
+			double[] tRadiusSet={50,40,35,15,13,10.5,10,9,8.5,8,7.5,7};
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
 			//Random r=new Random();
 			
-			for(int j=0;j<20;j++)
+			for(int j=0;j<1;j++)
 			{
 				for(int i=0;i<tNodeSet.length;i++)
 				{
