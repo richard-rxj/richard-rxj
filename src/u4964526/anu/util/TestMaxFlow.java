@@ -32,6 +32,8 @@ public class TestMaxFlow {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1;
+	private static double maxMaxRate=76800;
+	private static double maxBudgetEnergy=0.01365;
 
 	
 	public static double getEpsilon() {
@@ -50,69 +52,52 @@ public class TestMaxFlow {
 		
 	}
 
-   private static double getVertexMaxRate()
+	private static double getBudgetEnergy1()
+	{
+		return 0.01365;
+		
+	}
+	
+	private static double getBudgetEnergy3()
+	{
+		double[] result={0.01365,0.01009,0.00653};
+		int i=new Random().nextInt(result.length);
+		return result[i];
+		
+	}
+	
+	private static double getBudgetEnergy5()
+	{
+		double[] result={0.01365,0.01187,0.01009,0.00831,0.00653};
+		int i=new Random().nextInt(result.length);
+		return result[i];
+		
+	}
+	
+	private static double getVertexMaxRate1()
+	{
+		return 76800;
+	}
+	
+	
+	private static double getVertexMaxRate3()
    {
-	    double[] result={100000,75000,50000};
-		int i=new Random().nextInt(3);
+	    double[] result={76800,57600,38400};
+		int i=new Random().nextInt(result.length);
+		return result[i];
+   }
+   
+   private static double getVertexMaxRate5()
+   {
+	    double[] result={76800,67200,57600,48000,38400};
+		int i=new Random().nextInt(result.length);
 		return result[i];
    }
 	
 	
-	private static void initTest(Graph add)
-	{
-		Logger logger=Logger.getLogger("MaxFlow");
-		Graph g=add;
-		Vertex aV=new Vertex("A");
-        Vertex bV=new Vertex("B");
-        Vertex cV=new Vertex("C");
-        Vertex dV=new Vertex("D");
-        Vertex tV=new Vertex("T");
-        Vertex kV=new Vertex("K");
-        Vertex sV=new Vertex("S");
-        Edge asE=new Edge(aV,sV,2);
-        Edge bsE=new Edge(bV,sV,2);
-        Edge tsE=new Edge(tV,sV,2);
-        Edge ksE=new Edge(kV,sV,2);
-        Edge atE=new Edge(aV,tV,2);
-        Edge btE=new Edge(bV,tV,2);
-        Edge ctE=new Edge(cV,tV,2);
-        Edge ckE=new Edge(cV,kV,2);
-        Edge dkE=new Edge(dV,kV,2);
-        asE.setLength(10);
-        bsE.setLength(5);
-        tsE.setLength(2);
-        ksE.setLength(1);
-        atE.setLength(2);
-        btE.setLength(4);
-        ctE.setLength(4);
-        ckE.setLength(3);
-        dkE.setLength(1);
-        g.addVertex(aV);
-        g.addVertex(bV);
-        g.addVertex(cV);
-        g.addVertex(dV);
-        g.addVertex(tV);
-        g.addVertex(kV);
-        g.addVertex(sV);
-        g.addEdge(asE);
-        g.addEdge(bsE);
-        g.addEdge(tsE);
-        g.addEdge(ksE);
-        g.addEdge(atE);
-        g.addEdge(btE);
-        g.addEdge(ctE);
-        g.addEdge(ckE);
-        g.addEdge(dkE);
-        g.addSource(aV);
-        g.addSource(bV);
-        g.addSource(cV);
-        g.addSource(dV);
-        g.addSink(sV);
-        
-        logger.info("initial complete!");
-	}
 	
-	public static void initRandomData(String fileName1, String fileName2, Graph g, int wOption)
+	
+	public static void initRandomData(String fileName1, String fileName2, Graph g, int rOption, int eOption, int wOption)
 	/*
 	 *  set all weight to 1
 	 */
@@ -158,9 +143,48 @@ public class TestMaxFlow {
 			   {
 				   v1.setWeight(Double.parseDouble(b[3]));
 			   }
-			   v1.setMaxRate(Double.parseDouble(b[4]));
-			   //v1.setMaxRate(TestMaxFlow.getVertexMaxRate());
-			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
+			   
+			   
+			   if(eOption==1)
+			   {
+				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy1());
+			   }
+			   else if(eOption==3)
+			   {
+				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy3());
+			   }
+			   else if(eOption==5)
+			   {
+				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy5());
+			   }
+			   else
+			   {
+				   v1.setBudgetEnergy(Double.parseDouble(b[5]));
+			   }
+			   
+			   if(rOption==0)
+			   {
+				   v1.setMaxRate(v1.getBudgetEnergy()/TestMaxFlow.maxBudgetEnergy*TestMaxFlow.maxMaxRate);
+			   }
+			   else if(rOption==1)
+			   {
+				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate1());
+			   }
+			   else if(rOption==3)
+			   {
+				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate3());
+			   }
+			   else if(rOption==5)
+			   {
+				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate5());
+			   }
+			   else
+			   {
+				   v1.setMaxRate(Double.parseDouble(b[4]));
+			   }
+			   
+			  
+				   
 			   g.addVertex(v1);
 			   if(g.getVertexList().size()==1)
 			   {
@@ -225,7 +249,7 @@ public class TestMaxFlow {
 			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0])-1);
 			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1])-1);
 			   double c1=Double.parseDouble(b[2]);
-			   Edge e1=new Edge(s1,t1,c1);
+			   Edge e1=new Edge(s1,t1,s1.getBudgetEnergy());
 			   g.addEdge(e1);
 			   
 		   }
@@ -314,13 +338,13 @@ public class TestMaxFlow {
 		{
 			for(int n=0;n<apprFactorSet.length;n++)
 			{
-				for(int l=0;l<1;l++)
+				for(int l=0;l<20;l++)
 				{
-					PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/temp/Gragtask_"+gNodeSet[m]+"_"+l+".txt")));
-					String fileName1="test/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
-					String fileName2="test/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
+					PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/simulation/temp/Gragtask_"+gNodeSet[m]+"_"+l+".txt")));
+					String fileName1="test/simulation/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
+					String fileName2="test/simulation/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
 					Graph g=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
+					TestMaxFlow.initRandomData(fileName1, fileName2, g,0,0,1);
 					GragMaxFlow mFlow=new GragMaxFlow();
 					mFlow.setTopology(g);
 					//logger.info(String.valueOf(mFlow.getTopology()));
@@ -434,7 +458,7 @@ public class TestMaxFlow {
 					String fileName1="test/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
 					String fileName2="test/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
 					Graph g=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
+					TestMaxFlow.initRandomData(fileName1, fileName2, g,0,0,1);
 					WfMaxFlow mFlow=new WfMaxFlow();
 			    	mFlow.setTopology(g);		
 					
@@ -485,7 +509,7 @@ public class TestMaxFlow {
 	}
 	
 	
-	public static void runningTask() throws SecurityException, IOException
+	public static void runningTask(int rOption,int eOption ) throws SecurityException, IOException
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		FileHandler fh=new FileHandler("m.log");
@@ -503,9 +527,16 @@ public class TestMaxFlow {
 		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
 		
 		double[] apprFactorSet={0.3,0.2,0.1};
+		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
+		File tFile=new File(tFileAdd);
+		if(!tFile.exists())
+		{
+			tFile.mkdirs();
+		}
+		
 		for(int j=0;j<apprFactorSet.length;j++)
 		{
-			PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running_"+(int)(apprFactorSet[j]*100)+".txt")));
+			PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+".txt")));
 			for(int i=0;i<gNodeSet.length;i++)
 			{
 				double pRatio=0;
@@ -514,11 +545,19 @@ public class TestMaxFlow {
 				double rRRatio=0;
 				for(int l=0;l<20;l++)
 				{
-					PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/running/running_"+(int)(apprFactorSet[j]*100)+"_"+l+".txt",true)));
+					String rFileAdd="test/simulation/running/"+rOption+"-"+eOption;
+					File rFile=new File(rFileAdd);
+					if(!rFile.exists())
+					{
+						rFile.mkdirs();
+					}
+					
+					
+					PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(rFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+"_"+l+".txt",true)));
 
-					String fileName1="test/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
-					String fileName2="test/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
-					String fileName3="test/topology/wfedge_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName1="test/simulation/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName2="test/simulation/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName3="test/simulation/topology/wfedge_"+gNodeSet[i]+"_"+l+".txt";
 					
 					
 					
@@ -526,7 +565,7 @@ public class TestMaxFlow {
 					
 						
 						Graph gGrag=new Graph();
-						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,1);
+						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,rOption,eOption,1);
 						GragMaxFlow mFlow=new GragMaxFlow();
 						mFlow.setTopology(gGrag);
 						mFlow.seteRx(eRx);
@@ -553,7 +592,7 @@ public class TestMaxFlow {
 						
 						
 						Graph gWf=new Graph();
-						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,1);
+						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,rOption,eOption,1);
 						WfMaxFlow wFlow=new WfMaxFlow();
 						wFlow.setTopology(gWf);
 						wFlow.seteRx(eRx);
@@ -576,11 +615,12 @@ public class TestMaxFlow {
 						}
 						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
 						pwRun.flush();
+						
 						/*
 						 * begin of changable radius
-						 */
+						 *
 						Graph gRWf=new Graph();
-						TestMaxFlow.initRandomData(fileName1, fileName3, gRWf,1);
+						TestMaxFlow.initRandomData(fileName1, fileName3, gRWf,rOption,eOption,1);
 						WfMaxFlow wRFlow=new WfMaxFlow();
 						wRFlow.setTopology(gRWf);
 						wRFlow.seteRx(eRx);
@@ -610,9 +650,11 @@ public class TestMaxFlow {
 						
 						pRatio=pRatio+tWRate/tGRate;
 						rRatio=rRatio+tWTime/tGTime;
-						pRRatio=pRRatio+tRWRate/tGRate;
-						rRRatio=rRRatio+tRWTime/tGTime;
-						pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime)+" "+df.format(tRWRate/tGRate)+" "+df.format(tRWTime/tGTime));
+						//pRRatio=pRRatio+tRWRate/tGRate;
+						//rRRatio=rRRatio+tRWTime/tGTime;
+						//pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime)+" "+df.format(tRWRate/tGRate)+" "+df.format(tRWTime/tGTime));
+						
+						pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime));
 						pwRun.flush();
 						pwRun.close();
 						
@@ -657,7 +699,7 @@ public class TestMaxFlow {
 					epsilon=apprFactorSet[i];
 					GragMaxFlow gGrag=new GragMaxFlow();
 					Graph g1=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g1, 1);
+					TestMaxFlow.initRandomData(fileName1, fileName2, g1,0,0,1);
 					pw.print(apprFactorSet[i]+" ");
 					//pw.print(g1.getSourceList().size()+" ");
 					pw.flush();
@@ -680,7 +722,7 @@ public class TestMaxFlow {
 					//gP.gragRate=gGrag.getMaxG().getSourceList().get(0).getRate();
 					WfMaxFlow gWf=new WfMaxFlow();
 					Graph g2=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g2, 1);
+					TestMaxFlow.initRandomData(fileName1, fileName2, g2,0,0, 1);
 					gWf.setTopology(g2);
 					gWf.seteRx(eRx);
 					gWf.seteTx(eTx);
@@ -722,6 +764,6 @@ public class TestMaxFlow {
 		//TestMaxFlow.performanceTask();
 		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
-		TestMaxFlow.mainTaskConcurrent();
+		//TestMaxFlow.mainTaskConcurrent();
 	}
 }
