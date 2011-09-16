@@ -16,7 +16,7 @@ public class WSNGenerator {
 	private double gInitialEnergy=50;                      //J
 	private double gETx=0.0000144;                      //J/b
 	private double gERx=0.00000576;                      //J/b
-	private double[] gMaxRate={100000,75000,50000};                     //bps
+	private double[] gMaxRate={76800,57600,38400};                     //bps
 	private double[] gWeight={1,0.7,0.5};
 	private double[] gBudgetEnergy={0.01365,0.00653};
 	private int gNodeNum=100;
@@ -418,7 +418,7 @@ public class WSNGenerator {
 			//int[] tRangeSet={25,25,25};
 			//Random r=new Random();
 			
-			for(int j=0;j<1;j++)
+			for(int j=0;j<20;j++)
 			{
 				for(int i=0;i<tNodeSet.length;i++)
 				{
