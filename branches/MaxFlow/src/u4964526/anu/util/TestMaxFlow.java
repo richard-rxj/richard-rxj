@@ -307,7 +307,7 @@ public class TestMaxFlow {
 	
 	private static int mainTaskConcurrent() throws FileNotFoundException
 	{
-		int[] gNodeSet={450};
+		int[] gNodeSet={100,150,200,250,300,350,400,450,500};
 		double[] apprFactorSet={0.3};
 		Logger logger=Logger.getLogger("MaxFlow");
 		for(int m=0;m<gNodeSet.length;m++)
@@ -720,8 +720,8 @@ public class TestMaxFlow {
 		fh.setLevel(Level.INFO);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
-		TestMaxFlow.runningTask();
+		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
-		//TestMaxFlow.mainTaskConcurrent();
+		TestMaxFlow.mainTaskConcurrent();
 	}
 }
