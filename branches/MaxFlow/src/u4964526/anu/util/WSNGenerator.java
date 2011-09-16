@@ -229,7 +229,7 @@ public class WSNGenerator {
 		Vertex s=new Vertex(String.valueOf(1));
 		s.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 		s.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
-		s.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+		s.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
 		s.setxLabel(1);
 		s.setyLabel(1);
 		g.addVertex(s);
@@ -242,7 +242,7 @@ public class WSNGenerator {
 		Vertex s1=new Vertex(String.valueOf(2));
 		s1.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 		s1.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
-		s1.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+		s1.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
 		s1.setxLabel(5);
 		s1.setyLabel(5);
 		g.addVertex(s1);
@@ -259,7 +259,7 @@ public class WSNGenerator {
 				Vertex s2=new Vertex(String.valueOf(i+1));
 				s2.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 				s2.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
-				s2.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+				s2.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
 				s2.setxLabel(m*this.gRadius);
 				s2.setyLabel(n*this.gRadius);
 				g.addVertex(s2);
@@ -280,7 +280,7 @@ public class WSNGenerator {
 			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 			v.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
-			v.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextDouble()*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
+			v.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
 			v.setxLabel(this.getgWidth()*r.nextDouble());
 			v.setyLabel(this.getgLength()*r.nextDouble());
 			g.addVertex(v);
