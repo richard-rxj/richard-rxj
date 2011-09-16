@@ -527,7 +527,7 @@ public class Graph {
 		
 			
 	    Graph g=new Graph();
-	    TestMaxFlow.initRandomData(fileName1, fileName2, g,1);
+	    TestMaxFlow.initRandomData(fileName1, fileName2, g, 100,100,1);
 		
 		
 		
