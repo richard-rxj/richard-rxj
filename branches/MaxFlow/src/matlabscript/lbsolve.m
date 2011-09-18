@@ -1,14 +1,14 @@
-cd D:\PhDWork\Jspace\MaxFlow\test\RandomNoWeight\MatlabLP;
-conSet = load('test-config.txt');
+cd D:\PhDWork\Jspace\MaxFlowSVN\test\simulation\matlab\3-3\20;
+%conSet = load('test-config.txt');
 
-for i=conSet
-    f = strcat(strcat('a',int2str(i)),'.txt');
+for i=1
+    f = 'a.txt';
     A = load(f);
-    f = strcat(strcat('f',int2str(i)),'.txt');
+    f = 'f.txt';
     F = load(f);
-    f = strcat(strcat('b',int2str(i)),'.txt');
+    f = 'b.txt';
     B = load(f);
-    f = strcat(strcat('lb',int2str(i)),'.txt');
+    f = 'lb.txt';
     LB = load(f);
     X = linprog(F,A,B,[],[],LB);
     [x,y]= size(A);
