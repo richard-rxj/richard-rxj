@@ -248,7 +248,7 @@ public class WfMaxFlow {
 	}
 	
 	
-	public int computeDWFFLow()
+	public double computeDWFFLow()
 	{
 		topology.transit();
 		ArrayList<Edge> edgeList=topology.getEdgeList();
@@ -277,11 +277,19 @@ public class WfMaxFlow {
 			w=true;
 		}
 		int loopSum=0;
+		double startTime=System.currentTimeMillis();
 		while(w)
 		{
 			w=false;
+			
+			if(gD>=1)
+			{
+				continue;
+			}
+			
 			HashMap<Vertex,Path> tPathSet=this.topology.getShortPathAndDSNode(sink);
 			double wfFactor=1;
+			gD=0;
 			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
 				Edge te=topology.getEdgeList().get(i);
@@ -307,6 +315,7 @@ public class WfMaxFlow {
 						}
 					}
 					*/
+									
 				}
 			}
 			
@@ -321,7 +330,11 @@ public class WfMaxFlow {
 			/*
 			 * end of debug info
 			 */
-			double gD1=gD;
+			
+			
+			
+			
+			
 			gD=0;
 			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
@@ -339,12 +352,14 @@ public class WfMaxFlow {
 				gD=gD+te.getCapacity()*te.getLength();
 			}
 			
+			
 			for(int i=0;i<sourceList.size();i++)
 			{
 
 				Vertex mSource=sourceList.get(i);
 				
-				if((gD1<1)&&(mSource.getMaxRate()>0)&&mSource.isWasConnected())
+				
+				if(mSource.isWasConnected()&&mSource.getMaxRate()>0)
 				{
 					/*
 					 * begin of update rates and length for next loop
@@ -362,14 +377,12 @@ public class WfMaxFlow {
 					 * end of update rates and length for next loop
 					 */
 				}
-				else
-				{
-					w=false;
-				}
+				
 			}
 			
 			
 		}
+		double endTime=System.currentTimeMillis();
 		/*
 		 * begin of compute the real rate
 		 */
@@ -381,7 +394,7 @@ public class WfMaxFlow {
 		    r=r*this.getTau()/this.getWfScaleFactor();
 		    s.setRate(r);
 		}
-		return loopSum;
+		return endTime-startTime;
 		/*
 		 * end of compute the real rate
 		 */
