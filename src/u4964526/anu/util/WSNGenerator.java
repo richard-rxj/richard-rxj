@@ -1,9 +1,11 @@
 package u4964526.anu.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -417,6 +419,17 @@ public class WSNGenerator {
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
 			//Random r=new Random();
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/nodeDensity.txt")));
+			DecimalFormat df=new DecimalFormat("#.00");
+			pw.println("Node  Radius  NodeDensity");
+			for(int i=0;i<tNodeSet.length;i++)
+			{
+				double nodeDensity=1.0*tNodeSet[i]/(10000/3.14/tRadiusSet[i]/tRadiusSet[i]);
+				pw.println(tNodeSet[i]+" "+df.format(tRadiusSet[i])+" "+df.format(nodeDensity));
+			}
+			pw.flush();
+			pw.close();
+			
 			
 			for(int j=0;j<20;j++)
 			{
