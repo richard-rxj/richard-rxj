@@ -353,7 +353,7 @@ public class TestMaxFlow {
 			        mFlow.setEpsilon(TestMaxFlow.getEpsilon());
 			
 			       
-			        int result=mFlow.computeConcurrentFlow();
+			        mFlow.computeConcurrentFlow();
 			        
 			        /*
 			        *output the flow information
@@ -469,7 +469,7 @@ public class TestMaxFlow {
 			        mFlow.seteTx(eTx);
 			        
 			       
-			        int result=mFlow.computeDWFFLow();
+			        mFlow.computeDWFFLow();
 			        
 			        /*
 			        //output the flow information
@@ -514,7 +514,7 @@ public class TestMaxFlow {
 		Logger logger=Logger.getLogger("MaxFlow");
 		FileHandler fh=new FileHandler("m.log");
 		fh.setFormatter(new SimpleFormatter());
-		fh.setLevel(Level.INFO);
+		fh.setLevel(Level.WARNING);
 		logger.addHandler(fh);
 		DecimalFormat df=new DecimalFormat("#.0000");  
 				
@@ -543,6 +543,10 @@ public class TestMaxFlow {
 				double rRatio=0;
 				double pRRatio=0;
 				double rRRatio=0;
+				double gRunTime=0;
+				double gFlowData=0;
+				double wfRunTime=0;
+				double wfFlowData=0;
 				for(int l=0;l<20;l++)
 				{
 					String rFileAdd="test/simulation/running/"+rOption+"-"+eOption;
@@ -561,10 +565,11 @@ public class TestMaxFlow {
 					
 					
 					
-					
+					    
 					
 						
 						Graph gGrag=new Graph();
+						double tGTime=0;
 						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,rOption,eOption,1);
 						GragMaxFlow mFlow=new GragMaxFlow();
 						mFlow.setTopology(gGrag);
@@ -572,9 +577,9 @@ public class TestMaxFlow {
 						mFlow.seteTx(eTx);
 						mFlow.setEpsilon(apprFactorSet[j]);
 						startTime=System.currentTimeMillis();
-						mFlow.computeConcurrentFlow();
+						tGTime=mFlow.computeConcurrentFlow();
 						endTime=System.currentTimeMillis();
-						double tGTime=endTime-startTime;
+						
 						pwRun.print(gNodeSet[i]+" "+df.format(tGTime)+" ");
 						pwRun.flush();
 						
@@ -588,10 +593,14 @@ public class TestMaxFlow {
 						}
 						pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" ");
 						pwRun.flush();
-		
+		                gRunTime=gRunTime+tGTime;
+		                gFlowData=gFlowData+tGRate;
 						
+		                
+		                
 						
 						Graph gWf=new Graph();
+						double tWTime=0;
 						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,rOption,eOption,1);
 						WfMaxFlow wFlow=new WfMaxFlow();
 						wFlow.setTopology(gWf);
@@ -599,9 +608,9 @@ public class TestMaxFlow {
 						wFlow.seteTx(eTx);
 						wFlow.setEpsilon(apprFactorSet[j]);
 						startTime=System.currentTimeMillis();
-						wFlow.computeDWFFLow();
+						tWTime=wFlow.computeDWFFLow();
 						endTime=System.currentTimeMillis();
-						double tWTime=endTime-startTime;
+						
 						pwRun.print(df.format(tWTime)+" ");
 						pwRun.flush();
 					
@@ -615,7 +624,8 @@ public class TestMaxFlow {
 						}
 						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
 						pwRun.flush();
-						
+						wfRunTime=wfRunTime+tWTime;
+						wfFlowData=wfFlowData+tWRate;
 						/*
 						 * begin of changable radius
 						 *
@@ -659,7 +669,7 @@ public class TestMaxFlow {
 						pwRun.close();
 						
 				}
-				pwGRun.println(gNodeSet[i]+" "+df.format(pRatio/20)+" "+df.format(rRatio/20)+" "+df.format(pRRatio/20)+" "+df.format(rRRatio/20));
+				pwGRun.println(gNodeSet[i]+" "+df.format(gRunTime/20)+" "+df.format(gFlowData/20)+" "+df.format(wfRunTime/20)+" "+df.format(wfFlowData/20)+" "+df.format(pRatio/20)+" "+df.format(rRatio/20)+" "+df.format(pRRatio/20)+" "+df.format(rRRatio/20));
 				pwGRun.flush();
 				
 			}
