@@ -1,5 +1,6 @@
 package u4964526.anu.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -46,10 +47,17 @@ public class MatlabMaxFlow {
 	public void computeLPMatlab(String dir) throws FileNotFoundException
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
-		PrintWriter pwA=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"a"+maxG.getVertexList().size()+".txt")));
-		PrintWriter pwF=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"f"+maxG.getVertexList().size()+".txt")));
-		PrintWriter pwB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"b"+maxG.getVertexList().size()+".txt")));
-		PrintWriter pwLB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"lb"+maxG.getVertexList().size()+".txt")));
+		
+		File mFile=new File(dir);
+		if(!mFile.exists())
+		{
+			mFile.mkdirs();
+		}
+		
+		PrintWriter pwA=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/a.txt")));
+		PrintWriter pwF=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/f.txt")));
+		PrintWriter pwB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/b.txt")));
+		PrintWriter pwLB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/lb.txt")));
 
 		ArrayList<Path> pSet=maxG.getAllPath(maxG.getSinkList().get(0));
 		/*
