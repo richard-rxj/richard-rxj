@@ -205,7 +205,7 @@ public class GragMaxFlow {
 	}
 	
 	
-	public int computeConcurrentFlow()
+	public double computeConcurrentFlow()
 	/*
 	 * concurrent!!!!!!!!   
 	 */
@@ -239,6 +239,7 @@ public class GragMaxFlow {
 			w=true;
 		}
 		int loopSum=0;
+		double startTime=System.currentTimeMillis();
 		while(w)
 		{
 			w=false;
@@ -339,6 +340,7 @@ public class GragMaxFlow {
 				}
 			}
 		}
+		double endTime=System.currentTimeMillis();
 		/*
 		 * begin of compute the real rate
 		 */
@@ -355,7 +357,7 @@ public class GragMaxFlow {
 		/*
 		 * end of compute the real rate
 		 */
-		return loopSum;
+		return endTime-startTime;
 	}
 	
 	
