@@ -683,76 +683,190 @@ public class TestMaxFlow {
 		
 	}
 	
-	private static void performanceTask()
+	private static void includeMatlabTask(int rOption, int eOption)
 	{
-		class Performance
-		{
-			int nodeNum;
-		    double gragRate;
-		    double wfRate;
-		}
-		
+				
 		try
 		{
+			DecimalFormat df=new DecimalFormat("#.0000");
+			
+			
 			double[] apprFactorSet={0.3,0.2,0.1};
-			int [] nodeSet={100,150,200,250,300,350,400,450,500};
-			PrintWriter pw=null;
-			for(int m=0;m<nodeSet.length;m++)
+			int [] gNodeSet={10,15,20};
+			
+			long startTime=0;
+			long endTime=0;
+			String tFileAdd="test/simulation/matlab/"+rOption+"-"+eOption;;
+			File tFile=new File(tFileAdd);
+			if(!tFile.exists())
 			{
-				int j=nodeSet[m];
-				String fileName1="test/topology/vertex_"+j+".txt";
-				String fileName2="test/topology/edge_"+j+".txt";
-				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/performance_"+j+".txt")));
-				
-				for(int i=0;i<apprFactorSet.length;i++)
+				tFile.mkdirs();
+			}
+			
+			for(int i=0;i<gNodeSet.length;i++)
+			{
+				for(int l=0;l<1;l++)
 				{
-					epsilon=apprFactorSet[i];
-					GragMaxFlow gGrag=new GragMaxFlow();
-					Graph g1=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g1,0,0,1);
-					pw.print(apprFactorSet[i]+" ");
-					//pw.print(g1.getSourceList().size()+" ");
-					pw.flush();
-					//gP.nodeNum=g1.getSourceList().size();
-					gGrag.setTopology(g1);
-					gGrag.seteRx(eRx);
-					gGrag.seteTx(eTx);
-					gGrag.setEpsilon(epsilon);
-					gGrag.computeConcurrentFlow();
-					double tFlow=0;
-					double tRate=0;
-					for(int tS=0;tS<gGrag.getTopology().getSourceList().size();tS++)
+					String fileName1="test/simulation/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
+					String fileName2="test/simulation/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
+					
+					
+					
+					String mFileAdd="test/simulation/matlab/"+rOption+"-"+eOption+"/"+gNodeSet[i];;
+					
+					
+					Graph gMatlab=new Graph();
+					TestMaxFlow.initRandomData(fileName1, fileName2, gMatlab,rOption,eOption,1);
+					MatlabMaxFlow matlabFlow=new MatlabMaxFlow();
+					matlabFlow.setMaxG(gMatlab);
+					matlabFlow.seteRx(eRx);
+					matlabFlow.seteTx(eTx);
+					matlabFlow.computeLPMatlab(mFileAdd);
+				}
+			}
+			
+			for(int j=0;j<apprFactorSet.length;j++)
+			{
+				PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+".txt")));
+				for(int i=0;i<gNodeSet.length;i++)
+				{
+					double pRatio=0;
+					double rRatio=0;
+					double pRRatio=0;
+					double rRRatio=0;
+					double gRunTime=0;
+					double gFlowData=0;
+					double wfRunTime=0;
+					double wfFlowData=0;
+					int lMax=1;
+					for(int l=0;l<lMax;l++)
 					{
-						Vertex tV=gGrag.getTopology().getSourceList().get(tS);
-						tFlow=tFlow+tV.getRate()*(eRx+eTx);
-						tRate=tRate+tV.getRate();
+						String rFileAdd="test/simulation/matlab/running/"+rOption+"-"+eOption;
+						File rFile=new File(rFileAdd);
+						if(!rFile.exists())
+						{
+							rFile.mkdirs();
+						}
+						
+						
+						PrintWriter pwRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(rFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+"_"+l+".txt",true)));
+
+						String fileName1="test/simulation/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
+						String fileName2="test/simulation/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
+							
+						
+						    
+						
+							
+							Graph gGrag=new Graph();
+							double tGTime=0;
+							TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,rOption,eOption,1);
+							GragMaxFlow mFlow=new GragMaxFlow();
+							mFlow.setTopology(gGrag);
+							mFlow.seteRx(eRx);
+							mFlow.seteTx(eTx);
+							mFlow.setEpsilon(apprFactorSet[j]);
+							startTime=System.currentTimeMillis();
+							tGTime=mFlow.computeConcurrentFlow();
+							endTime=System.currentTimeMillis();
+							
+							pwRun.print(gNodeSet[i]+" "+df.format(tGTime)+" ");
+							pwRun.flush();
+							
+							double tGFlow=0;
+							double tGRate=0;
+							for(int tS=0;tS<mFlow.getTopology().getSourceList().size();tS++)
+							{
+								Vertex tV=mFlow.getTopology().getSourceList().get(tS);
+								tGFlow=tGFlow+tV.getRate()*(eRx+eTx);
+								tGRate=tGRate+tV.getRate();
+							}
+							pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" ");
+							pwRun.flush();
+			                gRunTime=gRunTime+tGTime;
+			                gFlowData=gFlowData+tGRate;
+							
+			                
+			                
+							
+							Graph gWf=new Graph();
+							double tWTime=0;
+							TestMaxFlow.initRandomData(fileName1, fileName2, gWf,rOption,eOption,1);
+							WfMaxFlow wFlow=new WfMaxFlow();
+							wFlow.setTopology(gWf);
+							wFlow.seteRx(eRx);
+							wFlow.seteTx(eTx);
+							wFlow.setEpsilon(apprFactorSet[j]);
+							startTime=System.currentTimeMillis();
+							tWTime=wFlow.computeDWFFLow();
+							endTime=System.currentTimeMillis();
+							
+							pwRun.print(df.format(tWTime)+" ");
+							pwRun.flush();
+						
+							double tWFlow=0;
+							double tWRate=0;
+							for(int tS=0;tS<wFlow.getTopology().getSourceList().size();tS++)
+							{
+								Vertex tV=wFlow.getTopology().getSourceList().get(tS);
+								tWFlow=tWFlow+tV.getRate()*(eRx+eTx);
+								tWRate=tWRate+tV.getRate();
+							}
+							pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
+							pwRun.flush();
+							wfRunTime=wfRunTime+tWTime;
+							wfFlowData=wfFlowData+tWRate;
+							/*
+							 * begin of changable radius
+							 *
+							Graph gRWf=new Graph();
+							TestMaxFlow.initRandomData(fileName1, fileName3, gRWf,rOption,eOption,1);
+							WfMaxFlow wRFlow=new WfMaxFlow();
+							wRFlow.setTopology(gRWf);
+							wRFlow.seteRx(eRx);
+							wRFlow.seteTx(eTx);
+							wRFlow.setEpsilon(apprFactorSet[j]);
+							startTime=System.currentTimeMillis();
+							wRFlow.computeDWFFLow();
+							endTime=System.currentTimeMillis();
+							double tRWTime=endTime-startTime;
+							pwRun.print(df.format(tRWTime)+" ");
+							pwRun.flush();
+						
+							double tRWFlow=0;
+							double tRWRate=0;
+							for(int tS=0;tS<wRFlow.getTopology().getSourceList().size();tS++)
+							{
+								Vertex tV=wRFlow.getTopology().getSourceList().get(tS);
+								tRWFlow=tRWFlow+tV.getRate()*(eRx+eTx);
+								tRWRate=tRWRate+tV.getRate();
+							}
+							pwRun.print(df.format(tRWFlow)+" "+df.format(tRWRate)+" ");
+							pwRun.flush();
+							/*
+							 * end of changable radius
+							 */
+							
+							
+							pRatio=pRatio+tWRate/tGRate;
+							rRatio=rRatio+tWTime/tGTime;
+							//pRRatio=pRRatio+tRWRate/tGRate;
+							//rRRatio=rRRatio+tRWTime/tGTime;
+							//pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime)+" "+df.format(tRWRate/tGRate)+" "+df.format(tRWTime/tGTime));
+							
+							pwRun.println(df.format(tWRate/tGRate)+" "+df.format(tWTime/tGTime));
+							pwRun.flush();
+							pwRun.close();
+							
 					}
-					pw.print(tFlow+" "+tRate+" ");
-					pw.flush();
-					//gP.gragRate=gGrag.getMaxG().getSourceList().get(0).getRate();
-					WfMaxFlow gWf=new WfMaxFlow();
-					Graph g2=new Graph();
-					TestMaxFlow.initRandomData(fileName1, fileName2, g2,0,0, 1);
-					gWf.setTopology(g2);
-					gWf.seteRx(eRx);
-					gWf.seteTx(eTx);
-					gWf.setEpsilon(epsilon);
-					gWf.computeDWFFLow();
-					tFlow=0;
-					tRate=0;
-					for(int tS=0;tS<gWf.getTopology().getSourceList().size();tS++)
-					{
-						Vertex tV=gWf.getTopology().getSourceList().get(tS);
-						tFlow=tFlow+tV.getRate()*(eRx+eTx);
-						tRate=tRate+tV.getRate();
-					}
-					pw.println(tFlow+" "+tRate);
-					pw.flush();
+					pwGRun.println(gNodeSet[i]+" "+df.format(gRunTime/lMax)+" "+df.format(gFlowData/lMax)+" "+df.format(wfRunTime/lMax)+" "+df.format(wfFlowData/lMax)+" "+df.format(pRatio/lMax)+" "+df.format(rRatio/lMax)+" "+df.format(pRRatio/lMax)+" "+df.format(rRRatio/lMax));
+					pwGRun.flush();
 					
 				}
-				
-			
+				pwGRun.close();
 			}
+			
+			
 		}
 		catch(Exception e)
 		{
@@ -769,11 +883,12 @@ public class TestMaxFlow {
 		Logger logger=Logger.getLogger("MaxFlow");
 		FileHandler fh=new FileHandler("m.log");
 		fh.setFormatter(new SimpleFormatter());
-		fh.setLevel(Level.INFO);
+		fh.setLevel(Level.WARNING);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
 		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
+		TestMaxFlow.includeMatlabTask(3, 3);
 	}
 }
