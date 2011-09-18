@@ -1,6 +1,7 @@
 package u4964526.anu.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,8 +21,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1;
-	private static double[] gBaseBudgetEnergy={0.00653*1.2,0.00653*1.5,0.00653*1.7};
-	private static double[] gBaseMaxRate={100000, 75000, 50000};
+	private static double[] gBaseBudgetEnergy={0.00653*8,0.00653*10,0.00653*12};
+	private static double[] gBaseMaxRate={76800, 57600, 38400};
 	private static double transRange=25;
 
 	
@@ -523,7 +524,7 @@ public class TestRealData {
 		 */
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
+   public static void realTest() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		Logger log=Logger.getLogger("TestReal");
 		String fileName1="test/real/topology-20.txt";
@@ -543,14 +544,14 @@ public class TestRealData {
 	    wFlow.computeConcurrentFlow();
 	    
 	    for(int i=0;i<wFlow.getMaxG().getSourceList().size();i++)
-        {
-        	Vertex tVertex=wFlow.getMaxG().getSourceList().get(i);
-        	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
-        	pw.flush();
-        }  
-        */
+       {
+       	Vertex tVertex=wFlow.getMaxG().getSourceList().get(i);
+       	pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getMaxRate()+" "+tVertex.getWeight());
+       	pw.flush();
+       }  
+       */
 	    
-        /*
+       /*
 	    PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate-0.txt")));
 	    Graph g=new Graph();
 		TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
@@ -567,60 +568,76 @@ public class TestRealData {
 	    
 	    
 	    for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
-    	{
-    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
-    		pw.flush();
-    	} 
+   	{
+   		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
+   		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
+   		pw.flush();
+   	} 
 	    */
 	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
+	    int[] nodeSet={200};
+	    int[] thresholdSet={6,7,8,9};
 	    
-	    
-	    for(int r=0;r<100;r++)
+	    for(int gn=0;gn<nodeSet.length;gn++)
 	    {
-	    	Graph g=new Graph();
-	    	fileName1="test/real/vertex_100_0.txt";
-	    	fileName2="test/real/neighbor/neighbor-"+r+".txt";
-	    	fileName3="test/real/weight/weight-"+r+".txt";
-			TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
-			String fVertex="test/real/vertex.txt";
-			String fEdge="test/real/edge.txt";
-			g.outputFile(fVertex, fEdge);
-			
-	    	for (int rr=0;rr<rouSet.length;rr++)
+		    int gNode=nodeSet[gn];
+		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
-	    		double rou=rouSet[rr];
-		    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/real/rate/rate-"+r+"-"+rou+".txt")));
-		    	g=new Graph();
-		    	fileName1="test/real/vertex.txt";
-		    	fileName2="test/real/edge.txt";
-		    	fileName3="test/real/weight/weight-"+r+".txt";
-		    	if(rou>0.95)
-		    	{
-		    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
-		    	}
-		    	else
-		    	{
-		    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
-		    	}
-		        WfMaxFlow wFlow=new WfMaxFlow();
-		    	wFlow.setTopology(g);
-			    wFlow.seteRx(eRx);
-			    wFlow.seteTx(eTx);
-			    wFlow.setEpsilon(epsilon);
-		    	log.info(String.valueOf(wFlow.getTopology()));
-		    	wFlow.computeDWFFLow();
-		    
-		    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
-		    	{
-		    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-		    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
-		    		pw.flush();
-		    	}
+		    	int gThreshold=thresholdSet[gt];
+		    	for(int r=0;r<50;r++)
+			    {
+			    	Graph g=new Graph();
+			    	fileName1="test/real/topology/vertex_"+gNode+"_0.txt";
+			    	fileName2="test/real/topology/edge_"+gNode+"_0.txt";
+			    	fileName3="test/real/"+gNode+"/weight-"+gThreshold+"/weight-"+r+".txt";
+					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
+					String fVertex="test/real/vertex.txt";
+					String fEdge="test/real/edge.txt";
+					g.outputFile(fVertex, fEdge);
+					
+			    	for (int rr=0;rr<rouSet.length;rr++)
+				    {
+			    		double rou=rouSet[rr];
+			    		String tFileName="test/real/"+gNode+"/rate-"+gThreshold;
+			    		File tf=new File(tFileName);
+			    		if(!tf.exists())
+			    		{
+			    			tf.mkdirs();
+			    		}
+				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+"/rate-"+r+"-"+(int)(rou*10)+".txt")));
+				    	g=new Graph();
+				    	fileName1="test/real/vertex.txt";
+				    	fileName2="test/real/edge.txt";
+				    	fileName3="test/real/"+gNode+"/weight-"+gThreshold+"/weight-"+r+".txt";
+				    	if(rou>0.95)
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
+				    	}
+				    	else
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
+				    	}
+				        WfMaxFlow wFlow=new WfMaxFlow();
+				    	wFlow.setTopology(g);
+					    wFlow.seteRx(eRx);
+					    wFlow.seteTx(eTx);
+					    wFlow.setEpsilon(epsilon);
+				    	log.info(String.valueOf(wFlow.getTopology()));
+				    	wFlow.computeDWFFLow();
+				    
+				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
+				    	{
+				    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
+				    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
+				    		pw.flush();
+				    	}
+				    }
+			    }
 		    }
 	    }
 	}
 
 }
+
