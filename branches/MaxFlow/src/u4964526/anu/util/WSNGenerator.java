@@ -241,22 +241,10 @@ public class WSNGenerator {
 		pwVertex.flush();
 		i=i+1;	
 		
-		Vertex s1=new Vertex(String.valueOf(2));
-		s1.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
-		s1.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
-		s1.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
-		s1.setxLabel(5);
-		s1.setyLabel(5);
-		g.addVertex(s1);
-		g.addSource(s1);
-		s1.setWasSource(true);
-		pwVertex.println(s1+" "+s1.getxLabel()+" "+s1.getyLabel()+" "+s1.getWeight()+" "+s1.getMaxRate()+" "+s1.getBudgetEnergy());
-		pwVertex.flush();
-		i=i+1;
-		
+	
 		for(int m=0; m<=Math.floor(100.0/this.gRadius);m++)
 		{
-			for(int n=0;n<=6;n++)
+			for(int n=0;n<=Math.floor(100.0/this.gRadius);n++)
 			{
 				Vertex s2=new Vertex(String.valueOf(i+1));
 				s2.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
