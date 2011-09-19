@@ -17,9 +17,11 @@ public class TestAll {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			//TestRealData.realTest();
+			TestRealData.realTest();
+			
 			logger.warning("TestMaxFlow.runningTask(1,1)");
 			TestMaxFlow.runningTask(1,1);
+			
 			logger.warning("TestMaxFlow.runningTask(1,3)");
 			TestMaxFlow.runningTask(1,3);
 			logger.warning("TestMaxFlow.runningTask(1,5)");
@@ -36,7 +38,7 @@ public class TestAll {
 			TestMaxFlow.runningTask(0,3);
 			logger.warning("TestMaxFlow.runningTask(0,5)");
 			TestMaxFlow.runningTask(0,5);
-
+            
 		}
 		catch(Exception e)
 		{
