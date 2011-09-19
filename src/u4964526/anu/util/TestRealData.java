@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TestRealData {
@@ -236,7 +237,7 @@ public class TestRealData {
 		{
 		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
 		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null)
+		   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
 		   {
 			   String[] b=tempString.split(" ");
 			   /*
@@ -271,6 +272,7 @@ public class TestRealData {
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			
 		}
 		finally
 		{
@@ -469,7 +471,7 @@ public class TestRealData {
 		{
 		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
 		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null)
+		   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
 		   {
 			   String[] b=tempString.split(" ");
 			   /*
@@ -577,7 +579,7 @@ public class TestRealData {
 	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={200};
+	    int[] nodeSet={300};
 	    int[] thresholdSet={6,7,8,9};
 	    
 	    for(int gn=0;gn<nodeSet.length;gn++)
@@ -586,7 +588,7 @@ public class TestRealData {
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
-		    	for(int r=0;r<50;r++)
+		    	for(int r=0;r<100;r++)
 			    {
 			    	Graph g=new Graph();
 			    	fileName1="test/real/topology/vertex_"+gNode+"_0.txt";
@@ -624,7 +626,7 @@ public class TestRealData {
 					    wFlow.seteRx(eRx);
 					    wFlow.seteTx(eTx);
 					    wFlow.setEpsilon(epsilon);
-				    	log.info(String.valueOf(wFlow.getTopology()));
+				    	log.fine(String.valueOf(wFlow.getTopology()));
 				    	wFlow.computeDWFFLow();
 				    
 				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
@@ -638,6 +640,22 @@ public class TestRealData {
 		    }
 	    }
 	}
-
+   
+   
+   
+   public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try
+		{
+			Logger logger=Logger.getLogger("MaxFlow");
+			logger.setLevel(Level.WARNING);
+			
+			TestRealData.realTest();
+		}
+		catch(Exception e)
+		{
+			
+		}
+   }
 }
 
