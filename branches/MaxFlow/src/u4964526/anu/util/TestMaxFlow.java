@@ -688,11 +688,12 @@ public class TestMaxFlow {
 				
 		try
 		{
+			Logger logger=Logger.getLogger("MaxFlow");
 			DecimalFormat df=new DecimalFormat("#.0000");
 			
 			
-			double[] apprFactorSet={0.3,0.2,0.1};
-			int [] gNodeSet={10,15,20};
+			double[] apprFactorSet={0.1,0.05,0.025};
+			int [] gNodeSet={10,15};
 			
 			long startTime=0;
 			long endTime=0;
@@ -717,6 +718,7 @@ public class TestMaxFlow {
 					
 					Graph gMatlab=new Graph();
 					TestMaxFlow.initRandomData(fileName1, fileName2, gMatlab,rOption,eOption,1);
+					//logger.warning(String.valueOf(gMatlab));
 					MatlabMaxFlow matlabFlow=new MatlabMaxFlow();
 					matlabFlow.setMaxG(gMatlab);
 					matlabFlow.seteRx(eRx);
@@ -889,6 +891,6 @@ public class TestMaxFlow {
 		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
-		TestMaxFlow.includeMatlabTask(3, 3);
+		TestMaxFlow.includeMatlabTask(0, 0);
 	}
 }
