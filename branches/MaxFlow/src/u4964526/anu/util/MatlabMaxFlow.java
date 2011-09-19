@@ -67,7 +67,7 @@ public class MatlabMaxFlow {
 		{
 			pwF.println(0);
 			pwLB.println(0);
-			logger.info(i+"--"+pSet.get(i));
+			logger.fine(i+"--"+pSet.get(i));
 		}
 		pwF.println(-1);
 		pwF.flush();
