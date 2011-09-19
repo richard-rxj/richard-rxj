@@ -66,9 +66,9 @@ public class TestMaxFlow {
 		
 	}
 	
-	private static double getBudgetEnergy5()
+	private static double getBudgetEnergy6()
 	{
-		double[] result={0.01365,0.01187,0.01009,0.00831,0.00653};
+		double[] result={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
 		int i=new Random().nextInt(result.length);
 		return result[i];
 		
@@ -87,9 +87,9 @@ public class TestMaxFlow {
 		return result[i];
    }
    
-   private static double getVertexMaxRate5()
+   private static double getVertexMaxRate6()
    {
-	    double[] result={76800,67200,57600,48000,38400};
+	    double[] result={76800,69120,61440,53760,46080,38400};
 		int i=new Random().nextInt(result.length);
 		return result[i];
    }
@@ -153,9 +153,9 @@ public class TestMaxFlow {
 			   {
 				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy3());
 			   }
-			   else if(eOption==5)
+			   else if(eOption==6)
 			   {
-				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy5());
+				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy6());
 			   }
 			   else
 			   {
@@ -174,9 +174,9 @@ public class TestMaxFlow {
 			   {
 				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate3());
 			   }
-			   else if(rOption==5)
+			   else if(rOption==6)
 			   {
-				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate5());
+				   v1.setMaxRate(TestMaxFlow.getVertexMaxRate6());
 			   }
 			   else
 			   {
@@ -526,7 +526,7 @@ public class TestMaxFlow {
 		int gNode=0;
 		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
 		
-		double[] apprFactorSet={0.05,0.025};
+		double[] apprFactorSet={0.5,0.025};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
 		File tFile=new File(tFileAdd);
 		if(!tFile.exists())
@@ -693,7 +693,7 @@ public class TestMaxFlow {
 			
 			
 			double[] apprFactorSet={0.1,0.05,0.025};
-			int [] gNodeSet={10,15};
+			int [] gNodeSet={10,15,20};
 			
 			long startTime=0;
 			long endTime=0;
@@ -891,6 +891,11 @@ public class TestMaxFlow {
 		//TestMaxFlow.runningTask();
 		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
-		TestMaxFlow.includeMatlabTask(0, 0);
+		TestMaxFlow.includeMatlabTask(1, 1);
+		TestMaxFlow.includeMatlabTask(1, 3);
+		TestMaxFlow.includeMatlabTask(3, 3);
+		TestMaxFlow.includeMatlabTask(1, 1);
+		TestMaxFlow.includeMatlabTask(1, 3);
+		TestMaxFlow.includeMatlabTask(3, 3);
 	}
 }
