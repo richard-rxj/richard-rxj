@@ -24,20 +24,20 @@ public class TestAll {
 			
 			logger.warning("TestMaxFlow.runningTask(1,3)");
 			TestMaxFlow.runningTask(1,3);
-			logger.warning("TestMaxFlow.runningTask(1,5)");
-			TestMaxFlow.runningTask(1,5);
+			logger.warning("TestMaxFlow.runningTask(1,6)");
+			TestMaxFlow.runningTask(1,6);
 			logger.warning("TestMaxFlow.runningTask(3,1)");
 			TestMaxFlow.runningTask(3,1);
-			logger.warning("TestMaxFlow.runningTask(5,1)");
-			TestMaxFlow.runningTask(5,1);
+			logger.warning("TestMaxFlow.runningTask(6,1)");
+			TestMaxFlow.runningTask(6,1);
 			logger.warning("TestMaxFlow.runningTask(3,3)");
 			TestMaxFlow.runningTask(3,3);
-			logger.warning("TestMaxFlow.runningTask(5,5)");
-			TestMaxFlow.runningTask(5,5);
+			logger.warning("TestMaxFlow.runningTask(6,6)");
+			TestMaxFlow.runningTask(6,6);
 			logger.warning("TestMaxFlow.runningTask(0,3)");
 			TestMaxFlow.runningTask(0,3);
-			logger.warning("TestMaxFlow.runningTask(0,5)");
-			TestMaxFlow.runningTask(0,5);
+			logger.warning("TestMaxFlow.runningTask(0,6)");
+			TestMaxFlow.runningTask(0,6);
             
 		}
 		catch(Exception e)
