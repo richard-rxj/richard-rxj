@@ -526,7 +526,7 @@ public class TestMaxFlow {
 		int gNode=0;
 		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
 		
-		double[] apprFactorSet={0.3,0.2,0.1};
+		double[] apprFactorSet={0.05,0.025};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
 		File tFile=new File(tFileAdd);
 		if(!tFile.exists())
