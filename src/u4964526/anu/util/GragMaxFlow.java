@@ -243,22 +243,24 @@ public class GragMaxFlow {
 		while(w)
 		{
 			w=false;
+			
 			for(int i=0;i<sourceList.size();i++)
 			{
 
 				Vertex mSource=sourceList.get(i);
 				Path mPath=this.topology.getSingleShortPath(mSource, sink);
+				sink.setMinKey(1);
 				if (mPath.getEdges().size()==0)
 				{
 					continue;
 				}
 				//double wd=mPath.getwULength();
 				
-				
+				++loopSum;
 				/*
 				 * begin of debug info
 				 *
-				++loopSum;
+				
 				System.out.println("********Gragloop--"+loopSum+"*******\n");
 				System.out.println("********GraggD--"+gD+"*******\n");
 				//System.out.println(this.getMaxG());
@@ -286,7 +288,9 @@ public class GragMaxFlow {
 							 mPath.updateLength(tFactor);
 							 for(int ti=0;ti<edgeList.size();ti++)
 							 {
-								    Edge te=edgeList.get(ti);									
+								    Edge te=edgeList.get(ti);	
+								    te.getWfNodeSet().clear();
+								    te.setWfSum(0);
 									gD=gD+te.getLength()*te.getCapacity();
 							 }
 							 /*
@@ -312,7 +316,9 @@ public class GragMaxFlow {
 								 mPath.updateLength(tFactor);
 								 for(int ti=0;ti<edgeList.size();ti++)
 								 {
-									    Edge te=edgeList.get(ti);									
+									    Edge te=edgeList.get(ti);	
+									    te.getWfNodeSet().clear();
+									    te.setWfSum(0);
 										gD=gD+te.getLength()*te.getCapacity();
 								 }
 								 /*
@@ -344,6 +350,7 @@ public class GragMaxFlow {
 		/*
 		 * begin of compute the real rate
 		 */
+		sink.setMaxRate(loopSum);
 		
 		for(int i=0;i<sourceList.size();i++)
 		{

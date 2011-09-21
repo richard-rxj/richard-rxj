@@ -331,8 +331,8 @@ public class TestMaxFlow {
 	
 	private static int mainTaskConcurrent() throws FileNotFoundException
 	{
-		int[] gNodeSet={100,150,200,250,300,350,400,450,500};
-		double[] apprFactorSet={0.3};
+		int[] gNodeSet={100};
+		double[] apprFactorSet={0.1};
 		Logger logger=Logger.getLogger("MaxFlow");
 		for(int m=0;m<gNodeSet.length;m++)
 		{
@@ -454,9 +454,9 @@ public class TestMaxFlow {
 			{
 				for(int l=0;l<1;l++)
 				{
-					PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/temp/WFtask_"+gNodeSet[m]+"_"+(int)(apprFactorSet[n]*100)+"_"+l+".txt")));
-					String fileName1="test/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
-					String fileName2="test/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
+					PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/simulation/temp/WFtask_"+gNodeSet[m]+"_"+(int)(apprFactorSet[n]*100)+"_"+l+".txt")));
+					String fileName1="test/simulation/topology/vertex_"+gNodeSet[m]+"_"+l+".txt";
+					String fileName2="test/simulation/topology/edge_"+gNodeSet[m]+"_"+l+".txt";
 					Graph g=new Graph();
 					TestMaxFlow.initRandomData(fileName1, fileName2, g,0,0,1);
 					WfMaxFlow mFlow=new WfMaxFlow();
@@ -526,7 +526,7 @@ public class TestMaxFlow {
 		int gNode=0;
 		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
 		
-		double[] apprFactorSet={0.5,0.025};
+		double[] apprFactorSet={0.05,0.1,0.025};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
 		File tFile=new File(tFileAdd);
 		if(!tFile.exists())
@@ -562,7 +562,11 @@ public class TestMaxFlow {
 					String fileName1="test/simulation/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
 					String fileName2="test/simulation/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
 					String fileName3="test/simulation/topology/wfedge_"+gNodeSet[i]+"_"+l+".txt";
-					
+					Graph gGraph=new Graph();
+					TestMaxFlow.initRandomData(fileName1, fileName2, gGraph, rOption, eOption, 1);
+					fileName1=tFileAdd+"/vertex.txt";
+					fileName2=tFileAdd+"/edge.txt";
+					gGraph.outputFile(fileName1,fileName2);
 					
 					
 					    
@@ -570,7 +574,7 @@ public class TestMaxFlow {
 						
 						Graph gGrag=new Graph();
 						double tGTime=0;
-						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,rOption,eOption,1);
+						TestMaxFlow.initRandomData(fileName1, fileName2, gGrag,100,100,1);
 						GragMaxFlow mFlow=new GragMaxFlow();
 						mFlow.setTopology(gGrag);
 						mFlow.seteRx(eRx);
@@ -591,7 +595,7 @@ public class TestMaxFlow {
 							tGFlow=tGFlow+tV.getRate()*(eRx+eTx);
 							tGRate=tGRate+tV.getRate();
 						}
-						pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" ");
+						pwRun.print(df.format(tGFlow)+" "+df.format(tGRate)+" "+df.format(mFlow.getTopology().getSinkList().get(0).getMaxRate())+" ");
 						pwRun.flush();
 		                gRunTime=gRunTime+tGTime;
 		                gFlowData=gFlowData+tGRate;
@@ -601,7 +605,7 @@ public class TestMaxFlow {
 						
 						Graph gWf=new Graph();
 						double tWTime=0;
-						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,rOption,eOption,1);
+						TestMaxFlow.initRandomData(fileName1, fileName2, gWf,100,100,1);
 						WfMaxFlow wFlow=new WfMaxFlow();
 						wFlow.setTopology(gWf);
 						wFlow.seteRx(eRx);
@@ -622,7 +626,7 @@ public class TestMaxFlow {
 							tWFlow=tWFlow+tV.getRate()*(eRx+eTx);
 							tWRate=tWRate+tV.getRate();
 						}
-						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" ");
+						pwRun.print(df.format(tWFlow)+" "+df.format(tWRate)+" "+df.format(wFlow.getTopology().getSinkList().get(0).getMaxRate())+" ");
 						pwRun.flush();
 						wfRunTime=wfRunTime+tWTime;
 						wfFlowData=wfFlowData+tWRate;
@@ -693,7 +697,7 @@ public class TestMaxFlow {
 			
 			
 			double[] apprFactorSet={0.1,0.05,0.025};
-			int [] gNodeSet={10,15,20};
+			int [] gNodeSet={10,15};
 			
 			long startTime=0;
 			long endTime=0;
@@ -889,13 +893,18 @@ public class TestMaxFlow {
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
 		//TestMaxFlow.runningTask();
-		//TestMaxFlow.mainTaskDWF();
+		TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
+		/*
 		TestMaxFlow.includeMatlabTask(1, 1);
 		TestMaxFlow.includeMatlabTask(1, 3);
+		TestMaxFlow.includeMatlabTask(1, 6);
+		TestMaxFlow.includeMatlabTask(0, 3);
+		TestMaxFlow.includeMatlabTask(0, 6);
+		TestMaxFlow.includeMatlabTask(3, 1);
+		TestMaxFlow.includeMatlabTask(6, 1);
 		TestMaxFlow.includeMatlabTask(3, 3);
-		TestMaxFlow.includeMatlabTask(1, 1);
-		TestMaxFlow.includeMatlabTask(1, 3);
-		TestMaxFlow.includeMatlabTask(3, 3);
+		TestMaxFlow.includeMatlabTask(6, 6);
+	    */
 	}
 }

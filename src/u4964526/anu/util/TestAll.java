@@ -17,7 +17,7 @@ public class TestAll {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			TestRealData.realTest();
+			//TestRealData.realTest();
 			
 			logger.warning("TestMaxFlow.runningTask(1,1)");
 			TestMaxFlow.runningTask(1,1);

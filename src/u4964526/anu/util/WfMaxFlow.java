@@ -289,7 +289,13 @@ public class WfMaxFlow {
 			
 			HashMap<Vertex,Path> tPathSet=this.topology.getShortPathAndDSNode(sink);
 			double wfFactor=1;
-			gD=0;
+			if(sink.getMinKey()<1)
+			{
+				wfFactor=sink.getMinKey()/(this.geteTx()+this.geteRx());
+			}
+			
+			sink.setMinKey(1);
+			/*
 			for(int i=0;i<topology.getEdgeList().size();i++)
 			{
 				Edge te=topology.getEdgeList().get(i);
@@ -306,23 +312,17 @@ public class WfMaxFlow {
 					}
 					
 					
-					/*
-					if(te.isWasFaked())
-					{
-						if(wfFactor>twfFactor)
-						{
-							wfFactor=twfFactor;
-						}
-					}
-					*/
+					
 									
 				}
 			}
+			*/
 			
+			++loopSum;
 			/*
 			 * begin of debug info
 			 *
-			++loopSum;
+			
 			System.out.println("********Wfloop--"+loopSum+"*******\n");
 			System.out.println("********WfgD--"+gD+"*******\n");
 			System.out.println("********WfFactor--"+wfFactor+"*******\n");
@@ -342,11 +342,13 @@ public class WfMaxFlow {
 				if(te.isWasTreed())
 				{
 					double tLength=te.getLength();
-					tLength=tLength*(1+this.getEpsilon()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfFactor()/te.getCapacity());
+					double tadd=(1+this.getEpsilon()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfSum()/te.getCapacity());
+					tLength=tLength*tadd;
+					
 					te.setLength(tLength);
 					te.setWasTreed(false);
 					te.getWfNodeSet().clear();
-					te.setWfFactor(0);
+					te.setWfSum(0);
 					
 				}
 				gD=gD+te.getCapacity()*te.getLength();
@@ -386,6 +388,7 @@ public class WfMaxFlow {
 		/*
 		 * begin of compute the real rate
 		 */
+		sink.setMaxRate(loopSum);
 		
 		for(int i=0;i<sourceList.size();i++)
 		{
