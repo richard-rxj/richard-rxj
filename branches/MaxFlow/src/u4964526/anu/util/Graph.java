@@ -376,6 +376,7 @@ public class Graph {
 		 *  begin of Path Creation
 		 */
 		HashMap<Vertex,Path> result=new HashMap<Vertex,Path>();
+		sink.setMinKey(1);
 		
 		for(int i=0;i<sourceList.size();i++)
 		{
@@ -397,7 +398,11 @@ public class Graph {
 					p1.addEdge(adjMat[se1][j]);
 					adjMat[se1][j].setWasTreed(true);
 					adjMat[se1][j].addWfNode(s1);
-					
+					if(adjMat[se1][j].getWfFactor()<sink.getMinKey())
+					{
+						sink.setMinKey(adjMat[se1][j].getWfFactor());
+					}
+					adjMat[se1][j].setWfFactor(0);
 				}
 				se1=j;
 			}
