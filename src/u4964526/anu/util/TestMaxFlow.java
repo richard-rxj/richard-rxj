@@ -524,7 +524,7 @@ public class TestMaxFlow {
 		long startTime=0;
 		long endTime=0;
 		int gNode=0;
-		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
+		int [] gNodeSet={100,150,200,250,300};
 		
 		double[] apprFactorSet={0.05,0.1,0.025};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
