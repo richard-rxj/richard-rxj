@@ -43,8 +43,14 @@ public class TestAll {
 			logger.warning("TestMaxFlow.runningTask(3,12)");
 			TestMaxFlow.runningTask(3,12);
 			
+			logger.warning("TestMaxFlow.runningTask(0,3)");
+			TestMaxFlow.runningTask(0,3);
+			
 			logger.warning("TestMaxFlow.runningTask(0,6)");
 			TestMaxFlow.runningTask(0,6);
+			
+			logger.warning("TestMaxFlow.runningTask(0,12)");
+			TestMaxFlow.runningTask(0,12);
             
 		}
 		catch(Exception e)
