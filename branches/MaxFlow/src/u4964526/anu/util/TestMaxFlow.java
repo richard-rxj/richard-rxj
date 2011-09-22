@@ -61,16 +61,24 @@ public class TestMaxFlow {
 	private static double getBudgetEnergy3()
 	{
 		double[] result={0.01365,0.01009,0.00653};
-		int i=new Random().nextInt(result.length);
-		return result[i];
+		double resultB =0.00653+(0.01365-0.00653)*new Random().nextInt(3)/result.length;
+		return resultB;
 		
 	}
 	
 	private static double getBudgetEnergy6()
 	{
 		double[] result={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
-		int i=new Random().nextInt(result.length);
-		return result[i];
+		double resultB =0.00653+(0.01365-0.00653)*new Random().nextInt(6)/result.length;
+		return resultB;
+		
+	}
+	
+	private static double getBudgetEnergy12()
+	{
+		double[] result={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
+		double resultB =0.00653+(0.01365-0.00653)*new Random().nextInt(12)/result.length;
+		return resultB;
 		
 	}
 	
@@ -156,6 +164,10 @@ public class TestMaxFlow {
 			   else if(eOption==6)
 			   {
 				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy6());
+			   }
+			   else if(eOption==12)
+			   {
+				   v1.setBudgetEnergy(TestMaxFlow.getBudgetEnergy12());
 			   }
 			   else
 			   {
@@ -524,9 +536,9 @@ public class TestMaxFlow {
 		long startTime=0;
 		long endTime=0;
 		int gNode=0;
-		int [] gNodeSet={100,150,200,250,300};
+		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
 		
-		double[] apprFactorSet={0.05,0.1,0.025};
+		double[] apprFactorSet={0.3,0.2,0.1,0.05};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
 		File tFile=new File(tFileAdd);
 		if(!tFile.exists())
@@ -696,7 +708,7 @@ public class TestMaxFlow {
 			DecimalFormat df=new DecimalFormat("#.0000");
 			
 			
-			double[] apprFactorSet={0.1,0.05,0.025};
+			double[] apprFactorSet={0.3,0.2,0.1,0.05};
 			int [] gNodeSet={10,15};
 			
 			long startTime=0;
