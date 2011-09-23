@@ -51,6 +51,12 @@ public class TestAll {
 			
 			logger.warning("TestMaxFlow.runningTask(0,12)");
 			TestMaxFlow.runningTask(0,12);
+			
+			TestMaxFlow.includeMatlabTask(1, 1);
+			TestMaxFlow.includeMatlabTask(1, 3);
+			TestMaxFlow.includeMatlabTask(1, 6);
+			TestMaxFlow.includeMatlabTask(1, 12);
+			TestMaxFlow.includeMatlabTask(3, 3);
             
 		}
 		catch(Exception e)
