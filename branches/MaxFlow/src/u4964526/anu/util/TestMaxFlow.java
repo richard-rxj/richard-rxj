@@ -699,7 +699,7 @@ public class TestMaxFlow {
 		
 	}
 	
-	private static void includeMatlabTask(int rOption, int eOption)
+	public static void includeMatlabTask(int rOption, int eOption)
 	{
 				
 		try
@@ -709,7 +709,7 @@ public class TestMaxFlow {
 			
 			
 			double[] apprFactorSet={0.3,0.2,0.1,0.05};
-			int [] gNodeSet={10,15};
+			int [] gNodeSet={10,12,14,16,18,20};
 			
 			long startTime=0;
 			long endTime=0;
@@ -905,18 +905,9 @@ public class TestMaxFlow {
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
 		//TestMaxFlow.runningTask();
-		TestMaxFlow.mainTaskDWF();
+		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
-		/*
-		TestMaxFlow.includeMatlabTask(1, 1);
-		TestMaxFlow.includeMatlabTask(1, 3);
-		TestMaxFlow.includeMatlabTask(1, 6);
-		TestMaxFlow.includeMatlabTask(0, 3);
-		TestMaxFlow.includeMatlabTask(0, 6);
-		TestMaxFlow.includeMatlabTask(3, 1);
-		TestMaxFlow.includeMatlabTask(6, 1);
-		TestMaxFlow.includeMatlabTask(3, 3);
-		TestMaxFlow.includeMatlabTask(6, 6);
-	    */
+		
+		
 	}
 }
