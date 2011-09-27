@@ -709,7 +709,7 @@ public class TestMaxFlow {
 			
 			
 			double[] apprFactorSet={0.3,0.2,0.1,0.05};
-			int [] gNodeSet={10,12,14,16,18,20};
+			int [] gNodeSet={10,12,14,16,18};
 			
 			long startTime=0;
 			long endTime=0;
