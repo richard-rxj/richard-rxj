@@ -241,7 +241,7 @@ public class WSNGenerator {
 		pwVertex.flush();
 		i=i+1;	
 		
-	
+		/*
 		for(int m=0; m<=Math.floor(100.0/this.gRadius);m++)
 		{
 			for(int n=0;n<=Math.floor(100.0/this.gRadius);n++)
@@ -260,11 +260,11 @@ public class WSNGenerator {
 				i=i+1;
 			}
 		}
+		*/
 		
 		
 		
-		
-		for(;i<this.getgNodeNum();i++)
+		for(;i<=this.getgNodeNum();i++)
 		{
 			Vertex v=new Vertex(String.valueOf(i+1));
 			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
