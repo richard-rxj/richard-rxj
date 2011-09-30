@@ -101,6 +101,7 @@ public class TestRealData {
 			   v1.setMaxRate(getVertexMaxRate());
 			   v1.setBudgetEnergy(getBudgetEnergy());
 			   v1.setRate(0);
+			   v1.setWeight(1);
 			   g.addVertex(v1);
 			   if(Integer.parseInt(b[0])==1)
 			   {
@@ -233,57 +234,60 @@ public class TestRealData {
 		/*
 		 * begin of initial Weights
 		 */
-		try
+		if(wOption==0)
 		{
-		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
-		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
-		   {
-			   String[] b=tempString.split(" ");
-			   /*
-			    * begin of debug info
-			    */
-			   ++lineNum;
-			   logger.fine(String.valueOf(lineNum));
-			   logger.fine(tempString);
-			   String detail="detail:(";
-			   for(int i=0;i<b.length;i++)
-			   {
-				   detail=detail+"<"+i+"-"+b[i]+">";
-			   }
-			   detail=detail+")\n";
-			   logger.fine(detail);
-			   /*
-			    * end of debug info
-			    */
-			   Vertex v1=g.getVertexList().get(lineNum-1);
-			   if(wOption>0)
-			   {
-				   v1.setWeight(1);
-			   }
-			   else
-			   {
-				   v1.setWeight(Double.parseDouble(b[0]));   
-			   }
-			   
-			   
-		   }
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			
-		}
-		finally
-		{
-			if(reader!=null)
+			try
 			{
-				try
+			   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
+			   int lineNum=0;
+			   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
+			   {
+				   String[] b=tempString.split(" ");
+				   /*
+				    * begin of debug info
+				    */
+				   ++lineNum;
+				   logger.fine(String.valueOf(lineNum));
+				   logger.fine(tempString);
+				   String detail="detail:(";
+				   for(int i=0;i<b.length;i++)
+				   {
+					   detail=detail+"<"+i+"-"+b[i]+">";
+				   }
+				   detail=detail+")\n";
+				   logger.fine(detail);
+				   /*
+				    * end of debug info
+				    */
+				   Vertex v1=g.getVertexList().get(lineNum-1);
+				   if(wOption>0)
+				   {
+					   v1.setWeight(1);
+				   }
+				   else
+				   {
+					   v1.setWeight(Double.parseDouble(b[1]));   
+				   }
+				   
+				   
+			   }
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				
+			}
+			finally
+			{
+				if(reader!=null)
 				{
-					reader.close();
-				}
-				catch(Exception e)
-				{
+					try
+					{
+						reader.close();
+					}
+					catch(Exception e)
+					{
+					}
 				}
 			}
 		}
@@ -497,7 +501,7 @@ public class TestRealData {
 			   }
 			   else
 			   {
-				   if(Double.parseDouble(b[0])<0.95)
+				   if(Double.parseDouble(b[1])<0.95)
 					   v1.setWeight(rou);   
 			   }
 			   
@@ -526,7 +530,7 @@ public class TestRealData {
 		 */
 	}
 	
-   public static void realTest() throws FileNotFoundException {
+   public static void realTestOne() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		Logger log=Logger.getLogger("TestReal");
 		String fileName1="test/real/topology-20.txt";
@@ -579,21 +583,62 @@ public class TestRealData {
 	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={300};
-	    int[] thresholdSet={6,7,8,9};
+	    int[] nodeSet={100};
+	    int[] thresholdSet={9};
+	    int rMax=20;
+	    int gDataSum=100;
 	    
+	    //begin of weightComputing
 	    for(int gn=0;gn<nodeSet.length;gn++)
 	    {
 		    int gNode=nodeSet[gn];
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
-		    	for(int r=0;r<100;r++)
+		    	for(int r=0;r<rMax;r++)
+		    	{
+		    		Graph g=new Graph();
+			    	fileName1="test/real/topology/vertex_"+100+"_0.txt";
+			    	fileName2="test/real/topology/edge_"+100+"_0.txt";
+			    	fileName3="";
+					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
+					
+					String tFileName="test/real/one/"+gNode+"/"+gThreshold+"/";
+		    		File tf=new File(tFileName);
+		    		if(!tf.exists())
+		    		{
+		    			tf.mkdirs();
+		    		}
+					
+					String fVertex=tFileName+"vertex.txt";
+					String fEdge=tFileName+"edge.txt";
+					String fWeight=tFileName+"weight-"+r+".txt";
+					g.outputFile(fVertex, fEdge);
+					g.outputWeightFile(fWeight, 0.6, 0.1);
+					String fData=tFileName+"data-"+r+".txt";
+					NodeDataGenerator dGenerator= new NodeDataGenerator();
+					dGenerator.setdThreshold(gThreshold*1.0/10);
+					dGenerator.setDataSum(gDataSum);
+					dGenerator.setNodeSum(gNode);
+					dGenerator.dataGenerator(fWeight, fData);
+		    	}
+		    }
+	    }
+	    //end of weightComputing
+	    
+	    //begin of rateComputing
+	    for(int gn=0;gn<nodeSet.length;gn++)
+	    {
+		    int gNode=nodeSet[gn];
+		    for(int gt=0;gt<thresholdSet.length;gt++)
+		    {
+		    	int gThreshold=thresholdSet[gt];
+		    	for(int r=0;r<rMax;r++)
 			    {
 			    	Graph g=new Graph();
 			    	fileName1="test/real/topology/vertex_"+gNode+"_0.txt";
 			    	fileName2="test/real/topology/edge_"+gNode+"_0.txt";
-			    	fileName3="test/real/"+gNode+"/weight-"+gThreshold+"/weight-"+r+".txt";
+			    	fileName3="";
 					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
 					String fVertex="test/real/vertex.txt";
 					String fEdge="test/real/edge.txt";
@@ -602,17 +647,13 @@ public class TestRealData {
 			    	for (int rr=0;rr<rouSet.length;rr++)
 				    {
 			    		double rou=rouSet[rr];
-			    		String tFileName="test/real/"+gNode+"/rate-"+gThreshold;
-			    		File tf=new File(tFileName);
-			    		if(!tf.exists())
-			    		{
-			    			tf.mkdirs();
-			    		}
-				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+"/rate-"+r+"-"+(int)(rou*10)+".txt")));
+			    		String tFileName="test/real/one/"+gNode+"/"+gThreshold+"/";
+			    		
+				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	g=new Graph();
 				    	fileName1="test/real/vertex.txt";
 				    	fileName2="test/real/edge.txt";
-				    	fileName3="test/real/"+gNode+"/weight-"+gThreshold+"/weight-"+r+".txt";
+				    	fileName3=tFileName+"weight-"+r+".txt";
 				    	if(rou>0.95)
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
@@ -639,6 +680,57 @@ public class TestRealData {
 			    }
 		    }
 	    }
+	    //end of rateComputing
+	    
+	    //begin of MSEComputing
+	    for(int gn=0;gn<nodeSet.length;gn++)
+	    {
+		    int gNode=nodeSet[gn];
+		    for(int gt=0;gt<thresholdSet.length;gt++)
+		    {
+		    	int gThreshold=thresholdSet[gt];
+		    	String fRReal="test/real/one/"+gNode+"/"+"1Real-"+gThreshold+".txt";
+				PrintWriter pwR=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fRReal,true)));
+		    	for(int rr=0;rr<rouSet.length-1;rr++)
+		    	{
+		    		double rou=rouSet[rr];	
+		    		double tRFresh=0;
+		    		double tROld=0;
+		    		for (int r=0;r<rMax;r++)
+				    {
+			    				
+						String tFileName="test/real/one/"+gNode+"/"+gThreshold+"/";
+			    		
+						String fData=tFileName+"data-"+r+".txt";
+						String fWeight=tFileName+"weight-"+r+".txt";
+						String fRate=tFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";
+						String fOldRate=tFileName+"rate-"+r+"-10.txt";
+						DataQuality dq=new DataQuality();
+						dq.setDataSum(gDataSum);
+						dq.setNodeSum(gNode);
+						
+						String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
+						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
+						double tFresh=dq.computeMSE(fData, fRate, 0, fWeight);
+						tRFresh=tRFresh+tFresh;
+						double tOld=dq.computeMSE(fData, fOldRate, 1, fWeight);
+						pw.print(tFresh+" "+tOld+" ");
+						tROld=tROld+tOld;
+						if(tFresh<tOld)
+						{
+							pw.print("*");
+						}
+						pw.println();
+						pw.flush();
+						pw.close();
+				    }
+		    		pwR.println(rou+" "+tRFresh/rMax+" "+tROld/rMax);
+		    		pwR.flush();
+		    	}
+		    	pwR.close();
+		    }
+	    }
+	    //end of MSEComputing
 	}
    
    
@@ -650,7 +742,10 @@ public class TestRealData {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			TestRealData.realTest();
+			TestRealData.realTestOne();
+			
+			
+			
 		}
 		catch(Exception e)
 		{
