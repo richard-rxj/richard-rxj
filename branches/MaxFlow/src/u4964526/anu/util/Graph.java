@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.logging.Logger;
 import java.util.Set;
 
@@ -518,6 +519,47 @@ public class Graph {
 			pwEdge.println(e.getSource()+" "+e.getTarget()+" "+e.getCapacity());
 			pwEdge.flush();
 		}
+		pwVertex.close();
+		pwEdge.close();
+	}
+	
+	public void outputWeightFile(String fWeight,double weight, double percent) throws FileNotFoundException
+	//1-1 match
+	{
+		PrintWriter pwWeight=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fWeight)));
+		double[][] result=new double[this.sourceList.size()][3];
+		for(int i=0;i<this.sourceList.size();i++)
+		{
+			result[i][0]=this.sourceList.get(i).getVerValue();
+			result[i][1]=1;
+			result[i][2]=0;
+		}
+		double tPercent=0;
+		while((tPercent*1.0/this.sourceList.size())<percent)
+		{
+			ArrayList<Vertex> tList=new ArrayList<Vertex>();
+			tList.add(this.sinkList.get(0));
+			int tId=new Random().nextInt(this.edgeList.size());
+			Edge tEdge=this.edgeList.get(tId);
+			if((!tList.contains(tEdge.getSource()))&&(!tList.contains(tEdge.getTarget())))
+			{
+				tList.add(tEdge.getSource());
+				tList.add(tEdge.getTarget());
+				tPercent=tPercent+2;
+				result[tEdge.getSource().getVerValue()-1][1]=weight;
+				result[tEdge.getSource().getVerValue()-1][2]=tEdge.getTarget().getVerValue();
+			}
+		}
+		
+		
+		for(int i=0;i<this.sourceList.size();i++)
+		{
+			pwWeight.println((int)result[i][0]+" "+result[i][1]+" "+(int)result[i][2]);
+		}
+		
+		
+		pwWeight.flush();
+		pwWeight.close();
 	}
 	
 	
