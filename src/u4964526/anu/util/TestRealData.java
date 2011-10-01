@@ -24,7 +24,7 @@ public class TestRealData {
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1;
 	private static double[] gBaseBudgetEnergy={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
-	private static double[] gBaseMaxRate={76800,69120,61440,53760,46080,38400};
+	private static double[] gBaseMaxRate={76800,69120,61440};
 	private static double transRange=25;
 
 	
@@ -38,7 +38,7 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)];
+		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*7;
 	}
 
    private static double getVertexMaxRate()
@@ -583,16 +583,18 @@ public class TestRealData {
 	    */
 	    
 	    
-	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
+	    double[] rouSet={0.1,0.3,0.5,0.7,0.9,1};
 	    int[] nodeSet={50,100,200};
+	    int[] gDataSumSet={250,100,50};
 	    int[] thresholdSet={9,8,7,6,5};
 	    int rMax=100;
-	    int gDataSum=100;
+	   
 	    
 	    //begin of weightComputing
 	    for(int gn=0;gn<nodeSet.length;gn++)
 	    {
 		    int gNode=nodeSet[gn];
+		    int gDataSum=gDataSumSet[gn];
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
@@ -615,7 +617,7 @@ public class TestRealData {
 					String fEdge=tFileName+"edge.txt";
 					String fWeight=tFileName+"weight-"+r+".txt";
 					g.outputFile(fVertex, fEdge);
-					g.outputWeightFile(fWeight, 0.6, 0.1);
+					g.outputWeightFile(fWeight, 0.6, 0.2);
 					String fData=tFileName+"data-"+r+".txt";
 					NodeDataGenerator dGenerator= new NodeDataGenerator();
 					dGenerator.setdThreshold(gThreshold*1.0/10);
@@ -688,6 +690,7 @@ public class TestRealData {
 	    for(int gn=0;gn<nodeSet.length;gn++)
 	    {
 		    int gNode=nodeSet[gn];
+		    int gDataSum=gDataSumSet[gn];
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
