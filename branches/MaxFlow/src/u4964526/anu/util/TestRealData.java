@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -22,8 +23,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1;
-	private static double[] gBaseBudgetEnergy={0.00653*8,0.00653*10,0.00653*12};
-	private static double[] gBaseMaxRate={76800, 57600, 38400};
+	private static double[] gBaseBudgetEnergy={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
+	private static double[] gBaseMaxRate={76800,69120,61440,53760,46080,38400};
 	private static double transRange=25;
 
 	
@@ -583,9 +584,9 @@ public class TestRealData {
 	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={100};
-	    int[] thresholdSet={9};
-	    int rMax=20;
+	    int[] nodeSet={50,100,200};
+	    int[] thresholdSet={9,8,7,6,5};
+	    int rMax=100;
 	    int gDataSum=100;
 	    
 	    //begin of weightComputing
@@ -598,8 +599,8 @@ public class TestRealData {
 		    	for(int r=0;r<rMax;r++)
 		    	{
 		    		Graph g=new Graph();
-			    	fileName1="test/real/topology/vertex_"+100+"_0.txt";
-			    	fileName2="test/real/topology/edge_"+100+"_0.txt";
+			    	fileName1="test/real/topology/vertex_"+gNode+"_0.txt";
+			    	fileName2="test/real/topology/edge_"+gNode+"_0.txt";
 			    	fileName3="";
 					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1);
 					
@@ -683,6 +684,7 @@ public class TestRealData {
 	    //end of rateComputing
 	    
 	    //begin of MSEComputing
+	    DecimalFormat df=new DecimalFormat("#.0000");
 	    for(int gn=0;gn<nodeSet.length;gn++)
 	    {
 		    int gNode=nodeSet[gn];
@@ -694,8 +696,8 @@ public class TestRealData {
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
 		    		double rou=rouSet[rr];	
-		    		double tRFresh=0;
-		    		double tROld=0;
+		    		double tRatio=0;
+		    		int tSum=0;
 		    		for (int r=0;r<rMax;r++)
 				    {
 			    				
@@ -712,19 +714,20 @@ public class TestRealData {
 						String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
 						double tFresh=dq.computeMSE(fData, fRate, 0, fWeight);
-						tRFresh=tRFresh+tFresh;
+						
 						double tOld=dq.computeMSE(fData, fOldRate, 1, fWeight);
-						pw.print(tFresh+" "+tOld+" ");
-						tROld=tROld+tOld;
+						pw.print(df.format(tFresh)+" "+df.format(tOld)+" ");
 						if(tFresh<tOld)
 						{
 							pw.print("*");
+							tRatio=tRatio+tFresh/tOld;
+							tSum++;
 						}
 						pw.println();
 						pw.flush();
 						pw.close();
 				    }
-		    		pwR.println(rou+" "+tRFresh/rMax+" "+tROld/rMax);
+		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/rMax));
 		    		pwR.flush();
 		    	}
 		    	pwR.close();
