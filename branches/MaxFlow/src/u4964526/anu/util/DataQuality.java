@@ -25,9 +25,17 @@ public class DataQuality {
 	public void setDataSum(int dataSum) {
 		this.dataSum = dataSum;
 	}
-	private double computeSubMSE(double[] slaveBase, double slaveRate, double[] masterBase, double masterRate)
+	private double computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate)
 	{
 		double result=0;
+		if (slaveRate>dataSum)
+		{
+			slaveRate=dataSum;
+		}
+		if(masterRate>dataSum)
+		{
+			masterRate=dataSum;
+		}
 		double[] tSlave=new double[slaveBase.length];
 		if(masterBase==null)
 		{
@@ -42,7 +50,16 @@ public class DataQuality {
 				tiPre=ti;
 				ti=ti+tStep;
 				tSlave[ti]=slaveBase[ti];
-				double tTemp=(tSlave[tiPre]+tSlave[ti])/2;   //中位数填充
+				double tTemp;
+				if(dOption<1)
+				{
+					tTemp=(tSlave[tiPre]+tSlave[ti])/2;//中位数填充
+				}
+				else
+				{
+					tTemp=tSlave[tiPre];                 //前一位填充
+				}	
+				
 				for(int j=tiPre+1;j<ti;j++)
 				{
 					tSlave[j]=tTemp;
@@ -57,12 +74,21 @@ public class DataQuality {
 		{
 			ArrayList<String> a=new ArrayList<String>();
 			int tSlaveRate=(int) Math.floor(slaveRate);
-			int tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
 			int ti=0;
-			a.add(String.valueOf(ti));
-			tSlave[ti]=slaveBase[ti];
+			int tStep=0;
 			int tiPre=0;
-			
+			if(tSlaveRate>0)
+			{
+				tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
+				ti=0;
+				a.add(String.valueOf(ti));
+				tSlave[ti]=slaveBase[ti];
+				tiPre=0;
+			}
+			else
+			{
+				ti=-1;
+			}
 			
 			
 			int tMasterRate=(int) Math.floor(masterRate);
@@ -124,7 +150,7 @@ public class DataQuality {
 			while((tempString=bf.readLine())!=null)
 			{
 				String[] tData=tempString.split(" ");
-				for(int i=0;i<tData.length;i++)
+				for(int i=0;i<dataSum;i++)
 				{
 					result[lineNum][i]=Double.parseDouble(tData[i]);
 				}
@@ -162,7 +188,7 @@ public class DataQuality {
 		return result;
 	}
 	
-	public double computeMSE(String dataFile, String rateFile, int wOption,String weightFile)
+	public double computeMSE(String dataFile, String rateFile, int wOption,String weightFile,int dOption)
 	{
 		double result=0;
 		try
@@ -179,15 +205,15 @@ public class DataQuality {
 				
 				if((Double.parseDouble(temp[1])<0.95)&&(wOption<1))
 				{
-					int tSlaveId = Integer.parseInt(temp[0]);
-					int tMasterId = Integer.parseInt(temp[2]);
-					result=result+this.computeSubMSE(gData[tSlaveId-1], gRate[tSlaveId-1], gData[tMasterId-1], gRate[tMasterId-1]);
+					int tSlaveId = (int)Double.parseDouble(temp[0]);
+					int tMasterId = (int)Double.parseDouble(temp[2]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], gData[tMasterId-1], gRate[tMasterId-1]);
 
 				}
 				else
 				{
-					int tSlaveId = Integer.parseInt(temp[0]);
-					result=result+this.computeSubMSE(gData[tSlaveId-1], gRate[tSlaveId-1], null, 0);
+					int tSlaveId = (int)Double.parseDouble(temp[0]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], null, 0);
 				}
 				lineNum++;
 			}
@@ -206,14 +232,14 @@ public class DataQuality {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String tFileName="test/real/100/9/";
-		String fData=tFileName+"data-0.txt";
-		String fWeight=tFileName+"weight-0.txt";
-		String fRate=tFileName+"rate-0-9.txt";
+		String fData="test/real/labData/50/data/data-1-2.txt";
+		String fWeight="test/real/labData/50/9/weight/weight-1.txt";
+		String fRate="test/real/labData/50/9/rate/rate-1-0.txt";
 		DataQuality dq=new DataQuality();
 		dq.setDataSum(100);
-		dq.setNodeSum(99);
-		System.out.println(dq.computeMSE(fData, fRate, 1, fWeight));
-		System.out.println(dq.computeMSE(fData, fRate, 0, fWeight));
+		dq.setNodeSum(50);
+		dq.computeMSE(fData, fRate, 0, fWeight,0);
+		
 		
 	}
 

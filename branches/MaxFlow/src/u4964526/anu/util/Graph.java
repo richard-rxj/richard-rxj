@@ -523,7 +523,7 @@ public class Graph {
 		pwEdge.close();
 	}
 	
-	public void outputWeightFile(String fWeight,double weight, double percent) throws FileNotFoundException
+	public void outputMatchFile(String fWeight,double weight, double percent) throws FileNotFoundException
 	//1-1 match
 	{
 		PrintWriter pwWeight=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fWeight)));
@@ -548,6 +548,61 @@ public class Graph {
 				tPercent=tPercent+2;
 				result[tEdge.getSource().getVerValue()-1][1]=weight;
 				result[tEdge.getSource().getVerValue()-1][2]=tEdge.getTarget().getVerValue();
+			}
+		}
+		
+		
+		for(int i=0;i<this.sourceList.size();i++)
+		{
+			pwWeight.println((int)result[i][0]+" "+result[i][1]+" "+(int)result[i][2]);
+		}
+		
+		
+		pwWeight.flush();
+		pwWeight.close();
+	}
+	
+	public void outputStarMatchFile(String fWeight,double weight, double percent) throws FileNotFoundException
+	//1-1 match
+	{
+		PrintWriter pwWeight=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fWeight)));
+		double[][] result=new double[this.sourceList.size()][3];
+		for(int i=0;i<this.sourceList.size();i++)
+		{
+			result[i][0]=this.sourceList.get(i).getVerValue();
+			result[i][1]=1;
+			result[i][2]=0;
+		}
+		double tPercent=0;
+		while((tPercent*1.0/this.sourceList.size())<percent)
+		{
+			ArrayList<Vertex> tList=new ArrayList<Vertex>();
+			Vertex sink=this.sinkList.get(0);
+			tList.add(this.sinkList.get(0));
+			int tId=new Random().nextInt(this.edgeList.size());
+			Edge tEdge=this.edgeList.get(tId);					
+			if((!tList.contains(tEdge.getSource()))&&(!tList.contains(tEdge.getTarget())))
+			{
+				tList.add(tEdge.getSource());
+				tList.add(tEdge.getTarget());
+				tPercent=tPercent+2;
+				result[tEdge.getTarget().getVerValue()-1][1]=weight;
+				result[tEdge.getTarget().getVerValue()-1][2]=tEdge.getSource().getVerValue();
+			
+				for(int i=0;i<this.edgeList.size();i++)
+				{
+					Edge temp=this.edgeList.get(i);
+					if(temp.getSource()==tEdge.getSource())
+					{
+						if((!tList.contains(temp.getTarget()))&&(temp.getTarget()!=sink))
+						{
+							tList.add(temp.getTarget());
+							result[temp.getTarget().getVerValue()-1][1]=weight;
+							result[temp.getTarget().getVerValue()-1][2]=temp.getSource().getVerValue();
+							tPercent=tPercent+1;
+						}
+					}
+				}
 			}
 		}
 		

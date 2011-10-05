@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class NodeDataGenerator {
@@ -72,6 +73,7 @@ public class NodeDataGenerator {
 		if(master==null)
 		{
 			double tSeed=Math.random()*this.seed;
+			double tStep=Math.random()*this.step;
 			int tGroup=0;
 			for(int i=0;i<result.length;i++)
 			{
@@ -79,9 +81,9 @@ public class NodeDataGenerator {
 				if(tGroup>this.stepGroup)
 				{
 					tGroup=0;
-					tSeed=tSeed+this.step;
+					tSeed=tSeed+tStep;
 				}
-				result[i]=tSeed+Math.random()*this.step;
+				result[i]=tSeed+Math.random()*tStep;
 			}
 		}
 		else
@@ -94,13 +96,27 @@ public class NodeDataGenerator {
 		return result;
 	}
 	
-	public double[][] dataGenerator(String weightFile,String dataFile)
+	private double computeDataCorrelation(double[] u, double[] v)
+	{
+		double result=0;
+		for(int i=1;i<u.length;i++)
+		{
+			double temp=Math.min(u[i], v[i])/Math.max(u[i], v[i]);
+			result=result+temp;
+		}
+		
+		
+		return result/u.length;
+	}
+	
+	public double[][] dataWeightGenerator(String weightFile,String dataFile,String fWeight)
 	{
 		double[][] result=new double[nodeSum][dataSum];
 		try
 		{
 			
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));
+			PrintWriter pwWeight=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fWeight)));
 			String tempString;
 			int lineNum=0;
 			
@@ -115,6 +131,7 @@ public class NodeDataGenerator {
 			while((tempString=bf.readLine())!=null)
 			{
 				String[] temp=tempString.split(" ");
+				pwWeight.print(temp[0]+" ");
 				if(Double.valueOf(temp[1])>0.95)
 				{
 					if(result[Integer.valueOf(temp[0])-1][0]==-1)
@@ -122,6 +139,7 @@ public class NodeDataGenerator {
 						result[Integer.valueOf(temp[0])-1]=subData(null);
 				
 					}
+					pwWeight.print(temp[1]+" ");
 				}
 				else
 				{
@@ -139,10 +157,14 @@ public class NodeDataGenerator {
 						//System.out.println(result[Integer.valueOf(temp[0])-1][0]+" : "+result[Integer.valueOf(temp[2])-1][0]);
 						
 						//End of Debug
+						double tWeight=this.computeDataCorrelation(result[Integer.valueOf(temp[0])-1], result[Integer.valueOf(temp[2])-1]);
+						DecimalFormat df=new DecimalFormat("#.00");
+						pwWeight.print(df.format(1-tWeight)+" "+temp[2]+" ");
 						
 						
 				}
 				lineNum++;
+				pwWeight.println();
 			}
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile)));
 			for(int i=0;i<nodeSum;i++)
@@ -155,6 +177,8 @@ public class NodeDataGenerator {
 			}
 			pw.flush();
 			pw.close();
+			pwWeight.flush();
+			pwWeight.close();
 			bf.close();
 		}
 		catch(Exception e)
@@ -164,8 +188,7 @@ public class NodeDataGenerator {
 		return result;
 	}
 	
-	
-	
+		
 	
 	
 	public static void main(String[] args) {
@@ -175,7 +198,6 @@ public class NodeDataGenerator {
 		dGenerator.setNodeSum(99);
 		String fData="test/real/data.txt";
 		String fWeight="test/real/weight.txt";
-		dGenerator.dataGenerator(fWeight, fData);
 	}
 
 }
