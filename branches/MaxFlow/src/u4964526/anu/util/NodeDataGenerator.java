@@ -77,7 +77,7 @@ public class NodeDataGenerator {
 
 	private double[] subData(double[] master)
 	{
-		double[] result=new double[2*dataSum];
+		double[] result=new double[dataSum];
 		
 		if(master==null)
 		{
@@ -112,14 +112,15 @@ public class NodeDataGenerator {
 			}
 			int[] tSet=new int[result.length];
 			int tSum=0;
-			while(tSum>(result.length*this.dThreshold))
+			while(tSum<(result.length*this.dThreshold))
 			{
 				int tI=new Random().nextInt(result.length);
 				if(tSet[tI]<1)
 				{
 					tSet[tI]=1;
 					tSum++;
-					result[tI]=master[tI]-(1-(Math.random()*this.sita));
+					double tSita=1-Math.random()*this.sita;
+					result[tI]=master[tI]*tSita;
 				}
 			}
 			
@@ -257,10 +258,15 @@ public class NodeDataGenerator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		NodeDataGenerator dGenerator= new NodeDataGenerator();
-		dGenerator.setDataSum(100);
-		dGenerator.setNodeSum(99);
-		String fData="test/real/data.txt";
-		String fWeight="test/real/weight.txt";
+		dGenerator.setDataSum(10);
+		dGenerator.setNodeSum(3);
+		dGenerator.setSita(0.001);
+		String fData="test/real/data00";
+		String fWeight="test/real/weight00.txt";
+		String fMatch="test/real/match00.txt";
+		double[][] r=dGenerator.dataWeightGenerator(fMatch, fData, fWeight);
+		System.out.println(dGenerator.computeDataCT(r[0], r[2], 0.001));
+		
 	}
 
 }

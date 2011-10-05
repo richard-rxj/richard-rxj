@@ -594,10 +594,10 @@ public class TestRealData {
 	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={100};      //50,100,200
-	    int[] gDataSumSet={150}; //250,100,50
-	    int[] thresholdSet={9};  //9,8,7,6,5
-	    double[] pairRatio={0.1}; //0.1,0.2,0.3,0.4,0.5
+	    int[] nodeSet={50,100,200};      //50,100,200
+	    int[] gDataSumSet={250,150,100}; //250,100,50
+	    int[] thresholdSet={9,8,7,6,5};  //9,8,7,6,5
+	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3}; //0.1,0.2,0.3,0.4,0.5
 	    int rMax=100;
 	   
 	    /*
@@ -679,6 +679,7 @@ public class TestRealData {
 					dGenerator.setdThreshold(gThreshold*1.0/10);
 					dGenerator.setDataSum(gDataSum);
 					dGenerator.setNodeSum(gNode);
+					dGenerator.setSita(0.001);
 					String fWeight=tWeightFileName+"weight-"+r+".txt";
 					dGenerator.dataWeightGenerator(fMatch, fData,fWeight);
 					
@@ -856,10 +857,10 @@ public class TestRealData {
 	    	    
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={100};      //50,100,200
-	    int[] gDataSumSet={150}; //250,100,50
+	    int[] nodeSet={50,100,200};      //50,100,200
+	    int[] gDataSumSet={250,150,100}; //250,100,50
 	    int[] thresholdSet={9,8,7,6,5};
-	    double[] pairRatio={0.1,0.2,0.3,0.4,0.5};
+	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3};
 	    int rMax=100;
 	   
 	    /*
@@ -915,6 +916,7 @@ public class TestRealData {
 					dGenerator.setdThreshold(gThreshold*1.0/10);
 					dGenerator.setDataSum(gDataSum);
 					dGenerator.setNodeSum(gNode);
+					dGenerator.setSita(0.001);
 					String fWeight=tWeightFileName+"weight-"+r+".txt";
 					dGenerator.dataWeightGenerator(fStarMatch, fData,fWeight);
 					
@@ -1344,7 +1346,7 @@ public class TestRealData {
 			logger.setLevel(Level.WARNING);
 			
 			TestRealData.realTestOne();
-			//TestRealData.realTestStar();
+			TestRealData.realTestStar();
 			//TestRealData.realDataTest();
 			
 		}
