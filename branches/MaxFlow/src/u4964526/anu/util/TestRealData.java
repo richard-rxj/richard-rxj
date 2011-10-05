@@ -38,7 +38,7 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*1.2;  //7
+		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*7;  //7  1.2
 	}
 
    private static double getVertexMaxRate()
@@ -593,11 +593,11 @@ public class TestRealData {
 	    */
 	    
 	    
-	    double[] rouSet={0,0.1,0.3,0.5,0.7,0.9,1};
+	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={100};      //50,100,200
 	    int[] gDataSumSet={150}; //250,100,50
-	    int[] thresholdSet={9,8,7,6,5};
-	    double[] pairRatio={0.1,0.2,0.3,0.4,0.5};
+	    int[] thresholdSet={9};  //9,8,7,6,5
+	    double[] pairRatio={0.1}; //0.1,0.2,0.3,0.4,0.5
 	    int rMax=100;
 	   
 	    /*
@@ -855,7 +855,7 @@ public class TestRealData {
 		
 	    	    
 	    
-	    double[] rouSet={0,0.1,0.3,0.5,0.7,0.9,1};
+	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={100};      //50,100,200
 	    int[] gDataSumSet={150}; //250,100,50
 	    int[] thresholdSet={9,8,7,6,5};
@@ -1343,9 +1343,9 @@ public class TestRealData {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			//TestRealData.realTestOne();
+			TestRealData.realTestOne();
 			//TestRealData.realTestStar();
-			TestRealData.realDataTest();
+			//TestRealData.realDataTest();
 			
 		}
 		catch(Exception e)

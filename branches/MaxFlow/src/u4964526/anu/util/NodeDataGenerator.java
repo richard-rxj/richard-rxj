@@ -17,7 +17,16 @@ public class NodeDataGenerator {
 	private int nodeSum=100;
 	private int dataSum=100;
 	private int stepGroup=10;
+	private double sita=0.001;
 	
+	public double getSita() {
+		return sita;
+	}
+
+	public void setSita(double sita) {
+		this.sita = sita;
+	}
+
 	public double getdThreshold() {
 		return dThreshold;
 	}
@@ -73,7 +82,7 @@ public class NodeDataGenerator {
 		if(master==null)
 		{
 			double tSeed=Math.random()*this.seed;
-			double tStep=Math.random()*this.step;
+			double tStep=this.step;
 			int tGroup=0;
 			for(int i=0;i<result.length;i++)
 			{
@@ -88,10 +97,39 @@ public class NodeDataGenerator {
 		}
 		else
 		{
+			double tSeed=master[0];
+			double tStep=this.step;
+			int tGroup=0;
 			for(int i=0;i<result.length;i++)
 			{
-				result[i]=master[i]*(this.dThreshold+Math.random()*(1-this.dThreshold));
+				tGroup++;
+				if(tGroup>this.stepGroup)
+				{
+					tGroup=0;
+					tSeed=tSeed+tStep;
+				}
+				result[i]=tSeed+Math.random()*tStep;
 			}
+			int[] tSet=new int[result.length];
+			int tSum=0;
+			while(tSum>(result.length*this.dThreshold))
+			{
+				int tI=new Random().nextInt(result.length);
+				if(tSet[tI]<1)
+				{
+					tSet[tI]=1;
+					tSum++;
+					result[tI]=master[tI]-(1-(Math.random()*this.sita));
+				}
+			}
+			
+			
+			/*
+			for(int i=0;i<result.length;i++)
+			{
+				result[i]=master[i]*(this.dThreshold+Math.random()*(1-this.dThreshold));	
+			}
+			*/
 		}
 		return result;
 	}
@@ -111,7 +149,8 @@ public class NodeDataGenerator {
 	
 	public double[][] dataWeightGenerator(String weightFile,String dataFile,String fWeight)
 	{
-		double[][] result=new double[nodeSum][2*dataSum];
+		double[][] result=new double[nodeSum][dataSum];
+		double[][] result2=new double[nodeSum][dataSum];
 		try
 		{
 			
@@ -122,9 +161,10 @@ public class NodeDataGenerator {
 			
 			for(int i=0;i<nodeSum;i++)
 			{
-				for(int j=0;j<2*dataSum;j++)
+				for(int j=0;j<dataSum;j++)
 				{
 					result[i][j]=-1;
+					result2[i][j]=-1;
 				}
 			}
 			
@@ -137,6 +177,7 @@ public class NodeDataGenerator {
 					if(result[Integer.valueOf(temp[0])-1][0]==-1)
 					{
 						result[Integer.valueOf(temp[0])-1]=subData(null);
+						result2[Integer.valueOf(temp[0])-1]=subData(null);
 				
 					}
 					pwWeight.print(temp[1]+" ");
@@ -147,17 +188,19 @@ public class NodeDataGenerator {
 						if(result[Integer.valueOf(temp[2])-1][0]==-1)
 						{
 							result[Integer.valueOf(temp[2])-1]=subData(null);
+							result2[Integer.valueOf(temp[2])-1]=subData(null);
 							
 						}
 						if(result[Integer.valueOf(temp[0])-1][0]==-1)
 						{
 							result[Integer.valueOf(temp[0])-1]=subData(result[Integer.valueOf(temp[2])-1]);
+							result2[Integer.valueOf(temp[0])-1]=subData(result[Integer.valueOf(temp[2])-1]);
 						}
 						//Begin of Debug
 						//System.out.println(result[Integer.valueOf(temp[0])-1][0]+" : "+result[Integer.valueOf(temp[2])-1][0]);
 						
 						//End of Debug
-						double tWeight=this.computeDataCorrelation(result[Integer.valueOf(temp[0])-1], result[Integer.valueOf(temp[2])-1]);
+						double tWeight=this.computeDataCT(result[Integer.valueOf(temp[0])-1], result[Integer.valueOf(temp[2])-1],this.sita);
 						DecimalFormat df=new DecimalFormat("#.00");
 						pwWeight.print(df.format(1-tWeight)+" "+temp[2]+" ");
 						
@@ -170,16 +213,13 @@ public class NodeDataGenerator {
 			PrintWriter pw2=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile+"-2.txt")));
 			for(int i=0;i<nodeSum;i++)
 			{
-				for(int j=0;j<2*dataSum;j++)
+				for(int j=0;j<dataSum;j++)
 				{
-					if(j<dataSum)
-						{
-							pw1.print(result[i][j]+" ");
-						}
-					else
-					{
-						pw2.print(result[i][j]+" ");
-					}
+					
+					pw1.print(result[i][j]+" ");
+					
+					pw2.print(result2[i][j]+" ");
+					
 				}
 				pw1.println();
 				pw2.println();
@@ -199,7 +239,19 @@ public class NodeDataGenerator {
 		return result;
 	}
 	
-		
+	private double computeDataCT(double[] u, double[] v, double sita)
+	{
+		int result=0;
+		for(int i=0;i<u.length;i++)
+		{
+			double temp=Math.abs(u[i]-v[i])/Math.max(u[i], v[i]);
+			if(temp<sita)
+			{
+				result++;
+			}
+		}
+		return 1.0*result/u.length;
+	}	
 	
 	
 	public static void main(String[] args) {
