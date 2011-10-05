@@ -111,7 +111,7 @@ public class NodeDataGenerator {
 	
 	public double[][] dataWeightGenerator(String weightFile,String dataFile,String fWeight)
 	{
-		double[][] result=new double[nodeSum][dataSum];
+		double[][] result=new double[nodeSum][2*dataSum];
 		try
 		{
 			
@@ -122,7 +122,7 @@ public class NodeDataGenerator {
 			
 			for(int i=0;i<nodeSum;i++)
 			{
-				for(int j=0;j<dataSum;j++)
+				for(int j=0;j<2*dataSum;j++)
 				{
 					result[i][j]=-1;
 				}
@@ -166,17 +166,28 @@ public class NodeDataGenerator {
 				lineNum++;
 				pwWeight.println();
 			}
-			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile)));
+			PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile+"-1.txt")));
+			PrintWriter pw2=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile+"-2.txt")));
 			for(int i=0;i<nodeSum;i++)
 			{
-				for(int j=0;j<dataSum;j++)
+				for(int j=0;j<2*dataSum;j++)
 				{
-					pw.print(result[i][j]+" ");
+					if(j<dataSum)
+						{
+							pw1.print(result[i][j]+" ");
+						}
+					else
+					{
+						pw2.print(result[i][j]+" ");
+					}
 				}
-				pw.println();
+				pw1.println();
+				pw2.println();
 			}
-			pw.flush();
-			pw.close();
+			pw1.flush();
+			pw1.close();
+			pw2.flush();
+			pw2.close();
 			pwWeight.flush();
 			pwWeight.close();
 			bf.close();
