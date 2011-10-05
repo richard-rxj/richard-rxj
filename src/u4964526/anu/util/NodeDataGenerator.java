@@ -68,7 +68,7 @@ public class NodeDataGenerator {
 
 	private double[] subData(double[] master)
 	{
-		double[] result=new double[dataSum];
+		double[] result=new double[2*dataSum];
 		
 		if(master==null)
 		{

@@ -1344,7 +1344,7 @@ public class TestRealData {
 			logger.setLevel(Level.WARNING);
 			
 			TestRealData.realTestOne();
-			//TestRealData.realTestStar();
+			TestRealData.realTestStar();
 			//TestRealData.realDataTest();
 			
 		}
