@@ -38,7 +38,7 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*7;
+		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*1.2;  //7
 	}
 
    private static double getVertexMaxRate()
@@ -727,11 +727,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1�����Ȩֵ��Ϊ1
+				    	if(rou>0.95)      //rou==1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ��?ͬȨֵ
+				    	else if(rou<0.05)  //rou==0
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -783,7 +783,7 @@ public class TestRealData {
 				
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0��?ͬȨֵ
+		    		double rou=rouSet[rr];	//tou=0
 		    		double tRatio=0;
 		    		double tgFresh=0;
 		    		double tgOld=0;
@@ -798,7 +798,7 @@ public class TestRealData {
 			    		
 						String fData=tDataFileName+"data-"+r+"-2.txt";
 						String fWeight=tWeightFileName+"weight-"+r+".txt";
-						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //ͳһweight
+						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //uniform weight
 						String fOldRate=tRateFileName+"rate-"+r+"-10.txt";
 						DataQuality dq=new DataQuality();
 						dq.setDataSum(gDataSum);
@@ -963,11 +963,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1�����Ȩֵ��Ϊ1
+				    	if(rou>0.95)      //rou==1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ��?ͬȨֵ
+				    	else if(rou<0.05)  //rou==0
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -1020,7 +1020,7 @@ public class TestRealData {
 				
 				for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0��?ͬȨֵ
+		    		double rou=rouSet[rr];	//tou=0
 		    		double tRatio=0;
 		    		double tgFresh=0;
 		    		double tgOld=0;
@@ -1035,7 +1035,7 @@ public class TestRealData {
 									    		
 						String fData=tDataFileName+"data-"+r+"-2.txt";
 						String fWeight=tWeightFileName+"weight-"+r+".txt";
-						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //ͳһweight
+						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //weight
 						String fOldRate=tRateFileName+"rate-"+r+"-10.txt";
 						DataQuality dq=new DataQuality();
 						dq.setDataSum(gDataSum);
@@ -1095,8 +1095,8 @@ public class TestRealData {
 	    double[] rouSet={0,0.1,0.3,0.5,0.7,0.9,1};
 	    int[] nodeSet={50};      //50,100,200
 	    int[] gDataSumSet={100}; //250,100,50
-	    int[] thresholdSet={9,8,7,6,5};
-	    double[] pairSumSet={0,0,0,0,0};
+	    int[] thresholdSet={8};
+	    double[] pairSumSet={0};
 	    int rMax=18;
 	   
 	    /*
@@ -1158,7 +1158,7 @@ public class TestRealData {
 					
 					g.outputFile(fVertex, fEdge);
 					RealDataHandler rdh=new RealDataHandler();
-					gPair=gPair+rdh.outputWeightFile(g, fData, fWeight, gThreshold*1.0/10, 0.01);   //��Է�ʽ
+					gPair=gPair+rdh.outputWeightFile(g, fData, fWeight, gThreshold*1.0/10, 0.01);  
 
 					
 					
@@ -1210,11 +1210,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1�����Ȩֵ��Ϊ1
+				    	if(rou>0.95)      //rou==1  all weight=1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ��?ͬȨֵ
+				    	else if(rou<0.05)  //rou==0   different weight
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -1343,9 +1343,9 @@ public class TestRealData {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			TestRealData.realTestOne();
-			TestRealData.realTestStar();
-			//TestRealData.realDataTest();
+			//TestRealData.realTestOne();
+			//TestRealData.realTestStar();
+			TestRealData.realDataTest();
 			
 		}
 		catch(Exception e)
