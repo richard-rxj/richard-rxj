@@ -38,7 +38,7 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*1.5;
+		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)]*7;
 	}
 
    private static double getVertexMaxRate()
@@ -674,7 +674,7 @@ public class TestRealData {
 					g.outputFile(fStarVertex, fStarEdge);
 					g.outputMatchFile(fMatch, 0.6, gPairRatio);
 					g.outputStarMatchFile(fStarMatch, 0.6, gPairRatio);
-					String fData=tDataFileName+"data-"+r+".txt";
+					String fData=tDataFileName+"data-"+r;
 					NodeDataGenerator dGenerator= new NodeDataGenerator();
 					dGenerator.setdThreshold(gThreshold*1.0/10);
 					dGenerator.setDataSum(gDataSum);
@@ -727,11 +727,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1£¬´ú±íÈ¨Öµ¶¼Îª1
+				    	if(rou>0.95)      //rou==1ï¿½ï¿½ï¿½ï¿½ï¿½È¨Öµï¿½ï¿½Îª1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ´ú±í²»Í¬È¨Öµ
+				    	else if(rou<0.05)  //rou==0, ï¿½ï¿½?Í¬È¨Öµ
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -783,16 +783,20 @@ public class TestRealData {
 				
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0´ú±í²»Í¬È¨Öµ
+		    		double rou=rouSet[rr];	//tou=0ï¿½ï¿½?Í¬È¨Öµ
 		    		double tRatio=0;
+		    		double tgFresh=0;
+		    		double tgOld=0;
 		    		int tSum=0;
+		    		double tgPFresh=0;
+		    		double tgPOld=0;
 		    		double tPRatio=0;
 		    		int tPSum=0;
 		    		for (int r=0;r<rMax;r++)
 				    {
 			    				
 			    		
-						String fData=tDataFileName+"data-"+r+".txt";
+						String fData=tDataFileName+"data-"+r+"-2.txt";
 						String fWeight=tWeightFileName+"weight-"+r+".txt";
 						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //Í³Ò»weight
 						String fOldRate=tRateFileName+"rate-"+r+"-10.txt";
@@ -803,8 +807,9 @@ public class TestRealData {
 						String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
 						double tFresh=dq.computeMSE(fData, fRate, 0, fWeight,0);
-						
+						tgFresh=tgFresh+tFresh;
 						double tOld=dq.computeMSE(fData, fOldRate, 1, fWeight,0);
+						tgOld=tgOld+tOld;
 						pw.print(df.format(tFresh)+" "+df.format(tOld)+" ");
 						if(tFresh<tOld)
 						{
@@ -814,8 +819,9 @@ public class TestRealData {
 						}
 						
 						double tPFresh=dq.computeMSE(fData, fRate, 0, fWeight,1);
-						
+						tgPFresh=tgPFresh+tPFresh;
 						double tPOld=dq.computeMSE(fData, fOldRate, 1, fWeight,1);
+						tgPOld=tgPOld+tPOld;
 						pw.print(df.format(tPFresh)+" "+df.format(tPOld)+" ");
 						if(tPFresh<tPOld)
 						{
@@ -829,7 +835,7 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
-		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/rMax)+" "+tPSum+" "+df.format(tPRatio/rMax));
+		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
 		    	pwR.close();
@@ -904,7 +910,7 @@ public class TestRealData {
 
 					String fStarMatch=tMatchFileName+"Smatch-"+r+".txt";
 					
-					String fData=tDataFileName+"data-"+r+".txt";
+					String fData=tDataFileName+"data-"+r;
 					NodeDataGenerator dGenerator= new NodeDataGenerator();
 					dGenerator.setdThreshold(gThreshold*1.0/10);
 					dGenerator.setDataSum(gDataSum);
@@ -957,11 +963,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1£¬´ú±íÈ¨Öµ¶¼Îª1
+				    	if(rou>0.95)      //rou==1ï¿½ï¿½ï¿½ï¿½ï¿½È¨Öµï¿½ï¿½Îª1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ´ú±í²»Í¬È¨Öµ
+				    	else if(rou<0.05)  //rou==0, ï¿½ï¿½?Í¬È¨Öµ
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -1014,16 +1020,20 @@ public class TestRealData {
 				
 				for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0´ú±í²»Í¬È¨Öµ
+		    		double rou=rouSet[rr];	//tou=0ï¿½ï¿½?Í¬È¨Öµ
 		    		double tRatio=0;
+		    		double tgFresh=0;
+		    		double tgOld=0;
 		    		int tSum=0;
 		    		double tPRatio=0;
+		    		double tgPFresh=0;
+		    		double tgPOld=0;
 		    		int tPSum=0;
 		    		for (int r=0;r<rMax;r++)
 				    {
 			    				
 									    		
-						String fData=tDataFileName+"data-"+r+".txt";
+						String fData=tDataFileName+"data-"+r+"-2.txt";
 						String fWeight=tWeightFileName+"weight-"+r+".txt";
 						String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  //Í³Ò»weight
 						String fOldRate=tRateFileName+"rate-"+r+"-10.txt";
@@ -1034,8 +1044,9 @@ public class TestRealData {
 						String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
 						double tFresh=dq.computeMSE(fData, fRate, 0, fWeight,0);
-						
+						tgFresh=tgFresh+tFresh;
 						double tOld=dq.computeMSE(fData, fOldRate, 1, fWeight,0);
+						tgOld=tgOld+tOld;
 						pw.print(df.format(tFresh)+" "+df.format(tOld)+" ");
 						if(tFresh<tOld)
 						{
@@ -1045,8 +1056,9 @@ public class TestRealData {
 						}
 						
 						double tPFresh=dq.computeMSE(fData, fRate, 0, fWeight,1);
-						
+						tgPFresh=tgPFresh+tPFresh;
 						double tPOld=dq.computeMSE(fData, fOldRate, 1, fWeight,1);
+						tgPOld=tgPOld+tPOld;
 						pw.print(df.format(tPFresh)+" "+df.format(tPOld)+" ");
 						if(tPFresh<tPOld)
 						{
@@ -1060,7 +1072,7 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
-		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/rMax)+" "+tPSum+" "+df.format(tPRatio/rMax));
+		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
 		    	pwR.close();
@@ -1146,7 +1158,7 @@ public class TestRealData {
 					
 					g.outputFile(fVertex, fEdge);
 					RealDataHandler rdh=new RealDataHandler();
-					gPair=gPair+rdh.outputWeightFile(g, fData, fWeight, gThreshold*1.0/10, 0.01);   //Åä¶Ô·½Ê½
+					gPair=gPair+rdh.outputWeightFile(g, fData, fWeight, gThreshold*1.0/10, 0.01);   //ï¿½ï¿½Ô·ï¿½Ê½
 
 					
 					
@@ -1198,11 +1210,11 @@ public class TestRealData {
 				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g=new Graph();
 				    	
-				    	if(rou>0.95)      //rou==1£¬´ú±íÈ¨Öµ¶¼Îª1
+				    	if(rou>0.95)      //rou==1ï¿½ï¿½ï¿½ï¿½ï¿½È¨Öµï¿½ï¿½Îª1
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
 				    	}
-				    	else if(rou<0.05)  //rou==0, ´ú±í²»Í¬È¨Öµ
+				    	else if(rou<0.05)  //rou==0, ï¿½ï¿½?Í¬È¨Öµ
 				    	{
 				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
 				    	}
@@ -1255,7 +1267,7 @@ public class TestRealData {
 				
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0´ú±í²»Í¬È¨Öµ
+		    		double rou=rouSet[rr];	//tou=0ï¿½ï¿½?Í¬È¨Öµ
 		    		double tRatio=0;
 		    		double tgFresh=0;
 		    		double tgOld=0;
@@ -1313,7 +1325,7 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
-		    		pwR.println(gPair+" "+rou+" "+tSum+" "+df.format(tRatio/rMax)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/rMax)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwR.println(gPair+" "+rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
 		    	pwR.close();
@@ -1331,7 +1343,7 @@ public class TestRealData {
 			Logger logger=Logger.getLogger("MaxFlow");
 			logger.setLevel(Level.WARNING);
 			
-			//TestRealData.realTestOne();
+			TestRealData.realTestOne();
 			//TestRealData.realTestStar();
 			//TestRealData.realDataTest();
 			

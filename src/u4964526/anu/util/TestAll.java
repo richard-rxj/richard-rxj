@@ -18,7 +18,7 @@ public class TestAll {
 			logger.setLevel(Level.WARNING);
 			
 			//TestRealData.realTest();
-			
+			/*
 			logger.warning("TestMaxFlow.runningTask(1,1)");
 			TestMaxFlow.runningTask(1,1);
 			
@@ -30,8 +30,9 @@ public class TestAll {
 			
 			logger.warning("TestMaxFlow.runningTask(1,12)");
 			TestMaxFlow.runningTask(1,12);
+			*/
 			
-			/*
+			
 			logger.warning("TestMaxFlow.runningTask(3,1)");
 			TestMaxFlow.runningTask(3,1);
 						
@@ -53,7 +54,7 @@ public class TestAll {
 			logger.warning("TestMaxFlow.runningTask(0,12)");
 			TestMaxFlow.runningTask(0,12);
 			
-			
+			/*
 			TestMaxFlow.includeMatlabTask(1, 1);
 			TestMaxFlow.includeMatlabTask(1, 3);
 			TestMaxFlow.includeMatlabTask(1, 6);
