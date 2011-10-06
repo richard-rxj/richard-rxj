@@ -774,8 +774,10 @@ public class TestRealData {
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
-		    	String fRReal="test/real/one/"+gNode+"/"+"1Real-"+gThreshold+".txt";
+		    	String fRReal="test/real/one/"+"Rho-"+gNode+"-"+gThreshold+".txt";
 				PrintWriter pwR=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fRReal,true)));
+				
+				
 				
 				String tFileName="test/real/one/"+gNode+"/"+gThreshold+"/";
 	    		String tWeightFileName="test/real/one/"+gNode+"/"+gThreshold+"/weight/";
@@ -784,6 +786,8 @@ public class TestRealData {
 				
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
+		    				    		
+		    		
 		    		double rou=rouSet[rr];	//tou=0
 		    		double tRatio=0;
 		    		double tgFresh=0;
@@ -793,6 +797,14 @@ public class TestRealData {
 		    		double tgPOld=0;
 		    		double tPRatio=0;
 		    		int tPSum=0;
+		    		
+		    		String fNode="test/real/one/Node-"+gThreshold+"-"+(int)(rou*10)+".txt";
+					PrintWriter pwN=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fNode,true)));
+					
+					String fThreshold="test/real/one/Threshold-"+gNode+"-"+(int)(rou*10)+".txt";
+					PrintWriter pwT=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fThreshold,true)));
+
+		    		
 		    		for (int r=0;r<rMax;r++)
 				    {
 			    				
@@ -836,6 +848,14 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
+		    		pwN.println(gNode+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwN.flush();
+		    		pwN.close();
+		    		
+		    		pwT.println(gThreshold+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwT.flush();
+		    		pwT.close();
+		    		
 		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
@@ -1011,7 +1031,7 @@ public class TestRealData {
 		    for(int gt=0;gt<thresholdSet.length;gt++)
 		    {
 		    	int gThreshold=thresholdSet[gt];
-		    	String fRReal="test/real/star/"+gNode+"/"+"1Real-"+gThreshold+".txt";
+		    	String fRReal="test/real/star/"+"Rho-"+gNode+"-"+gThreshold+".txt";
 				PrintWriter pwR=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fRReal,true)));
 		    	
 				String tFileName="test/real/star/"+gNode+"/"+gThreshold+"/";
@@ -1031,6 +1051,14 @@ public class TestRealData {
 		    		double tgPFresh=0;
 		    		double tgPOld=0;
 		    		int tPSum=0;
+		    		
+		    		String fNode="test/real/star/Node-"+gThreshold+"-"+(int)(rou*10)+".txt";
+					PrintWriter pwN=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fNode,true)));
+
+					String fThreshold="test/real/star/Threshold-"+gNode+"-"+(int)(rou*10)+".txt";
+					PrintWriter pwT=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fThreshold,true)));
+
+		    		
 		    		for (int r=0;r<rMax;r++)
 				    {
 			    				
@@ -1074,6 +1102,14 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
+		    		pwN.println(gNode+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwN.flush();
+		    		pwN.close();
+		    		
+		    		pwT.println(gThreshold+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwT.flush();
+		    		pwT.close();
+		    		
 		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
@@ -1269,7 +1305,7 @@ public class TestRealData {
 				
 		    	for(int rr=0;rr<rouSet.length-1;rr++)
 		    	{
-		    		double rou=rouSet[rr];	//tou=0��?ͬȨֵ
+		    		double rou=rouSet[rr];	//tou=0
 		    		double tRatio=0;
 		    		double tgFresh=0;
 		    		double tgOld=0;
