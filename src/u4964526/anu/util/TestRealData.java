@@ -595,9 +595,9 @@ public class TestRealData {
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={50,100,200};      //50,100,200
-	    int[] gDataSumSet={250,150,100}; //250,100,50
-	    int[] thresholdSet={9,8,7,6,5};  //9,8,7,6,5
-	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3}; //0.1,0.2,0.3,0.4,0.5
+	    int[] gDataSumSet={250,100,70}; //250,100,70
+	    int[] thresholdSet={9,8,7,6,5,4,3};  //9,8,7,6,5
+	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3,0.4,0.5}; //0.1,0.2,0.3,0.4,0.5
 	    int rMax=100;
 	   
 	    /*
@@ -878,9 +878,9 @@ public class TestRealData {
 	    
 	    double[] rouSet={0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={50,100,200};      //50,100,200
-	    int[] gDataSumSet={250,150,100}; //250,100,50
-	    int[] thresholdSet={9,8,7,6,5};
-	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3};
+	    int[] gDataSumSet={250,150,70}; //250,150,70
+	    int[] thresholdSet={9,8,7,6,5,4,3};
+	    double[] pairRatio={0.1,0.15,0.2,0.25,0.3,0.4,0.5};
 	    int rMax=100;
 	   
 	    /*
