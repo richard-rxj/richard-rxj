@@ -51,6 +51,8 @@ public class RealDataHandler {
 		return 1.0*result/u.length;
 	}
 	
+	
+	
 	public void getData(String dateFilter, String sourceFile,String dataFile)
 	{
 		try
@@ -516,8 +518,97 @@ public class RealDataHandler {
 	}
 	
 	
+	private double[][] loadData2(String dataFile)
+	{
+		double[][] result=new double[nodeSum][dataSum];
+		try
+		{
+			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(dataFile)));
+			String tempString;
+			int lineNum=0;
+			while((tempString=bf.readLine())!=null)
+			{
+				String[] tData=tempString.split(" ");
+				for(int i=0;i<dataSum;i++)
+				{
+					result[lineNum][i]=Double.parseDouble(tData[i]);
+				}
+				lineNum++;
+			}
+			bf.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int outputWeightFile2(Graph g,String dataFile,String weightFile,double cData,double theta)
+	{
+		int rI=0;
+		try
+		{
+			double[][] result=new double[nodeSum][3];
+			double[][] dataSet=this.loadData2(dataFile);
+
+			
+			for(int i=0;i<g.getSourceList().size();i++)
+			{
+				int ti=g.getSourceList().get(i).getVerValue();
+				result[ti-1][0]=ti;
+				result[ti-1][1]=1;
+				result[ti-1][2]=0;
+			}
+			
+			ArrayList<Vertex> vSet=new ArrayList<Vertex>();
+			Vertex sink=g.getSinkList().get(0);
+			vSet.add(sink);
+			for(int i=0;i<g.getEdgeList().size();i++)
+			{
+				Edge tE=g.getEdgeList().get(i);
+				Vertex tS=tE.getSource();
+				Vertex tT=tE.getTarget();
+				if((!vSet.contains(tS))&&(!vSet.contains(tT)))
+				{
+					double tD=this.computeDataCT(dataSet[tS.getVerValue()], dataSet[tT.getVerValue()], theta,0, dataSet[tS.getVerValue()].length);
+					
+					if(tD>=cData)
+					{
+						vSet.add(tS);
+						rI++;
+						vSet.add(tT);
+						rI++;
+						result[tS.getVerValue()-1][1]=1-tD;
+						result[tS.getVerValue()-1][2]=tT.getVerValue();
+					}
+				}
+			}
+			
+			
+			
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(weightFile)));
+			for(int i=0;i<nodeSum;i++)
+			{
+				for(int j=0;j<3;j++)
+				{
+					pw.print(result[i][j]+" ");
+				}
+				pw.println();
+			}
+			pw.flush();
+			pw.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return rI;
+	}
+	
+	
 	/*
-	 * »¹ÐèÐÞÕý£¡£¡£¡£¡£¡£¡
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public int outputStarWeightFile(Graph g,String dataFile,String weightFile,double ratio,double dThreshold,int begin,int end)
 	{

@@ -24,6 +24,15 @@ public class WSNGenerator {
 	private int gNodeNum=100;
 	
 	
+	private int gDataNum=100;
+	private int gDataGroup=10;
+	private int gSelfStep=2;
+	private int gSelfGroup=10;
+	private int gNeigStep=1;
+	private double minSeed=14;
+	private double maxSeed=20;
+	
+	
 	public int getgLength() {
 		return gLength;
 	}
@@ -218,6 +227,184 @@ public class WSNGenerator {
 		this.gBudgetEnergy = gBaseEdgeCapacity;
 	}
 
+	
+	public int getgDataNum() {
+		return gDataNum;
+	}
+
+
+
+
+
+
+
+	public void setgDataNum(int gDataNum) {
+		this.gDataNum = gDataNum;
+	}
+
+
+
+
+
+
+
+	public int getgDataGroup() {
+		return gDataGroup;
+	}
+
+
+
+
+
+
+
+	public void setgDataGroup(int gDataGroup) {
+		this.gDataGroup = gDataGroup;
+	}
+
+
+
+
+
+
+
+	public int getgSelfStep() {
+		return gSelfStep;
+	}
+
+
+
+
+
+
+
+	public void setgSelfStep(int gSelfStep) {
+		this.gSelfStep = gSelfStep;
+	}
+
+
+
+
+
+
+
+	public int getgSelfGroup() {
+		return gSelfGroup;
+	}
+
+
+
+
+
+
+
+	public void setgSelfGroup(int gSelfGroup) {
+		this.gSelfGroup = gSelfGroup;
+	}
+
+
+
+
+
+
+
+	public int getgNeigStep() {
+		return gNeigStep;
+	}
+
+
+
+
+
+
+
+	public void setgNeigStep(int gNeigStep) {
+		this.gNeigStep = gNeigStep;
+	}
+
+
+
+
+
+
+
+	public double getMinSeed() {
+		return minSeed;
+	}
+
+
+
+
+
+
+
+	public void setMinSeed(double minSeed) {
+		this.minSeed = minSeed;
+	}
+
+
+
+
+
+
+
+	public double getMaxSeed() {
+		return maxSeed;
+	}
+
+
+
+
+
+
+
+	public void setMaxSeed(double maxSeed) {
+		this.maxSeed = maxSeed;
+	}
+
+
+
+
+
+
+
+	private double[] subData(double[] master)
+	{
+		double[] result=new double[this.gDataNum*this.gDataGroup];
+		
+		if(master==null)
+		{
+			double tSeed=this.minSeed+Math.random()*(this.maxSeed-this.minSeed);
+			double tSeed0=tSeed;
+			double tStep=this.gSelfStep;
+			int tGroup=0;
+			for(int i=0;i<result.length;i++)
+			{
+				tGroup++;
+				if(tGroup>this.gDataNum)
+				{
+					tGroup=tGroup-this.gDataNum;
+					tSeed=tSeed0;
+				}
+				
+				if(tGroup%this.gSelfGroup==0)
+				{
+					tSeed=tSeed+tStep;
+				}
+				result[i]=tSeed+Math.random()*tStep;
+			}
+		}
+		else
+		{
+			for(int i=0;i<result.length;i++)
+			{
+				result[i]=master[i]+(2*Math.random()-1)*this.gNeigStep;
+			}
+			
+		}
+		return result;
+	}
+	
     
 	public Graph generateGraph(String f) throws FileNotFoundException
 	{
@@ -226,9 +413,9 @@ public class WSNGenerator {
 		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
 		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
 		//PrintWriter pwWFEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/wfedge_"+f+".txt")));
-		int i=0;
 		
-		Vertex s=new Vertex(String.valueOf(1));
+		int i=0;
+		Vertex s=new Vertex(String.valueOf(0));
 		s.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 		s.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 		s.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
@@ -239,7 +426,7 @@ public class WSNGenerator {
 		s.setWasSink(true);
 		pwVertex.println(s+" "+s.getxLabel()+" "+s.getyLabel()+" "+s.getWeight()+" "+s.getMaxRate()+" "+s.getBudgetEnergy());
 		pwVertex.flush();
-		i=i+1;	
+		i++;	
 		
 		/*
 		for(int m=0; m<=Math.floor(100.0/this.gRadius);m++)
@@ -262,11 +449,20 @@ public class WSNGenerator {
 		}
 		*/
 		
-		
-		
-		for(;i<=this.getgNodeNum();i++)
+		double[][] gData=new double[this.gNodeNum][this.gDataGroup*this.gDataNum];
+		for(int m=0;m<this.gNodeNum;m++)
 		{
-			Vertex v=new Vertex(String.valueOf(i+1));
+			for(int n=0;n<this.gDataGroup*this.gDataNum;n++)
+			{
+				gData[m][n]=-1;
+			}
+		}
+		
+		
+		
+		for(;i<this.getgNodeNum();i++)
+		{
+			Vertex v=new Vertex(String.valueOf(i));
 			v.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 			v.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 			//v.setBudgetEnergy(this.getgBaseEdgeCapacity()[r.nextInt(this.getgBaseEdgeCapacity().length)]);
@@ -287,6 +483,11 @@ public class WSNGenerator {
 		while(slowI.hasNext())
 		{
 			Vertex v1=slowI.next();
+			if(gData[v1.getVerValue()][0]==-1)
+			{
+				gData[v1.getVerValue()]=this.subData(null);
+			}
+				
 			fastI=vSet.iterator();
 			
 			while(fastI.next()!=v1)
@@ -310,6 +511,8 @@ public class WSNGenerator {
 					g.addEdge(e2);
 					pwEdge.println(v2+" "+v1+" "+e2.getCapacity());
 					pwEdge.flush();
+					
+					gData[v2.getVerValue()]=this.subData(gData[v1.getVerValue()]);
 				}
 				
 				/*
@@ -379,6 +582,29 @@ public class WSNGenerator {
 		pwEdge.close();
 		//pwWFEdge.close();
 		
+		
+		
+		for(int m=0;m<this.gNodeNum;m++)
+		{
+			for(int n=0;n<this.gDataNum*this.gDataGroup;n++)
+			{
+				PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/data_"+f+"_"+n/this.gDataNum+".txt",true)));
+				pw1.print(gData[m][n]+" ");
+				if((n+1)%this.gDataNum==0)
+				{
+					pw1.println();
+				}
+				pw1.flush();
+				pw1.close();
+			}
+			
+			
+		}
+		
+
+		
+		
+		
 		return g;
 	}
 	
@@ -401,9 +627,10 @@ public class WSNGenerator {
 		try
 		{
 			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
-			int[] tNodeSet={10,11,12,13,14};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
+			int[] tNodeSet={50,100,150,200,250};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
 			double[] tRadiusSet={49,49,49,49,49};
 			double tDensity=7.5;
+			int gLoop=10;
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
@@ -421,13 +648,16 @@ public class WSNGenerator {
 			pw.close();
 			
 			
-			for(int j=0;j<100;j++)
+			for(int j=0;j<gLoop;j++)
 			{
 				for(int i=0;i<tNodeSet.length;i++)
 				{
 					WSNGenerator tGenerator=new WSNGenerator();
 					tGenerator.setgNodeNum(tNodeSet[i]);
 					tGenerator.setgRadius(tRadiusSet[i]);
+					//tGenerator.setgDataNum(10);
+					//tGenerator.setgDataGroup(3);
+					//tGenerator.setgSelfGroup(5);
 					tGenerator.generateGraph(String.valueOf(tNodeSet[i])+"_"+j);
 				}
 			}
