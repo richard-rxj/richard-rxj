@@ -12,8 +12,9 @@ import java.util.Random;
 public class NodeDataGenerator {
 
 	private double dThreshold = 0.9;
-	private double seed = 50;
-	private double step = 5;
+	private double seed = 20;
+	private double baseSeed = 14;
+	private double step = 2;
 	private int nodeSum=100;
 	private int dataSum=100;
 	private int stepGroup=10;
@@ -81,7 +82,7 @@ public class NodeDataGenerator {
 		
 		if(master==null)
 		{
-			double tSeed=Math.random()*this.seed;
+			double tSeed=this.baseSeed+Math.random()*(this.seed-this.baseSeed);
 			double tStep=this.step;
 			int tGroup=0;
 			for(int i=0;i<result.length;i++)
