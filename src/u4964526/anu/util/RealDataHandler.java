@@ -552,13 +552,16 @@ public class RealDataHandler {
 			double[][] result=new double[nodeSum][3];
 			double[][] dataSet=this.loadData2(dataFile);
 
+			result[0][0]=0;
+			result[0][1]=1;
+			result[0][2]=0;
 			
 			for(int i=0;i<g.getSourceList().size();i++)
 			{
 				int ti=g.getSourceList().get(i).getVerValue();
-				result[ti-1][0]=ti;
-				result[ti-1][1]=1;
-				result[ti-1][2]=0;
+				result[ti][0]=ti;
+				result[ti][1]=1;
+				result[ti][2]=0;
 			}
 			
 			ArrayList<Vertex> vSet=new ArrayList<Vertex>();
@@ -579,8 +582,8 @@ public class RealDataHandler {
 						rI++;
 						vSet.add(tT);
 						rI++;
-						result[tS.getVerValue()-1][1]=1-tD;
-						result[tS.getVerValue()-1][2]=tT.getVerValue();
+						result[tS.getVerValue()][1]=1-tD;
+						result[tS.getVerValue()][2]=tT.getVerValue();
 					}
 				}
 			}
@@ -588,7 +591,7 @@ public class RealDataHandler {
 			
 			
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(weightFile)));
-			for(int i=0;i<nodeSum;i++)
+			for(int i=1;i<nodeSum;i++)
 			{
 				for(int j=0;j<3;j++)
 				{
@@ -608,7 +611,7 @@ public class RealDataHandler {
 	
 	
 	/*
-	 * ���������������
+	 * 
 	 */
 	public int outputStarWeightFile(Graph g,String dataFile,String weightFile,double ratio,double dThreshold,int begin,int end)
 	{
