@@ -37,10 +37,10 @@ public class RealDataHandler {
 		this.dataSum = dataSum;
 	}
 
-	private double computeDataCT(double[] u, double[] v, double threshold)
+	private double computeDataCT(double[] u, double[] v, double threshold,int trainBegin, int trainEnd)
 	{
 		int result=0;
-		for(int i=0;i<u.length;i++)
+		for(int i=trainBegin;i<trainEnd;i++)
 		{
 			double temp=Math.abs(u[i]-v[i])/Math.max(u[i], v[i]);
 			if(temp<threshold)
@@ -130,15 +130,15 @@ public class RealDataHandler {
 				for(int j=0;j<dataSum;j++)
 				{
 					System.out.println(i+"-"+j+":"+result[i][j]);
-					if(j<100)
+					if(j<200)
 					{
 						pw1.print(result[i][j]+" ");
 					}
-					else if(j<200)
+					else if(j<300)
 					{
 						pw2.print(result[i][j]+" ");
 					}
-					else if(j<300)
+					else if(j<400)
 					{
 						pw3.print(result[i][j]+" ");
 					}
@@ -180,7 +180,47 @@ public class RealDataHandler {
 	}
 	
 	
-	private double[][] loadData(String dataFile)
+	public static double[][] loadData(String dataFile, int begin,int end)
+	{
+		double[][] result=new double[50][end-begin];
+		String dataFile1=dataFile+"-1.txt";
+		String dataFile2=dataFile+"-2.txt";
+		try
+		{
+			BufferedReader bf1=new BufferedReader(new InputStreamReader(new FileInputStream(dataFile1)));
+			BufferedReader bf2=new BufferedReader(new InputStreamReader(new FileInputStream(dataFile2)));
+			String tempString1,tempString2;
+			int lineNum=0;
+			while((tempString1=bf1.readLine())!=null)
+			{
+				tempString2=bf2.readLine();
+				String[] tData1=tempString1.split(" ");
+				String[] tData2=tempString2.split(" ");
+				for(int i=0;i<end-begin;i++)
+				{
+					if(i<100-begin)
+					{
+						result[lineNum][i]=Double.parseDouble(tData1[i+begin]);
+					}
+					else
+					{	
+						result[lineNum][i]=Double.parseDouble(tData2[i-(100-begin)]);
+				
+					}
+				}
+				lineNum++;
+			}
+			bf1.close();
+			bf2.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private double[][] MergeData(String dataFile)
 	{
 		double[][] result=new double[nodeSum][dataSum];
 		try
@@ -206,12 +246,12 @@ public class RealDataHandler {
 		return result;
 	}
 	
-	public void outputCTFile(String dataFile,String ctFile)
+	public void outputCTFile(String dataFile,String ctFile,int begin,int end)
 	{
 		try
 		{
 			double[][] result=new double[nodeSum][nodeSum];
-			double[][] dataSet=this.loadData(dataFile);
+			double[][] dataSet=this.loadData(dataFile,begin,end);
 			int pairSum=0;
 			
 			for(int i=0;i<nodeSum;i++)
@@ -220,7 +260,7 @@ public class RealDataHandler {
 				{
 					if(i!=j)
 					{
-						result[i][j]=this.computeDataCT(dataSet[i], dataSet[j], 0.005);
+						result[i][j]=this.computeDataCT(dataSet[i], dataSet[j], 0.005,0,20);
 					}
 						if(result[i][j]>0.8)
 					{
@@ -252,11 +292,11 @@ public class RealDataHandler {
 	}
 	
 	
-	public void outputDataFile(String sourceFile,String matchFile, String dataFile)
+	public void outputDataFile(String sourceFile,String matchFile, String dataFile,int begin,int end)
 	{
 		try
 		{
-			double[][] source=this.loadData(sourceFile);
+			double[][] source=this.loadData(sourceFile,begin,end);
 			double[][] result=new double[nodeSum][dataSum];
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(matchFile)));
 			String tempString;
@@ -413,13 +453,13 @@ public class RealDataHandler {
 	}
 	
 	
-	public int outputWeightFile(Graph g,String dataFile,String weightFile,double ratio,double dThreshold)
+	public int outputWeightFile(Graph g,String dataFile,String weightFile,double cData,double sita,int begin,int end)
 	{
 		int rI=0;
 		try
 		{
 			double[][] result=new double[nodeSum][3];
-			double[][] dataSet=this.loadData(dataFile);
+			double[][] dataSet=this.loadData(dataFile,begin,end);
 
 			
 			for(int i=0;i<g.getSourceList().size();i++)
@@ -440,8 +480,9 @@ public class RealDataHandler {
 				Vertex tT=tE.getTarget();
 				if((!vSet.contains(tS))&&(!vSet.contains(tT)))
 				{
-					double tD=this.computeDataCT(dataSet[tS.getVerValue()-1], dataSet[tT.getVerValue()-1], dThreshold);
-					if(tD>=ratio)
+					double tD=this.computeDataCT(dataSet[tS.getVerValue()-1], dataSet[tT.getVerValue()-1], sita,begin,end);
+					
+					if(tD>=cData)
 					{
 						vSet.add(tS);
 						rI++;
@@ -478,13 +519,13 @@ public class RealDataHandler {
 	/*
 	 * »¹ÐèÐÞÕý£¡£¡£¡£¡£¡£¡
 	 */
-	public int outputStarWeightFile(Graph g,String dataFile,String weightFile,double ratio,double dThreshold)
+	public int outputStarWeightFile(Graph g,String dataFile,String weightFile,double ratio,double dThreshold,int begin,int end)
 	{
 		int rI=0;
 		try
 		{
 			double[][] result=new double[nodeSum][3];
-			double[][] dataSet=this.loadData(dataFile);
+			double[][] dataSet=this.loadData(dataFile,begin,end);
 
 			
 			for(int i=0;i<g.getSourceList().size();i++)
@@ -505,7 +546,7 @@ public class RealDataHandler {
 				Vertex tT=tE.getTarget();
 				if((!vSet.contains(tS))&&(!vSet.contains(tT)))
 				{
-					double tD=this.computeDataCT(dataSet[tS.getVerValue()-1], dataSet[tT.getVerValue()-1], dThreshold);
+					double tD=this.computeDataCT(dataSet[tS.getVerValue()-1], dataSet[tT.getVerValue()-1], dThreshold,0,20);
 					if(tD>=ratio)
 					{
 						vSet.add(tS);
@@ -546,11 +587,11 @@ public class RealDataHandler {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
 		RealDataHandler rdh=new RealDataHandler();
-		rdh.setDataSum(600);
+		rdh.setDataSum(200);
 		rdh.setNodeSum(50);
 		for(int i=1;i<10;i++)
 		{
-			rdh.getData("2004-03-0"+i, "test/real/data.txt", "test/real/data-"+(i-1));
+			rdh.getData("2004-03-0"+i, "test/real/data.txt", "test/real/data/data-"+(i-1));
 		}
 		//rdh.outputCTFile("test/real/Ndata.txt","test/real/ct.txt");
 		//rdh.outputDataFile("test/real/Ndata.txt", "test/real/labData/50/9/weight/weight-0.txt", "test/real/labData/50/9/data/data-0.txt");
