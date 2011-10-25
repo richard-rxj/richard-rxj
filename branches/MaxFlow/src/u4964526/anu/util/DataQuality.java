@@ -53,11 +53,11 @@ public class DataQuality {
 				double tTemp;
 				if(dOption<1)
 				{
-					tTemp=(tSlave[tiPre]+tSlave[ti])/2;//ÖÐÎ»ÊýÌî³ä
+					tTemp=(tSlave[tiPre]+tSlave[ti])/2;//ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½
 				}
 				else
 				{
-					tTemp=tSlave[tiPre];                 //Ç°Ò»Î»Ìî³ä
+					tTemp=tSlave[tiPre];                 //Ç°Ò»Î»ï¿½ï¿½ï¿½
 				}	
 				
 				for(int j=tiPre+1;j<ti;j++)
@@ -117,7 +117,7 @@ public class DataQuality {
 			for(int i=1;i<a.size();i++)
 			{
 				ti=Integer.parseInt(a.get(i));
-				double tTemp=(tSlave[tiPre]+tSlave[ti])/2;   //ÖÐÎ»ÊýÌî³ä
+				double tTemp=(tSlave[tiPre]+tSlave[ti])/2;   //ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½
 				for(int j=tiPre+1;j<ti;j++)
 				{
 					tSlave[j]=tTemp;
@@ -204,6 +204,45 @@ public class DataQuality {
 				
 				
 				if((Double.parseDouble(temp[1])<0.95)&&(wOption<1))
+				{
+					int tSlaveId = (int)Double.parseDouble(temp[0]);
+					int tMasterId = (int)Double.parseDouble(temp[2]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], gData[tMasterId-1], gRate[tMasterId-1]);
+
+				}
+				else
+				{
+					int tSlaveId = (int)Double.parseDouble(temp[0]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], null, 0);
+				}
+				lineNum++;
+			}
+			bf.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	public double computeMSE2(String dataFile, String rateFile, int wOption,String weightFile,int dOption)
+	{
+		double result=0;
+		try
+		{
+			double[][] gData=loadData(dataFile);
+			double[] gRate=loadRate(rateFile);
+			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
+			String tempString;
+			int lineNum=0;
+			while((tempString=bf.readLine())!=null)
+			{
+				String[] temp=tempString.split(" ");
+				
+				
+				if((Double.parseDouble(temp[1])<1)&&(wOption<1))
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
 					int tMasterId = (int)Double.parseDouble(temp[2]);

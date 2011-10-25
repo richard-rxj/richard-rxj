@@ -708,8 +708,8 @@ public class TestMaxFlow {
 			DecimalFormat df=new DecimalFormat("#.0000");
 			
 			
-			double[] apprFactorSet={0.3,0.2,0.1,0.05};
-			int [] gNodeSet={10,12,14,16,18};
+			double[] apprFactorSet={0.1,0.05,0.025};
+			int [] gNodeSet={10,11,12,13,14};
 			
 			long startTime=0;
 			long endTime=0;
@@ -719,10 +719,11 @@ public class TestMaxFlow {
 			{
 				tFile.mkdirs();
 			}
+			int lMax=1;
 			
 			for(int i=0;i<gNodeSet.length;i++)
 			{
-				for(int l=0;l<1;l++)
+				for(int l=0;l<lMax;l++)
 				{
 					String fileName1="test/simulation/topology/vertex_"+gNodeSet[i]+"_"+l+".txt";
 					String fileName2="test/simulation/topology/edge_"+gNodeSet[i]+"_"+l+".txt";
@@ -739,13 +740,13 @@ public class TestMaxFlow {
 					matlabFlow.setMaxG(gMatlab);
 					matlabFlow.seteRx(eRx);
 					matlabFlow.seteTx(eTx);
-					matlabFlow.computeLPMatlab(mFileAdd);
+					matlabFlow.computeLPMatlab(mFileAdd,l);
 				}
 			}
 			
 			for(int j=0;j<apprFactorSet.length;j++)
 			{
-				PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+".txt")));
+				PrintWriter pwGRun=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileAdd+"/running_"+(int)(apprFactorSet[j]*100)+".txt",true)));
 				for(int i=0;i<gNodeSet.length;i++)
 				{
 					double pRatio=0;
@@ -756,7 +757,7 @@ public class TestMaxFlow {
 					double gFlowData=0;
 					double wfRunTime=0;
 					double wfFlowData=0;
-					int lMax=1;
+					
 					for(int l=0;l<lMax;l++)
 					{
 						String rFileAdd="test/simulation/matlab/running/"+rOption+"-"+eOption;
