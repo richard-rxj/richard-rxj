@@ -553,7 +553,7 @@ public class TestRealData {
 	    double[] rouSet={0,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={50,100,150,200,250};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100}; //100,100,100,100,100
-	    double[] gEISet={4,6,10,11,17};         //3,7,9,12,19
+	    double[] gEISet={4,6,11,11,17};         //3,7,9,12,19
 	    int[] thresholdSet={7};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    int rMax=1;
