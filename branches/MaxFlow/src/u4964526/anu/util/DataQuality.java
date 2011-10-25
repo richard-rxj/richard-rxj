@@ -53,11 +53,11 @@ public class DataQuality {
 				double tTemp;
 				if(dOption<1)
 				{
-					tTemp=(tSlave[tiPre]+tSlave[ti])/2;//��λ�����
+					tTemp=(tSlave[tiPre]+tSlave[ti])/2;
 				}
 				else
 				{
-					tTemp=tSlave[tiPre];                 //ǰһλ���
+					tTemp=tSlave[tiPre];                 
 				}	
 				
 				for(int j=tiPre+1;j<ti;j++)
@@ -117,7 +117,7 @@ public class DataQuality {
 			for(int i=1;i<a.size();i++)
 			{
 				ti=Integer.parseInt(a.get(i));
-				double tTemp=(tSlave[tiPre]+tSlave[ti])/2;   //��λ�����
+				double tTemp=(tSlave[tiPre]+tSlave[ti])/2;   
 				for(int j=tiPre+1;j<ti;j++)
 				{
 					tSlave[j]=tTemp;
@@ -147,8 +147,10 @@ public class DataQuality {
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(dataFile)));
 			String tempString;
 			int lineNum=0;
+			//tempString=bf.readLine();
 			while((tempString=bf.readLine())!=null)
 			{
+				
 				String[] tData=tempString.split(" ");
 				for(int i=0;i<dataSum;i++)
 				{
@@ -246,13 +248,13 @@ public class DataQuality {
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
 					int tMasterId = (int)Double.parseDouble(temp[2]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], gData[tMasterId-1], gRate[tMasterId-1]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1]);
 
 				}
 				else
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId-1], gRate[tSlaveId-1], null, 0);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0);
 				}
 				lineNum++;
 			}
