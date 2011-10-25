@@ -104,7 +104,7 @@ public class TestRealData {
 			   v1.setRate(0);
 			   v1.setWeight(1);
 			   g.addVertex(v1);
-			   if(Integer.parseInt(b[0])==1)
+			   if(Integer.parseInt(b[0])==0)
 			   {
 				   g.addSink(v1);
 			   }
@@ -203,8 +203,8 @@ public class TestRealData {
 			   /*
 			    * end of debug info
 			    */
-			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0])-1);
-			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1])-1);
+			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0]));
+			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1]));
 			   Edge e1=new Edge(s1,t1,s1.getBudgetEnergy());
 			   g.addEdge(e1);
 			   
@@ -341,7 +341,7 @@ public class TestRealData {
 			   //v1.setBudgetEnergy(TestRealData.getBudgetEnergy());
 			   v1.setRate(0);
 			   g.addVertex(v1);
-			   if(Integer.parseInt(b[0])==1)
+			   if(Integer.parseInt(b[0])==0)
 			   {
 				   g.addSink(v1);
 			   }
@@ -440,8 +440,8 @@ public class TestRealData {
 			   /*
 			    * end of debug info
 			    */
-			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0])-1);
-			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1])-1);
+			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0]));
+			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1]));
 			   Edge e1=new Edge(s1,t1,s1.getBudgetEnergy());
 			   g.addEdge(e1);
 			   
@@ -495,7 +495,7 @@ public class TestRealData {
 			   /*
 			    * end of debug info
 			    */
-			   Vertex v1=g.getSourceList().get(lineNum-1);   //!!!!!!
+			   Vertex v1=g.getVertexList().get(lineNum-1);   //!!!!!!
 			   if(wOption==1)
 			   {
 				   v1.setWeight(1);
@@ -506,7 +506,7 @@ public class TestRealData {
 			   }
 			   else
 			   {
-				   if(Double.parseDouble(b[1])<0.95)
+				   if(Double.parseDouble(b[1])<0.99)
 				   {
 					   v1.setWeight(rou);
 				   }
@@ -551,10 +551,10 @@ public class TestRealData {
 	   	    
 	    
 	    double[] rouSet={0,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={50,100,150,200,300};      //50,100,150,200,300
+	    int[] nodeSet={50,100,150,200,250};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100}; //100,100,100,100,100
-	    double[] gEISet={3,7,9,12,19};         //3,7,9,12,19
-	    int[] thresholdSet={9,8,7,6};  //9,8,7,6,5,4,3
+	    double[] gEISet={4,6,10,11,17};         //3,7,9,12,19
+	    int[] thresholdSet={7};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    int rMax=1;
 	   
@@ -613,7 +613,10 @@ public class TestRealData {
 					String fData="test/real/topology/data_"+gNode+"_"+r+"_0.txt";
 					
 					String fWeight=tWeightFileName+"weight-"+r+".txt";
-					gPair=gPair+new RealDataHandler().outputWeightFile2(g, fData, fWeight, gThreshold*1.0/10, 0.01);
+					RealDataHandler rdh=new RealDataHandler();
+					rdh.setDataSum(gDataSum);
+					rdh.setNodeSum(gNode);
+					gPair=gPair+rdh.outputWeightFile2(g, fData, fWeight, gThreshold*1.0/10, 0.03);
 					
 					
 		    	}
