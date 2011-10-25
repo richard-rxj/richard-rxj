@@ -28,13 +28,13 @@ public class DataQuality {
 	private double computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate)
 	{
 		double result=0;
-		if (slaveRate>dataSum)
+		if (slaveRate>slaveBase.length)
 		{
-			slaveRate=dataSum;
+			slaveRate=slaveBase.length;
 		}
-		if(masterRate>dataSum)
+		if(masterRate>slaveBase.length)
 		{
-			masterRate=dataSum;
+			masterRate=slaveBase.length;
 		}
 		double[] tSlave=new double[slaveBase.length];
 		if(masterBase==null)
@@ -188,12 +188,12 @@ public class DataQuality {
 		return result;
 	}
 	
-	public double computeMSE(String dataFile, String rateFile, int wOption,String weightFile,int dOption)
+	public double computeMSE(String dataFile, String rateFile, int wOption,String weightFile,int dOption,int begin,int end)
 	{
 		double result=0;
 		try
 		{
-			double[][] gData=loadData(dataFile);
+			double[][] gData=RealDataHandler.loadData(dataFile, begin, end);
 			double[] gRate=loadRate(rateFile);
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
 			String tempString;
@@ -238,7 +238,7 @@ public class DataQuality {
 		DataQuality dq=new DataQuality();
 		dq.setDataSum(100);
 		dq.setNodeSum(50);
-		dq.computeMSE(fData, fRate, 0, fWeight,0);
+		//dq.computeMSE(fData, fRate, 0, fWeight,0);
 		
 		
 	}
