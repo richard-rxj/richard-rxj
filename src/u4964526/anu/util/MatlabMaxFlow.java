@@ -44,7 +44,7 @@ public class MatlabMaxFlow {
 	}
 
 	
-	public void computeLPMatlab(String dir) throws FileNotFoundException
+	public void computeLPMatlab(String dir,int r) throws FileNotFoundException
 	{
 		Logger logger=Logger.getLogger("MaxFlow");
 		
@@ -54,10 +54,10 @@ public class MatlabMaxFlow {
 			mFile.mkdirs();
 		}
 		
-		PrintWriter pwA=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/a.txt")));
-		PrintWriter pwF=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/f.txt")));
-		PrintWriter pwB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/b.txt")));
-		PrintWriter pwLB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/lb.txt")));
+		PrintWriter pwA=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/a-"+r+".txt")));
+		PrintWriter pwF=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/f-"+r+".txt")));
+		PrintWriter pwB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/b-"+r+".txt")));
+		PrintWriter pwLB=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dir+"/lb-"+r+".txt")));
 
 		ArrayList<Path> pSet=maxG.getAllPath(maxG.getSinkList().get(0));
 		/*
