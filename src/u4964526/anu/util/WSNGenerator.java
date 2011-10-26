@@ -628,9 +628,9 @@ public class WSNGenerator {
 		{
 			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
 			int[] tNodeSet={50,100,150,200,250,300};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
-			double[] tRadiusSet={49,49,49,49,49,49};
+			double[] tRadiusSet={21,21,21,21,21,21};
 			double tDensity=7.5;
-			int gLoop=10;
+			int gLoop=1;
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
@@ -641,7 +641,7 @@ public class WSNGenerator {
 			for(int i=0;i<tNodeSet.length;i++)
 			{
 				double nodeDensity=tDensity;
-				tRadiusSet[i]=Math.sqrt(100*100*tDensity/3.14/tNodeSet[i]);
+				//tRadiusSet[i]=Math.sqrt(100*100*tDensity/3.14/tNodeSet[i]);
 				pw.println(tNodeSet[i]+" "+df.format(tRadiusSet[i])+" "+df.format(nodeDensity));
 			}
 			pw.flush();
