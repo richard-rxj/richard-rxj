@@ -419,8 +419,8 @@ public class WSNGenerator {
 		s.setMaxRate(this.getgMaxRate()[r.nextInt(this.getgMaxRate().length)]);
 		s.setWeight(this.getgWeight()[r.nextInt(this.getgWeight().length)]);
 		s.setBudgetEnergy(this.gBudgetEnergy[1]+r.nextInt(10)*1.0/10*(this.gBudgetEnergy[0]-this.gBudgetEnergy[1]));
-		s.setxLabel(1);
-		s.setyLabel(1);
+		s.setxLabel(50);
+		s.setyLabel(50);
 		g.addVertex(s);
 		g.addSink(s);
 		s.setWasSink(true);
@@ -630,7 +630,7 @@ public class WSNGenerator {
 			int[] tNodeSet={50,100,150,200,250,300};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
 			double[] tRadiusSet={49,49,49,49,49,49};
 			double tDensity=7.5;
-			int gLoop=20;
+			int gLoop=10;
 			//int[] tXSet={100,100,100};
 			//int[] tYSet={100,100,100};
 			//int[] tRangeSet={25,25,25};
