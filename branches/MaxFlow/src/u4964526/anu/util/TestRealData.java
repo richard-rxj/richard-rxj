@@ -550,12 +550,13 @@ public class TestRealData {
 		
 	   	    
 	    
-	    double[] rouSet={0,0.5,0.6,0.7,0.8,0.9,1};
-	    int[] nodeSet={50,100,150,200,250};      //50,100,150,200,300
-	    int[] gDataSumSet={100,100,100,100,100}; //100,100,100,100,100
-	    double[] gEISet={4,6,9,11,10};         //3,7,9,12,19
-	    int[] thresholdSet={7};  //9,8,7,6,5,4,3
+	    double[] rouSet={1,0,0.8};  //0,0.2,0.4,0.6,0.8,1
+	    int[] nodeSet={50,100,150,200,250,300};      //50,100,150,200,300
+	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
+	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
+	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
+	    double gRateIndicator=70;
 	    int rMax=1;
 	   
 	    /*
@@ -656,7 +657,49 @@ public class TestRealData {
 			    	fileName2=tTopologyFileName+"edge-"+r+".txt";
 			    	fileName3=tWeightFileName+"weight-"+r+".txt";
 					
-			    	for (int rr=0;rr<rouSet.length;rr++)
+			    	double rateIndicator=1;
+			    	
+			    	for (int rr=0;rr<1;rr++)
+				    {
+			    		double rou=rouSet[rr];
+			    		
+			    		
+				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
+				    	Graph g=new Graph();
+				    	
+				    	if(rou>0.95)      //rou==1
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 1,rou);
+				    	}
+				    	else if(rou<0.05)  //rou==0
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 2,rou);
+				    	}
+				    	else
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, g, 0,rou);
+				    	}
+				        WfMaxFlow wFlow=new WfMaxFlow();
+				    	wFlow.setTopology(g);
+					    wFlow.seteRx(eRx);
+					    wFlow.seteTx(eTx);
+					    wFlow.setEpsilon(epsilon);
+				    	log.fine(String.valueOf(wFlow.getTopology()));
+				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
+				    	wFlow.computeDWFFLow();
+				    
+				    	rateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
+				    	
+				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
+				    	{
+				    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
+				    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()*rateIndicator+" "+tVertex.getWeight());
+				    		pw.flush();
+				    	}
+				    }
+			    	
+			    	
+			    	for (int rr=1;rr<rouSet.length;rr++)
 				    {
 			    		double rou=rouSet[rr];
 			    		
@@ -688,7 +731,7 @@ public class TestRealData {
 				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
 				    	{
 				    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-				    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()+" "+tVertex.getWeight());
+				    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()*rateIndicator+" "+tVertex.getWeight());
 				    		pw.flush();
 				    	}
 				    }
@@ -722,7 +765,7 @@ public class TestRealData {
 
 	    		String tRateFileName="test/real/one/"+gNode+"/"+gThreshold+"/rate/";
 				
-		    	for(int rr=0;rr<rouSet.length-1;rr++)
+		    	for(int rr=1;rr<rouSet.length;rr++)
 		    	{
 		    				    		
 		    		
@@ -797,15 +840,15 @@ public class TestRealData {
 						pw.flush();
 						pw.close();
 				    }
-		    		pwN.println(gNode+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwN.println(gNode+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwN.flush();
 		    		pwN.close();
 		    		
-		    		pwT.println(gThreshold+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwT.println(gThreshold+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwT.flush();
 		    		pwT.close();
 		    		
-		    		pwR.println(rou+" "+tSum+" "+df.format(tRatio/tSum)+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+tPSum+" "+df.format(tPRatio/tPSum)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
+		    		pwR.println(rou+" "+df.format(tgFresh/tgOld)+" "+df.format(tgFresh/rMax)+" "+df.format(tgOld/rMax)+" "+df.format(tgPFresh/tgPOld)+" "+df.format(tgPFresh/rMax)+" "+df.format(tgPOld/rMax));
 		    		pwR.flush();
 		    	}
 		    	pwR.close();
