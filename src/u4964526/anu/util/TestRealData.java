@@ -22,9 +22,9 @@ public class TestRealData {
 	 */
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
-	private static double epsilon=0.05;
-	private static double[] gBaseBudgetEnergy={0.01365,0.01221,0.01079,0.00937,0.00795,0.00653};
-	private static double[] gBaseMaxRate={76800,69120,61440};
+	private static double epsilon=0.05; 
+	private static double[] gBaseBudgetEnergy={0.01365};  //0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={76800};   //76800,69120,61440
 	private static double transRange=25;
 
 	
@@ -241,7 +241,7 @@ public class TestRealData {
 			{
 			   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
 			   int lineNum=0;
-			   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
+			   while((tempString=reader.readLine())!=null&&lineNum<g.getSourceList().size())
 			   {
 				   String[] b=tempString.split(" ");
 				   /*
@@ -260,7 +260,7 @@ public class TestRealData {
 				   /*
 				    * end of debug info
 				    */
-				   Vertex v1=g.getVertexList().get(lineNum-1);
+				   Vertex v1=g.getSourceList().get(lineNum-1);
 				   if(wOption>0)
 				   {
 					   v1.setWeight(1);
@@ -476,7 +476,7 @@ public class TestRealData {
 		{
 		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
 		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null&&lineNum<g.getVertexList().size())
+		   while((tempString=reader.readLine())!=null&&lineNum<g.getSourceList().size())
 		   {
 			   String[] b=tempString.split(" ");
 			   /*
@@ -495,7 +495,7 @@ public class TestRealData {
 			   /*
 			    * end of debug info
 			    */
-			   Vertex v1=g.getVertexList().get(lineNum-1);   //!!!!!!
+			   Vertex v1=g.getSourceList().get(lineNum-1);   //!!!!!!
 			   if(wOption==1)
 			   {
 				   v1.setWeight(1);
@@ -553,7 +553,7 @@ public class TestRealData {
 	    double[] rouSet={0,0.5,0.6,0.7,0.8,0.9,1};
 	    int[] nodeSet={50,100,150,200,250};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100}; //100,100,100,100,100
-	    double[] gEISet={4,6,11,11,17};         //3,7,9,12,19
+	    double[] gEISet={4,6,9,11,10};         //3,7,9,12,19
 	    int[] thresholdSet={7};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    int rMax=1;
@@ -598,8 +598,8 @@ public class TestRealData {
 		    	{
 		    		Graph g=new Graph();
 			    	fileName1="test/topology/vertex_"+gNode+"_"+r+".txt";
-			    	fileName2="test/real/topology/edge_"+gNode+"_"+r+".txt";
-			    	fileName3="test/real/topology/data_"+gNode+"_"+r+"_0.txt";
+			    	fileName2="test/topology/edge_"+gNode+"_"+r+".txt";
+			    	fileName3="test/topology/data_"+gNode+"_"+r+"_0.txt";
 					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1,gEI);
 					
 					
@@ -610,7 +610,7 @@ public class TestRealData {
 					g.outputFile(fVertex, fEdge);
 					g.outputFile(fStarVertex, fStarEdge);
 					
-					String fData="test/real/topology/data_"+gNode+"_"+r+"_0.txt";
+					String fData="test/topology/data_"+gNode+"_"+r+"_0.txt";
 					
 					String fWeight=tWeightFileName+"weight-"+r+".txt";
 					RealDataHandler rdh=new RealDataHandler();
@@ -753,7 +753,7 @@ public class TestRealData {
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
 			    		for(int rData=1;rData<=9;rData++)
 			    		{
-							String fData="test/real/topology/data_"+gNode+"_"+r+"_"+rData+".txt";
+							String fData="test/topology/data_"+gNode+"_"+r+"_"+rData+".txt";
 							String fWeight=tWeightFileName+"weight-"+r+".txt";
 							String fRate=tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt";  
 							String fOldRate=tRateFileName+"rate-"+r+"-10.txt";
