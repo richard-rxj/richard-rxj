@@ -22,7 +22,7 @@ public class TestRealData {
 	 */
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
-	private static double epsilon=0.05; 
+	private static double epsilon=0.1; 
 	private static double[] gBaseBudgetEnergy={0.01365};  //0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
 	private static double[] gBaseMaxRate={76800};   //76800,69120,61440
 	private static double transRange=25;
@@ -554,10 +554,10 @@ public class TestRealData {
 	    int[] nodeSet={50,100,150,200,250,300};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] thresholdSet={7};  //9,8,7,6,5,4,3
+	    int[] thresholdSet={7,8,9};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=70;
-	    int rMax=1;
+	    int rMax=10;
 	   
 	    /*
 	     * //begin of weightComputing
