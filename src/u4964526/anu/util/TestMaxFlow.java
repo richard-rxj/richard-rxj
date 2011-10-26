@@ -258,8 +258,8 @@ public class TestMaxFlow {
 			   /*
 			    * end of debug info
 			    */
-			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0])-1);
-			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1])-1);
+			   Vertex s1=g.getVertexList().get(Integer.parseInt(b[0]));
+			   Vertex t1=g.getVertexList().get(Integer.parseInt(b[1]));
 			   double c1=Double.parseDouble(b[2]);
 			   Edge e1=new Edge(s1,t1,s1.getBudgetEnergy());
 			   g.addEdge(e1);
@@ -536,7 +536,8 @@ public class TestMaxFlow {
 		long startTime=0;
 		long endTime=0;
 		int gNode=0;
-		int [] gNodeSet={100,150,200,250,300,350,400,450,500};
+		int [] gNodeSet={100,150,200,250,300};
+		int lMax=10;
 		
 		double[] apprFactorSet={0.3,0.2,0.1,0.05};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
