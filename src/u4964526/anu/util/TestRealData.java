@@ -905,7 +905,7 @@ public class TestRealData {
 	    int[] nodeSet={50,100,150,200};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
+	    int[] thresholdSet={8,6};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=70;
 	    int rMax=10;
@@ -1034,7 +1034,7 @@ public class TestRealData {
 				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
 				    	wFlow.computeConcurrentFlow();
 				    
-				    	rateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
+				    	rateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(5).getRate();
 				    	gGRateIndicatorSet[r]=rateIndicator;
 				    	
 				    	
@@ -1270,9 +1270,9 @@ public class TestRealData {
 							
 							
 							
-							tPFresh=tPFresh+dq.computeMSE2(fData, fGRate, 0, fWeight,1)/gNode;
+							tPFresh=tPFresh+dq.computeMSE2(fData, fGRate, 0, fWeight,0)/gNode;
 							
-							tPOld=tPOld+dq.computeMSE2(fData, fGOldRate, 1, fWeight,1)/gNode;
+							tPOld=tPOld+dq.computeMSE2(fData, fGOldRate, 1, fWeight,0)/gNode;
 							
 							
 			    		}
