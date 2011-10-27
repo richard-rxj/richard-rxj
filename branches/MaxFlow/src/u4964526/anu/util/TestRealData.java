@@ -901,14 +901,14 @@ public class TestRealData {
 	    DecimalFormat df=new DecimalFormat("#.0000");
 	   	    
 	    
-	    double[] rouSet={1,0,0.2,0.4,0.6,0.8};  //0,0.2,0.4,0.6,0.8,1
-	    int[] nodeSet={50,100,150,200,250,300};      //50,100,150,200,300
+	    double[] rouSet={1,0.4,0.8};  //0,0.2,0.4,0.6,0.8,1
+	    int[] nodeSet={50,100,150,200};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] thresholdSet={9,8,7,6};  //9,8,7,6,5,4,3
+	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=70;
-	    int rMax=1;
+	    int rMax=10;
 	   
 	    /*
 	     * //begin of weightComputing
@@ -991,7 +991,8 @@ public class TestRealData {
 	    			tf.mkdirs();
 	    		}
 		    	
-		    	double[] gRateIndicatorSet=new double[rMax];
+		    	double[] gGRateIndicatorSet=new double[rMax];
+		    	double[] gWRateIndicatorSet=new double[rMax];
 		    	
 		    	for(int r=0;r<rMax;r++)
 			    {
@@ -1009,7 +1010,7 @@ public class TestRealData {
 			    		double rou=1;
 			    		
 			    		
-				    	PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
+				    	
 				    	Graph g=new Graph();
 				    	
 				    	if(rou>0.95)      //rou==1
@@ -1034,15 +1035,38 @@ public class TestRealData {
 				    	wFlow.computeConcurrentFlow();
 				    
 				    	rateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
-				    	gRateIndicatorSet[r]=rateIndicator;
+				    	gGRateIndicatorSet[r]=rateIndicator;
 				    	
-				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
+				    	
+				    	
+				    	Graph tg=new Graph();
+				    	
+				    	if(rou>0.95)      //rou==1
 				    	{
-				    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-				    		pw.println(tVertex.getVerValue()+" "+tVertex.getRate()*rateIndicator+" "+tVertex.getWeight());
-				    		pw.flush();
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, tg, 1,rou);
 				    	}
-				    	pw.close();
+				    	else if(rou<0.05)  //rou==0
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, tg, 2,rou);
+				    	}
+				    	else
+				    	{
+				    		TestRealData.initRealDataRou(fileName1, fileName2, fileName3, tg, 0,rou);
+				    	}
+				        WfMaxFlow twFlow=new WfMaxFlow();
+				    	twFlow.setTopology(g);
+					    twFlow.seteRx(eRx);
+					    twFlow.seteTx(eTx);
+					    twFlow.setEpsilon(gAppr*1.0/1000);
+				    	log.fine(String.valueOf(wFlow.getTopology()));
+				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
+				    	twFlow.computeDWFFLow();
+				    
+				    	rateIndicator=gRateIndicator/twFlow.getTopology().getSourceList().get(0).getRate();
+				    	gWRateIndicatorSet[r]=rateIndicator;
+				    	
+				    	
+				    	
 				    }
 			    	
 			    	
@@ -1068,7 +1092,7 @@ public class TestRealData {
 		    		for(int r=0;r<rMax;r++)
 		    		{
 		    			
-			    		double rateIndicator=gRateIndicatorSet[r];
+			    		double tGRateIndicator=gGRateIndicatorSet[r];
 			    		
 			    		
 			    		PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"grate-"+r+"-"+(int)(rou*10)+".txt")));
@@ -1102,7 +1126,7 @@ public class TestRealData {
 				    	for(int i=0;i<gFlow.getTopology().getSourceList().size();i++)
 				    	{
 				    		Vertex tVertex=gFlow.getTopology().getSourceList().get(i);
-				    		pw1.println(tVertex.getVerValue()+" "+tVertex.getRate()*rateIndicator+" "+tVertex.getWeight()+" "+tVertex.getRate());
+				    		pw1.println(tVertex.getVerValue()+" "+tVertex.getRate()*tGRateIndicator+" "+tVertex.getWeight()+" "+tVertex.getRate());
 				    		pw1.flush();
 				    		tGFlow=tGFlow+tVertex.getRate()*(eRx+eTx);
 							tGRate=tGRate+tVertex.getRate();
@@ -1114,7 +1138,7 @@ public class TestRealData {
 			    		
 			    		
 			    		
-			    		
+			            double tWRateIndicator=gWRateIndicatorSet[r];
 				    	PrintWriter pw2=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tRateFileName+"rate-"+r+"-"+(int)(rou*10)+".txt")));
 				    	Graph g2=new Graph();
 				    	
@@ -1146,7 +1170,7 @@ public class TestRealData {
 				    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
 				    	{
 				    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-				    		pw2.println(tVertex.getVerValue()+" "+tVertex.getRate()*rateIndicator+" "+tVertex.getWeight()+" "+tVertex.getRate());
+				    		pw2.println(tVertex.getVerValue()+" "+tVertex.getRate()*tWRateIndicator+" "+tVertex.getWeight()+" "+tVertex.getRate());
 				    		pw2.flush();
 				    		tWFlow=tWFlow+tVertex.getRate()*(eRx+eTx);
 							tWRate=tWRate+tVertex.getRate();
@@ -1196,7 +1220,7 @@ public class TestRealData {
 
 	    		String tRateFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/rate/";
 				
-		    	for(int rr=1;rr<rouSet.length;rr++)
+		    	for(int rr=0;rr<rouSet.length;rr++)
 		    	{
 		    				    		
 		    		
