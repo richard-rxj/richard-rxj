@@ -229,7 +229,8 @@ public class GragMaxFlow {
 			Vertex s=sourceList.get(i);
 			f.setStart(s);
 			f.setEnd(sink);
-			f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());
+			//f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());         !!!!!!!!!!!!!!!1027
+			f.setMaxRate(s.getMaxRate()*this.getGragScaleFactor());
 			f.setRate(0);
 			fSolution.put(s, f);
 		}
@@ -277,7 +278,8 @@ public class GragMaxFlow {
 						 
 						 f.addPath(mPath);
 						 gD=0;
-						 double addRate=mPath.getBottleNeck()/(this.geteRx()+this.geteTx());
+						 //double addRate=mPath.getBottleNeck()/(this.geteRx()+this.geteTx());  //!!!!!!!!!!!!!!!!!1027
+						 double addRate=mSource.getWeight()*mPath.getBottleNeck()/(this.geteRx()+this.geteTx());
 						 if(addRate<f.getMaxRate())
 						 {
 							 w=true;
@@ -285,7 +287,8 @@ public class GragMaxFlow {
 							  * begin of update length and gD
 							  */
 							 double tFactor=this.getEpsilon()*mPath.getBottleNeck();
-							 mPath.updateLength(tFactor);
+							 //mPath.updateLength(tFactor);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1027
+							 mPath.updateLength(tFactor*mSource.getWeight());
 							 for(int ti=0;ti<edgeList.size();ti++)
 							 {
 								    Edge te=edgeList.get(ti);	
