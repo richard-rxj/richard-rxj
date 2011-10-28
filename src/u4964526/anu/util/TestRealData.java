@@ -556,7 +556,7 @@ public class TestRealData {
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] thresholdSet={4,5,6,7,8,9};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
-	    double gRateIndicator=70;
+	    double gRateIndicator=60;
 	    int rMax=10;
 	   
 	    /*
@@ -907,7 +907,7 @@ public class TestRealData {
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
-	    double gRateIndicator=70;
+	    double gRateIndicator=60;
 	    int rMax=10;
 	   
 	    /*
