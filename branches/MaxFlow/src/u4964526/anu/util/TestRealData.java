@@ -1033,7 +1033,7 @@ public class TestRealData {
 				    	wFlow.setTopology(g);
 					    wFlow.seteRx(eRx);
 					    wFlow.seteTx(eTx);
-					    wFlow.setEpsilon(0.2/1000);
+					    wFlow.setEpsilon(0.1);
 				    	log.fine(String.valueOf(wFlow.getTopology()));
 				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
 				    	wFlow.computeConcurrentFlow();
@@ -1061,7 +1061,7 @@ public class TestRealData {
 				    	twFlow.setTopology(g);
 					    twFlow.seteRx(eRx);
 					    twFlow.seteTx(eTx);
-					    twFlow.setEpsilon(0.2/1000);
+					    twFlow.setEpsilon(0.1);
 				    	log.fine(String.valueOf(wFlow.getTopology()));
 				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
 				    	twFlow.computeDWFFLow();
