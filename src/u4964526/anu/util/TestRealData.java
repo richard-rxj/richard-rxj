@@ -872,9 +872,9 @@ public class TestRealData {
 			
 			//TestRealData.realTestOne();
 			
-			//TestRealData.testSPTGK(50);
-			TestRealData.testSPTGK(100);
-			//TestRealData.testSPTGK(200);
+			TestRealData.testSPTGK(50);
+			//TestRealData.testSPTGK(100);
+			TestRealData.testSPTGK(200);
 			
 			
 			
@@ -905,10 +905,10 @@ public class TestRealData {
 	    int[] nodeSet={50,100,150,200};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] thresholdSet={8,6};  //9,8,7,6,5,4,3
+	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=70;
-	    int rMax=2;
+	    int rMax=10;
 	   
 	    /*
 	     * //begin of weightComputing
@@ -997,7 +997,7 @@ public class TestRealData {
 		    	
 		    	/*
 		    	 * 
-		    	 *
+		    	 */
 		    	for(int r=0;r<rMax;r++)
 			    {
 
@@ -1033,13 +1033,13 @@ public class TestRealData {
 				    	wFlow.setTopology(g);
 					    wFlow.seteRx(eRx);
 					    wFlow.seteTx(eTx);
-					    wFlow.setEpsilon(gAppr*1.0/1000);
+					    wFlow.setEpsilon(0.2/1000);
 				    	log.fine(String.valueOf(wFlow.getTopology()));
 				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
 				    	wFlow.computeConcurrentFlow();
 				    
 				    	rateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(5).getRate();
-				    	gGRateIndicatorSet[r]=70.0/wFlow.getTopology().getSourceList().get(gNode/2).getRate();
+				    	gGRateIndicatorSet[r]=rateIndicator;
 				    	
 				    	
 				    	
@@ -1061,13 +1061,13 @@ public class TestRealData {
 				    	twFlow.setTopology(g);
 					    twFlow.seteRx(eRx);
 					    twFlow.seteTx(eTx);
-					    twFlow.setEpsilon(gAppr*1.0/1000);
+					    twFlow.setEpsilon(0.2/1000);
 				    	log.fine(String.valueOf(wFlow.getTopology()));
 				    	//System.out.println(r+"-"+gThreshold+"-"+rou);
 				    	twFlow.computeDWFFLow();
 				    
 				    	rateIndicator=gRateIndicator/twFlow.getTopology().getSourceList().get(0).getRate();
-				    	gWRateIndicatorSet[r]=70.0/twFlow.getTopology().getSourceList().get(gNode/2).getRate();
+				    	gWRateIndicatorSet[r]=rateIndicator;
 				    	
 				    	
 				    	
@@ -1097,6 +1097,10 @@ public class TestRealData {
 		    		
 		    		for(int r=0;r<rMax;r++)
 		    		{
+		    			
+		    			fileName1=tTopologyFileName+"vertex-"+r+".txt";
+				    	fileName2=tTopologyFileName+"edge-"+r+".txt";
+				    	fileName3=tWeightFileName+"weight-"+r+".txt";
 		    			
 			    		double tGRateIndicator=1;
 			    		
@@ -1131,8 +1135,9 @@ public class TestRealData {
 				        
 				    	if(rou>0.99)
 				    	{
-				    		tGRateIndicator=gRateIndicator/gFlow.getTopology().getSourceList().get(0).getRate();
-				    		gGRateIndicatorSet[r]=tGRateIndicator;
+				    		//tGRateIndicator=gRateIndicator/gFlow.getTopology().getSourceList().get(0).getRate();
+				    		//gGRateIndicatorSet[r]=tGRateIndicator;
+				    		tGRateIndicator=gGRateIndicatorSet[r];
 				    	}
 				    	else
 				    	{
@@ -1186,8 +1191,9 @@ public class TestRealData {
 				    	
 				    	if(rou>0.99)
 				    	{
-				    		tWRateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
-				    		gWRateIndicatorSet[r]=tWRateIndicator;
+				    		//tWRateIndicator=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
+				    		//gWRateIndicatorSet[r]=tWRateIndicator;
+				    		tWRateIndicator=gWRateIndicatorSet[r];
 				    	}
 				    	else
 				    	{
