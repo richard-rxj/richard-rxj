@@ -23,8 +23,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.01365};  //0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={76800};   //76800,69120,61440
+	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={76800,69120,61440};   //76800,69120,61440
 	private static double transRange=25;
 
 	
@@ -38,7 +38,7 @@ public class TestRealData {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[new Random().nextInt(gBaseBudgetEnergy.length)];  //7(100,150)  1.2(real)  19(300)  3(50) 12(200)
+		return gBaseBudgetEnergy[0]+Math.random()*(gBaseBudgetEnergy[1]-gBaseBudgetEnergy[0]);  //7(100,150)  1.2(real)  19(300)  3(50) 12(200)
 	}
 
    private static double getVertexMaxRate()
@@ -557,8 +557,9 @@ public class TestRealData {
 	    int[] thresholdSet={4,5,6,7,8,9};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=60;
-	    int rMax=10;
-	   
+	    int rMax=15;    // 
+	    int rDataMax=10;  // number of time slots
+	    
 	    /*
 	     * //begin of weightComputing
 	     */
@@ -794,7 +795,7 @@ public class TestRealData {
 		    			double tPOld=0;
 			    		String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
-			    		for(int rData=1;rData<=9;rData++)
+			    		for(int rData=0;rData<rDataMax;rData++)         //10 time slots
 			    		{
 							String fData="test/topology/data_"+gNode+"_"+r+"_"+rData+".txt";
 							String fWeight=tWeightFileName+"weight-"+r+".txt";
@@ -804,22 +805,34 @@ public class TestRealData {
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
 							
-							
-							tFresh=tFresh+dq.computeMSE2(fData, fRate, 0, fWeight,0)/gNode;
-							
+							if(rData==0)                //training period
+							{
+								tFresh=tFresh+dq.computeMSE2(fData, fOldRate, 1, fWeight,0)/gNode;
+							}
+							else                        //
+							{
+								tFresh=tFresh+dq.computeMSE2(fData, fRate, 0, fWeight,0)/gNode;
+							}
+								
 							tOld=tOld+dq.computeMSE2(fData, fOldRate, 1, fWeight,0)/gNode;
 							
 							
 							
-							
-							tPFresh=tPFresh+dq.computeMSE2(fData, fRate, 0, fWeight,1)/gNode;
-							
+							if(rData==0)
+							{
+								tPFresh=tPFresh+dq.computeMSE2(fData, fOldRate, 1, fWeight,1)/gNode;
+							}
+							else
+							{
+								tPFresh=tPFresh+dq.computeMSE2(fData, fRate, 0, fWeight,1)/gNode;
+							}
+								
 							tPOld=tPOld+dq.computeMSE2(fData, fOldRate, 1, fWeight,1)/gNode;
 							
 							
 			    		}
-			    		tgFresh=tgFresh+tFresh;		
-			    		tgOld=tgOld+tOld;
+			    		tgFresh=tgFresh+tFresh/rDataMax;		
+			    		tgOld=tgOld+tOld/rDataMax;
 			    		pw.print(df.format(tFresh)+" "+df.format(tOld)+" ");
 			    		if(tFresh<tOld)
 						{
@@ -827,8 +840,8 @@ public class TestRealData {
 							tRatio=tRatio+tFresh/tOld;
 							tSum++;
 						}
-			    		tgPFresh=tgPFresh+tPFresh;
-			    		tgPOld=tgPOld+tPOld;
+			    		tgPFresh=tgPFresh+tPFresh/rDataMax;
+			    		tgPOld=tgPOld+tPOld/rDataMax;
 			    		pw.print(df.format(tPFresh)+" "+df.format(tPOld)+" ");
 						if(tPFresh<tPOld)
 						{
@@ -908,7 +921,8 @@ public class TestRealData {
 	    int[] thresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[nodeSet.length][thresholdSet.length];
 	    double gRateIndicator=60;
-	    int rMax=10;
+	    int rMax=15;
+	    int rDataMax=10;
 	   
 	    /*
 	     * //begin of weightComputing
@@ -1283,7 +1297,7 @@ public class TestRealData {
 		    			double tPOld=0;
 			    		String fReal=tFileName+"1Real-"+(int)(rou*10)+".txt";
 						PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fReal,true)));
-			    		for(int rData=1;rData<=9;rData++)
+			    		for(int rData=0;rData<rDataMax;rData++)
 			    		{
 							String fData="test/topology/data_"+gNode+"_"+r+"_"+rData+".txt";
 							String fWeight=tWeightFileName+"weight-"+r+".txt";
@@ -1297,21 +1311,34 @@ public class TestRealData {
 							dq.setNodeSum(gNode);
 							
 							
-							tFresh=tFresh+dq.computeMSE2(fData, fRate, 0, fWeight,0)/gNode;
-							
+							if(rData==0)                //training period
+							{
+								tFresh=tFresh+dq.computeMSE2(fData, fOldRate, 1, fWeight,0)/gNode;
+							}
+							else                        //
+							{
+								tFresh=tFresh+dq.computeMSE2(fData, fRate, 0, fWeight,0)/gNode;
+							}
+								
 							tOld=tOld+dq.computeMSE2(fData, fOldRate, 1, fWeight,0)/gNode;
 							
 							
 							
-							
-							tPFresh=tPFresh+dq.computeMSE2(fData, fGRate, 0, fWeight,0)/gNode;
-							
-							tPOld=tPOld+dq.computeMSE2(fData, fGOldRate, 1, fWeight,0)/gNode;
+							if(rData==0)
+							{
+								tPFresh=tPFresh+dq.computeMSE2(fData, fOldRate, 1, fWeight,1)/gNode;
+							}
+							else
+							{
+								tPFresh=tPFresh+dq.computeMSE2(fData, fRate, 0, fWeight,1)/gNode;
+							}
+								
+							tPOld=tPOld+dq.computeMSE2(fData, fOldRate, 1, fWeight,1)/gNode;
 							
 							
 			    		}
-			    		tgFresh=tgFresh+tFresh;		
-			    		tgOld=tgOld+tOld;
+			    		tgFresh=tgFresh+tFresh/rDataMax;		
+			    		tgOld=tgOld+tOld/rDataMax;
 			    		pw.print(df.format(tFresh)+" "+df.format(tOld)+" ");
 			    		if(tFresh<tOld)
 						{
@@ -1319,8 +1346,8 @@ public class TestRealData {
 							tRatio=tRatio+tFresh/tOld;
 							tSum++;
 						}
-			    		tgPFresh=tgPFresh+tPFresh;
-			    		tgPOld=tgPOld+tPOld;
+			    		tgPFresh=tgPFresh+tPFresh/rDataMax;
+			    		tgPOld=tgPOld+tPOld/rDataMax;
 			    		pw.print(df.format(tPFresh)+" "+df.format(tPOld)+" ");
 						if(tPFresh<tPOld)
 						{
