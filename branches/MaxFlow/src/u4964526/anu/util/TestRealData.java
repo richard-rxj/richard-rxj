@@ -885,6 +885,43 @@ public class TestRealData {
 			
 			
 			
+			int[] tNodeSet={50,100,150,200,250,300};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
+			double[] tRadiusSet={21,21,21,21,21,21};
+			double tDensity=7.5;
+			int gLoop=10;
+			//int[] tXSet={100,100,100};
+			//int[] tYSet={100,100,100};
+			//int[] tRangeSet={25,25,25};
+			//Random r=new Random();
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/000000nodeDensity.txt")));
+			DecimalFormat df=new DecimalFormat("#.00");
+			pw.println("Node  Radius  NodeDensity");
+			for(int i=0;i<tNodeSet.length;i++)
+			{
+				double nodeDensity=tDensity;
+				//tRadiusSet[i]=Math.sqrt(100*100*tDensity/3.14/tNodeSet[i]);
+				pw.println(tNodeSet[i]+" "+df.format(tRadiusSet[i])+" "+df.format(nodeDensity));
+			}
+			pw.flush();
+			pw.close();
+			
+			
+			for(int j=0+10;j<gLoop+10;j++)
+			{
+				for(int i=0;i<tNodeSet.length;i++)
+				{
+					WSNGenerator tGenerator=new WSNGenerator();
+					tGenerator.setgNodeNum(tNodeSet[i]);
+					tGenerator.setgRadius(tRadiusSet[i]);
+					//tGenerator.setgDataNum(10);
+					//tGenerator.setgDataGroup(3);
+					//tGenerator.setgSelfGroup(5);
+					tGenerator.generateGraph(String.valueOf(tNodeSet[i])+"_"+j);
+				}
+			}
+			
+			
+			
 			TestRealData.testSPTGK(50);
 			TestRealData.testSPTGK(100);
 			TestRealData.testSPTGK(200);
