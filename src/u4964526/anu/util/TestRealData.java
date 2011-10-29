@@ -920,14 +920,16 @@ public class TestRealData {
 				}
 			}
 			
-			
+			System.out.println("topology completed");
 			
 			TestRealData.testSPTGK(50);
 			TestRealData.testSPTGK(100);
 			TestRealData.testSPTGK(200);
 			
-			TestRealData.realTestOne();
+			System.out.println("sptgk completed");
 			
+			TestRealData.realTestOne();
+	
 			
 			
 				
@@ -975,7 +977,7 @@ public class TestRealData {
 		    	int gThreshold=thresholdSet[gt];
 		    	double gPair=0;
 		    	
-		    	String tTopologyFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/topology/";
+		    	String tTopologyFileName="test/real/sptgk/"+gNode+"/topology/";
 	    		File tf=new File(tTopologyFileName);
 	    		if(!tf.exists())
 	    		{
@@ -984,38 +986,41 @@ public class TestRealData {
 	    		
 	    				
 	    		
-	    		String tWeightFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/weight/";
+	    		String tWeightFileName="test/real/sptgk/"+gNode+"/"+gThreshold+"/weight/";
 	    		tf=new File(tWeightFileName);
 	    		if(!tf.exists())
 	    		{
 	    			tf.mkdirs();
 	    		}
 		    	
-		    	for(int r=0;r<rMax;r++)
-		    	{
-		    		Graph g=new Graph();
-			    	fileName1="test/topology/vertex_"+gNode+"_"+r+".txt";
-			    	fileName2="test/topology/edge_"+gNode+"_"+r+".txt";
-			    	fileName3="test/topology/data_"+gNode+"_"+r+"_0.txt";
-					TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1,gEI);
-					
-					
-					String fVertex=tTopologyFileName+"vertex-"+r+".txt";
-					String fEdge=tTopologyFileName+"edge-"+r+".txt";
-					g.outputFile(fVertex, fEdge);
-					
-					
-					String fData="test/topology/data_"+gNode+"_"+r+"_0.txt";
-					
-					String fWeight=tWeightFileName+"weight-"+r+".txt";
-					RealDataHandler rdh=new RealDataHandler();
-					rdh.setDataSum(gDataSum);
-					rdh.setNodeSum(gNode);
-					gPair=gPair+rdh.outputWeightFile2(g, fData, fWeight, gThreshold*1.0/10, 0.03);
-					
-					
-		    	}
-		    	gPairSet[gn][gt]=gPair/rMax;
+	    		if(gAppr==50)
+	    		{
+			    	for(int r=0;r<rMax;r++)
+			    	{
+			    		Graph g=new Graph();
+				    	fileName1="test/topology/vertex_"+gNode+"_"+r+".txt";
+				    	fileName2="test/topology/edge_"+gNode+"_"+r+".txt";
+				    	fileName3="test/topology/data_"+gNode+"_"+r+"_0.txt";
+						TestRealData.initRealData(fileName1, fileName2, fileName3, g, 1,gEI);
+						
+						
+						String fVertex=tTopologyFileName+"vertex-"+r+".txt";
+						String fEdge=tTopologyFileName+"edge-"+r+".txt";
+						g.outputFile(fVertex, fEdge);
+						
+						
+						String fData="test/topology/data_"+gNode+"_"+r+"_0.txt";
+						
+						String fWeight=tWeightFileName+"weight-"+r+".txt";
+						RealDataHandler rdh=new RealDataHandler();
+						rdh.setDataSum(gDataSum);
+						rdh.setNodeSum(gNode);
+						gPair=gPair+rdh.outputWeightFile2(g, fData, fWeight, gThreshold*1.0/10, 0.03);
+						
+						
+			    	}
+			    	gPairSet[gn][gt]=gPair/rMax;
+	    		}
 		    }
 	    }
 	    /*
@@ -1033,8 +1038,8 @@ public class TestRealData {
 		    {
 		    	int gThreshold=thresholdSet[gt];
 		    	
-		    	String tTopologyFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/topology/";	    			    		
-	    		String tWeightFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/weight/";		    	
+		    	String tTopologyFileName="test/real/sptgk/"+gNode+"/topology/";	    			    		
+	    		String tWeightFileName="test/real/sptgk/"+gNode+"/"+gThreshold+"/weight/";		    	
 	    		String tRateFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/rate/";
 	    		File tf=new File(tRateFileName);
 	    		if(!tf.exists())
@@ -1301,7 +1306,7 @@ public class TestRealData {
 				
 				
 				String tFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/";
-	    		String tWeightFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/weight/";
+	    		String tWeightFileName="test/real/sptgk/"+gNode+"/"+gThreshold+"/weight/";
 
 	    		String tRateFileName="test/real/sptgk/"+gAppr+"/"+gNode+"/"+gThreshold+"/rate/";
 				
