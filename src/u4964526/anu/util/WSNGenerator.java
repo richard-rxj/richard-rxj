@@ -410,8 +410,8 @@ public class WSNGenerator {
 	{
 		Graph g=new Graph();
 		Random r=new Random();
-		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology2/vertex_"+f+".txt")));
-		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology2/edge_"+f+".txt")));
+		PrintWriter pwVertex=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/vertex_"+f+".txt")));
+		PrintWriter pwEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/edge_"+f+".txt")));
 		//PrintWriter pwWFEdge=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/wfedge_"+f+".txt")));
 		
 		int i=0;
@@ -588,7 +588,7 @@ public class WSNGenerator {
 		{
 			for(int n=0;n<this.gDataNum*this.gDataGroup;n++)
 			{
-				PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology2/data_"+f+"_"+n/this.gDataNum+".txt",true)));
+				PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/data_"+f+"_"+n/this.gDataNum+".txt",true)));
 				pw1.print(gData[m][n]+" ");
 				if((n+1)%this.gDataNum==0)
 				{
@@ -648,7 +648,7 @@ public class WSNGenerator {
 			pw.close();
 			
 			
-			for(int j=0;j<gLoop;j++)
+			for(int j=0+10;j<gLoop+10;j++)
 			{
 				for(int i=0;i<tNodeSet.length;i++)
 				{
