@@ -25,7 +25,7 @@ public class DataQuality {
 	public void setDataSum(int dataSum) {
 		this.dataSum = dataSum;
 	}
-	private double computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate)
+	private double computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate,double[] saveData)
 	{
 		double result=0;
 		if (slaveRate>slaveBase.length)
@@ -134,8 +134,9 @@ public class DataQuality {
 		for(int t=0;t<tSlave.length;t++)
 		{
 			result=result+Math.pow((tSlave[t]-slaveBase[t]), 2);
+			saveData[t]=tSlave[t];
 		}
-		
+
 		return result;
 	}
 	
@@ -190,6 +191,9 @@ public class DataQuality {
 		return result;
 	}
 	
+	/*
+	 * 
+	 *
 	public double computeMSE(String dataFile, String rateFile, int wOption,String weightFile,int dOption,int begin,int end)
 	{
 		double result=0;
@@ -227,13 +231,21 @@ public class DataQuality {
 		}
 		return result;
 	}
+	/*
+	 * 
+	 */
 	
-	
-	public double computeMSE2(String dataFile, String rateFile, int wOption,String weightFile,int dOption)
+	public double computeMSE2(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
 	{
 		double result=0;
 		try
 		{
+			double[][] sData=new double[this.nodeSum][this.dataSum];
+			for(int i=0;i<this.nodeSum;i++)
+				for(int j=0;j<this.dataSum;j++)
+					sData[i][j]=0;
+			
+			
 			double[][] gData=loadData(dataFile);
 			double[] gRate=loadRate(rateFile);
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
@@ -248,17 +260,32 @@ public class DataQuality {
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
 					int tMasterId = (int)Double.parseDouble(temp[2]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1]);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId]);
 
 				}
 				else
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0);
+					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId]);
 				}
 				lineNum++;
 			}
 			bf.close();
+			
+			if(saveFile!=null)
+			{
+				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(saveFile)));
+				for(int i=0;i<this.nodeSum;i++)
+				{
+					for(int j=0;j<this.dataSum;j++)
+					{
+						pw.print(sData[i][j]+" ");
+					}
+					pw.println();
+				}
+				pw.flush();
+				pw.close();
+			}
 		}
 		catch(Exception e)
 		{
