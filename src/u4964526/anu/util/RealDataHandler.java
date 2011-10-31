@@ -550,7 +550,7 @@ public class RealDataHandler {
 		try
 		{
 			double[][] result=new double[nodeSum][3];
-			double[][] dataSet=this.loadData2(dataFile);
+			
 
 			result[0][0]=0;
 			result[0][1]=1;
@@ -564,30 +564,33 @@ public class RealDataHandler {
 				result[ti][2]=0;
 			}
 			
-			ArrayList<Vertex> vSet=new ArrayList<Vertex>();
-			Vertex sink=g.getSinkList().get(0);
-			vSet.add(sink);
-			for(int i=0;i<g.getEdgeList().size();i++)
+			if(dataFile!=null)
 			{
-				Edge tE=g.getEdgeList().get(i);
-				Vertex tS=tE.getSource();
-				Vertex tT=tE.getTarget();
-				if((!vSet.contains(tS))&&(!vSet.contains(tT)))
+				double[][] dataSet=this.loadData2(dataFile);
+				ArrayList<Vertex> vSet=new ArrayList<Vertex>();
+				Vertex sink=g.getSinkList().get(0);
+				vSet.add(sink);
+				for(int i=0;i<g.getEdgeList().size();i++)
 				{
-					double tD=this.computeDataCT(dataSet[tS.getVerValue()], dataSet[tT.getVerValue()], theta,0, dataSet[tS.getVerValue()].length);
-					
-					if(tD>=cData)
+					Edge tE=g.getEdgeList().get(i);
+					Vertex tS=tE.getSource();
+					Vertex tT=tE.getTarget();
+					if((!vSet.contains(tS))&&(!vSet.contains(tT)))
 					{
-						vSet.add(tS);
-						rI++;
-						vSet.add(tT);
-						rI++;
-						result[tS.getVerValue()][1]=1-tD;
-						result[tS.getVerValue()][2]=tT.getVerValue();
+						double tD=this.computeDataCT(dataSet[tS.getVerValue()], dataSet[tT.getVerValue()], theta,0, dataSet[tS.getVerValue()].length);
+						
+						if(tD>=cData)
+						{
+							vSet.add(tS);
+							rI++;
+							vSet.add(tT);
+							rI++;
+							result[tS.getVerValue()][1]=1-tD;
+							result[tS.getVerValue()][2]=tT.getVerValue();
+						}
 					}
 				}
 			}
-			
 			
 			
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(weightFile)));
