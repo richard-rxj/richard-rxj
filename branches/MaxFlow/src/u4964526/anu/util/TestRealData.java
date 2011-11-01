@@ -340,6 +340,7 @@ public class TestRealData {
 			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 			   //v1.setBudgetEnergy(TestRealData.getBudgetEnergy());
 			   v1.setRate(0);
+			   v1.setWeight(1);
 			   g.addVertex(v1);
 			   if(Integer.parseInt(b[0])==0)
 			   {
@@ -474,49 +475,52 @@ public class TestRealData {
 		 */
 		try
 		{
-		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
-		   int lineNum=0;
-		   while((tempString=reader.readLine())!=null&&lineNum<g.getSourceList().size())
+		   if(wOption!=1)
 		   {
-			   String[] b=tempString.split(" ");
-			   /*
-			    * begin of debug info
-			    */
-			   ++lineNum;
-			   logger.fine(String.valueOf(lineNum));
-			   logger.fine(tempString);
-			   String detail="detail:(";
-			   for(int i=0;i<b.length;i++)
+				reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileName3)));
+			   int lineNum=0;
+			   while((tempString=reader.readLine())!=null&&lineNum<g.getSourceList().size())
 			   {
-				   detail=detail+"<"+i+"-"+b[i]+">";
-			   }
-			   detail=detail+")\n";
-			   logger.fine(detail);
-			   /*
-			    * end of debug info
-			    */
-			   Vertex v1=g.getSourceList().get(lineNum-1);   //!!!!!!
-			   if(wOption==1)
-			   {
-				   v1.setWeight(1);
-			   }
-			   else if(wOption==2)
-			   {
-				   v1.setWeight(Double.parseDouble(b[1]));
-			   }
-			   else
-			   {
-				   if(Double.parseDouble(b[1])<0.99)
+				   String[] b=tempString.split(" ");
+				   /*
+				    * begin of debug info
+				    */
+				   ++lineNum;
+				   logger.fine(String.valueOf(lineNum));
+				   logger.fine(tempString);
+				   String detail="detail:(";
+				   for(int i=0;i<b.length;i++)
 				   {
-					   v1.setWeight(rou);
+					   detail=detail+"<"+i+"-"+b[i]+">";
 				   }
-				   else
+				   detail=detail+")\n";
+				   logger.fine(detail);
+				   /*
+				    * end of debug info
+				    */
+				   Vertex v1=g.getSourceList().get(lineNum-1);   //!!!!!!
+				   if(wOption==1)
 				   {
 					   v1.setWeight(1);
 				   }
+				   else if(wOption==2)
+				   {
+					   v1.setWeight(Double.parseDouble(b[1]));
+				   }
+				   else
+				   {
+					   if(Double.parseDouble(b[1])<0.99)
+					   {
+						   v1.setWeight(rou);
+					   }
+					   else
+					   {
+						   v1.setWeight(1);
+					   }
+				   }
+				   
+				   
 			   }
-			   
-			   
 		   }
 		}
 		catch(Exception e)
@@ -1390,15 +1394,15 @@ public class TestRealData {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,0,10,20,40,60,80};  //0,0.2,0.4,0.6,0.8,1
-	    int[] gNodeSet={50,100,150};      //50,100,150,200,300
+	    int[] gRouSet={100,110,0,10,20,40,80};  //0,0.2,0.4,0.6,0.8,1
+	    int[] gNodeSet={50,100,150,200};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={9,8,7,6,5,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
-	    double gRateIndicator=60;
+	    double gRateIndicator=65;
 	    int topologySum=5;
-	    int intervalSum=5;
+	    int intervalSum=10;
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][6];
 	    
@@ -1459,10 +1463,30 @@ public class TestRealData {
 					g.outputFile(fVertex, fEdge);
 					
 					
-					
-					
+					g=new Graph();
+					TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
+					double tWRateFactor=0;
+					WfMaxFlow twFlow=new WfMaxFlow();
+			    	twFlow.setTopology(g);
+				    twFlow.seteRx(eRx);
+				    twFlow.seteTx(eTx);
+				    twFlow.setEpsilon(0.1);
+			    	twFlow.computeDWFFLow();
+			    	tWRateFactor=gRateIndicator/twFlow.getTopology().getSourceList().get(0).getRate();
 					
     	    		
+			    	g=new Graph();
+					TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
+					double tGRateFactor=0;
+					GragMaxFlow tgFlow=new GragMaxFlow();
+			    	tgFlow.setTopology(g);
+				    tgFlow.seteRx(eRx);
+				    tgFlow.seteTx(eTx);
+				    tgFlow.setEpsilon(0.1);
+			    	tgFlow.computeConcurrentFlow();
+			    	tGRateFactor=gRateIndicator/tgFlow.getTopology().getSourceList().get(0).getRate();
+			    	
+			    	
 		    		
 		    		
 		    		for(int gC=0;gC<gCThresholdSet.length;gC++)
@@ -1471,14 +1495,14 @@ public class TestRealData {
 		    		    
 		    			
 						
-		    			double tWRateFactor=0;
+		    			
 		    			for(int gR=0;gR<gRouSet.length;gR++)
 		    			{
 		    				int gRou=gRouSet[gR];
 		    				
 		    				
 		    				//calculate weight
-		    				String fSData=tSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+gI+"-R"+gRou+".txt";
+		    				String fWData="test/topology/data_"+gNode+"_"+gT+"_"+(gI-1)+".txt";
 			    			String fWeight=tWeightFileName+"weight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 							
 			    			RealDataHandler rdh=new RealDataHandler();
@@ -1490,11 +1514,78 @@ public class TestRealData {
 							}
 							else
 							{
-								rdh.outputWeightFile2(g, fSData, fWeight, gCThreshold*1.0/10, 0.03);
+								rdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
 							}
 		    				
 		    				
-		    				//rate allocation
+		    				
+							
+							//GK rate allocation
+					    	String fGRate=tRateFileName+"grate-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		
+				    		
+				    		
+				            
+					    	PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fGRate)));
+					    	Graph g1=new Graph();
+					    	
+					    	if(gRou==100)      //rou==1
+					    	{
+					    		TestRealData.initRealDataRou(fVertex, fEdge, fWeight, g1, 1,gRou*1.0/100);
+					    	}
+					    	else if(gRou==110)  //rou==varible
+					    	{
+					    		TestRealData.initRealDataRou(fVertex, fEdge, fWeight, g1, 2,gRou*1.0/100);
+					    	}
+					    	else
+					    	{
+					    		TestRealData.initRealDataRou(fVertex, fEdge, fWeight, g1, 0,gRou*1.0/100);
+					    	}
+					    	
+					    	double tGTime=0;
+					    	double tGFlow=0;
+							double tGRate=0;
+					        GragMaxFlow gFlow=new GragMaxFlow();
+					    	gFlow.setTopology(g1);
+						    gFlow.seteRx(eRx);
+						    gFlow.seteTx(eTx);
+						    gFlow.setEpsilon(gAppr*1.0/1000);
+					    	tGTime=gFlow.computeConcurrentFlow();
+					    	
+					    	
+					    	//if(gRou==100)
+					    	//{
+					    		//tGRateFactor=gRateIndicator/tgFlow.getTopology().getSourceList().get(0).getRate();
+					    	//}
+					    	
+					    	
+					    
+					    	for(int i=0;i<gFlow.getTopology().getSourceList().size();i++)
+					    	{
+					    		Vertex tVertex=gFlow.getTopology().getSourceList().get(i);
+					    		pw1.println(tVertex.getVerValue()+" "+tVertex.getRate()*tGRateFactor+" "+tVertex.getWeight()+" "+tVertex.getRate());
+					    		pw1.flush();
+					    		tGFlow=tGFlow+tVertex.getRate()*(eRx+eTx);
+								tGRate=tGRate+tVertex.getRate();
+					    	}
+					    	pw1.flush();
+					    	pw1.close();
+					    	
+					    	tResultSet[gN][gC][gR][3]=tResultSet[gN][gC][gR][3]+tGTime;
+					    	tResultSet[gN][gC][gR][4]=tResultSet[gN][gC][gR][4]+tGRate;
+							
+							
+					    	
+					    	//GKMSE calculate
+					    	String fSData1=tSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
+		    				DataQuality dq=new DataQuality();
+							dq.setDataSum(gDataSum);
+							dq.setNodeSum(gNode);
+		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+dq.computeMSE2(fRData, fGRate, 0, fWeight,0,fSData1)/gNode/100;
+		    				
+							
+							
+							
+							//WFrate allocation
 		    			    String fRate=tRateFileName+"rate-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		
 				    		
 				    		
@@ -1506,7 +1597,7 @@ public class TestRealData {
 					    	{
 					    		TestRealData.initRealDataRou(fVertex, fEdge, fWeight, g2, 1,gRou*1.0/100);
 					    	}
-					    	else if(gRou==0)  //rou==0
+					    	else if(gRou==110)  //rou==0
 					    	{
 					    		TestRealData.initRealDataRou(fVertex, fEdge, fWeight, g2, 2,gRou*1.0/100);
 					    	}
@@ -1525,12 +1616,13 @@ public class TestRealData {
 						    wFlow.setEpsilon(gAppr*1.0/1000);
 					    	tWTime=wFlow.computeDWFFLow();
 					    	
+					    	/*
 					    	if(gRou==100)
 					    	{
-					    		tWRateFactor=gRateIndicator/wFlow.getTopology().getSourceList().get(0).getRate();
+					    		tWRateFactor=gRateIndicator/twFlow.getTopology().getSourceList().get(0).getRate();
 					    		
 					    	}
-					    	
+					    	*/
 					    	
 					    
 					    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
@@ -1550,18 +1642,19 @@ public class TestRealData {
 							
 		    				
 		    				
+					    	
+					    	
 		    				
 		    	    		
+					    	
 		    				
 		    				
-		    				
-		    				
-		    				//MSE calculate
-					    	fSData=tSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
-		    				DataQuality dq=new DataQuality();
+		    				//WFMSE calculate
+					    	String fSData2=tSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
+		    				dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
-		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+dq.computeMSE2(fRData, fRate, 0, fWeight,0,fSData)/gNode/100;
+		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+dq.computeMSE2(fRData, fRate, 0, fWeight,0,fSData2)/gNode/100;
 		    			
 		    			}
 		    		}
@@ -1604,7 +1697,10 @@ public class TestRealData {
     				double tTime=gResultSet[i][j][k][0]/intervalSum;
     				double tMSE=gResultSet[i][j][k][2]/intervalSum;
     				double t1MSE=gResultSet[i][j][0][2]/intervalSum;
-    				pwN.println(gNodeSet[i]+" "+df.format(tMSE/t1MSE)+" "+df.format(tMSE)+" "+df.format(t1MSE)+" "+df.format(tTime));
+    				double tGTime=gResultSet[i][j][k][3]/intervalSum;
+    				double tGMSE=gResultSet[i][j][k][5]/intervalSum;
+    				double t1GMSE=gResultSet[i][j][0][5]/intervalSum;
+    				pwN.println(gNodeSet[i]+" "+df.format(tMSE/t1MSE)+" "+df.format(tMSE)+" "+df.format(t1MSE)+" "+df.format(tTime)+" "+df.format(tGMSE/t1GMSE)+" "+df.format(tGMSE)+" "+df.format(t1GMSE)+" "+df.format(tGTime));
     				pwN.flush();
     				pwN.close();
     			}
