@@ -900,6 +900,11 @@ public class TestRealData {
 			//TestRealData.realTestOne();
 	
 			TestRealData.testIntervalSet(100);
+			System.out.println("100 complete");
+			TestRealData.testIntervalSet(200);
+			System.out.println("200 complete");
+			//TestRealData.testIntervalSet(50);
+			//System.out.println("50 complete");
 			
 				
 			
@@ -1692,7 +1697,7 @@ public class TestRealData {
     		{
     			for(int k=1;k<gRouSet.length;k++)
     			{
-    				String fNode=tResultFileName+"Node-C"+gCThresholdSet[j]+"-"+gRouSet[k]+".txt";
+    				String fNode=tResultFileName+"Node-C"+gCThresholdSet[j]+"-R"+gRouSet[k]+"-A"+gAppr+".txt";
     				PrintWriter pwN=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fNode,true)));
     				double tTime=gResultSet[i][j][k][0]/intervalSum;
     				double tMSE=gResultSet[i][j][k][2]/intervalSum;
