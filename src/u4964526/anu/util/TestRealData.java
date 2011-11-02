@@ -1399,14 +1399,14 @@ public class TestRealData {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,110,0,10,20,40,80};  //0,0.2,0.4,0.6,0.8,1
+	    int[] gRouSet={100,110,0,20,40,80};  //0,0.2,0.4,0.6,0.8,1
 	    int[] gNodeSet={50,100,150,200};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={9,8,7,6,5,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=65;
-	    int topologySum=5;
+	    int topologySum=3;
 	    int intervalSum=10;
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][6];
@@ -1510,6 +1510,9 @@ public class TestRealData {
 		    				String fWData="test/topology/data_"+gNode+"_"+gT+"_"+(gI-1)+".txt";
 			    			String fWeight=tWeightFileName+"weight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 							
+			    			
+			    			g=new Graph();
+							TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
 			    			RealDataHandler rdh=new RealDataHandler();
 							rdh.setDataSum(gDataSum);
 							rdh.setNodeSum(gNode);
