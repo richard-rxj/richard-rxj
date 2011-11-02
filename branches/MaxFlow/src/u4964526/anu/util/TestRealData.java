@@ -903,8 +903,8 @@ public class TestRealData {
 			System.out.println("100 complete");
 			TestRealData.testIntervalSet(200);
 			System.out.println("200 complete");
-			//TestRealData.testIntervalSet(50);
-			//System.out.println("50 complete");
+			TestRealData.testIntervalSet(50);
+			System.out.println("50 complete");
 			
 				
 			
