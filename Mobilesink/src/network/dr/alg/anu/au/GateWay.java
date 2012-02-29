@@ -9,8 +9,8 @@ public class GateWay implements Comparable<GateWay> {
 
 	private int id;
 	private int name; 
-	private double X;
-	private double Y;
+	private double X=0;
+	private double Y=0;
 	private double lBenefit = 0;
 	private double fBenefit = 0;
 	private ArrayList<Node> neighborNodes;

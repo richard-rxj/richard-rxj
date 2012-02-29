@@ -1,10 +1,19 @@
 package dr.alg.anu.au;
 
+import generate.dr.alg.anu.au.NetworkGenerator;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Logger;
 
+
+import network.dr.alg.anu.au.BiNetwork;
 import network.dr.alg.anu.au.GateWay;
 import network.dr.alg.anu.au.GateWayFBenefitComparator;
 import network.dr.alg.anu.au.GateWayLBenefitComparator;
@@ -13,6 +22,8 @@ import network.dr.alg.anu.au.Node;
 public class TourDesign {
 
 	public static double transmissionRange=25;
+	public static double xRange=100;
+	public static double yRange=100;
 	public static double initSinkX=50;
 	public static double initSinkY=50;
 	public static double gRate= 500; //  bps
@@ -26,28 +37,19 @@ public class TourDesign {
 	
 	
 	
-	public ArrayList<Node> getNodeFromFile(String nFile)
-	{
-		ArrayList<Node> result=new ArrayList<Node>();
-	
-		return result;
-	}
-	
-	public ArrayList<GateWay> getGateWayFromFile(String gFile,ArrayList<Node> nList)
-	{
-		ArrayList<GateWay> result=new ArrayList<GateWay>();
 		
-		return result;
-	}
 	
 	
-	public ArrayList<GateWay> linearTourDesign(String nFile, String gFile)
+	
+	
+	public ArrayList<GateWay> linearTourDesign(String nFile, String gFile) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		ArrayList<Node> nodeSet = this.getNodeFromFile(nFile) ; //
-		ArrayList<GateWay> gatewaySet = this.getGateWayFromFile(gFile, nodeSet); //
+		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
 		
 		
@@ -129,7 +131,7 @@ public class TourDesign {
 				tNode.setrEnergy(tREnergy);
 				
 				//reallocate harvesting rate
-				tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+				//tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
 			
 				
 				
@@ -154,13 +156,14 @@ public class TourDesign {
 	}
 	
 	
-	public ArrayList<GateWay> fairTourDesign(String nFile, String gFile)
+	public ArrayList<GateWay> fairTourDesign(String nFile, String gFile) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		ArrayList<Node> nodeSet = this.getNodeFromFile(nFile) ; //
-		ArrayList<GateWay> gatewaySet = this.getGateWayFromFile(gFile, nodeSet); //
+		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
 		
 		
@@ -242,7 +245,7 @@ public class TourDesign {
 				tNode.setrEnergy(tREnergy);
 				
 				//reallocate harvesting rate
-				tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+				//tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
 			
 				
 				
