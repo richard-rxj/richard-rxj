@@ -9,15 +9,15 @@ public class Node implements Comparable<Node> {
 	private int active; //0-------non-select 1--------select
 	private double rEnergy =0;
 	private double cEnergy =100;  //battery capacity 100 Jules
-	private double hEnergy;
-	private double rData;
-	private double cData;
+	private double hEnergy=0;
+	private double rData=0;
+	private double cData=0;
 	private double gRate = 500;
 	private double tRate = 10000;
 	private double xLabel = 0;
 	private double yLabel = 0;
-	private double X;
-	private double Y;
+	private double X=0;
+	private double Y=0;
 	private double tTime = 0;
 	private double uploadTime =0;
 	private double lWeight= 1;

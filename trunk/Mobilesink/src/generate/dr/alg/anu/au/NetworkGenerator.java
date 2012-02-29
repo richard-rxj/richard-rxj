@@ -14,184 +14,127 @@
 
 package generate.dr.alg.anu.au;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Random;
 
-import org.jgrapht.Graph;
-import org.jgrapht.VertexFactory;
-import org.jgrapht.generate.GraphGenerator;
+import dr.alg.anu.au.TourDesign;
+
+import network.dr.alg.anu.au.BiNetwork;
+import network.dr.alg.anu.au.GateWay;
+import network.dr.alg.anu.au.Node;
 
 
 
-public class NetworkGenerator<V, E> implements GraphGenerator<V, E, V> {
+
+
+
+
+public class NetworkGenerator   {
 	// ~ Instance fields
 	// --------------------------------------------------------
-
-	private double transmissionRange;
-	private int nSize;
-
-	// ~ Constructors
-	// -----------------------------------------------------------
-
-	/**
-	 * Construct a new NetworkGenerator.
-	 * 
-	 * @param nSize
-	 *            number of vertices to be generated
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the specified size is negative.
-	 */
-	public NetworkGenerator(int nSize, int gSize, double transmissionRange) {
-		if (nSize < 0) {
-			throw new IllegalArgumentException("must be non-negative");
+	private static Random ran=new Random();
+	
+	public static BiNetwork generateNetwork(int nSize, int gSize)
+	{
+		BiNetwork result=new BiNetwork();
+		
+		for(int i=0;i<nSize;i++)
+		{
+			Node n=new Node(i);
+			n.setX(NetworkGenerator.ran.nextDouble()*TourDesign.xRange);
+			n.setY(NetworkGenerator.ran.nextDouble()*TourDesign.yRange);
+			n.setcData(TourDesign.gRate*TourDesign.tourTime);
+			n.sethEnergy(TourDesign.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+		
+			result.getnList().add(n);
 		}
 
-		this.nSize = nSize;
-		this.transmissionRange=transmissionRange;
+		for(int i=nSize;i<nSize+gSize;i++)
+		{
+			GateWay g=new GateWay(i);
+			g.setX(NetworkGenerator.ran.nextDouble()*TourDesign.xRange);
+			g.setY(NetworkGenerator.ran.nextDouble()*TourDesign.yRange);
+			
+			result.getgList().add(g);
+		}
+		
+		
+		return result;
 	}
-
-	// ~ Methods
-	// ----------------------------------------------------------------
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void generateGraph(Graph<V, E> target,
-			VertexFactory<V> vertexFactory, Map<String, V> resultMap) {
-		if (nSize < 1) {
-			return;
+	
+	
+	
+	public static BiNetwork createFromFile(String nFile, String gFile) throws IOException
+	{
+		BiNetwork result=new BiNetwork();
+		String tempString=null;
+		
+		
+		BufferedReader nReader=new BufferedReader(new InputStreamReader(new FileInputStream(nFile)));
+	
+		while((tempString=nReader.readLine())!=null)
+		{
+			String[] b=tempString.split(" ");
+			Node n=new Node(Integer.parseInt(b[0]));
+			n.setcData(Double.parseDouble(b[1]));
+			n.setrData(Double.parseDouble(b[2]));
+			n.setcEnergy(Double.parseDouble(b[3]));
+			n.setrEnergy(Double.parseDouble(b[4]));
+			n.sethEnergy(Double.parseDouble(b[5]));
+			n.setX(Double.parseDouble(b[6]));
+			n.setY(Double.parseDouble(b[7]));
+			
+			result.getnList().add(n);
 		}
-
-		// Add all the vertices to the set
-		for (int i = 0; i < nSize; i++) {
-			V newVertex = vertexFactory.createVertex();
-			target.addVertex(newVertex);
-		}
-
-		/*
-		 * We want two iterators over the vertex set, one fast and one slow. The
-		 * slow one will move through the set once. For each vertex, the fast
-		 * iterator moves through the set, adding an edge to all vertices we
-		 * haven't connected to yet.
-		 * 
-		 * If we have an undirected graph, the second addEdge call will return
-		 * nothing; it will not add a second edge.
-		 */
-		Iterator<V> slowI = target.vertexSet().iterator();
-		Iterator<V> fastI;
-		while (slowI.hasNext()) { // While there are more vertices in the
-									// set
-
-			V latestVertex = slowI.next();
-			fastI = target.vertexSet().iterator();
-
-			// Jump to the first vertex *past* latestVertex
-			while (fastI.next() != latestVertex) {
-				;
-			}
-
-			// And, add edges to all remaining vertices
-			V temp;
-			while (fastI.hasNext()) {
-				temp = fastI.next();
-				double distX, distY, dist;
-				try {
-					distX = (Double) temp.getClass().getMethod("getX")
-							.invoke(temp, null)
-							- (Double) latestVertex.getClass()
-									.getMethod("getX")
-									.invoke(latestVertex, null);
-					distY = (Double) temp.getClass().getMethod("getY")
-							.invoke(temp, null)
-							- (Double) latestVertex.getClass()
-									.getMethod("getY")
-									.invoke(latestVertex, null);
-					dist = Math.sqrt(distX * distX + distY * distY);
-					if (dist <= this.transmissionRange) {
-						target.addEdge(latestVertex, temp);
-						target.addEdge(temp, latestVertex);
-					}
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+		
+		
+		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
+		
+		while((tempString=gReader.readLine())!=null)
+		{
+			String[] b=tempString.split(" ");
+			GateWay g=new GateWay(Integer.parseInt(b[0]));
+			g.setX(Double.parseDouble(b[1]));
+			g.setY(Double.parseDouble(b[2]));
+			
+			for(int i=0;i<result.getnList().size();i++)
+			{
+				Node n=result.getnList().get(i);
+				
+				double tX=g.getX()-n.getX();
+				double tY=g.getY()-n.getY();
+				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
+				if(tD<=TourDesign.transmissionRange)
+				{
+					g.getNeighborNodes().add(n);
 				}
-
+				
 			}
+			
+			result.getgList().add(g);
 		}
+		
+		nReader.close();
+		gReader.close();
+		return result;
 	}
-
-	public void generateGraphFromNodeArray(Graph<V, E> target, V nodes[]) {
-
-		// Add all the vertices to the set
-		for (int i = 0; i < nodes.length; i++) {
-			V newVertex = nodes[i];
-			target.addVertex(newVertex);
-		}
-		/*
-		 * We want two iterators over the vertex set, one fast and one slow. The
-		 * slow one will move through the set once. For each vertex, the fast
-		 * iterator moves through the set, adding an edge to all vertices we
-		 * haven't connected to yet.
-		 * 
-		 * If we have an undirected graph, the second addEdge call will return
-		 * nothing; it will not add a second edge.
-		 */
-		Iterator<V> slowI = target.vertexSet().iterator();
-		Iterator<V> fastI;
-
-		while (slowI.hasNext()) { // While there are more vertices in the set
-
-			V latestVertex = slowI.next();
-			fastI = target.vertexSet().iterator();
-
-			// Jump to the first vertex *past* latestVertex
-			while (fastI.next() != latestVertex) {
-				;
-			}
-
-			// And, add edges to all remaining vertices
-			V temp;
-			while (fastI.hasNext()) {
-				temp = fastI.next();
-				double distX, distY, dist;
-				try {
-					distX = (Double) temp.getClass().getMethod("getX")
-							.invoke(temp, null)
-							- (Double) latestVertex.getClass()
-									.getMethod("getX")
-									.invoke(latestVertex, null);
-					distY = (Double) temp.getClass().getMethod("getY")
-							.invoke(temp, null)
-							- (Double) latestVertex.getClass()
-									.getMethod("getY")
-									.invoke(latestVertex, null);
-					dist = Math.sqrt(distX * distX + distY * distY);
-					if (dist <= this.transmissionRange) {
-						target.addEdge(latestVertex, temp);
-						target.addEdge(temp, latestVertex);
-					}
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
+	
+	
+	
+	public static void main(String[] args)
+	{
+		
 	}
+	
+	
 }
