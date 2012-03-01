@@ -231,19 +231,19 @@ public class Node implements Comparable<Node> {
 	}
 
 	public double getX() {
-		return X;
+		return this.X;
 	}
 
 	public void setX(double x) {
-		X = x;
+		this.X = x;
 	}
 
 	public double getY() {
-		return Y;
+		return this.Y;
 	}
 
 	public void setY(double y) {
-		X = y;
+		this.Y = y;
 	}
 	
 	

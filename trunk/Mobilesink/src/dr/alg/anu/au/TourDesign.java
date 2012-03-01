@@ -26,13 +26,13 @@ public class TourDesign {
 	public static double yRange=100;
 	public static double initSinkX=50;
 	public static double initSinkY=50;
-	public static double gRate= 500; //  bps
-	public static double tRate= 10000; //  bps
+	public static double gRate= 1000; //  bps
+	public static double tRate= 20000; //  bps
 	public static double tourTime=300;  //  s    -----------------------varible
-	public static double[] harvestRate={0.00653,0.01365}; // J/s
+	public static double[] harvestRate={0.0004,0.0009}; // J/s
 	public static double mSpeed=1;   // m/s   
 	public static double lossWeight=0.1;  //--------------------------------varible
-	public static double beta=0.006; //J/b/m^3     £¡£¡£¡£¡£¡need to reset
+	public static double beta=0.0000000006; //J/b/m^3     £¡£¡£¡£¡£¡need to reset
 	public static Random ran=new Random();
 	
 	
