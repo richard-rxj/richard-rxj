@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BiNetwork {
@@ -34,6 +35,7 @@ public class BiNetwork {
 
 	public void saveToFile(String nFile,String gFile) throws FileNotFoundException
 	{
+		DecimalFormat df=new DecimalFormat("#.0000");
 		PrintWriter pwNode=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
 		PrintWriter pwGateWay=new PrintWriter(new OutputStreamWriter(new FileOutputStream(gFile)));
 
@@ -41,7 +43,7 @@ public class BiNetwork {
 		{
 			Node n=this.nList.get(i);
 			
-			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+n.getcEnergy()+" "+n.getrEnergy()+" "+n.gethEnergy()+" "+n.getX()+" "+n.getY());
+			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+n.getcEnergy()+" "+n.getrEnergy()+" "+n.gethEnergy()+" "+df.format(n.getX())+" "+df.format(n.getY()));
 			pwNode.flush();
 		}
 		
@@ -49,7 +51,7 @@ public class BiNetwork {
 		{
 			GateWay g=this.gList.get(i);
 			
-			pwGateWay.println(g.getId()+" "+g.getX()+" "+g.getY());
+			pwGateWay.println(g.getId()+" "+df.format(g.getX())+" "+df.format(g.getY()));
 			pwGateWay.flush();
 		}
 		
