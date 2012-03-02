@@ -43,10 +43,12 @@ public class MobileSinkTest {
 		{
 			tf.mkdirs();
 		}
-		BiNetwork bNet=NetworkGenerator.generateNetwork(1, 1);
-		bNet.saveToFile(tFileName+"n-1.txt", tFileName+"g-1.txt");
-		bNet=NetworkGenerator.createFromFile(tFileName+"n-1.txt", tFileName+"g-1.txt");
-		bNet.saveToFile(tFileName+"n-2.txt", tFileName+"g-2.txt");
+		BiNetwork bNet=NetworkGenerator.generateNetwork(100, 50);
+		bNet.saveToFile(tFileName+"n-100.txt", tFileName+"g-100.txt");
+		bNet=NetworkGenerator.createFromFile(tFileName+"n-100.txt", tFileName+"g-100.txt");
+		bNet.saveToFile(tFileName+"n-100-2.txt", tFileName+"g-100-2.txt");
+		
+		
 		
 	}
 
