@@ -42,7 +42,7 @@ public class TourDesign {
 	
 	
 	
-	public ArrayList<GateWay> linearTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> linearTourDesign(String nFile, String gFile) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -156,7 +156,7 @@ public class TourDesign {
 	}
 	
 	
-	public ArrayList<GateWay> fairTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> fairTourDesign(String nFile, String gFile) throws IOException
 	{
 		/*
 		 * initial network topology 
