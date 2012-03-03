@@ -52,9 +52,9 @@ public class GateWayLBenefitComparator<V> implements Comparator<V> {
 		double lBenefit2 = 0;
 		
 		try {
-			lBenefit1 = (Double) v1.getClass().getMethod("getlBenefit")
+			lBenefit1 = (Double) v1.getClass().getMethod("getBenefit")
 					.invoke(v1, null);
-			lBenefit2 = (Double) v2.getClass().getMethod("getlBenefit")
+			lBenefit2 = (Double) v2.getClass().getMethod("getBenefit")
 					.invoke(v2, null);
 
 		} catch (IllegalArgumentException e) {
@@ -93,15 +93,15 @@ public class GateWayLBenefitComparator<V> implements Comparator<V> {
 		// TODO Auto-generated method stub
 		ArrayList<GateWay> a=new ArrayList<GateWay>();
 		GateWay n1=new GateWay(10);
-		n1.setlBenefit(100);
+		n1.setBenefit(100);
 		a.add(n1);
 		
 		GateWay n2=new GateWay(2);
-		n2.setlBenefit(80);
+		n2.setBenefit(80);
 		a.add(n2);
 		
 		GateWay n3=new GateWay(3);
-		n3.setlBenefit(200);
+		n3.setBenefit(200);
 		a.add(n3);
 		
 		Object[] gSet=a.toArray();

@@ -12,8 +12,8 @@ public class Node implements Comparable<Node> {
 	private double hEnergy=0;
 	private double rData=0;
 	private double cData=0;
-	private double gRate = 500;
-	private double tRate = 10000;
+	private double gRate = 1000;
+	private double tRate = 20000;
 	private double xLabel = 0;
 	private double yLabel = 0;
 	private double X=0;
@@ -287,7 +287,7 @@ public class Node implements Comparable<Node> {
 	public double updateFweight()
 	{
 		double result=0;
-		result = 1-(this.rData/this.cData)*(this.rData/this.cData);
+		result = 1-((this.cData-this.rData)/this.cData)*((this.cData-this.rData)/this.cData);
 		this.fWeight = result;
 		return result;
 	}

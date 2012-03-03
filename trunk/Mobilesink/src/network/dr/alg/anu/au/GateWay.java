@@ -1,5 +1,6 @@
 package network.dr.alg.anu.au;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,23 +12,21 @@ public class GateWay implements Comparable<GateWay> {
 	private int name; 
 	private double X=0;
 	private double Y=0;
-	private double lBenefit = 0;
-	private double fBenefit = 0;
+	private double benefit = 0;
+	private double utility=0;
+	private double throughput=0;
 	private ArrayList<Node> neighborNodes;
 	private ArrayList<Double> eConSet;
-	private ArrayList<Node> lActiveNodes;
-	private ArrayList<Node> fActiveNodes;
-	private double lSojournTime =0;
-	private double fSojournTime =0;
-	private double tMovingTime=0;
+	private ArrayList<Node> activeNodes;
+	private double sojournTime =0;
+	private double movingTime=0;
 	
 	
 	public GateWay(int id) {
 		this.id = id;
 		this.name = id;
 		this.neighborNodes =new ArrayList<Node>();
-		this.lActiveNodes =new ArrayList<Node>();
-		this.fActiveNodes =new ArrayList<Node>();
+		this.activeNodes =new ArrayList<Node>();
 		this.eConSet =new ArrayList<Double>(); 
 	}
 	
@@ -37,27 +36,23 @@ public class GateWay implements Comparable<GateWay> {
 		this.name = g.name;
 		this.X = g.X;
 		this.Y = g.Y;
-		this.lBenefit =g.lBenefit;
-		this.fBenefit =g.fBenefit;
-		this.lSojournTime=g.lSojournTime;
-		this.fSojournTime=g.fSojournTime;
-		this.tMovingTime=g.tMovingTime;
+		this.benefit = g.benefit;
+		this.utility = g.utility;
+		this.throughput = g.throughput;
+		this.sojournTime=g.sojournTime;
+		this.movingTime=g.movingTime;
 		this.neighborNodes =new ArrayList<Node>();
-		this.lActiveNodes =new ArrayList<Node>();
-		this.fActiveNodes =new ArrayList<Node>();
+		this.activeNodes =new ArrayList<Node>();
 		this.eConSet =new ArrayList<Double>();
 		for(int i=0; i<g.neighborNodes.size();i++)
 		{
 			this.neighborNodes.add(g.neighborNodes.get(i));
 		}
-		for(int i=0; i<g.lActiveNodes.size();i++)
+		for(int i=0; i<g.activeNodes.size();i++)
 		{
-			this.lActiveNodes.add(g.lActiveNodes.get(i));
+			this.activeNodes.add(g.activeNodes.get(i));
 		}
-		for(int i=0; i<g.fActiveNodes.size();i++)
-		{
-			this.fActiveNodes.add(g.fActiveNodes.get(i));
-		}
+
 		for(int i=0; i<g.eConSet.size();i++)
 		{
 			this.eConSet.add(g.eConSet.get(i));
@@ -77,17 +72,13 @@ public class GateWay implements Comparable<GateWay> {
 	
 	
 	
-	public int addLActiveNode(Node v)
+	public int addActiveNode(Node v)
 	{
-		this.lActiveNodes.add(v);
+		this.activeNodes.add(v);
 		return 1;
 	}
 	
-	public int addFActiveNode(Node v)
-	{
-		this.fActiveNodes.add(v);
-		return 1;
-	}
+
 	
 	@Override
 	public int compareTo(GateWay arg0) {
@@ -127,21 +118,35 @@ public class GateWay implements Comparable<GateWay> {
 		Y = y;
 	}
 
-	public double getlBenefit() {
-		return lBenefit;
+	public double getBenefit() {
+		return benefit;
 	}
 
-	public void setlBenefit(double lBenefit) {
-		this.lBenefit = lBenefit;
+	public void setBenefit(double benefit) {
+		this.benefit = benefit;
 	}
 
-	public double getfBenefit() {
-		return fBenefit;
+	
+
+	public double getUtility() {
+		return utility;
 	}
 
-	public void setfBenefit(double fBenefit) {
-		this.fBenefit = fBenefit;
+
+	public void setUtility(double utility) {
+		this.utility = utility;
 	}
+
+
+	public double getThroughput() {
+		return throughput;
+	}
+
+
+	public void setThroughput(double throughput) {
+		this.throughput = throughput;
+	}
+
 
 	public ArrayList<Node> getNeighborNodes() {
 		return neighborNodes;
@@ -156,44 +161,35 @@ public class GateWay implements Comparable<GateWay> {
 	}
 
 
-	public double getlSojournTime() {
-		return lSojournTime;
+	public double getSojournTime() {
+		return sojournTime;
 	}
 
 
-	public void setlSojournTime(double lSojournTime) {
-		this.lSojournTime = lSojournTime;
+	public void setSojournTime(double sojournTime) {
+		this.sojournTime = sojournTime;
 	}
 
 
-	public double getfSojournTime() {
-		return fSojournTime;
+
+
+
+	public double getMovingTime() {
+		return movingTime;
 	}
 
 
-	public void setfSojournTime(double fSojournTime) {
-		this.fSojournTime = fSojournTime;
+	public void setMovingTime(double movingTime) {
+		this.movingTime = movingTime;
 	}
 
 
-	public double gettMovingTime() {
-		return tMovingTime;
+	public ArrayList<Node> getActiveNodes() {
+		return activeNodes;
 	}
 
 
-	public void settMovingTime(double tMovingTime) {
-		this.tMovingTime = tMovingTime;
-	}
 
-
-	public ArrayList<Node> getlActiveNodes() {
-		return lActiveNodes;
-	}
-
-
-	public ArrayList<Node> getfActiveNodes() {
-		return fActiveNodes;
-	}
 
 	
 	public double calcLBenefit(double lossPSec,double timeLimit)                   //linear policy
@@ -203,27 +199,31 @@ public class GateWay implements Comparable<GateWay> {
 		
 		
 		ArrayList<GateWay> resultGateWays =new ArrayList<GateWay>();
-		double tTimeLimit=timeLimit-this.tMovingTime;
+		double tTimeLimit=timeLimit-this.movingTime;
         if(tTimeLimit<=0)
         {
-        	this.lBenefit=Double.NEGATIVE_INFINITY;
-        	return this.lBenefit;
+        	this.benefit=Double.NEGATIVE_INFINITY;
+        	this.utility=0;
+        	this.throughput=0;
+        	this.sojournTime=0;
+        	this.activeNodes.clear();
+        	return this.benefit;
         }
 		
 		
 		for (int i=0;i<this.neighborNodes.size();i++)
 		{
-			this.neighborNodes.get(i).calcUploadTime(this.tMovingTime,this.eConSet.get(i));
+			this.neighborNodes.get(i).calcUploadTime(this.movingTime,this.eConSet.get(i));
 		}
 		Object[] nSet=this.neighborNodes.toArray();
 		NodeUploadTimeComparator nCom=new NodeUploadTimeComparator(false);
 		Arrays.sort(nSet, nCom);
-		this.lActiveNodes.clear();
+		this.activeNodes.clear();
 		
 		for(int i=0;i<nSet.length;i++)
 		{
 			Node t=(Node)nSet[i];
-			this.lActiveNodes.add(t);
+			this.activeNodes.add(t);
 			double tSojournTime=t.getUploadTime();
 			if(tSojournTime>tTimeLimit)
 			{
@@ -232,12 +232,21 @@ public class GateWay implements Comparable<GateWay> {
 			
 			
 			double tBenefit=0;
-			for(int j=0;j<this.lActiveNodes.size();j++)
+			double tThroughput=0;
+			for(int j=0;j<this.activeNodes.size();j++)
 			{
-				tBenefit=tBenefit+this.lActiveNodes.get(i).calcLBenefit(tSojournTime);
+				tBenefit=tBenefit+this.activeNodes.get(i).calcLBenefit(tSojournTime);
+				tThroughput= tThroughput+this.activeNodes.get(i).gettRate()*tSojournTime;
 			}
-			this.lBenefit=tBenefit-tSojournTime*lossPSec;
-			this.lSojournTime=tSojournTime;
+			this.utility=tBenefit;
+			this.throughput=tThroughput;
+			this.benefit=tBenefit-this.movingTime*lossPSec;
+			this.sojournTime=tSojournTime;
+			if(tSojournTime==0)
+			{
+				this.benefit=Double.NEGATIVE_INFINITY;
+			}
+			
 			
 			GateWay tGateWay=new GateWay(this);
 			resultGateWays.add(tGateWay);			
@@ -246,19 +255,34 @@ public class GateWay implements Comparable<GateWay> {
 		Object[] gSet=resultGateWays.toArray();
 		GateWayLBenefitComparator gCom=new GateWayLBenefitComparator(false);
 		Arrays.sort(gSet,gCom);
-		GateWay result=(GateWay)gSet[0];
 		
-		
-		//update the chosen result
-		this.lBenefit=result.lBenefit;
-		this.lSojournTime=result.lSojournTime;
-		this.lActiveNodes.clear();
-		for(int i=0;i<result.lActiveNodes.size();i++)
+		if(gSet.length>0)
 		{
-			this.lActiveNodes.add(result.lActiveNodes.get(i));
+			GateWay result=(GateWay)gSet[0];
+		
+		
+			//update the chosen result
+			this.benefit=result.benefit;
+			this.utility=result.utility;
+			this.throughput=result.throughput;
+			this.sojournTime=result.sojournTime;
+			this.activeNodes.clear();
+			for(int i=0;i<result.activeNodes.size();i++)
+			{
+				this.activeNodes.add(result.activeNodes.get(i));
+			}
+		}
+		else
+		{
+			this.benefit=Double.NEGATIVE_INFINITY;
+			this.utility=0;
+			this.throughput=0;
+			this.sojournTime=0;
+			this.activeNodes.clear();
 		}
 		
-		return result.lBenefit;
+		
+		return this.benefit;
 	}
 	
 	
@@ -267,26 +291,31 @@ public class GateWay implements Comparable<GateWay> {
 	{
 		
 		ArrayList<GateWay> resultGateWays =new ArrayList<GateWay>();
-        double tTimeLimit=timeLimit-this.tMovingTime;
+        double tTimeLimit=timeLimit-this.movingTime;
         if(tTimeLimit<=0)
         {
-        	this.fBenefit=Double.NEGATIVE_INFINITY;
-        	return this.fBenefit;
+        	
+        	this.benefit=Double.NEGATIVE_INFINITY;
+        	this.utility=0;
+        	this.throughput=0;
+        	this.sojournTime=0;
+        	this.activeNodes.clear();
+        	return this.benefit;
         }
 		
 		for (int i=0;i<this.neighborNodes.size();i++)
 		{
-			this.neighborNodes.get(i).calcUploadTime(this.tMovingTime,this.eConSet.get(i));
+			this.neighborNodes.get(i).calcUploadTime(this.movingTime,this.eConSet.get(i));
 		}
 		Object[] nSet=this.neighborNodes.toArray();
 		NodeUploadTimeComparator nCom=new NodeUploadTimeComparator(false);
 		Arrays.sort(nSet, nCom);
-		this.fActiveNodes.clear();
+		this.activeNodes.clear();
 		
 		for(int i=0;i<nSet.length;i++)
 		{
 			Node t=(Node)nSet[i];
-			this.fActiveNodes.add(t);
+			this.activeNodes.add(t);
 			double tSojournTime=t.getUploadTime();
 			
 			if(tSojournTime>tTimeLimit)
@@ -295,12 +324,21 @@ public class GateWay implements Comparable<GateWay> {
 			}
 			
 			double tBenefit=0;
-			for(int j=0;j<this.fActiveNodes.size();j++)
+			double tThroughput=0;
+			for(int j=0;j<this.activeNodes.size();j++)
 			{
-				tBenefit=tBenefit+this.fActiveNodes.get(i).calcFBenefit(tSojournTime);
+				tBenefit=tBenefit+this.activeNodes.get(i).calcFBenefit(tSojournTime);
+				tThroughput=tThroughput+this.activeNodes.get(i).gettRate()*tSojournTime;
 			}
-			this.fBenefit=tBenefit-tSojournTime*lossPSec;
-			this.fSojournTime=tSojournTime;
+			this.utility=tBenefit;
+			this.throughput=tThroughput;
+			this.benefit=tBenefit-tSojournTime*lossPSec;
+			this.sojournTime=tSojournTime;
+			if(tSojournTime==0)
+			{
+				this.benefit=Double.NEGATIVE_INFINITY;
+			}
+			
 			
 			GateWay tGateWay=new GateWay(this);
 			resultGateWays.add(tGateWay);			
@@ -309,26 +347,45 @@ public class GateWay implements Comparable<GateWay> {
 		Object[] gSet=resultGateWays.toArray();
 		GateWayFBenefitComparator gCom=new GateWayFBenefitComparator(false);
 		Arrays.sort(gSet,gCom);
-		GateWay result=(GateWay)gSet[0];
 		
-		
-		//update the chosen result
-		this.fBenefit=result.fBenefit;
-		this.fSojournTime=result.fSojournTime;
-		this.fActiveNodes.clear();
-		for(int i=0;i<result.fActiveNodes.size();i++)
+		if(gSet.length>0)
 		{
-			this.fActiveNodes.add(result.fActiveNodes.get(i));
+			GateWay result=(GateWay)gSet[0];
+		
+		
+			//update the chosen result
+			this.benefit=result.benefit;
+			this.utility=result.utility;
+			this.throughput=result.throughput;
+			this.sojournTime=result.sojournTime;
+			this.activeNodes.clear();
+			for(int i=0;i<result.activeNodes.size();i++)
+			{
+				this.activeNodes.add(result.activeNodes.get(i));
+			}
+		}
+		else
+		{
+			this.benefit=Double.NEGATIVE_INFINITY;
+			this.utility=0;
+			this.throughput=0;
+			this.sojournTime=0;
+			this.activeNodes.clear();
 		}
 		
-		return result.fBenefit;
+		
+		return this.benefit;
+		
+		
 	}
 	
 	
 	
 
 	public String toString() {
-		return "gateway " + id;
+		DecimalFormat df=new DecimalFormat("#.0000");
+		
+		return "gateway " + id+"-(m)"+df.format(this.movingTime)+"-(s)"+df.format(this.sojournTime)+"-(active)"+this.activeNodes.toString()+"-(neighbor)"+this.neighborNodes.toString();
 	}
 	
 	
