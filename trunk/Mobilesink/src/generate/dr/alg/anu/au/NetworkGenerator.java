@@ -88,8 +88,10 @@ public class NetworkGenerator   {
 		{
 			String[] b=tempString.split(" ");
 			Node n=new Node(Integer.parseInt(b[0]));
-			n.setcData(Double.parseDouble(b[1]));
-			n.setrData(Double.parseDouble(b[2]));
+			//n.setcData(Double.parseDouble(b[1]));
+			n.setcData(TourDesign.gRate*TourDesign.tourTime);
+			n.setrData(TourDesign.gRate*TourDesign.tourTime);
+			//n.setrData(Double.parseDouble(b[2]));
 			n.setcEnergy(Double.parseDouble(b[3]));
 			n.setrEnergy(Double.parseDouble(b[4]));
 			n.sethEnergy(Double.parseDouble(b[5]));
@@ -136,9 +138,10 @@ public class NetworkGenerator   {
 	public static void main(String[] args) throws FileNotFoundException
 	{
 		int[] networkSizeSet={100};
+		int[] transRangeSet={10};
 		int cishu=10;
 		
-		String tFileName="test/Topology";
+		String tFileName="test/Topology/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{
@@ -148,6 +151,7 @@ public class NetworkGenerator   {
 		for(int i=0;i<networkSizeSet.length;i++)
 		{
 			int networkSize=networkSizeSet[i];
+			TourDesign.transmissionRange=transRangeSet[i];
 			for(int j=0;j<cishu;j++)
 			{
 				String nFile=tFileName+"node-"+networkSize+"-"+j+".txt";
