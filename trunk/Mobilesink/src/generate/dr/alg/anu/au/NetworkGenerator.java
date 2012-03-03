@@ -15,6 +15,7 @@
 package generate.dr.alg.anu.au;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -132,8 +133,29 @@ public class NetworkGenerator   {
 	
 	
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException
 	{
+		int[] networkSizeSet={100};
+		int cishu=10;
+		
+		String tFileName="test/Topology";
+		File tf=new File(tFileName);
+		if(!tf.exists())
+		{
+			tf.mkdirs();
+		}
+		
+		for(int i=0;i<networkSizeSet.length;i++)
+		{
+			int networkSize=networkSizeSet[i];
+			for(int j=0;j<cishu;j++)
+			{
+				String nFile=tFileName+"node-"+networkSize+"-"+j+".txt";
+				String gFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
+				BiNetwork bNet=NetworkGenerator.generateNetwork(networkSize, 50);
+				bNet.saveToFile(nFile, gFile);
+			}
+		}
 		
 	}
 	
