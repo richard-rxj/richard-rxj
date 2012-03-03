@@ -19,6 +19,7 @@ import network.dr.alg.anu.au.BiNetwork;
 import network.dr.alg.anu.au.GateWay;
 import network.dr.alg.anu.au.GateWayFBenefitComparator;
 import network.dr.alg.anu.au.GateWayLBenefitComparator;
+import network.dr.alg.anu.au.LabResult;
 import network.dr.alg.anu.au.Node;
 
 public class TourDesign {
@@ -30,7 +31,7 @@ public class TourDesign {
 	public static double initSinkY=50;
 	public static double gRate= 1000; //  bps
 	public static double tRate= 20000; //  bps
-	public static double tourTime=300;  //  s    -----------------------varible
+	public static double tourTime=1800;  //  s    -----------------------varible
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
 	public static double mSpeed=1;   // m/s   
 	public static double lossWeight=0.1;  //--------------------------------varible
@@ -272,10 +273,10 @@ public class TourDesign {
 	}
 	
 	
-	public static String outputString(PrintWriter pw, ArrayList<GateWay> solution, BiNetwork bNet, double tourTime)
+	public static LabResult getSimInfo(ArrayList<GateWay> solution, BiNetwork bNet, double tourTime)
 	{
-		DecimalFormat df=new DecimalFormat("#.0000");
-		String result="";
+		
+		LabResult result=new LabResult();
 		int activeNodes=0;
 		double totalUtility=0;
 		double totalThroughput=0;
@@ -301,9 +302,12 @@ public class TourDesign {
 		}
 		activeNodes=tempList.size();
 		
+		result.setActiveNodes(activeNodes);
+		result.setTotalMovingTime(totalMovingTime);
+		result.setTotalSojournTime(totalSojournTime);
+		result.setTotalThroughput(totalThroughput);
+		result.setTotalUtility(totalUtility);
 		
-		
-		result=result+" "+df.format(Double.toString(totalUtility))+" "+df.format(Double.toString(totalThroughput))+" "+df.format(Double.toString(totalSojournTime))+" "+df.format(Double.toString(totalMovingTime))+" "+Double.toString(activeNodes);
 		return result;
 	}
 	
