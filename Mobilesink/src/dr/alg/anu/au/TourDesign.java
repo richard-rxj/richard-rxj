@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ import network.dr.alg.anu.au.Node;
 
 public class TourDesign {
 
-	public static double transmissionRange=25;
+	public static double transmissionRange=10;
 	public static double xRange=100;
 	public static double yRange=100;
 	public static double initSinkX=50;
@@ -79,7 +81,7 @@ public class TourDesign {
 				double tX=tSinkX-tGateWay.getX();
 				double tY=tSinkY-tGateWay.getY();
 				double tD=Math.sqrt(tX*tX+tY*tY);
-				tGateWay.settMovingTime(tD/tSinkSpeed);  //calculate moving time
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
 				tGateWay.calcLBenefit(tLossPSec,tTourTime);
 			}
 			Object[] gSet=gatewaySet.toArray();
@@ -88,8 +90,8 @@ public class TourDesign {
 			GateWay chosenGateWay=new GateWay((GateWay)gSet[0]);
 			
 			solution.add(chosenGateWay);
-			tMovingTime=chosenGateWay.gettMovingTime();
-			tSojournTime=chosenGateWay.getlSojournTime();
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
 			tTourTime=tTourTime-tMovingTime-tSojournTime;
 			
 			/*
@@ -106,9 +108,9 @@ public class TourDesign {
 			//only update active nodes
 			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
 			{
-				Node tNode=nodeSet.get(i);
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
 				double eCom=chosenGateWay.geteConSet().get(i);
-				if(chosenGateWay.getlActiveNodes().contains(tNode))
+				if(chosenGateWay.getActiveNodes().contains(tNode))
 				{
 					double tDData=tNode.gettRate()*tSojournTime;
 					double tRData=tNode.getrData();
@@ -193,7 +195,7 @@ public class TourDesign {
 				double tX=tSinkX-tGateWay.getX();
 				double tY=tSinkY-tGateWay.getY();
 				double tD=Math.sqrt(tX*tX+tY*tY);
-				tGateWay.settMovingTime(tD/tSinkSpeed);  //calculate moving time
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
 				tGateWay.calcFBenefit(tLossPSec,tTourTime);
 			}
 			Object[] gSet=gatewaySet.toArray();
@@ -202,8 +204,8 @@ public class TourDesign {
 			GateWay chosenGateWay=new GateWay((GateWay)gSet[0]);
 			
 			solution.add(chosenGateWay);
-			tMovingTime=chosenGateWay.gettMovingTime();
-			tSojournTime=chosenGateWay.getlSojournTime();
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
 			tTourTime=tTourTime-tMovingTime-tSojournTime;
 			
 			/*
@@ -220,9 +222,9 @@ public class TourDesign {
 			//only update active nodes
 			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
 			{
-				Node tNode=nodeSet.get(i);
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
 				double eCom=chosenGateWay.geteConSet().get(i);
-				if(chosenGateWay.getlActiveNodes().contains(tNode))
+				if(chosenGateWay.getActiveNodes().contains(tNode))
 				{
 					double tDData=tNode.gettRate()*tSojournTime;
 					double tRData=tNode.getrData();
@@ -267,6 +269,42 @@ public class TourDesign {
 		
 		
 		return solution;
+	}
+	
+	
+	public static String outputString(PrintWriter pw, ArrayList<GateWay> solution, BiNetwork bNet, double tourTime)
+	{
+		DecimalFormat df=new DecimalFormat("#.0000");
+		String result="";
+		int activeNodes=0;
+		double totalUtility=0;
+		double totalThroughput=0;
+		double totalSojournTime=0;
+		double totalMovingTime=0;
+		ArrayList<Node> tempList=new ArrayList<Node>();
+		
+		for(int i=0; i<solution.size();i++)
+		{
+			GateWay g=solution.get(i);
+			totalUtility=totalUtility+g.getUtility();
+			totalThroughput=totalThroughput+g.getThroughput();
+			totalSojournTime=totalSojournTime+g.getSojournTime();
+			totalMovingTime=totalMovingTime+g.getMovingTime();
+			for(int j=0;j<g.getActiveNodes().size();j++)
+			{
+				Node n=g.getActiveNodes().get(j);
+				if(!tempList.contains(n))
+				{
+					tempList.add(n);
+				}
+			}
+		}
+		activeNodes=tempList.size();
+		
+		
+		
+		result=result+" "+df.format(Double.toString(totalUtility))+" "+df.format(Double.toString(totalThroughput))+" "+df.format(Double.toString(totalSojournTime))+" "+df.format(Double.toString(totalMovingTime))+" "+Double.toString(activeNodes);
+		return result;
 	}
 	
 	

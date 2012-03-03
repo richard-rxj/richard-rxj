@@ -54,6 +54,7 @@ public class NetworkGenerator   {
 			n.setX(NetworkGenerator.ran.nextDouble()*TourDesign.xRange);
 			n.setY(NetworkGenerator.ran.nextDouble()*TourDesign.yRange);
 			n.setcData(TourDesign.gRate*TourDesign.tourTime);
+			n.setrData(TourDesign.gRate*TourDesign.tourTime);
 			n.sethEnergy(TourDesign.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
 		
 			result.getnList().add(n);
@@ -116,7 +117,7 @@ public class NetworkGenerator   {
 				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
 				if(tD<=TourDesign.transmissionRange)
 				{
-					g.getNeighborNodes().add(n);
+					g.addNeighborNode(n);
 				}
 				
 			}
