@@ -251,12 +251,20 @@ public class Node implements Comparable<Node> {
 	{
 		double result=0;
 		double result1=0;
-		result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
 		result1 = this.rData / this.tRate;
-		if(result>result1)
+		if(eConsumption*this.tRate>this.hEnergy)
 		{
-			result=result1;
+			result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
+			if(result>result1)
+			{
+				result=result1;
+			}
+		
 		}
+		else
+			result=result1;
+		
+		
 		this.uploadTime=result;
 		return result;
 	}

@@ -36,6 +36,7 @@ public class BiNetwork {
 	public void saveToFile(String nFile,String gFile) throws FileNotFoundException
 	{
 		DecimalFormat df=new DecimalFormat("#.0000");
+		DecimalFormat df1=new DecimalFormat("#.000000");
 		PrintWriter pwNode=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
 		PrintWriter pwGateWay=new PrintWriter(new OutputStreamWriter(new FileOutputStream(gFile)));
 
@@ -43,7 +44,7 @@ public class BiNetwork {
 		{
 			Node n=this.nList.get(i);
 			
-			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+n.getcEnergy()+" "+n.getrEnergy()+" "+n.gethEnergy()+" "+df.format(n.getX())+" "+df.format(n.getY()));
+			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+df.format(n.getcEnergy())+" "+df.format(n.getrEnergy())+" "+df1.format(n.gethEnergy())+" "+df.format(n.getX())+" "+df.format(n.getY()));
 			pwNode.flush();
 		}
 		
