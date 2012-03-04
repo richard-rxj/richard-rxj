@@ -76,6 +76,69 @@ public class NetworkGenerator   {
 	
 	
 	
+	public static BiNetwork firstInitialFromFile(String nFile, String gFile) throws IOException
+	{
+		BiNetwork result=new BiNetwork();
+		String tempString=null;
+		
+		
+		BufferedReader nReader=new BufferedReader(new InputStreamReader(new FileInputStream(nFile)));
+	
+		int nnn=0;
+		
+		while((tempString=nReader.readLine())!=null)
+		{
+			nnn++;
+			String[] b=tempString.split(" ");
+			Node n=new Node(nnn);
+			n.setcData(TourDesign.gRate*TourDesign.tourTime);
+			n.setrData(TourDesign.gRate*TourDesign.tourTime);
+			n.sethEnergy(TourDesign.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+			n.setX(Double.parseDouble(b[1]));
+			n.setY(Double.parseDouble(b[2]));
+			
+			result.getnList().add(n);
+		}
+		
+		
+		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
+		
+		int ttt=0;
+		while(ttt<TourDesign.gatewayLimit)
+		{
+			ttt++;
+			nnn++;
+			tempString=gReader.readLine();
+			String[] b=tempString.split(" ");
+			GateWay g=new GateWay(nnn);
+			g.setX(Double.parseDouble(b[1]));
+			g.setY(Double.parseDouble(b[2]));
+			
+			for(int i=0;i<result.getnList().size();i++)
+			{
+				Node n=result.getnList().get(i);
+				
+				double tX=g.getX()-n.getX();
+				double tY=g.getY()-n.getY();
+				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
+				if(tD<=TourDesign.transmissionRange)
+				{
+					g.addNeighborNode(n);
+				}
+				
+			}
+			
+			result.getgList().add(g);
+		}
+		
+		nReader.close();
+		gReader.close();
+		return result;
+	}
+	
+	
+	
+	
 	public static BiNetwork createFromFile(String nFile, String gFile) throws IOException
 	{
 		BiNetwork result=new BiNetwork();
@@ -135,11 +198,12 @@ public class NetworkGenerator   {
 	
 	
 	
-	public static void main(String[] args) throws FileNotFoundException
+	public static void main(String[] args) throws IOException
 	{
 		int[] networkSizeSet={100,200,300,400,500,600};
 		int[] transRangeSet={23,16,14,12,10,10};
 		int cishu=15;
+		
 		
 		String tFileName="test/Topology/";
 		File tf=new File(tFileName);
@@ -154,9 +218,13 @@ public class NetworkGenerator   {
 			TourDesign.transmissionRange=transRangeSet[i];
 			for(int j=0;j<cishu;j++)
 			{
+				tFileName="test/Topology/";
 				String nFile=tFileName+"node-"+networkSize+"-"+j+".txt";
 				String gFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
-				BiNetwork bNet=NetworkGenerator.generateNetwork(networkSize, 50);
+				tFileName="test/originTopology/";
+				String nOriginFile=tFileName+"node-"+networkSize+"-"+j+".txt";
+				String gOriginFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
+				BiNetwork bNet=NetworkGenerator.firstInitialFromFile(nOriginFile, gOriginFile);
 				bNet.saveToFile(nFile, gFile);
 			}
 		}

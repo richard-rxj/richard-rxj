@@ -19,12 +19,14 @@ import network.dr.alg.anu.au.BiNetwork;
 import network.dr.alg.anu.au.GateWay;
 import network.dr.alg.anu.au.GateWayFBenefitComparator;
 import network.dr.alg.anu.au.GateWayLBenefitComparator;
+import network.dr.alg.anu.au.GateWayMovingTimeComparator;
 import network.dr.alg.anu.au.LabResult;
 import network.dr.alg.anu.au.Node;
 
 public class TourDesign {
 
 	public static double transmissionRange=10;
+	public static int  gatewayLimit=100;
 	public static double minSojournTime=0.05;
 	public static double xRange=100;
 	public static double yRange=100;
@@ -41,7 +43,262 @@ public class TourDesign {
 	
 	
 	
+	public static ArrayList<GateWay> nearestLinearTourDesign(String nFile, String gFile) throws IOException
+	{
+		/*
+		 * initial network topology 
+		 */
+		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
+		
+		
+		
+		
+		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		boolean flag=true;
+		double tTourTime=TourDesign.tourTime;
+		double tLossWeight=TourDesign.lossWeight;
+		
+		double tMovingTime=0;
+		double tSojournTime=0;
+		
+		double tSinkX=TourDesign.initSinkX;
+		double tSinkY=TourDesign.initSinkY;
+		
+		double tSinkSpeed=TourDesign.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		
+		
+		
+		while(flag)
+		{
+			for(int i=0;i<gatewaySet.size();i++)
+			{
+				GateWay tGateWay=gatewaySet.get(i);
+				double tX=tSinkX-tGateWay.getX();
+				double tY=tSinkY-tGateWay.getY();
+				double tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+				tGateWay.calcLBenefit(tLossPSec,tTourTime);   //utility function
+				if(tGateWay.getSojournTime()<=TourDesign.minSojournTime)
+				{
+					tGateWay.setMovingTime(Double.NEGATIVE_INFINITY);
+				}
+			}
+			Object[] gSet=gatewaySet.toArray();
+			GateWayMovingTimeComparator gCom=new GateWayMovingTimeComparator(true);
+			Arrays.sort(gSet,gCom);
+			GateWay chosenGateWay=new GateWay((GateWay)gSet[0]);
+			
+
+
+			
+			solution.add(chosenGateWay);
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
+			tTourTime=tTourTime-tMovingTime-tSojournTime;
+			
+			if(tSojournTime<=0)
+			{
+				flag=false;
+			}
+			/*
+			 *  move to chosen sojourn location to collect data
+			 *  then update both mobilesink, and node status
+			 *  including:
+			 *  mobilesink(X,Y)
+			 *  
+			 *  node(rEnergy, rData, hEnergy, and fWeight)  
+			 */
+			tSinkX=chosenGateWay.getX();
+			tSinkY=chosenGateWay.getY();
+			
+			//only update active nodes
+			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
+			{
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
+				double eCom=chosenGateWay.geteConSet().get(i);
+				if(chosenGateWay.getActiveNodes().contains(tNode))
+				{
+					double tDData=tNode.gettRate()*tSojournTime;
+					double tRData=tNode.getrData();
+					tNode.setrData(tRData-tDData);
+					double tREnergy=tNode.getrEnergy()-tDData*eCom;
+					tNode.setrEnergy(tREnergy);
+					
+				}
+			}
+			
+			//update nodes
+			for(int i=0;i<nodeSet.size();i++)
+			{
+				Node tNode=nodeSet.get(i);
+				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				if(tREnergy>tNode.getcEnergy())
+				{
+					tREnergy=tNode.getcEnergy();
+				}
+				tNode.setrEnergy(tREnergy);
+				
+				//reallocate harvesting rate
+				//tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+			
+				
+				
+				tNode.updateLweight();       //utility function
+				
+			}
+			
+
+			
+			
+			if(tTourTime <=0)
+			{
+				flag=false;
+			}
+			
+		}
+		
+		
+		
+		
+		return solution;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public static ArrayList<GateWay> randomLinearTourDesign(String nFile, String gFile) throws IOException
+	{
+		/*
+		 * initial network topology 
+		 */
+		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
+		
+		
+		
+		
+		
+		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		boolean flag=true;
+		double tTourTime=TourDesign.tourTime;
+		double tLossWeight=TourDesign.lossWeight;
+		
+		double tMovingTime=0;
+		double tSojournTime=0;
+		
+		double tSinkX=TourDesign.initSinkX;
+		double tSinkY=TourDesign.initSinkY;
+		
+		double tSinkSpeed=TourDesign.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		
+		
+		
+		while(flag)
+		{
+//			for(int i=0;i<gatewaySet.size();i++)
+//			{
+//				GateWay tGateWay=gatewaySet.get(i);
+//				double tX=tSinkX-tGateWay.getX();
+//				double tY=tSinkY-tGateWay.getY();
+//				double tD=Math.sqrt(tX*tX+tY*tY);
+//				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+//				tGateWay.calcLBenefit(tLossPSec,tTourTime);
+//			}
+//			Object[] gSet=gatewaySet.toArray();
+//			GateWayLBenefitComparator gCom=new GateWayLBenefitComparator(false);
+//			Arrays.sort(gSet,gCom);
+//			GateWay chosenGateWay=new GateWay((GateWay)gSet[0]);
+			
+			GateWay chosenGateWay=gatewaySet.get(new Random().nextInt(gatewaySet.size()));
+			double tX=tSinkX-chosenGateWay.getX();
+			double tY=tSinkY-chosenGateWay.getY();
+			double tD=Math.sqrt(tX*tX+tY*tY);
+			chosenGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+			chosenGateWay.calcLBenefit(tLossPSec,tTourTime);  //utility function
+
+			
+			solution.add(chosenGateWay);
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
+			tTourTime=tTourTime-tMovingTime-tSojournTime;
+			
+			if(tSojournTime<=0)
+			{
+				flag=false;
+			}
+			/*
+			 *  move to chosen sojourn location to collect data
+			 *  then update both mobilesink, and node status
+			 *  including:
+			 *  mobilesink(X,Y)
+			 *  
+			 *  node(rEnergy, rData, hEnergy, and fWeight)  
+			 */
+			tSinkX=chosenGateWay.getX();
+			tSinkY=chosenGateWay.getY();
+			
+			//only update active nodes
+			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
+			{
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
+				double eCom=chosenGateWay.geteConSet().get(i);
+				if(chosenGateWay.getActiveNodes().contains(tNode))
+				{
+					double tDData=tNode.gettRate()*tSojournTime;
+					double tRData=tNode.getrData();
+					tNode.setrData(tRData-tDData);
+					double tREnergy=tNode.getrEnergy()-tDData*eCom;
+					tNode.setrEnergy(tREnergy);
+					
+				}
+			}
+			
+			//update nodes
+			for(int i=0;i<nodeSet.size();i++)
+			{
+				Node tNode=nodeSet.get(i);
+				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				if(tREnergy>tNode.getcEnergy())
+				{
+					tREnergy=tNode.getcEnergy();
+				}
+				tNode.setrEnergy(tREnergy);
+				
+				//reallocate harvesting rate
+				//tNode.sethEnergy(TourDesign.harvestRate[0]+TourDesign.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+			
+				
+				
+				tNode.updateLweight();       //utility function
+				
+			}
+			
+
+			
+			
+			if(tTourTime <=0)
+			{
+				flag=false;
+			}
+			
+		}
+		
+		
+		
+		
+		return solution;
+	}
+	
+	
 	
 	
 	
