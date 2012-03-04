@@ -242,7 +242,7 @@ public class GateWay implements Comparable<GateWay> {
 			this.throughput=tThroughput;
 			this.benefit=tBenefit-this.movingTime*lossPSec;
 			this.sojournTime=tSojournTime;
-			if(tSojournTime==0)
+			if(tSojournTime<=TourDesign.minSojournTime)
 			{
 				this.benefit=Double.NEGATIVE_INFINITY;
 			}
@@ -334,7 +334,7 @@ public class GateWay implements Comparable<GateWay> {
 			this.throughput=tThroughput;
 			this.benefit=tBenefit-tSojournTime*lossPSec;
 			this.sojournTime=tSojournTime;
-			if(tSojournTime==0)
+			if(tSojournTime<=TourDesign.minSojournTime)
 			{
 				this.benefit=Double.NEGATIVE_INFINITY;
 			}

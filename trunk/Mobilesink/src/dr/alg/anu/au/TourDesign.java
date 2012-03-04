@@ -25,6 +25,7 @@ import network.dr.alg.anu.au.Node;
 public class TourDesign {
 
 	public static double transmissionRange=10;
+	public static double minSojournTime=0.05;
 	public static double xRange=100;
 	public static double yRange=100;
 	public static double initSinkX=50;
