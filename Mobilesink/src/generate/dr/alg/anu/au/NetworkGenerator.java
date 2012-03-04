@@ -137,9 +137,9 @@ public class NetworkGenerator   {
 	
 	public static void main(String[] args) throws FileNotFoundException
 	{
-		int[] networkSizeSet={100};
-		int[] transRangeSet={10};
-		int cishu=10;
+		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] transRangeSet={23,16,14,12,10,10};
+		int cishu=15;
 		
 		String tFileName="test/Topology/";
 		File tf=new File(tFileName);

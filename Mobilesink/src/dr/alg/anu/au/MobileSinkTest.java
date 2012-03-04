@@ -34,9 +34,10 @@ public class MobileSinkTest {
 	 */
 	public static void impactWeightWithLinear() throws IOException
 	{
-		int[] networkSizeSet={100};
-		int[] weightSet={10};   // 0,5,10,20,40,80,100   divide 100
-		int  cishu=1;   
+		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] transRangeSet={23,16,14,12,10,10};
+		int[] weightSet={0,5,10,20,40,80,100};   // 0,5,10,20,40,80,100   divide 100
+		int  cishu=15;   
 		for(int i=0;i<weightSet.length;i++)
 		{
 			String tFileName="test/ImpactWeight/";
@@ -65,6 +66,8 @@ public class MobileSinkTest {
 			{
 				ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
 				int networkSize=networkSizeSet[j];
+				int transRange=transRangeSet[j];
+				TourDesign.transmissionRange=transRange;
 				
 				for(int k=0;k<cishu;k++)
 				{
@@ -78,7 +81,7 @@ public class MobileSinkTest {
 					{
 							System.out.println(solution.get(ti));
 					}
-					System.out.println("!!!!!Completet---<Round>"+k+"-<Node>"+networkSize+"-<Weight>"+tWeight);
+					System.out.println("!!!!!Completet--Linear--<Round>"+k+"-<Node>"+networkSize+"-<Weight>"+tWeight);
 					//end of debug
 					
 					
@@ -119,8 +122,9 @@ public class MobileSinkTest {
 	public static void impactWeightWithFair() throws IOException
 	{
 		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] transRangeSet={23,16,14,12,10,10};
 		int[] weightSet={0,5,10,20,40,80,100};   // 0,5,10,20,40,80,100   divide 100
-		int  cishu=10;   
+		int  cishu=15;   
 		for(int i=0;i<weightSet.length;i++)
 		{
 			String tFileName="test/ImpactWeight/";
@@ -149,6 +153,8 @@ public class MobileSinkTest {
 			{
 				ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
 				int networkSize=networkSizeSet[j];
+				int transRange=transRangeSet[j];
+				TourDesign.transmissionRange=transRange;
 				
 				for(int k=0;k<cishu;k++)
 				{
@@ -162,7 +168,181 @@ public class MobileSinkTest {
 					{
 							System.out.println(solution.get(ti));
 					}
-					System.out.println("!!!!!Completet---<Round>"+k+"-<Node>"+networkSize+"-<Weight>"+tWeight);
+					System.out.println("!!!!!Completet--Fair--<Round>"+k+"-<Node>"+networkSize+"-<Weight>"+tWeight);
+					//end of debug
+					
+					
+					LabResult tResult=TourDesign.getSimInfo(solution, bNet, TourDesign.tourTime);
+					resultSet.add(tResult);
+				}
+				
+				LabResult gResult=new LabResult();
+				int activeNodes=0;
+				double totalUtility=0;
+				double totalThroughput=0;
+				double totalSojournTime=0;
+				double totalMovingTime=0;
+				for(int k=0;k<resultSet.size();k++)
+				{
+					LabResult tResult=resultSet.get(k);
+					activeNodes=activeNodes+tResult.getActiveNodes();
+					totalUtility=totalUtility+tResult.getTotalUtility();
+					totalThroughput=totalThroughput+tResult.getTotalThroughput();
+					totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+					totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+				}
+				gResult.setActiveNodes(activeNodes/resultSet.size());
+				gResult.setTotalUtility(totalUtility/resultSet.size());
+				gResult.setTotalThroughput(totalThroughput/resultSet.size());
+				gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+				gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+				
+				pw.println(networkSize+" "+gResult);
+				pw.flush();
+			}
+			pw.close();
+		}
+		
+	}
+	
+	
+	
+	public static void impactTimeWithLinear() throws IOException
+	{
+		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] transRangeSet={23,16,14,12,10,10};
+		int[] weightSet={300,600,1200,2400,4800};   // 0,5,10,20,40,80,100   divide 100
+		int  cishu=15;   
+		for(int i=0;i<weightSet.length;i++)
+		{
+			String tFileName="test/ImpactTime/";
+			File tf=new File(tFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			int tWeight=weightSet[i];
+			
+			String outputFile=tFileName+"linear-time-"+Integer.toString(tWeight)+".txt";
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+
+			
+			TourDesign.tourTime=tWeight;
+			
+						
+			tFileName="test/Topology/";
+			tf=new File(tFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			
+			for(int j=0;j<networkSizeSet.length;j++)
+			{
+				ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+				int networkSize=networkSizeSet[j];
+				int transRange=transRangeSet[j];
+				TourDesign.transmissionRange=transRange;
+				
+				for(int k=0;k<cishu;k++)
+				{
+					String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+					String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+					BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+					ArrayList<GateWay> solution=TourDesign.linearTourDesign(nFile, gFile);
+					
+					//begin of debug
+					for(int ti=0;ti<solution.size();ti++)
+					{
+							System.out.println(solution.get(ti));
+					}
+					System.out.println("!!!!!Completet--Linear--<Round>"+k+"-<Node>"+networkSize+"-<Time>"+tWeight);
+					//end of debug
+					
+					
+					LabResult tResult=TourDesign.getSimInfo(solution, bNet, TourDesign.tourTime);
+					resultSet.add(tResult);
+				}
+				
+				LabResult gResult=new LabResult();
+				int activeNodes=0;
+				double totalUtility=0;
+				double totalThroughput=0;
+				double totalSojournTime=0;
+				double totalMovingTime=0;
+				for(int k=0;k<resultSet.size();k++)
+				{
+					LabResult tResult=resultSet.get(k);
+					activeNodes=activeNodes+tResult.getActiveNodes();
+					totalUtility=totalUtility+tResult.getTotalUtility();
+					totalThroughput=totalThroughput+tResult.getTotalThroughput();
+					totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+					totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+				}
+				gResult.setActiveNodes(activeNodes/resultSet.size());
+				gResult.setTotalUtility(totalUtility/resultSet.size());
+				gResult.setTotalThroughput(totalThroughput/resultSet.size());
+				gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+				gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+				
+				pw.println(networkSize+" "+gResult);
+				pw.flush();
+			}
+			pw.close();
+		}
+		
+	}
+	
+	public static void impactTimeWithFair() throws IOException
+	{
+		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] transRangeSet={23,16,14,12,10,10};
+		int[] weightSet={300,600,1200,2400,4800};   // 0,5,10,20,40,80,100   divide 100
+		int  cishu=15;   
+		for(int i=0;i<weightSet.length;i++)
+		{
+			String tFileName="test/ImpactTime/";
+			File tf=new File(tFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			int tWeight=weightSet[i];
+			
+			String outputFile=tFileName+"fair-time-"+Integer.toString(tWeight)+".txt";
+			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+
+			
+			TourDesign.tourTime=tWeight;
+			
+						
+			tFileName="test/Topology/";
+			tf=new File(tFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			
+			for(int j=0;j<networkSizeSet.length;j++)
+			{
+				ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+				int networkSize=networkSizeSet[j];
+				int transRange=transRangeSet[j];
+				TourDesign.transmissionRange=transRange;
+				
+				for(int k=0;k<cishu;k++)
+				{
+					String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+					String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+					BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+					ArrayList<GateWay> solution=TourDesign.fairTourDesign(nFile, gFile);
+					
+					//begin of debug
+					for(int ti=0;ti<solution.size();ti++)
+					{
+							System.out.println(solution.get(ti));
+					}
+					System.out.println("!!!!!Completet---Fair---<Round>"+k+"-<Node>"+networkSize+"-<Time>"+tWeight);
 					//end of debug
 					
 					
@@ -233,7 +413,9 @@ public class MobileSinkTest {
 //			System.out.println(solution.get(i));
 //		}
 		MobileSinkTest.impactWeightWithLinear();
-		MobileSinkTest.impactWeightWithFair();
+		//MobileSinkTest.impactWeightWithFair();
+		MobileSinkTest.impactTimeWithLinear();
+		MobileSinkTest.impactTimeWithFair();
 	}
 
 }
