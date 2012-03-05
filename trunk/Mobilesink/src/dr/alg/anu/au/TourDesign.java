@@ -82,9 +82,9 @@ public class TourDesign {
 				double tD=Math.sqrt(tX*tX+tY*tY);
 				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
 				tGateWay.calcLBenefit(tLossPSec,tTourTime);   //utility function
-				if(tGateWay.getSojournTime()<=TourDesign.minSojournTime)
+				if(tGateWay.getSojournTime()<TourDesign.minSojournTime)
 				{
-					tGateWay.setMovingTime(Double.NEGATIVE_INFINITY);
+					tGateWay.setMovingTime(Double.POSITIVE_INFINITY);
 				}
 			}
 			Object[] gSet=gatewaySet.toArray();
