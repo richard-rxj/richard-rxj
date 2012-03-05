@@ -240,7 +240,7 @@ public class MobileSinkTest {
 	{
 		int[] networkSizeSet={100,200,300,400,500,600};
 		int[] transRangeSet={23,16,14,12,10,10};
-		int[] weightSet={0,5,10,20,40,80,100};   // 0,5,10,20,40,80,100   divide 100
+		int[] weightSet={0,5,10,20,30,40,50,60,70,80,90,100};   // 0,5,10,20,40,80,100   divide 100
 		int  cishu=15;   
 		for(int i=0;i<weightSet.length;i++)
 		{
@@ -415,7 +415,7 @@ public class MobileSinkTest {
 	{
 		int[] networkSizeSet={100,200,300,400,500,600};
 		int[] transRangeSet={23,16,14,12,10,10};
-		int[] weightSet={300,600,1200,2400,4800};   // 0,5,10,20,40,80,100   divide 100
+		int[] weightSet={300,600,1200,2400,4800,36000,72000,144000};   
 		int  cishu=15;   
 		for(int i=0;i<weightSet.length;i++)
 		{
@@ -618,9 +618,9 @@ public class MobileSinkTest {
 //		}
 		MobileSinkTest.impactWeightWithLinear();
 		//MobileSinkTest.impactWeightWithFair();
-		MobileSinkTest.impactTimeWithLinear();
+		//MobileSinkTest.impactTimeWithLinear();
 		//MobileSinkTest.impactTimeWithFair();
-		MobileSinkTest.impactPerformanceWithLinear();
+		//MobileSinkTest.impactPerformanceWithLinear();
 	}
 
 }
