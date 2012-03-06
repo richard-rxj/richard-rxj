@@ -26,7 +26,7 @@ import network.dr.alg.anu.au.Node;
 public class TourDesign {
 
 	public static double transmissionRange=10;
-	public static int  gatewayLimit=100;
+	public static int  gatewayLimit=50;
 	public static double minSojournTime=0.05;
 	public static double xRange=100;
 	public static double yRange=100;
@@ -36,8 +36,8 @@ public class TourDesign {
 	public static double tRate= 20000; //  bps
 	public static double tourTime=300;  //  s    -----------------------varible
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
-	public static double mSpeed=3;   // m/s   
-	public static double lossWeight=0.1;  //--------------------------------varible
+	public static double mSpeed=1;   // m/s   
+	public static double lossWeight=0.4;  //--------------------------------varible
 	public static double beta=0.0000000006; //J/b/m^3     £¡£¡£¡£¡£¡need to reset
 	public static Random ran=new Random();
 	

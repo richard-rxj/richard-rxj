@@ -167,8 +167,11 @@ public class NetworkGenerator   {
 		
 		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
 		
-		while((tempString=gReader.readLine())!=null)
+		int gNum=0;
+		while(gNum<TourDesign.gatewayLimit)
 		{
+			gNum++;
+			tempString=gReader.readLine();
 			String[] b=tempString.split(" ");
 			GateWay g=new GateWay(Integer.parseInt(b[0]));
 			g.setX(Double.parseDouble(b[1]));
