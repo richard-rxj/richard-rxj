@@ -2,6 +2,7 @@ package network.dr.alg.anu.au;
 
 import java.util.ArrayList;
 
+import dr.alg.anu.au.ExperimentSetting;
 import dr.alg.anu.au.NewTourDesign;
 
 public class Node implements Comparable<Node> {
@@ -353,10 +354,10 @@ public class Node implements Comparable<Node> {
 	{
 		double result=0;
 		double tConsumption=eConsumption*this.tRate;
-		if(tConsumption<NewTourDesign.minEConsumption)
-			tConsumption=NewTourDesign.minEConsumption;
+		if(tConsumption<ExperimentSetting.minEConsumption)
+			tConsumption=ExperimentSetting.minEConsumption;
 		result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
-		
+		this.setSurvivalTime(result);
 		return result;
 	}
 	
@@ -364,8 +365,8 @@ public class Node implements Comparable<Node> {
 	public double calcUtilityGain(double sojournTime)
 	{
 		double result=0;
-		double tA=NewTourDesign.utilityA;
-		double tTourTime=NewTourDesign.tourTime;
+		double tA=ExperimentSetting.utilityA;
+		double tTourTime=ExperimentSetting.tourTime;
 		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
 		double tNew=1-Math.pow((1-(this.totalSojournTime+sojournTime)/tTourTime),tA);
 		result=tPrevious-tNew;

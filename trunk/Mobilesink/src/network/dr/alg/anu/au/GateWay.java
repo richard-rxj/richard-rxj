@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import dr.alg.anu.au.ExperimentSetting;
 import dr.alg.anu.au.NewTourDesign;
 import dr.alg.anu.au.TourDesign;
 
@@ -26,7 +27,7 @@ public class GateWay implements Comparable<GateWay> {
 	private double unitBenefitGain=0; //new
 	private double utilityGain=0;     //new
 	private double unitUtilityGain=0; //new
-	private int    feasible=0;        // 0-non feasible 1--semi-feasible   2--feasible
+	private int    feasible=0;        // 0-non feasible 1-feasible
 	
 	public GateWay(int id) {
 		this.id = id;
@@ -63,16 +64,20 @@ public class GateWay implements Comparable<GateWay> {
 		{
 			this.eConSet.add(g.eConSet.get(i));
 		}
-		
+		this.backTime=g.backTime;
+		this.benefitGain=g.benefitGain;
+		this.unitBenefitGain=g.unitBenefitGain;
+		this.unitUtilityGain=g.unitUtilityGain;
+		this.utilityGain=g.utilityGain;
 	}
 	
 	
 	public int addNeighborNode(Node v)
 	{
 		this.neighborNodes.add(v);
-		double eTemp =TourDesign.beta*Math.pow(Math.sqrt(Math.pow((v.getX()-this.X), 2)+Math.pow((v.getY()-this.Y), 2)),2);  //mΪ2
-		if (eTemp*v.gettRate()<NewTourDesign.minEConsumption)
-			eTemp=NewTourDesign.minEConsumption/v.gettRate();
+		double eTemp =ExperimentSetting.beta*Math.pow(Math.sqrt(Math.pow((v.getX()-this.X), 2)+Math.pow((v.getY()-this.Y), 2)),ExperimentSetting.eComM);  //mΪ2
+		if (eTemp*v.gettRate()<ExperimentSetting.minEConsumption)
+			eTemp=ExperimentSetting.minEConsumption/v.gettRate();
 		this.eConSet.add(Double.valueOf(eTemp));
 		
 		return 1;
@@ -312,7 +317,7 @@ public class GateWay implements Comparable<GateWay> {
 			this.throughput=tThroughput;
 			this.benefit=tBenefit-this.movingTime*lossPSec;
 			this.sojournTime=tSojournTime;
-			if(tSojournTime<=TourDesign.minSojournTime)
+			if(tSojournTime<=ExperimentSetting.minSojournTime)
 			{
 				this.benefit=Double.NEGATIVE_INFINITY;
 			}
@@ -404,7 +409,7 @@ public class GateWay implements Comparable<GateWay> {
 			this.throughput=tThroughput;
 			this.benefit=tBenefit-tSojournTime*lossPSec;
 			this.sojournTime=tSojournTime;
-			if(tSojournTime<=TourDesign.minSojournTime)
+			if(tSojournTime<=ExperimentSetting.minSojournTime)
 			{
 				this.benefit=Double.NEGATIVE_INFINITY;
 			}
@@ -523,7 +528,15 @@ public class GateWay implements Comparable<GateWay> {
 			
 			
 				//update the chosen result
-				this.feasible=1;
+				if(this.sojournTime<ExperimentSetting.minSojournTime)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					this.feasible=1;
+				}
+				
 				this.benefitGain=result.benefitGain;
 				this.unitBenefitGain=result.unitBenefitGain;
 				this.sojournTime=result.sojournTime;
@@ -597,7 +610,21 @@ public class GateWay implements Comparable<GateWay> {
 			
 			
 				//update the chosen result
-				this.feasible=1;
+				if(this.sojournTime>tTimeLimit)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					if(this.sojournTime<ExperimentSetting.minSojournTime)
+					{
+						this.feasible=0;
+					}
+					else
+					{
+						this.feasible=1;
+					}
+				}
 				this.benefitGain=result.benefitGain;
 				this.unitBenefitGain=result.unitBenefitGain;
 				this.sojournTime=result.sojournTime;
@@ -698,7 +725,16 @@ public class GateWay implements Comparable<GateWay> {
 			
 			
 				//update the chosen result
-				this.feasible=1;
+				if(this.sojournTime<ExperimentSetting.minSojournTime)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					this.feasible=1;
+				}
+				
+				
 				this.utilityGain=result.utilityGain;
 				this.unitUtilityGain=result.unitUtilityGain;
 				this.sojournTime=result.sojournTime;
@@ -772,7 +808,25 @@ public class GateWay implements Comparable<GateWay> {
 			
 			
 				//update the chosen result
-				this.feasible=1;
+				if(this.sojournTime>tTimeLimit)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					if(this.sojournTime<ExperimentSetting.minSojournTime)
+					{
+						this.feasible=0;
+					}
+					else
+					{
+						this.feasible=1;
+					}
+				}
+				
+				
+				
+				
 				this.utilityGain=result.utilityGain;
 				this.unitUtilityGain=result.unitUtilityGain;
 				this.sojournTime=result.sojournTime;
