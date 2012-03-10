@@ -26,25 +26,7 @@ import network.dr.alg.anu.au.Node;
 
 public class TourDesign {
 
-	public static double transmissionRange=10;
-	public static int  gatewayLimit=50;
-	public static double minSojournTime=0.05;
-	public static double minLeftTime=0.001;
-	public static double xRange=100;
-	public static double yRange=100;
-	public static double initSinkX=50;
-	public static double initSinkY=50;
-	public static double gRate= 1000; //  bps
-	public static double tRate= 1000; //  bps
-	public static double tourTime=300;  //  s    -----------------------varible
-	public static double[] harvestRate={0.0004,0.0009}; // J/s
-	public static double mSpeed=1;   // m/s   
-	public static double lossWeight=0.4;  //--------------------------------varible
-	public static double beta=0.0000008; //J/b/m^2    0.0000000006;J/b/m^3     £¡£¡£¡£¡£¡need to reset
-	public static double eComM=2;
-	public static double minEConsumption=0.008;   //J/s
-	public static double utilityA=2;
-	public static Random ran=new Random();
+	
 	
 	
 	
@@ -63,17 +45,17 @@ public class TourDesign {
 		
 		ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
-		double tTourTime=TourDesign.tourTime;
-		double tLossWeight=TourDesign.lossWeight;
+		double tTourTime=ExperimentSetting.tourTime;
+		double tLossWeight=ExperimentSetting.lossWeight;
 		
 		double tMovingTime=0;
 		double tSojournTime=0;
 		
-		double tSinkX=TourDesign.initSinkX;
-		double tSinkY=TourDesign.initSinkY;
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
 		
-		double tSinkSpeed=TourDesign.mSpeed;
-		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*ExperimentSetting.gRate;
 		
 		
 		
@@ -87,7 +69,7 @@ public class TourDesign {
 				double tD=Math.sqrt(tX*tX+tY*tY);
 				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
 				tGateWay.calcLBenefit(tLossPSec,tTourTime);   //utility function
-				if(tGateWay.getSojournTime()<TourDesign.minSojournTime)
+				if(tGateWay.getSojournTime()<ExperimentSetting.minSojournTime)
 				{
 					tGateWay.setMovingTime(Double.POSITIVE_INFINITY);
 				}
@@ -193,17 +175,17 @@ public class TourDesign {
 		
 		ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
-		double tTourTime=TourDesign.tourTime;
-		double tLossWeight=TourDesign.lossWeight;
+		double tTourTime=ExperimentSetting.tourTime;
+		double tLossWeight=ExperimentSetting.lossWeight;
 		
 		double tMovingTime=0;
 		double tSojournTime=0;
 		
-		double tSinkX=TourDesign.initSinkX;
-		double tSinkY=TourDesign.initSinkY;
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
 		
-		double tSinkSpeed=TourDesign.mSpeed;
-		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*ExperimentSetting.gRate;
 		
 		
 		
@@ -323,17 +305,17 @@ public class TourDesign {
 		
 		ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
-		double tTourTime=TourDesign.tourTime;
-		double tLossWeight=TourDesign.lossWeight;
+		double tTourTime=ExperimentSetting.tourTime;
+		double tLossWeight=ExperimentSetting.lossWeight;
 		
 		double tMovingTime=0;
 		double tSojournTime=0;
 		
-		double tSinkX=TourDesign.initSinkX;
-		double tSinkY=TourDesign.initSinkY;
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
 		
-		double tSinkSpeed=TourDesign.mSpeed;
-		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*ExperimentSetting.gRate;
 		
 		
 		
@@ -441,17 +423,17 @@ public class TourDesign {
 		
 		ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
-		double tTourTime=TourDesign.tourTime;
-		double tLossWeight=TourDesign.lossWeight;
+		double tTourTime=ExperimentSetting.tourTime;
+		double tLossWeight=ExperimentSetting.lossWeight;
 		
 		double tMovingTime=0;
 		double tSojournTime=0;
 		
-		double tSinkX=TourDesign.initSinkX;
-		double tSinkY=TourDesign.initSinkY;
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
 		
-		double tSinkSpeed=TourDesign.mSpeed;
-		double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		double tLossPSec=tLossWeight*nodeSet.size()*ExperimentSetting.gRate;
 		
 		
 		

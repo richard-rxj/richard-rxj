@@ -81,7 +81,7 @@ public class LabResult {
 	public String toString() {
 		DecimalFormat df=new DecimalFormat("#.0000");
 		String result="";
-		result=result+" "+df.format(this.totalUtility)+" "+df.format(this.totalThroughput)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime)+" "+Double.toString(activeNodes);
+		result=result+" "+df.format(this.totalThroughput)+" "+df.format(this.totalUtility)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime)+" "+Double.toString(activeNodes);
 		return result;
 	}
 	

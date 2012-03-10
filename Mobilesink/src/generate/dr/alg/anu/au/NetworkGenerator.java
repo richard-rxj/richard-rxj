@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import dr.alg.anu.au.ExperimentSetting;
+import dr.alg.anu.au.NewTourDesign;
 import dr.alg.anu.au.TourDesign;
 
 import network.dr.alg.anu.au.BiNetwork;
@@ -52,11 +54,11 @@ public class NetworkGenerator   {
 		for(int i=0;i<nSize;i++)
 		{
 			Node n=new Node(i);
-			n.setX(NetworkGenerator.ran.nextDouble()*TourDesign.xRange);
-			n.setY(NetworkGenerator.ran.nextDouble()*TourDesign.yRange);
-			n.setcData(TourDesign.gRate*TourDesign.tourTime);
-			n.setrData(TourDesign.gRate*TourDesign.tourTime);
-			n.sethEnergy(TourDesign.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+			n.setX(NetworkGenerator.ran.nextDouble()*ExperimentSetting.xRange);
+			n.setY(NetworkGenerator.ran.nextDouble()*ExperimentSetting.yRange);
+			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.sethEnergy(ExperimentSetting.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]));
 		
 			result.getnList().add(n);
 		}
@@ -64,8 +66,8 @@ public class NetworkGenerator   {
 		for(int i=nSize;i<nSize+gSize;i++)
 		{
 			GateWay g=new GateWay(i);
-			g.setX(NetworkGenerator.ran.nextDouble()*TourDesign.xRange);
-			g.setY(NetworkGenerator.ran.nextDouble()*TourDesign.yRange);
+			g.setX(NetworkGenerator.ran.nextDouble()*ExperimentSetting.xRange);
+			g.setY(NetworkGenerator.ran.nextDouble()*ExperimentSetting.yRange);
 			
 			result.getgList().add(g);
 		}
@@ -91,9 +93,9 @@ public class NetworkGenerator   {
 			nnn++;
 			String[] b=tempString.split(" ");
 			Node n=new Node(nnn);
-			n.setcData(TourDesign.gRate*TourDesign.tourTime);
-			n.setrData(TourDesign.gRate*TourDesign.tourTime);
-			n.sethEnergy(TourDesign.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(TourDesign.harvestRate[1]-TourDesign.harvestRate[0]));
+			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.sethEnergy(ExperimentSetting.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]));
 			n.setX(Double.parseDouble(b[1]));
 			n.setY(Double.parseDouble(b[2]));
 			
@@ -104,7 +106,7 @@ public class NetworkGenerator   {
 		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
 		
 		int ttt=0;
-		while(ttt<TourDesign.gatewayLimit)
+		while(ttt<ExperimentSetting.gatewayLimit)
 		{
 			ttt++;
 			nnn++;
@@ -121,7 +123,7 @@ public class NetworkGenerator   {
 				double tX=g.getX()-n.getX();
 				double tY=g.getY()-n.getY();
 				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
-				if(tD<=TourDesign.transmissionRange)
+				if(tD<=ExperimentSetting.transmissionRange)
 				{
 					g.addNeighborNode(n);
 				}
@@ -152,8 +154,8 @@ public class NetworkGenerator   {
 			String[] b=tempString.split(" ");
 			Node n=new Node(Integer.parseInt(b[0]));
 			//n.setcData(Double.parseDouble(b[1]));
-			n.setcData(TourDesign.gRate*TourDesign.tourTime);
-			n.setrData(TourDesign.gRate*TourDesign.tourTime);
+			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
 			//n.setrData(Double.parseDouble(b[2]));
 			n.setcEnergy(Double.parseDouble(b[3]));
 			n.setrEnergy(Double.parseDouble(b[4]));
@@ -168,7 +170,7 @@ public class NetworkGenerator   {
 		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
 		
 		int gNum=0;
-		while(gNum<TourDesign.gatewayLimit)
+		while(gNum<ExperimentSetting.gatewayLimit)
 		{
 			gNum++;
 			tempString=gReader.readLine();
@@ -184,7 +186,7 @@ public class NetworkGenerator   {
 				double tX=g.getX()-n.getX();
 				double tY=g.getY()-n.getY();
 				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
-				if(tD<=TourDesign.transmissionRange)
+				if(tD<=ExperimentSetting.transmissionRange)
 				{
 					g.addNeighborNode(n);
 				}
@@ -208,7 +210,7 @@ public class NetworkGenerator   {
 		int cishu=15;
 		
 		
-		String tFileName="test/Topology/";
+		String tFileName="test/new/topology/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{
@@ -218,10 +220,11 @@ public class NetworkGenerator   {
 		for(int i=0;i<networkSizeSet.length;i++)
 		{
 			int networkSize=networkSizeSet[i];
-			TourDesign.transmissionRange=transRangeSet[i];
+			ExperimentSetting.gatewayLimit=networkSize;
+			ExperimentSetting.transmissionRange=transRangeSet[i];
 			for(int j=0;j<cishu;j++)
 			{
-				tFileName="test/Topology/";
+				tFileName="test/new/topology/";
 				String nFile=tFileName+"node-"+networkSize+"-"+j+".txt";
 				String gFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
 				tFileName="test/originTopology/";
