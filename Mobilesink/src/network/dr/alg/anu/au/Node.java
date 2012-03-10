@@ -2,6 +2,8 @@ package network.dr.alg.anu.au;
 
 import java.util.ArrayList;
 
+import dr.alg.anu.au.NewTourDesign;
+
 public class Node implements Comparable<Node> {
 
 	private int id;
@@ -13,7 +15,7 @@ public class Node implements Comparable<Node> {
 	private double rData=0;
 	private double cData=0;
 	private double gRate = 1000;
-	private double tRate = 20000;
+	private double tRate = 1000;   // transmission rate = generation rate
 	private double xLabel = 0;
 	private double yLabel = 0;
 	private double X=0;
@@ -24,6 +26,12 @@ public class Node implements Comparable<Node> {
 	private double fWeight= 1;
 	private double lBenefit = 0;
 	private double fBenefit = 0;
+	private double survivalTime=0; // new
+	private double totalSojournTime=0; // new
+	private double benefitGain=0;     //new
+	private double utilityGain=0;      //new
+	
+	
 
 	
 	
@@ -305,6 +313,63 @@ public class Node implements Comparable<Node> {
 	{
 		
 		return this.lWeight;
+	}
+	
+	
+	public double getSurvivalTime() {
+		return survivalTime;
+	}
+
+	public void setSurvivalTime(double survivalTime) {
+		this.survivalTime = survivalTime;
+	}
+
+	public double getTotalSojournTime() {
+		return totalSojournTime;
+	}
+
+	public void setTotalSojournTime(double totalSojournTime) {
+		this.totalSojournTime = totalSojournTime;
+	}
+
+	public double getBenefitGain() {
+		return benefitGain;
+	}
+
+	public void setBenefitGain(double benefitGain) {
+		this.benefitGain = benefitGain;
+	}
+
+	public double getUtilityGain() {
+		return utilityGain;
+	}
+
+	public void setUtilityGain(double utilityGain) {
+		this.utilityGain = utilityGain;
+	}
+
+	
+	public double calcSurvivalTime(double movingTime, double eConsumption)
+	{
+		double result=0;
+		double tConsumption=eConsumption*this.tRate;
+		if(tConsumption<NewTourDesign.minEConsumption)
+			tConsumption=NewTourDesign.minEConsumption;
+		result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
+		
+		return result;
+	}
+	
+	
+	public double calcUtilityGain(double sojournTime)
+	{
+		double result=0;
+		double tA=NewTourDesign.utilityA;
+		double tTourTime=NewTourDesign.tourTime;
+		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
+		double tNew=1-Math.pow((1-(this.totalSojournTime+sojournTime)/tTourTime),tA);
+		result=tPrevious-tNew;
+		return result;
 	}
 	
 	
