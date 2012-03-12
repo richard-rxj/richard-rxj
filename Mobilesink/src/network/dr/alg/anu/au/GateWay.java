@@ -525,7 +525,14 @@ public class GateWay implements Comparable<GateWay> {
 			if(gSet.length>0)
 			{
 				GateWay result=(GateWay)gSet[0];
-			
+				this.benefitGain=result.benefitGain;
+				this.unitBenefitGain=result.unitBenefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
 			
 				//update the chosen result
 				if(this.sojournTime<ExperimentSetting.minSojournTime)
@@ -537,14 +544,7 @@ public class GateWay implements Comparable<GateWay> {
 					this.feasible=1;
 				}
 				
-				this.benefitGain=result.benefitGain;
-				this.unitBenefitGain=result.unitBenefitGain;
-				this.sojournTime=result.sojournTime;
-				this.activeNodes.clear();
-				for(int i=0;i<result.activeNodes.size();i++)
-				{
-					this.activeNodes.add(result.activeNodes.get(i));
-				}
+				
 			}
 			else
 			{
@@ -607,7 +607,14 @@ public class GateWay implements Comparable<GateWay> {
 			if(gSet.length>0)
 			{
 				GateWay result=(GateWay)gSet[0];
-			
+				this.benefitGain=result.benefitGain;
+				this.unitBenefitGain=result.unitBenefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
 			
 				//update the chosen result
 				if(this.sojournTime>tTimeLimit)
@@ -625,14 +632,7 @@ public class GateWay implements Comparable<GateWay> {
 						this.feasible=1;
 					}
 				}
-				this.benefitGain=result.benefitGain;
-				this.unitBenefitGain=result.unitBenefitGain;
-				this.sojournTime=result.sojournTime;
-				this.activeNodes.clear();
-				for(int i=0;i<result.activeNodes.size();i++)
-				{
-					this.activeNodes.add(result.activeNodes.get(i));
-				}
+				
 			}
 			else
 			{
@@ -649,6 +649,201 @@ public class GateWay implements Comparable<GateWay> {
 		return this.benefitGain;
 	}
 	
+	
+	
+	public double calcUnitBenefitGain(double lastBackTime, double timeLimit, boolean lastLocation)                   //new
+	{
+		
+		
+		
+		ArrayList<GateWay> resultGateWays =new ArrayList<GateWay>();
+		double tTimeLimit=timeLimit-this.movingTime-this.backTime;     //back to origin spot
+        if(tTimeLimit<=0)
+        {
+        	this.feasible=0;
+        	this.benefitGain=Double.NEGATIVE_INFINITY;
+        	this.unitBenefitGain=Double.NEGATIVE_INFINITY;
+        	this.sojournTime=0;
+        	this.activeNodes.clear();
+        	return this.benefitGain;
+        }
+		
+        if(lastLocation)
+        {
+        		
+			for (int i=0;i<this.neighborNodes.size();i++)
+			{
+				this.neighborNodes.get(i).calcSurvivalTime(this.movingTime,this.eConSet.get(i));
+			}
+			Object[] nSet=this.neighborNodes.toArray();
+			NodeSurvivalTimeComparator nCom=new NodeSurvivalTimeComparator(false);
+			Arrays.sort(nSet, nCom);
+			this.activeNodes.clear();
+			
+			for(int i=0;i<nSet.length;i++)
+			{
+				Node t=(Node)nSet[i];
+				this.activeNodes.add(t);
+				double tSojournTime=t.getSurvivalTime();
+				if(tSojournTime>tTimeLimit)
+				{
+					tSojournTime=tTimeLimit;
+				}
+				
+				
+				double tBenefitGain=0;
+				double tUnitBenefitGain=0;
+				for(int j=0;j<this.activeNodes.size();j++)
+				{
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
+				}
+				
+				
+				this.benefitGain=tBenefitGain;
+				this.sojournTime=tSojournTime;
+				this.unitBenefitGain=this.benefitGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
+	//			if(tSojournTime<=TourDesign.minSojournTime)
+	//			{
+	//				this.benefit=Double.NEGATIVE_INFINITY;
+	//			}
+				
+				
+				GateWay tGateWay=new GateWay(this);
+				resultGateWays.add(tGateWay);			
+			}
+			
+			Object[] gSet=resultGateWays.toArray();
+			GateWayUnitBenefitGainComparator gCom=new GateWayUnitBenefitGainComparator(false);
+			Arrays.sort(gSet,gCom);
+		
+			
+			
+			if(gSet.length>0)
+			{
+				GateWay result=(GateWay)gSet[0];
+				this.benefitGain=result.benefitGain;
+				this.unitBenefitGain=result.unitBenefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
+			
+				//update the chosen result
+				if(this.sojournTime<ExperimentSetting.minSojournTime)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					this.feasible=1;
+				}
+				
+				
+			}
+			else
+			{
+				this.feasible=0;
+	        	this.benefitGain=Double.NEGATIVE_INFINITY;
+	        	this.unitBenefitGain=Double.NEGATIVE_INFINITY;
+	        	this.sojournTime=0;
+	        	this.activeNodes.clear();
+			}
+        }
+        else
+        {
+        	for (int i=0;i<this.neighborNodes.size();i++)
+			{
+				this.neighborNodes.get(i).calcSurvivalTime(this.movingTime,this.eConSet.get(i));
+			}
+			Object[] nSet=this.neighborNodes.toArray();
+			NodeSurvivalTimeComparator nCom=new NodeSurvivalTimeComparator(false);
+			Arrays.sort(nSet, nCom);
+			this.activeNodes.clear();
+			
+			for(int i=0;i<nSet.length;i++)
+			{
+				Node t=(Node)nSet[i];
+				this.activeNodes.add(t);
+				double tSojournTime=t.getSurvivalTime();
+//				if(tSojournTime>tTimeLimit)
+//				{
+//					tSojournTime=tTimeLimit;
+//				}
+				
+				
+				double tBenefitGain=0;
+				double tUnitBenefitGain=0;
+				for(int j=0;j<this.activeNodes.size();j++)
+				{
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
+				}
+				
+				
+				this.benefitGain=tBenefitGain;
+				this.sojournTime=tSojournTime;
+				this.unitBenefitGain=this.benefitGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
+	//			if(tSojournTime<=TourDesign.minSojournTime)
+	//			{
+	//				this.benefit=Double.NEGATIVE_INFINITY;
+	//			}
+				
+				
+				GateWay tGateWay=new GateWay(this);
+				resultGateWays.add(tGateWay);			
+			}
+			
+			Object[] gSet=resultGateWays.toArray();
+			GateWayUnitBenefitGainComparator gCom=new GateWayUnitBenefitGainComparator(false);
+			Arrays.sort(gSet,gCom);
+		
+			
+			
+			if(gSet.length>0)
+			{
+				GateWay result=(GateWay)gSet[0];
+				this.benefitGain=result.benefitGain;
+				this.unitBenefitGain=result.unitBenefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
+			
+				//update the chosen result
+				if(this.sojournTime>tTimeLimit)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					if(this.sojournTime<ExperimentSetting.minSojournTime)
+					{
+						this.feasible=0;
+					}
+					else
+					{
+						this.feasible=1;
+					}
+				}
+				
+			}
+			else
+			{
+				this.feasible=0;
+	        	this.benefitGain=Double.NEGATIVE_INFINITY;
+	        	this.unitBenefitGain=Double.NEGATIVE_INFINITY;
+	        	this.sojournTime=0;
+	        	this.activeNodes.clear();
+			}
+        }
+        
+        
+        
+		return this.benefitGain;
+	}
 	
 	
 	
@@ -693,14 +888,16 @@ public class GateWay implements Comparable<GateWay> {
 				
 				
 				double tUtilityGain=0;
-				double tUnitUtilityGain=0;
+				double tBenefitGain=0;
 				for(int j=0;j<this.activeNodes.size();j++)
 				{
 					tUtilityGain= tUtilityGain+this.activeNodes.get(i).calcUtilityGain(tSojournTime);
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
 				}
 				
 				
 				this.utilityGain=tUtilityGain;
+				this.benefitGain=tBenefitGain;
 				this.sojournTime=tSojournTime;
 				this.unitUtilityGain=this.utilityGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
 	//			if(tSojournTime<=TourDesign.minSojournTime)
@@ -722,7 +919,15 @@ public class GateWay implements Comparable<GateWay> {
 			if(gSet.length>0)
 			{
 				GateWay result=(GateWay)gSet[0];
-			
+				this.utilityGain=result.utilityGain;
+				this.unitUtilityGain=result.unitUtilityGain;
+				this.benefitGain=result.benefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
 			
 				//update the chosen result
 				if(this.sojournTime<ExperimentSetting.minSojournTime)
@@ -735,14 +940,7 @@ public class GateWay implements Comparable<GateWay> {
 				}
 				
 				
-				this.utilityGain=result.utilityGain;
-				this.unitUtilityGain=result.unitUtilityGain;
-				this.sojournTime=result.sojournTime;
-				this.activeNodes.clear();
-				for(int i=0;i<result.activeNodes.size();i++)
-				{
-					this.activeNodes.add(result.activeNodes.get(i));
-				}
+				
 			}
 			else
 			{
@@ -776,14 +974,16 @@ public class GateWay implements Comparable<GateWay> {
 				
 				
 				double tUtilityGain=0;
-				double tUnitUtilityGain=0;
+				double tBenefitGain=0;
 				for(int j=0;j<this.activeNodes.size();j++)
 				{
 					tUtilityGain= tUtilityGain+this.activeNodes.get(i).calcUtilityGain(tSojournTime);
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
 				}
 				
 				
 				this.utilityGain=tUtilityGain;
+				this.benefitGain=tBenefitGain;
 				this.sojournTime=tSojournTime;
 				this.unitUtilityGain=this.utilityGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
 	//			if(tSojournTime<=TourDesign.minSojournTime)
@@ -805,7 +1005,15 @@ public class GateWay implements Comparable<GateWay> {
 			if(gSet.length>0)
 			{
 				GateWay result=(GateWay)gSet[0];
-			
+				this.utilityGain=result.utilityGain;
+				this.unitUtilityGain=result.unitUtilityGain;
+				this.benefitGain=result.benefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
 			
 				//update the chosen result
 				if(this.sojournTime>tTimeLimit)
@@ -827,14 +1035,7 @@ public class GateWay implements Comparable<GateWay> {
 				
 				
 				
-				this.utilityGain=result.utilityGain;
-				this.unitUtilityGain=result.unitUtilityGain;
-				this.sojournTime=result.sojournTime;
-				this.activeNodes.clear();
-				for(int i=0;i<result.activeNodes.size();i++)
-				{
-					this.activeNodes.add(result.activeNodes.get(i));
-				}
+				
 			}
 			else
 			{
@@ -851,7 +1052,210 @@ public class GateWay implements Comparable<GateWay> {
 		return this.utilityGain;
 	}
 	
-	
+	public double calcUnitUtilityGain(double lastBackTime, double timeLimit, boolean lastLocation)                   //new
+	{
+		
+		
+		
+		ArrayList<GateWay> resultGateWays =new ArrayList<GateWay>();
+		double tTimeLimit=timeLimit-this.movingTime-this.backTime;     //back to origin spot
+        if(tTimeLimit<=0)
+        {
+        	this.feasible=0;
+        	this.utilityGain=Double.NEGATIVE_INFINITY;
+        	this.unitUtilityGain=Double.NEGATIVE_INFINITY;
+        	this.sojournTime=0;
+        	this.activeNodes.clear();
+        	return this.utilityGain;
+        }
+		
+        if(lastLocation)
+        {
+        		
+			for (int i=0;i<this.neighborNodes.size();i++)
+			{
+				this.neighborNodes.get(i).calcSurvivalTime(this.movingTime,this.eConSet.get(i));
+			}
+			Object[] nSet=this.neighborNodes.toArray();
+			NodeSurvivalTimeComparator nCom=new NodeSurvivalTimeComparator(false);
+			Arrays.sort(nSet, nCom);
+			this.activeNodes.clear();
+			
+			for(int i=0;i<nSet.length;i++)
+			{
+				Node t=(Node)nSet[i];
+				this.activeNodes.add(t);
+				double tSojournTime=t.getSurvivalTime();
+				if(tSojournTime>tTimeLimit)
+				{
+					tSojournTime=tTimeLimit;
+				}
+				
+				
+				double tUtilityGain=0;
+				double tBenefitGain=0;
+				for(int j=0;j<this.activeNodes.size();j++)
+				{
+					tUtilityGain= tUtilityGain+this.activeNodes.get(i).calcUtilityGain(tSojournTime);
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
+				}
+				
+				
+				this.utilityGain=tUtilityGain;
+				this.benefitGain=tBenefitGain;
+				this.sojournTime=tSojournTime;
+				this.unitUtilityGain=this.utilityGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
+	//			if(tSojournTime<=TourDesign.minSojournTime)
+	//			{
+	//				this.benefit=Double.NEGATIVE_INFINITY;
+	//			}
+				
+				
+				GateWay tGateWay=new GateWay(this);
+				resultGateWays.add(tGateWay);			
+			}
+			
+			Object[] gSet=resultGateWays.toArray();
+			GateWayUnitUtilityGainComparator gCom=new GateWayUnitUtilityGainComparator(false);
+			Arrays.sort(gSet,gCom);
+		
+			
+			
+			if(gSet.length>0)
+			{
+				GateWay result=(GateWay)gSet[0];
+				this.utilityGain=result.utilityGain;
+				this.unitUtilityGain=result.unitUtilityGain;
+				this.benefitGain=result.benefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
+			
+				//update the chosen result
+				if(this.sojournTime<ExperimentSetting.minSojournTime)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					this.feasible=1;
+				}
+				
+				
+				
+			}
+			else
+			{
+				this.feasible=0;
+	        	this.utilityGain=Double.NEGATIVE_INFINITY;
+	        	this.unitUtilityGain=Double.NEGATIVE_INFINITY;
+	        	this.sojournTime=0;
+	        	this.activeNodes.clear();
+			}
+        }
+        else
+        {
+        	for (int i=0;i<this.neighborNodes.size();i++)
+			{
+				this.neighborNodes.get(i).calcSurvivalTime(this.movingTime,this.eConSet.get(i));
+			}
+			Object[] nSet=this.neighborNodes.toArray();
+			NodeSurvivalTimeComparator nCom=new NodeSurvivalTimeComparator(false);
+			Arrays.sort(nSet, nCom);
+			this.activeNodes.clear();
+			
+			for(int i=0;i<nSet.length;i++)
+			{
+				Node t=(Node)nSet[i];
+				this.activeNodes.add(t);
+				double tSojournTime=t.getSurvivalTime();
+//				if(tSojournTime>tTimeLimit)
+//				{
+//					tSojournTime=tTimeLimit;
+//				}
+				
+				
+				double tUtilityGain=0;
+				double tBenefitGain=0;
+				for(int j=0;j<this.activeNodes.size();j++)
+				{
+					tUtilityGain= tUtilityGain+this.activeNodes.get(i).calcUtilityGain(tSojournTime);
+					tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
+				}
+				
+				
+				this.utilityGain=tUtilityGain;
+				this.benefitGain=tBenefitGain;
+				this.sojournTime=tSojournTime;
+				this.unitUtilityGain=this.utilityGain/(this.movingTime+this.sojournTime+this.backTime-lastBackTime);
+	//			if(tSojournTime<=TourDesign.minSojournTime)
+	//			{
+	//				this.benefit=Double.NEGATIVE_INFINITY;
+	//			}
+				
+				
+				GateWay tGateWay=new GateWay(this);
+				resultGateWays.add(tGateWay);			
+			}
+			
+			Object[] gSet=resultGateWays.toArray();
+			GateWayUnitUtilityGainComparator gCom=new GateWayUnitUtilityGainComparator(false);
+			Arrays.sort(gSet,gCom);
+		
+			
+			
+			if(gSet.length>0)
+			{
+				GateWay result=(GateWay)gSet[0];
+				this.utilityGain=result.utilityGain;
+				this.unitUtilityGain=result.unitUtilityGain;
+				this.benefitGain=result.benefitGain;
+				this.sojournTime=result.sojournTime;
+				this.activeNodes.clear();
+				for(int i=0;i<result.activeNodes.size();i++)
+				{
+					this.activeNodes.add(result.activeNodes.get(i));
+				}
+			
+				//update the chosen result
+				if(this.sojournTime>tTimeLimit)
+				{
+					this.feasible=0;
+				}
+				else
+				{
+					if(this.sojournTime<ExperimentSetting.minSojournTime)
+					{
+						this.feasible=0;
+					}
+					else
+					{
+						this.feasible=1;
+					}
+				}
+				
+				
+				
+				
+				
+			}
+			else
+			{
+				this.feasible=0;
+	        	this.utilityGain=Double.NEGATIVE_INFINITY;
+	        	this.unitUtilityGain=Double.NEGATIVE_INFINITY;
+	        	this.sojournTime=0;
+	        	this.activeNodes.clear();
+			}
+        }
+        
+        
+        
+		return this.utilityGain;
+	}
 	
 
 	public String toString() {
