@@ -52,9 +52,9 @@ public class GateWayUnitUtilityGainComparator<V> implements Comparator<V> {
 		double lBenefit2 = 0;
 		
 		try {
-			lBenefit1 = (Double) v1.getClass().getMethod("getUtilityGain")
+			lBenefit1 = (Double) v1.getClass().getMethod("getUnitUtilityGain")
 					.invoke(v1, null);
-			lBenefit2 = (Double) v2.getClass().getMethod("getUtilityGain")
+			lBenefit2 = (Double) v2.getClass().getMethod("getUnitUtilityGain")
 					.invoke(v2, null);
 
 		} catch (IllegalArgumentException e) {

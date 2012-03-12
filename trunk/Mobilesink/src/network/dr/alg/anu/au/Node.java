@@ -369,7 +369,7 @@ public class Node implements Comparable<Node> {
 		double tTourTime=ExperimentSetting.tourTime;
 		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
 		double tNew=1-Math.pow((1-(this.totalSojournTime+sojournTime)/tTourTime),tA);
-		result=tPrevious-tNew;
+		result=tNew-tPrevious;
 		return result;
 	}
 	
