@@ -26,12 +26,12 @@ public class ExperimentSetting {
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
 	public static double mSpeed=2;   // m/s   
 	public static double lossWeight=0.4;  //--------------------------------varible
-	public static double beta=0.000000015; //J/b/m^2    0.0000000006;J/b/m^3     £¡£¡£¡£¡£¡need to reset
+	public static double beta=0.000000015; //J/b/m^2    0.0000000006;J/b/m^3     need to reset
 	public static double eComM=2;
 	public static double minEConsumption=0.002;   //J/s   
 	public static double utilityA=2;
 	public static Random ran=new Random();
-	public static int cishu=1;
+	public static int cishu=15;
 	
 	
 	/**

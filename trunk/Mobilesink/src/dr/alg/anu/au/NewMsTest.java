@@ -41,7 +41,7 @@ public class NewMsTest {
 		int[] networkSizeSet={100,200,300,400,500,600};
 		int[] gatewayLimitSet={50,50,50,50,50,50};
 		int[] transRangeSet={30,30,30,30,30,30};
-		int[] tourTimeSet={100,200,400,800,1600,3200,6400};
+		int[] tourTimeSet={1600,3200,6400};    //100,200,400,800
 	
 			
 
@@ -715,7 +715,7 @@ public class NewMsTest {
 	
 	public static void impactNodeDiff() throws IOException
 	{
-		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] networkSizeSet={100};
 		int[] gatewayLimitSet={50,50,50,50,50,50};
 		int[] transRangeSet={30,30,30,30,30,30};
 		int[] tourTimeSet={100,400,1600};
@@ -1046,7 +1046,7 @@ public class NewMsTest {
 		
 		
 		//NewMsTest.impactPerformance();
-		NewMsTest.impactWeightWithUtilityGain();
+		//NewMsTest.impactWeightWithUtilityGain();
 		NewMsTest.impactNodeDiff();
 		
 	}
