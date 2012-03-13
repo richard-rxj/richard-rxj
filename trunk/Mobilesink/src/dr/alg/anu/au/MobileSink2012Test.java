@@ -26,7 +26,7 @@ import network.dr.alg.anu.au.LabResult;
  * @author user
  *
  */
-public class MobileSinkTest {
+public class MobileSink2012Test {
 
 	/**
 	 * @param args
@@ -622,7 +622,7 @@ public class MobileSinkTest {
 //		{
 //			System.out.println(solution.get(i));
 //		}
-		MobileSinkTest.impactWeightWithLinear();
+		MobileSink2012Test.impactWeightWithLinear();
 		//MobileSinkTest.impactWeightWithFair();
 		//MobileSinkTest.impactTimeWithLinear();
 		//MobileSinkTest.impactTimeWithFair();
