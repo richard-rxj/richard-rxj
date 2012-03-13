@@ -35,12 +35,12 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> randomBenefitGainTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> randomBenefitGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -178,12 +178,12 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> maxBenefitGainTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> maxBenefitGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -315,20 +315,20 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> maxUnitBenefitGainTourDesign(String nFile, String gFile, BiNetwork gNet) throws IOException
+	public static ArrayList<GateWay> maxUnitBenefitGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
 		
-		if(gNet!=null)
-		{
-			gNet=bNet;
-		}
+//		if(gNet!=null)
+//		{
+//			gNet=bNet;
+//		}
 		
 		
 		
@@ -458,12 +458,12 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<Node> maxUnitBenefitGainTourDesignNode(String nFile, String gFile) throws IOException
+	public static ArrayList<Node> maxUnitBenefitGainTourDesignNode(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -599,12 +599,12 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> randomUtilityGainTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> randomUtilityGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -737,12 +737,12 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> maxUtilityGainTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> maxUtilityGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -874,19 +874,19 @@ public class NewTourDesign {
 	}
 	
 	
-	public static ArrayList<GateWay> maxUnitUtilityGainTourDesign(String nFile, String gFile, BiNetwork gNet) throws IOException
+	public static ArrayList<GateWay> maxUnitUtilityGainTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
-		if(gNet!=null)
-		{
-			gNet=bNet;
-		}
+//		if(gNet!=null)
+//		{
+//			gNet=bNet;
+//		}
 		
 		
 		
@@ -1014,12 +1014,12 @@ public class NewTourDesign {
 	}
 	
 	
-	public static ArrayList<Node> maxUnitUtilityGainTourDesignNode(String nFile, String gFile) throws IOException
+	public static ArrayList<Node> maxUnitUtilityGainTourDesignNode(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		

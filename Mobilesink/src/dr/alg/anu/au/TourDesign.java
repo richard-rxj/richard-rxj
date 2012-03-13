@@ -30,12 +30,12 @@ public class TourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> nearestLinearTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> nearestLinearTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -160,12 +160,12 @@ public class TourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> randomLinearTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> randomLinearTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -290,12 +290,12 @@ public class TourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> linearTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> linearTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
@@ -408,12 +408,12 @@ public class TourDesign {
 	}
 	
 	
-	public static ArrayList<GateWay> fairTourDesign(String nFile, String gFile) throws IOException
+	public static ArrayList<GateWay> fairTourDesign(BiNetwork bNet) throws IOException
 	{
 		/*
 		 * initial network topology 
 		 */
-		BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
