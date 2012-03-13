@@ -331,6 +331,12 @@ public class Node implements Comparable<Node> {
 
 	public void setTotalSojournTime(double totalSojournTime) {
 		this.totalSojournTime = totalSojournTime;
+		this.benefitGain=totalSojournTime*this.tRate;
+		double tA=ExperimentSetting.utilityA;
+		double tTourTime=ExperimentSetting.tourTime;
+		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
+		this.utilityGain=tPrevious;
+
 	}
 
 	public double getBenefitGain() {
