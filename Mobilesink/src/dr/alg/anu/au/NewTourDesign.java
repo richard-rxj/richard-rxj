@@ -1181,6 +1181,8 @@ public class NewTourDesign {
 		}
 		activeNodes=tempList.size();
 		
+		result.setTourTime(tourTime);
+		result.setNetworkSize(bNet.getnList().size());
 		result.setActiveNodes(activeNodes);
 		result.setTotalMovingTime(totalMovingTime);
 		result.setTotalSojournTime(totalSojournTime);

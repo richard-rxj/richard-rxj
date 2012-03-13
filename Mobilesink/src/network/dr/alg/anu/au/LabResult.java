@@ -5,20 +5,37 @@ package network.dr.alg.anu.au;
 
 import java.text.DecimalFormat;
 
+import dr.alg.anu.au.ExperimentSetting;
+
 /**
  * @author user
  *
  */
 public class LabResult {
 
+	int networkSize=0;	
 	int activeNodes=0;
+	double tourTime=0;
 	double totalUtility=0;
 	double totalThroughput=0;
 	double totalSojournTime=0;
 	double totalMovingTime=0;
+	double totalThroughputRatio=0;
 	
 	
 	
+	public int getNetworkSize() {
+		return networkSize;
+	}
+
+
+
+	public void setNetworkSize(int networkSize) {
+		this.networkSize = networkSize;
+	}
+
+
+
 	public int getActiveNodes() {
 		return activeNodes;
 	}
@@ -27,6 +44,18 @@ public class LabResult {
 
 	public void setActiveNodes(int activeNodes) {
 		this.activeNodes = activeNodes;
+	}
+
+
+
+	public double getTourTime() {
+		return tourTime;
+	}
+
+
+
+	public void setTourTime(double tourTime) {
+		this.tourTime = tourTime;
 	}
 
 
@@ -51,6 +80,7 @@ public class LabResult {
 
 	public void setTotalThroughput(double totalThroughput) {
 		this.totalThroughput = totalThroughput;
+		this.totalThroughputRatio=this.totalThroughput/(this.tourTime*this.networkSize*ExperimentSetting.gRate);
 	}
 
 
@@ -76,6 +106,12 @@ public class LabResult {
 	public void setTotalMovingTime(double totalMovingTime) {
 		this.totalMovingTime = totalMovingTime;
 	}
+
+
+	public double getTotalThroughputRatio() {
+		return totalThroughputRatio;
+	}
+
 
 
 	public String toString() {

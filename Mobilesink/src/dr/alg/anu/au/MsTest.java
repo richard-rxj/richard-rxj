@@ -27,7 +27,7 @@ import network.dr.alg.anu.au.Node;
  * @author user
  *
  */
-public class NewMobileSinkTest {
+public class MsTest {
 
 	/**
 	 * @param args
@@ -1639,12 +1639,12 @@ public class NewMobileSinkTest {
 //		NewMobileSinkTest.impactPerformance();
 //		NewMobileSinkTest.impactWeightWithUtilityGain();
 		
-		NewMobileSinkTest.impactPerformance50();
+		MsTest.impactPerformance50();
 		ExperimentSetting.gatewayLimit=50;
-		NewMobileSinkTest.impactNodeDiff();	
-		NewMobileSinkTest.impactWeightWithUtilityGain50();
+		MsTest.impactNodeDiff();	
+		MsTest.impactWeightWithUtilityGain50();
 		ExperimentSetting.utilityA=2;
-		NewMobileSinkTest.impactLocation();
+		MsTest.impactLocation();
 	}
 
 }
