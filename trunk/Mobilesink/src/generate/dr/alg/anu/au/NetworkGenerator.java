@@ -141,7 +141,7 @@ public class NetworkGenerator   {
 	
 	
 	
-	public static BiNetwork createFromFile(String nFile, String gFile) throws IOException
+	public static BiNetwork createFromFile(String nFile, String gFile,int gatewayLimit,double transRange) throws IOException
 	{
 		BiNetwork result=new BiNetwork();
 		String tempString=null;
@@ -170,7 +170,7 @@ public class NetworkGenerator   {
 		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
 		
 		int gNum=0;
-		while(gNum<ExperimentSetting.gatewayLimit)
+		while(gNum<gatewayLimit)
 		{
 			gNum++;
 			tempString=gReader.readLine();
@@ -186,7 +186,7 @@ public class NetworkGenerator   {
 				double tX=g.getX()-n.getX();
 				double tY=g.getY()-n.getY();
 				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
-				if(tD<=ExperimentSetting.transmissionRange)
+				if(tD<=transRange)
 				{
 					g.addNeighborNode(n);
 				}
