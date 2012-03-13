@@ -481,15 +481,18 @@ public class NewMsTest {
 	
 	public static void impactWeightWithUtilityGain() throws IOException
 	{
+
+		
+		
+		
 		int[] networkSizeSet={100,200,300,400,500,600};
 		int[] gatewayLimitSet={50,50,50,50,50,50};
 		int[] transRangeSet={30,30,30,30,30,30};
 		int[] tourTimeSet={100,400,1600};
 		int[] weightSet={11,20,40,80,160,320,640,1000};   // 0,5,10,20,40,80,100   divide 100
 		
-		
 			
-		for(int tti=0;tti<tourTimeSet[tti];tti++)
+		for(int tti=0;tti<tourTimeSet.length;tti++)
 		{
 			int tourTime=tourTimeSet[tti];
 			ExperimentSetting.tourTime=tourTime;
