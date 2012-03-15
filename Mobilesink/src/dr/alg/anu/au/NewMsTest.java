@@ -489,7 +489,7 @@ public class NewMsTest {
 		int[] gatewayLimitSet={50,50,50,50,50,50};
 		int[] transRangeSet={30,30,30,30,30,30};
 		int[] tourTimeSet={100,800,3200};
-		int[] weightSet={11,20,80,320,1000,10000};   // 0,5,10,20,40,80,100   divide 100
+		int[] weightSet={11,20,80,160,320,1000,10000};   // 0,5,10,20,40,80,100   divide 100
 		
 			
 		for(int tti=0;tti<tourTimeSet.length;tti++)
@@ -621,6 +621,7 @@ public class NewMsTest {
 					double totalThroughput=0;
 					double totalSojournTime=0;
 					double totalMovingTime=0;
+					double totalVariance=0;
 					for(int k=0;k<resultSet.size();k++)
 					{
 						LabResult tResult=resultSet.get(k);
@@ -628,7 +629,8 @@ public class NewMsTest {
 						totalUtility=totalUtility+tResult.getTotalUtility();
 						totalThroughput=totalThroughput+tResult.getTotalThroughput();
 						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
-						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
 					}
 					gResult.setNetworkSize(networkSize);
 					gResult.setTourTime(ExperimentSetting.tourTime);
@@ -637,6 +639,7 @@ public class NewMsTest {
 					gResult.setTotalThroughput(totalThroughput/resultSet.size());
 					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
 					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
 					
 					pw.println(networkSize+" "+gResult);
 					pw.flush();
@@ -683,6 +686,7 @@ public class NewMsTest {
 					double totalThroughput=0;
 					double totalSojournTime=0;
 					double totalMovingTime=0;
+					double totalVariance=0;
 					for(int k=0;k<resultSet.size();k++)
 					{
 						LabResult tResult=resultSet.get(k);
@@ -690,7 +694,8 @@ public class NewMsTest {
 						totalUtility=totalUtility+tResult.getTotalUtility();
 						totalThroughput=totalThroughput+tResult.getTotalThroughput();
 						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
-						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
 					}
 					gResult.setNetworkSize(networkSize);
 					gResult.setTourTime(ExperimentSetting.tourTime);
@@ -699,6 +704,7 @@ public class NewMsTest {
 					gResult.setTotalThroughput(totalThroughput/resultSet.size());
 					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
 					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
 					
 					pw.println(networkSize+" "+gResult);
 					pw.flush();
@@ -719,7 +725,7 @@ public class NewMsTest {
 		int[] gatewayLimitSet={50,50,50,50,50,50};
 		int[] transRangeSet={30,30,30,30,30,30};
 		int[] tourTimeSet={100,800,3200};
-		int[] weightSet={11,20,80,320,1000,10000};   // 0,5,10,20,40,80,100   divide 100
+		int[] weightSet={11,20,80,160,320,1000,10000};   // 0,5,10,20,40,80,100   divide 100
 
 		
 		for(int tti=0;tti<tourTimeSet.length;tti++)
@@ -1047,7 +1053,7 @@ public class NewMsTest {
 		
 		//NewMsTest.impactPerformance();
 		NewMsTest.impactWeightWithUtilityGain();
-		NewMsTest.impactNodeDiff();
+		//NewMsTest.impactNodeDiff();
 		
 	}
 

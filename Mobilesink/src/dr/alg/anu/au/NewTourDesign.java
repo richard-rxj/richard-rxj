@@ -1188,6 +1188,7 @@ public class NewTourDesign {
 		result.setTotalSojournTime(totalSojournTime);
 		result.setTotalThroughput(totalBenefitGain);
 		result.setTotalUtility(totalUtilityGain);
+		result.setVariance(ExperimentSetting.calcVariance(bNet.getnList()));
 		
 		return result;
 	}
