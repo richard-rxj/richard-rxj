@@ -21,6 +21,7 @@ public class LabResult {
 	double totalSojournTime=0;
 	double totalMovingTime=0;
 	double totalThroughputRatio=0;
+	double variance=0;
 	
 	
 	
@@ -114,10 +115,22 @@ public class LabResult {
 
 
 
+	public double getVariance() {
+		return variance;
+	}
+
+
+
+	public void setVariance(double variance) {
+		this.variance = variance;
+	}
+
+
+
 	public String toString() {
 		DecimalFormat df=new DecimalFormat("#.0000");
 		String result="";
-		result=result+" "+df.format(this.totalThroughputRatio)+" "+df.format(this.totalThroughput)+" "+df.format(this.totalUtility)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime)+" "+Double.toString(activeNodes);
+		result=result+" "+df.format(this.totalThroughputRatio)+" "+df.format(this.totalThroughput)+" "+df.format(this.totalUtility)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime)+" "+df.format(this.variance)+" "+Double.toString(activeNodes);
 		return result;
 	}
 	

@@ -3,7 +3,10 @@
  */
 package dr.alg.anu.au;
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import network.dr.alg.anu.au.Node;
 
 /**
  * @author user
@@ -32,6 +35,24 @@ public class ExperimentSetting {
 	public static double utilityA=2;
 	public static Random ran=new Random();
 	public static int cishu=15;
+	
+	
+	public static double calcVariance(ArrayList<Node> nList)
+	{
+		double mean=0;
+		double variance=0;
+		for(int i=0;i<nList.size();i++)
+		{
+			mean=mean+nList.get(i).getTotalSojournTime();
+		}
+		mean=mean/nList.size();
+		for(int i=0;i<nList.size();i++)
+		{
+			variance=variance+Math.pow((nList.get(i).getTotalSojournTime()-mean), 2);
+		}
+		variance=variance/nList.size();
+		return Math.sqrt(variance);
+	}
 	
 	
 	/**
