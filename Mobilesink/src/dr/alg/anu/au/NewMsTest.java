@@ -1039,6 +1039,496 @@ public class NewMsTest {
 	
 	
 
+	public static void impactLocation() throws IOException
+	{
+
+		
+		
+		
+		int[] networkSizeSet={100,200,300,400,500,600};
+		int[] gatewayLimitSet={50,50,50,50,50,50};       //!!!different style
+		int[] transRangeSet={30,30,30,30,30,30};
+		int[] tourTimeSet={100,800};
+		int[] weightSet={20,40,60,80,100};   // number of sojourn locations
+		
+			
+		for(int tti=0;tti<tourTimeSet.length;tti++)
+		{
+			int tourTime=tourTimeSet[tti];
+			ExperimentSetting.tourTime=tourTime;
+			
+			
+			String tOutputFileName="test/new/ImpactLocation/T"+tourTime+"/";
+			File tf=new File(tOutputFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			
+			
+			
+			String tFileName="test/new/topology/";
+			tf=new File(tFileName);
+			if(!tf.exists())
+			{
+				tf.mkdirs();
+			}
+			
+			
+			for(int i=0;i<weightSet.length;i++)
+			{
+				
+				int tWeight=weightSet[i];			
+				int gatewayLimit=tWeight;
+				
+//				String outputFile=tOutputFileName+"unit-benefit-weight-"+Integer.toString(tWeight)+".txt";
+//				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+//	
+//				
+//				
+//				
+//				for(int j=0;j<networkSizeSet.length;j++)
+//				{
+//					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+//					int networkSize=networkSizeSet[j];
+//					int transRange=transRangeSet[j];
+//					int gatewayLimit=gatewayLimitSet[j];
+//					
+//					for(int k=0;k<ExperimentSetting.cishu;k++)
+//					{
+//						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+//						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+//						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+//						ArrayList<GateWay> solution=NewTourDesign.maxUnitBenefitGainTourDesign(bNet);
+//						
+//						//begin of debug
+//						for(int ti=0;ti<solution.size();ti++)
+//						{
+//								System.out.println(solution.get(ti));
+//						}
+//						System.out.println("!!!!!Completet-Utility-Weight-<Round>"+k+"-<Node>"+networkSize+"-<Weight>"+tWeight);
+//						//end of debug
+//						
+//						
+//						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+//						resultSet.add(tResult);
+//					}
+//					
+//					LabResult gResult=new LabResult();
+//					int activeNodes=0;
+//					double totalUtility=0;
+//					double totalThroughput=0;
+//					double totalSojournTime=0;
+//					double totalMovingTime=0;
+//					for(int k=0;k<resultSet.size();k++)
+//					{
+//						LabResult tResult=resultSet.get(k);
+//						activeNodes=activeNodes+tResult.getActiveNodes();
+//						totalUtility=totalUtility+tResult.getTotalUtility();
+//						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+//						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+//						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+//					}
+//					gResult.setNetworkSize(networkSize);
+//					gResult.setTourTime(ExperimentSetting.tourTime);
+//					gResult.setActiveNodes(activeNodes/resultSet.size());
+//					gResult.setTotalUtility(totalUtility/resultSet.size());
+//					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+//					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+//					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+//					
+//					pw.println(networkSize+" "+gResult);
+//					pw.flush();
+//				}
+//				pw.close();
+				
+				
+				
+				String outputFile=tOutputFileName+"max-utility-location-"+Integer.toString(tWeight)+".txt";
+				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.maxUtilityGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-MaxUtility-Location--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+				
+				
+				outputFile=tOutputFileName+"unit-utility-location-"+Integer.toString(tWeight)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.maxUnitUtilityGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-UnitUtility-Location--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+				outputFile=tOutputFileName+"random-utility-location-"+Integer.toString(tWeight)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.randomUtilityGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-RandomUtility-Locaton--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+				outputFile=tOutputFileName+"random-benefit-location-"+Integer.toString(tWeight)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.randomBenefitGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-RandomBenefit-Locaton--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+				outputFile=tOutputFileName+"max-benefit-location-"+Integer.toString(tWeight)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.maxBenefitGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-maxBenefit-Locaton--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+				
+				outputFile=tOutputFileName+"unit-benefit-location-"+Integer.toString(tWeight)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+	
+				
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					//int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						ArrayList<GateWay> solution=NewTourDesign.maxUnitBenefitGainTourDesign(bNet);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet-UnitBenefit-Locaton--<Round>"+k+"-<Node>"+networkSize+"-<Location>"+tWeight);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					double totalVariance=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();	
+						totalVariance=totalVariance+tResult.getVariance();
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					gResult.setVariance(totalVariance/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+				}
+				pw.close();
+				
+				
+			}
+		}
+	}
+	
 	
 
 
@@ -1052,8 +1542,9 @@ public class NewMsTest {
 		
 		
 		//NewMsTest.impactPerformance();
-		NewMsTest.impactWeightWithUtilityGain();
+		//NewMsTest.impactWeightWithUtilityGain();
 		//NewMsTest.impactNodeDiff();
+		NewMsTest.impactLocation();
 		
 	}
 
