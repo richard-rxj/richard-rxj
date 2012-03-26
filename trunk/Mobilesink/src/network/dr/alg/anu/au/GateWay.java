@@ -28,6 +28,8 @@ public class GateWay implements Comparable<GateWay> {
 	private double utilityGain=0;     //new
 	private double unitUtilityGain=0; //new
 	private int    feasible=0;        // 0-non feasible 1-feasible
+	private double timeStamp=0;
+	private double priorityWeight=0;
 	
 	public GateWay(int id) {
 		this.id = id;
@@ -244,6 +246,26 @@ public class GateWay implements Comparable<GateWay> {
 
 	public void setUnitUtilityGain(double unitUtilityGain) {
 		this.unitUtilityGain = unitUtilityGain;
+	}
+
+
+	public double getTimeStamp() {
+		return timeStamp;
+	}
+
+
+	public void setTimeStamp(double lastVisitTime) {
+		this.timeStamp = lastVisitTime;
+	}
+
+
+	public double getPriorityWeight() {
+		return priorityWeight;
+	}
+
+
+	public void setPriorityWeight(double priorityWeight) {
+		this.priorityWeight = priorityWeight;
 	}
 
 
@@ -1256,6 +1278,26 @@ public class GateWay implements Comparable<GateWay> {
         
 		return this.utilityGain;
 	}
+	
+	
+	public void calcPriorityWeight(double timeLimit)
+	{
+		if(this.movingTime+this.backTime>=timeLimit)
+		{
+			this.feasible=0;
+		}
+		else
+		{
+			this.feasible=1;
+		}
+		this.priorityWeight=0;
+		/*
+		 * detail of calculate the priority weight
+		 */
+		
+		
+	}
+	
 	
 
 	public String toString() {
