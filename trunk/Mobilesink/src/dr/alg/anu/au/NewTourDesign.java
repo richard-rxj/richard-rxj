@@ -71,6 +71,7 @@ public class NewTourDesign {
 				double tX=tSinkX-tGateWay.getX();
 				double tY=tSinkY-tGateWay.getY();
 				double tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setDistance(tD);
 				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
 				
 				tX=ExperimentSetting.initSinkX-tGateWay.getX();
@@ -78,12 +79,30 @@ public class NewTourDesign {
 				tD=Math.sqrt(tX*tX+tY*tY);
 				tGateWay.setBackTime(tD/tSinkSpeed);
 				
+				/*
+				 * first select 
+				 */
+				if(tGateWay.getMovingTime()+tGateWay.getBackTime()>=tTourTime)
+				{
+					tGateWay.setFeasible(0);
+				}
+				else
+				{
+					tGateWay.setFeasible(1);
+				}
 				
+				/*
+				 * distance
+				 */
 				
-				
-				tGateWay.calcPriorityWeight(tTourTime);//calculate priority
 				if(tGateWay.getFeasible()>0)
+				{
 					tGateWaySet.add(tGateWay);
+					tGateWay.calcPriorityWeight(tTourTime);//calculate priority
+				}
+				/*
+				 * 
+				 */
 			}
 			
 						

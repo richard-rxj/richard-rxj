@@ -30,6 +30,7 @@ public class GateWay implements Comparable<GateWay> {
 	private int    feasible=0;        // 0-non feasible 1-feasible
 	private double timeStamp=0;
 	private double priorityWeight=0;
+	private double distance=0;
 	
 	public GateWay(int id) {
 		this.id = id;
@@ -266,6 +267,16 @@ public class GateWay implements Comparable<GateWay> {
 
 	public void setPriorityWeight(double priorityWeight) {
 		this.priorityWeight = priorityWeight;
+	}
+
+
+	public double getDistance() {
+		return distance;
+	}
+
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 
@@ -1282,15 +1293,15 @@ public class GateWay implements Comparable<GateWay> {
 	
 	public void calcPriorityWeight(double timeLimit)
 	{
-		if(this.movingTime+this.backTime>=timeLimit)
-		{
-			this.feasible=0;
-		}
-		else
-		{
-			this.feasible=1;
-		}
-		this.priorityWeight=0;
+//		if(this.movingTime+this.backTime>=timeLimit)
+//		{
+//			this.feasible=0;
+//		}
+//		else
+//		{
+//			this.feasible=1;
+//		}
+//		this.priorityWeight=0;
 		/*
 		 * detail of calculate the priority weight
 		 */
