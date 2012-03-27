@@ -31,9 +31,7 @@ import network.dr.alg.anu.au.Node;
 public class NewTourDesign {
 
 	
-	
-	
-	public static ArrayList<GateWay> distributedMaxBenefitGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniSimilarity, double deltaSimilarity) throws IOException
+	public static ArrayList<GateWay> disNeiSimTimTraMaxBenefitGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniSimilarity, double deltaSimilarity) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -174,7 +172,7 @@ public class NewTourDesign {
 					if(tGateWay.getSimilarity()<tSimilarity)
 					{
 						tGateWaySet.add(tGateWay);
-						tGateWay.calcPriorityWeight(tUsedTime);
+						tGateWay.calcNeiSimTimTraPriorityWeight(tUsedTime);
 					}					
 				}
 				if(tGateWaySet.size()>0)
@@ -190,6 +188,497 @@ public class NewTourDesign {
 			Object[] gSet=tGateWaySet.toArray();
 			GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(false);
 			//GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(true);
+			Arrays.sort(gSet,gCom);
+			GateWay realGateWay=(GateWay)gSet[0];
+			
+			realGateWay.calcBenefitGain(lastBackTime, tTourTime, false);
+			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
+			{
+				realGateWay.calcBenefitGain(lastBackTime,tTourTime, true);   //last sojourn location
+			}
+			realGateWay.setTimeStamp(tUsedTime+realGateWay.getMovingTime()+realGateWay.getSojournTime());
+			
+			GateWay chosenGateWay=new GateWay(realGateWay);
+			
+			solution.add(chosenGateWay);
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
+			tTourTime=tTourTime-tMovingTime-tSojournTime;
+			tUsedTime=tUsedTime+tMovingTime+tSojournTime;
+			lastBackTime=chosenGateWay.getBackTime();
+			
+			
+			/*
+			 * update similar node collection
+			 */
+			previousNodeSet.clear();
+			previousNodeSet.addAll(latestNodeSet);
+			latestNodeSet.clear();
+			latestNodeSet.addAll(chosenGateWay.getActiveNodes());
+			/*
+			 * 
+			 */
+			
+			
+			/*
+			 *  move to chosen sojourn location to collect data
+			 *  then update both mobilesink, and node status
+			 *  including:
+			 *  mobilesink(X,Y)
+			 *  
+			 *  node(rEnergy, rData, hEnergy, and fWeight)  
+			 */
+			tSinkX=chosenGateWay.getX();
+			tSinkY=chosenGateWay.getY();
+			
+			//only update active nodes
+			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
+			{
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
+				double eCom=chosenGateWay.geteConSet().get(i);
+				if(chosenGateWay.getActiveNodes().contains(tNode))
+				{
+					double tDData=tNode.gettRate()*tSojournTime;
+					
+					double tREnergy=tNode.getrEnergy()-tDData*eCom;
+					tNode.setrEnergy(tREnergy);
+					
+					double tTotalSojournTime=tNode.getTotalSojournTime()+tSojournTime;
+					tNode.setTotalSojournTime(tTotalSojournTime);
+				}
+			}
+			
+			//update nodes
+			for(int i=0;i<nodeSet.size();i++)
+			{
+				Node tNode=nodeSet.get(i);
+				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				if(tREnergy>tNode.getcEnergy())
+				{
+					tREnergy=tNode.getcEnergy();
+				}
+				tNode.setrEnergy(tREnergy);
+				
+				
+				
+			}
+			
+			
+			if(tTourTime <=0)
+			{
+				flag=false;
+			}
+			
+		}
+		
+		
+		return solution;
+	}
+	
+	
+	public static ArrayList<GateWay> disTimTraMaxBenefitGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniSimilarity, double deltaSimilarity) throws IOException
+	{
+		/*
+		 * initial network topology 
+		 */
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
+		
+		
+		
+		
+		
+		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		boolean flag=true;
+		double tTourTime=ExperimentSetting.tourTime;
+		//double tLossWeight=TourDesign.lossWeight;
+		double tUsedTime=0;
+		double tMovingTime=0;
+		double tSojournTime=0;
+		
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
+		
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		//double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double lastBackTime=0;
+		
+		
+		ArrayList<Node> latestNodeSet=new ArrayList<Node>();
+		ArrayList<Node> previousNodeSet=new ArrayList<Node>();
+		
+		
+		
+		while(flag)
+		{
+			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
+			ArrayList<GateWay> tDistanceGateWaySet=new ArrayList<GateWay>();
+			ArrayList<Node>    tSimilarNodeSet=new ArrayList<Node>();
+			tSimilarNodeSet.addAll(latestNodeSet);
+			tSimilarNodeSet.removeAll(previousNodeSet);
+			tSimilarNodeSet.addAll(previousNodeSet);
+			
+			for(int i=0;i<gatewaySet.size();i++)
+			{
+				GateWay tGateWay=gatewaySet.get(i);
+				double tX=tSinkX-tGateWay.getX();
+				double tY=tSinkY-tGateWay.getY();
+				double tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setDistance(tD);
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+				
+				tX=ExperimentSetting.initSinkX-tGateWay.getX();
+				tY=ExperimentSetting.initSinkY-tGateWay.getY();
+				tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setBackTime(tD/tSinkSpeed);
+				
+				/*
+				 * first select 
+				 */
+				if(tGateWay.getMovingTime()+tGateWay.getBackTime()>=tTourTime)
+				{
+					tGateWay.setFeasible(0);
+				}
+				else
+				{
+					tGateWay.setFeasible(1);
+				}
+																												
+			}
+			
+			/*
+			 * Step1----distance
+			 */
+			double min=iniMinRange;                    //1.5R
+			double max=iniMaxRange;                      //3R
+			boolean distanceFlag=true;
+			while(distanceFlag)
+			{	
+				for(int i=0;i<gatewaySet.size();i++)
+				{
+					GateWay tGateWay=gatewaySet.get(i);
+					if(tGateWay.getFeasible()>0)
+					{
+						if((tGateWay.getDistance()>=min) && (tGateWay.getDistance()<=max))
+						{
+							tDistanceGateWaySet.add(tGateWay);
+							tGateWay.calcSimilarity(tSimilarNodeSet);//calculate similarity
+						}
+					}
+				}
+				
+				if(tDistanceGateWaySet.size()>0)
+				{
+					distanceFlag=false;
+				}
+			
+				
+				min=min-deltaRange;
+				if(min <0)
+				{
+					min=0;
+				}
+				max=max+deltaRange;
+				double maxRange=Math.sqrt(Math.pow(ExperimentSetting.xRange, 2)+Math.pow(ExperimentSetting.yRange, 2));
+				if(max >maxRange)
+				{
+					max=maxRange;
+				}
+				if((min==0) && (max==maxRange))
+				{
+					distanceFlag=false;
+				}
+				
+			}
+			/*
+			 * 
+			 */
+			
+						
+			if(tDistanceGateWaySet.size()==0)
+			{
+				flag=false;
+				return solution;
+			}
+			
+			
+			/*
+			 * Step 2---node similarity
+			 */
+			boolean similarityFlag=true;
+			double tSimilarity=iniSimilarity;
+			while(similarityFlag)
+			{
+
+				for(int i=0;i<tDistanceGateWaySet.size();i++)
+				{
+					GateWay tGateWay=tDistanceGateWaySet.get(i);
+					if(tGateWay.getSimilarity()<tSimilarity)
+					{
+						tGateWaySet.add(tGateWay);
+						tGateWay.calcTimTraPriorityWeight(tUsedTime);
+					}					
+				}
+				if(tGateWaySet.size()>0)
+				{
+					similarityFlag=false;
+				}
+				tSimilarity=tSimilarity+deltaSimilarity;
+			}
+			/*
+			 * 
+			 */
+			
+			Object[] gSet=tGateWaySet.toArray();
+			GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(false);
+			//GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(true);
+			Arrays.sort(gSet,gCom);
+			GateWay realGateWay=(GateWay)gSet[0];
+			
+			realGateWay.calcBenefitGain(lastBackTime, tTourTime, false);
+			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
+			{
+				realGateWay.calcBenefitGain(lastBackTime,tTourTime, true);   //last sojourn location
+			}
+			realGateWay.setTimeStamp(tUsedTime+realGateWay.getMovingTime()+realGateWay.getSojournTime());
+			
+			GateWay chosenGateWay=new GateWay(realGateWay);
+			
+			solution.add(chosenGateWay);
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
+			tTourTime=tTourTime-tMovingTime-tSojournTime;
+			tUsedTime=tUsedTime+tMovingTime+tSojournTime;
+			lastBackTime=chosenGateWay.getBackTime();
+			
+			
+			/*
+			 * update similar node collection
+			 */
+			previousNodeSet.clear();
+			previousNodeSet.addAll(latestNodeSet);
+			latestNodeSet.clear();
+			latestNodeSet.addAll(chosenGateWay.getActiveNodes());
+			/*
+			 * 
+			 */
+			
+			
+			/*
+			 *  move to chosen sojourn location to collect data
+			 *  then update both mobilesink, and node status
+			 *  including:
+			 *  mobilesink(X,Y)
+			 *  
+			 *  node(rEnergy, rData, hEnergy, and fWeight)  
+			 */
+			tSinkX=chosenGateWay.getX();
+			tSinkY=chosenGateWay.getY();
+			
+			//only update active nodes
+			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
+			{
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
+				double eCom=chosenGateWay.geteConSet().get(i);
+				if(chosenGateWay.getActiveNodes().contains(tNode))
+				{
+					double tDData=tNode.gettRate()*tSojournTime;
+					
+					double tREnergy=tNode.getrEnergy()-tDData*eCom;
+					tNode.setrEnergy(tREnergy);
+					
+					double tTotalSojournTime=tNode.getTotalSojournTime()+tSojournTime;
+					tNode.setTotalSojournTime(tTotalSojournTime);
+				}
+			}
+			
+			//update nodes
+			for(int i=0;i<nodeSet.size();i++)
+			{
+				Node tNode=nodeSet.get(i);
+				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				if(tREnergy>tNode.getcEnergy())
+				{
+					tREnergy=tNode.getcEnergy();
+				}
+				tNode.setrEnergy(tREnergy);
+				
+				
+				
+			}
+			
+			
+			if(tTourTime <=0)
+			{
+				flag=false;
+			}
+			
+		}
+		
+		
+		return solution;
+	}
+	
+	
+	
+	public static ArrayList<GateWay> disTraMaxBenefitGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniSimilarity, double deltaSimilarity) throws IOException
+	{
+		/*
+		 * initial network topology 
+		 */
+		//BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile);
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
+		
+		
+		
+		
+		
+		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		boolean flag=true;
+		double tTourTime=ExperimentSetting.tourTime;
+		//double tLossWeight=TourDesign.lossWeight;
+		double tUsedTime=0;
+		double tMovingTime=0;
+		double tSojournTime=0;
+		
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
+		
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		//double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
+		double lastBackTime=0;
+		
+		
+		ArrayList<Node> latestNodeSet=new ArrayList<Node>();
+		ArrayList<Node> previousNodeSet=new ArrayList<Node>();
+		
+		
+		
+		while(flag)
+		{
+			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
+			ArrayList<GateWay> tDistanceGateWaySet=new ArrayList<GateWay>();
+			ArrayList<Node>    tSimilarNodeSet=new ArrayList<Node>();
+			tSimilarNodeSet.addAll(latestNodeSet);
+			tSimilarNodeSet.removeAll(previousNodeSet);
+			tSimilarNodeSet.addAll(previousNodeSet);
+			
+			for(int i=0;i<gatewaySet.size();i++)
+			{
+				GateWay tGateWay=gatewaySet.get(i);
+				double tX=tSinkX-tGateWay.getX();
+				double tY=tSinkY-tGateWay.getY();
+				double tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setDistance(tD);
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+				
+				tX=ExperimentSetting.initSinkX-tGateWay.getX();
+				tY=ExperimentSetting.initSinkY-tGateWay.getY();
+				tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setBackTime(tD/tSinkSpeed);
+				
+				/*
+				 * first select 
+				 */
+				if(tGateWay.getMovingTime()+tGateWay.getBackTime()>=tTourTime)
+				{
+					tGateWay.setFeasible(0);
+				}
+				else
+				{
+					tGateWay.setFeasible(1);
+				}
+																												
+			}
+			
+			/*
+			 * Step1----distance
+			 */
+			double min=iniMinRange;                    //1.5R
+			double max=iniMaxRange;                      //3R
+			boolean distanceFlag=true;
+			while(distanceFlag)
+			{	
+				for(int i=0;i<gatewaySet.size();i++)
+				{
+					GateWay tGateWay=gatewaySet.get(i);
+					if(tGateWay.getFeasible()>0)
+					{
+						if((tGateWay.getDistance()>=min) && (tGateWay.getDistance()<=max))
+						{
+							tDistanceGateWaySet.add(tGateWay);
+							tGateWay.calcSimilarity(tSimilarNodeSet);//calculate similarity
+						}
+					}
+				}
+				
+				if(tDistanceGateWaySet.size()>0)
+				{
+					distanceFlag=false;
+				}
+			
+				
+				min=min-deltaRange;
+				if(min <0)
+				{
+					min=0;
+				}
+				max=max+deltaRange;
+				double maxRange=Math.sqrt(Math.pow(ExperimentSetting.xRange, 2)+Math.pow(ExperimentSetting.yRange, 2));
+				if(max >maxRange)
+				{
+					max=maxRange;
+				}
+				if((min==0) && (max==maxRange))
+				{
+					distanceFlag=false;
+				}
+				
+			}
+			/*
+			 * 
+			 */
+			
+						
+			if(tDistanceGateWaySet.size()==0)
+			{
+				flag=false;
+				return solution;
+			}
+			
+			
+			/*
+			 * Step 2---node similarity
+			 */
+			boolean similarityFlag=true;
+			double tSimilarity=iniSimilarity;
+			while(similarityFlag)
+			{
+
+				for(int i=0;i<tDistanceGateWaySet.size();i++)
+				{
+					GateWay tGateWay=tDistanceGateWaySet.get(i);
+					if(tGateWay.getSimilarity()<tSimilarity)
+					{
+						tGateWaySet.add(tGateWay);
+						tGateWay.calcTraPriorityWeight(tUsedTime);
+					}					
+				}
+				if(tGateWaySet.size()>0)
+				{
+					similarityFlag=false;
+				}
+				tSimilarity=tSimilarity+deltaSimilarity;
+			}
+			/*
+			 * 
+			 */
+			
+			Object[] gSet=tGateWaySet.toArray();
+			//GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(false);
+			GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(true);
 			Arrays.sort(gSet,gCom);
 			GateWay realGateWay=(GateWay)gSet[0];
 			

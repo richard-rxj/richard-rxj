@@ -39,9 +39,9 @@ public class NewMsTest {
 	public static void impactPerformance() throws IOException
 	{
 		int[] networkSizeSet={100,200,300,400,500,600};
-		int[] gatewayLimitSet={100,100,100,100,100,100};   //50
-		int[] transRangeSet={20,20,20,20,20,20};   //30    20 for distributed
-		int[] tourTimeSet={100,800};    //100,200,400,800,3200,6400
+		int[] gatewayLimitSet={50,50,50,50,50,50};   //50
+		int[] transRangeSet={30,30,30,30,30,30};   //30    20 for distributed
+		int[] tourTimeSet={100,200,400,800,3200};    //100,200,400,800,3200,6400
 	
 			
 
@@ -76,10 +76,19 @@ public class NewMsTest {
 				}
 				
 				
-				String outputFile=tOutputFileName+"dis-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
-				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
-				String outputFile1=tOutputFileName1+"dis-benefitgain-tour.txt";
-				PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
+				String outputFile=null;
+				String outputFile1=null;
+				PrintWriter pw=null;
+				PrintWriter pw1=null;
+				
+				
+				/*
+				 * begin of distributed   section
+				 */
+				outputFile=tOutputFileName+"disNeiSimTimTra-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+				outputFile1=tOutputFileName1+"disNeiSimTimTra-benefitgain-tour.txt";
+				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
 				for(int j=0;j<networkSizeSet.length;j++)
 				{
 					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
@@ -95,13 +104,13 @@ public class NewMsTest {
 						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
 						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
 						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
-						double iniMinRange=1.95*transRange;
-						double iniMaxRange=2.05*transRange;
+						double iniMinRange=1.5*transRange;
+						double iniMaxRange=2.5*transRange;
 						double deltaRange=0.05*transRange;
 						double iniSimilarity=0.05;
 						double deltaSimilarity=0.05;
 						
-						ArrayList<GateWay> solution=NewTourDesign.distributedMaxBenefitGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
+						ArrayList<GateWay> solution=NewTourDesign.disNeiSimTimTraMaxBenefitGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
 						
 						//begin of debug
 						for(int ti=0;ti<solution.size();ti++)
@@ -148,6 +157,155 @@ public class NewMsTest {
 				pw1.close();
 				
 				
+				
+				outputFile=tOutputFileName+"disTimTra-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+				outputFile1=tOutputFileName1+"disTimTra-benefitgain-tour.txt";
+				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+											
+						
+						
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						double iniMinRange=1.5*transRange;
+						double iniMaxRange=2.5*transRange;
+						double deltaRange=0.05*transRange;
+						double iniSimilarity=0.05;
+						double deltaSimilarity=0.05;
+						
+						ArrayList<GateWay> solution=NewTourDesign.disTimTraMaxBenefitGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet--DisBenefitGain--<Round>"+k+"-<Node>"+networkSize);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+					pw1.println(networkSize+" "+gResult);
+					pw1.flush();
+				}
+				pw.close();
+				pw1.close();
+				
+				
+				
+				outputFile=tOutputFileName+"disTra-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+				outputFile1=tOutputFileName1+"disTra-benefitgain-tour.txt";
+				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)
+					{
+											
+						
+						
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						double iniMinRange=1.5*transRange;
+						double iniMaxRange=2.5*transRange;
+						double deltaRange=0.05*transRange;
+						double iniSimilarity=0.05;
+						double deltaSimilarity=0.05;
+						
+						ArrayList<GateWay> solution=NewTourDesign.disTraMaxBenefitGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
+						
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("!!!!!Completet--DisBenefitGain--<Round>"+k+"-<Node>"+networkSize);
+						//end of debug
+						
+						
+						LabResult tResult=NewTourDesign.getSimInfo(solution, bNet, ExperimentSetting.tourTime);
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalThroughput=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalThroughput=totalThroughput+tResult.getTotalThroughput();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setActiveNodes(activeNodes/resultSet.size());
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalThroughput(totalThroughput/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+					pw1.println(networkSize+" "+gResult);
+					pw1.flush();
+				}
+				pw.close();
+				pw1.close();
+				
+				
+				/*
+				 * end of distributed section
+				 */
 				
 				
 				outputFile=tOutputFileName+"max-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
