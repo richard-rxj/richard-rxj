@@ -189,6 +189,7 @@ public class NewTourDesign {
 			
 			Object[] gSet=tGateWaySet.toArray();
 			GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(false);
+			//GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(true);
 			Arrays.sort(gSet,gCom);
 			GateWay realGateWay=(GateWay)gSet[0];
 			
