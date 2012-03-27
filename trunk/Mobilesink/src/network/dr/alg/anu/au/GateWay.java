@@ -1309,19 +1309,28 @@ public class GateWay implements Comparable<GateWay> {
 	}
 	
 	
-	public void calcPriorityWeight(double tUsedTime)
+	public void calcNeiSimTimTraPriorityWeight(double tUsedTime)
 	{
 
-//		this.priorityWeight=0;
-		/*
-		 * detail of calculate the priority weight
-		 */
-		//this.priorityWeight=tUsedTime-this.timeStamp-this.movingTime-this.backTime;
+
 		this.priorityWeight=(1-this.similarity)*(tUsedTime-this.timeStamp-this.movingTime-this.backTime)*this.neighborNodes.size();
-		//this.priorityWeight=this.movingTime+this.backTime;
+
 	}
 	
+	public void calcTimTraPriorityWeight(double tUsedTime)
+	{
+
+
+		this.priorityWeight=tUsedTime-this.timeStamp-this.movingTime-this.backTime;
+		
+	}
 	
+	public void calcTraPriorityWeight(double tUsedTime)
+	{
+
+		
+		this.priorityWeight=this.movingTime+this.backTime;
+	}
 	
 	
 
