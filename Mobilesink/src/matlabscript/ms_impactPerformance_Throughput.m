@@ -1,8 +1,8 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance\T1600;
+cd D:\PhDWork\Jspace\Mobilesink\test\dis\ImpactPerformance\T800;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
-    C = load('unit-benefitgain-tour.txt');
+    C = load('dis-benefitgain-tour.txt');
     N = C(:,1);
     [m,n]=size(N);
     RB = C(:,2);
@@ -52,4 +52,15 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance\T1600;
     %v='pratio';
     %saveas(gcf,v,'eps');
     
-
+% fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\performance-throughput-T100.txt','w');%写入文件路径
+% [m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
+% for i=1:1:m
+%   for j=1:1:n
+%      if j==n %如果一行的个数达到n个则换行，否则空格
+%         fprintf(fid,'%6.6f\n',E(i,j));
+%     else
+%        fprintf(fid,'%6.6f\t',E(i,j));
+%     end
+%   end
+% end
+%   fclose(fid); 
