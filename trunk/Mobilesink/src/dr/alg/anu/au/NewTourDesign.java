@@ -33,7 +33,7 @@ public class NewTourDesign {
 	
 	
 	
-	public static ArrayList<GateWay> distributedMaxBenefitGainTourDesign(BiNetwork bNet) throws IOException
+	public static ArrayList<GateWay> distributedMaxBenefitGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniSimilarity, double deltaSimilarity) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -62,9 +62,20 @@ public class NewTourDesign {
 		double lastBackTime=0;
 		
 		
+		ArrayList<Node> latestNodeSet=new ArrayList<Node>();
+		ArrayList<Node> previousNodeSet=new ArrayList<Node>();
+		
+		
+		
 		while(flag)
 		{
 			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
+			ArrayList<GateWay> tDistanceGateWaySet=new ArrayList<GateWay>();
+			ArrayList<Node>    tSimilarNodeSet=new ArrayList<Node>();
+			tSimilarNodeSet.addAll(latestNodeSet);
+			tSimilarNodeSet.removeAll(previousNodeSet);
+			tSimilarNodeSet.addAll(previousNodeSet);
+			
 			for(int i=0;i<gatewaySet.size();i++)
 			{
 				GateWay tGateWay=gatewaySet.get(i);
@@ -90,27 +101,90 @@ public class NewTourDesign {
 				{
 					tGateWay.setFeasible(1);
 				}
-				
-				/*
-				 * distance
-				 */
-				
-				if(tGateWay.getFeasible()>0)
-				{
-					tGateWaySet.add(tGateWay);
-					tGateWay.calcPriorityWeight(tTourTime);//calculate priority
-				}
-				/*
-				 * 
-				 */
+																												
 			}
 			
+			/*
+			 * Step1----distance
+			 */
+			double min=iniMinRange;                    //1.5R
+			double max=iniMaxRange;                      //3R
+			boolean distanceFlag=true;
+			while(distanceFlag)
+			{	
+				for(int i=0;i<gatewaySet.size();i++)
+				{
+					GateWay tGateWay=gatewaySet.get(i);
+					if(tGateWay.getFeasible()>0)
+					{
+						if((tGateWay.getDistance()>=min) && (tGateWay.getDistance()<=max))
+						{
+							tDistanceGateWaySet.add(tGateWay);
+							tGateWay.calcSimilarity(tSimilarNodeSet);//calculate similarity
+						}
+					}
+				}
+				
+				if(tDistanceGateWaySet.size()>0)
+				{
+					distanceFlag=false;
+				}
+			
+				
+				min=min-deltaRange;
+				if(min <0)
+				{
+					min=0;
+				}
+				max=max+deltaRange;
+				double maxRange=Math.sqrt(Math.pow(ExperimentSetting.xRange, 2)+Math.pow(ExperimentSetting.yRange, 2));
+				if(max >maxRange)
+				{
+					max=maxRange;
+				}
+				if((min==0) && (max==maxRange))
+				{
+					distanceFlag=false;
+				}
+				
+			}
+			/*
+			 * 
+			 */
+			
 						
-			if(tGateWaySet.size()==0)
+			if(tDistanceGateWaySet.size()==0)
 			{
 				flag=false;
 				return solution;
 			}
+			
+			
+			/*
+			 * Step 2---node similarity
+			 */
+			boolean similarityFlag=true;
+			while(similarityFlag)
+			{
+				double tSimilarity=iniSimilarity;
+				for(int i=0;i<tDistanceGateWaySet.size();i++)
+				{
+					GateWay tGateWay=tDistanceGateWaySet.get(i);
+					if(tGateWay.getSimilarity()<tSimilarity)
+					{
+						tGateWaySet.add(tGateWay);
+						tGateWay.calcPriorityWeight(tUsedTime);
+					}					
+				}
+				if(tGateWaySet.size()>0)
+				{
+					similarityFlag=false;
+				}
+				tSimilarity=tSimilarity+deltaSimilarity;
+			}
+			/*
+			 * 
+			 */
 			
 			Object[] gSet=tGateWaySet.toArray();
 			GateWayPriorityWeightComparator gCom=new GateWayPriorityWeightComparator(false);
@@ -132,6 +206,18 @@ public class NewTourDesign {
 			tTourTime=tTourTime-tMovingTime-tSojournTime;
 			tUsedTime=tUsedTime+tMovingTime+tSojournTime;
 			lastBackTime=chosenGateWay.getBackTime();
+			
+			
+			/*
+			 * update similar node collection
+			 */
+			previousNodeSet.clear();
+			previousNodeSet.addAll(latestNodeSet);
+			latestNodeSet.clear();
+			latestNodeSet.addAll(chosenGateWay.getActiveNodes());
+			/*
+			 * 
+			 */
 			
 			
 			/*

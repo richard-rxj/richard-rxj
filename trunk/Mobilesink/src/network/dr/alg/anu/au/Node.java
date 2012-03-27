@@ -388,4 +388,41 @@ public class Node implements Comparable<Node> {
 			return false;
 	}
 
+	
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ArrayList<Node> l1=new ArrayList<Node>();
+		ArrayList<Node> l2=new ArrayList<Node>();
+		ArrayList<Node> l3=new ArrayList<Node>();
+		
+		Node n1=new Node(1);
+		Node n2=new Node(2);
+		Node n3=new Node(3);
+		Node n4=new Node(4);
+		Node n5=new Node(5);
+		Node n6=new Node(6);
+		
+		l1.add(n1);
+		l1.add(n2);
+		l1.add(n3);
+		
+		l2.add(n3);
+		l2.add(n4);
+		l2.add(n5);
+		//l2.retainAll(l1);
+	
+		System.out.println(l2);
+		//l2.removeAll(l2);
+		l3.addAll(l2);
+		System.out.println(l3);
+		//l3.removeAll(l2);
+		//l3.addAll(l2);
+		l2.clear();
+		System.out.println(l2);
+		System.out.println(l3);
+	}
 }

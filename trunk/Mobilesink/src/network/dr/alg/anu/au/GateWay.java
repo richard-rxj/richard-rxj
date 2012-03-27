@@ -31,6 +31,7 @@ public class GateWay implements Comparable<GateWay> {
 	private double timeStamp=0;
 	private double priorityWeight=0;
 	private double distance=0;
+	private double similarity=0;
 	
 	public GateWay(int id) {
 		this.id = id;
@@ -277,6 +278,11 @@ public class GateWay implements Comparable<GateWay> {
 
 	public void setDistance(double distance) {
 		this.distance = distance;
+	}
+
+
+	public double getSimilarity() {
+		return similarity;
 	}
 
 
@@ -1291,23 +1297,30 @@ public class GateWay implements Comparable<GateWay> {
 	}
 	
 	
-	public void calcPriorityWeight(double timeLimit)
+	/*
+	 * used for distributed
+	 */
+	public void calcSimilarity(ArrayList<Node> tList)
 	{
-//		if(this.movingTime+this.backTime>=timeLimit)
-//		{
-//			this.feasible=0;
-//		}
-//		else
-//		{
-//			this.feasible=1;
-//		}
+		ArrayList<Node> l1=new ArrayList<Node>();
+		l1.addAll(this.neighborNodes);
+		l1.retainAll(tList);
+		this.similarity=l1.size()*1.0/this.neighborNodes.size();
+	}
+	
+	
+	public void calcPriorityWeight(double tUsedTime)
+	{
+
 //		this.priorityWeight=0;
 		/*
 		 * detail of calculate the priority weight
 		 */
-		
+		this.priorityWeight=tUsedTime-this.timeStamp-this.movingTime-this.backTime;
 		
 	}
+	
+	
 	
 	
 
