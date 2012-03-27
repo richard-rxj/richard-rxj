@@ -164,9 +164,10 @@ public class NewTourDesign {
 			 * Step 2---node similarity
 			 */
 			boolean similarityFlag=true;
+			double tSimilarity=iniSimilarity;
 			while(similarityFlag)
 			{
-				double tSimilarity=iniSimilarity;
+
 				for(int i=0;i<tDistanceGateWaySet.size();i++)
 				{
 					GateWay tGateWay=tDistanceGateWaySet.get(i);
