@@ -1309,6 +1309,17 @@ public class GateWay implements Comparable<GateWay> {
 	}
 	
 	
+	public void calcOnePriorityWeight(double tUsedTime, double tDistance, double tMaxTraTime, double tMinTraTime)
+	{
+
+		double tD=Math.abs(this.distance-tDistance)/this.distance;
+		double tT=(this.movingTime+this.backTime-tMinTraTime)/(tMaxTraTime-tMinTraTime);
+		double tS=this.similarity;
+		this.priorityWeight=tD+tT+tS;
+
+	}
+	
+	
 	public void calcNeiSimTimTraPriorityWeight(double tUsedTime)
 	{
 

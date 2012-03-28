@@ -21,8 +21,8 @@ public class ExperimentSetting {
 	public static double minLeftTime=0.001;
 	public static double xRange=100;
 	public static double yRange=100;
-	public static double initSinkX=0;   //50    0 for distributed
-	public static double initSinkY=0;   //50    0 for distributed
+	public static double initSinkX=50;   //50    0 for distributed
+	public static double initSinkY=50;   //50    0 for distributed
 	public static double gRate= 1000; //  bps
 	public static double tRate= 1000; //  bps    old 20000
 	public static double tourTime=100;  //  s    -----------------------varible
