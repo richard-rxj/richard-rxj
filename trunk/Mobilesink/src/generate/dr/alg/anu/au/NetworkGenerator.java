@@ -78,7 +78,7 @@ public class NetworkGenerator   {
 	
 	
 	
-	public static BiNetwork firstInitialFromFile(String nFile, String gFile) throws IOException
+	public static BiNetwork firstInitialFromFile(String nFile, String gFile, int gatewayLimit, double transRange) throws IOException
 	{
 		BiNetwork result=new BiNetwork();
 		String tempString=null;
@@ -106,7 +106,7 @@ public class NetworkGenerator   {
 		BufferedReader gReader=new BufferedReader(new InputStreamReader(new FileInputStream(gFile)));
 		
 		int ttt=0;
-		while(ttt<ExperimentSetting.gatewayLimit)
+		while(ttt<gatewayLimit)
 		{
 			ttt++;
 			nnn++;
@@ -123,7 +123,7 @@ public class NetworkGenerator   {
 				double tX=g.getX()-n.getX();
 				double tY=g.getY()-n.getY();
 				double tD=Math.sqrt(Math.pow(tX, 2)+Math.pow(tY, 2));
-				if(tD<=ExperimentSetting.transmissionRange)
+				if(tD<=transRange)
 				{
 					g.addNeighborNode(n);
 				}
@@ -205,9 +205,10 @@ public class NetworkGenerator   {
 	
 	public static void main(String[] args) throws IOException
 	{
-		int[] networkSizeSet={100,200,300,400,500,600};
-		int[] transRangeSet={23,16,14,12,10,10};
-		int cishu=15;
+		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000,2000};
+		int[] gatewayLimitSet={50,50,50,50,50,50,50,50,50,50,50};  
+		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};
+		int cishu=20;
 		
 		
 		String tFileName="test/new/topology/";
@@ -219,22 +220,21 @@ public class NetworkGenerator   {
 		
 		for(int i=0;i<networkSizeSet.length;i++)
 		{
-			int networkSize=networkSizeSet[i];
-			ExperimentSetting.gatewayLimit=networkSize;
-			ExperimentSetting.transmissionRange=transRangeSet[i];
+			int tnetworkSize=networkSizeSet[i];
+			int tgatewayLimit=tnetworkSize;
+			double ttransRange=transRangeSet[i];
 			for(int j=0;j<cishu;j++)
 			{
 				tFileName="test/new/topology/";
-				String nFile=tFileName+"node-"+networkSize+"-"+j+".txt";
-				String gFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
+				String nFile=tFileName+"node-"+tnetworkSize+"-"+j+".txt";
+				String gFile=tFileName+"gateway-"+tnetworkSize+"-"+j+".txt";
 				tFileName="test/originTopology/";
-				String nOriginFile=tFileName+"node-"+networkSize+"-"+j+".txt";
-				String gOriginFile=tFileName+"gateway-"+networkSize+"-"+j+".txt";
-				BiNetwork bNet=NetworkGenerator.firstInitialFromFile(nOriginFile, gOriginFile);
+				String nOriginFile=tFileName+"node-"+tnetworkSize+"-"+j+".txt";
+				String gOriginFile=tFileName+"gateway-"+tnetworkSize+"-"+j+".txt";
+				BiNetwork bNet=NetworkGenerator.firstInitialFromFile(nOriginFile, gOriginFile,tgatewayLimit,ttransRange);
 				bNet.saveToFile(nFile, gFile);
 			}
 		}
-		
 	}
 	
 	

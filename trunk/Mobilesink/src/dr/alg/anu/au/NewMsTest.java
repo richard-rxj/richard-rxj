@@ -38,10 +38,10 @@ public class NewMsTest {
 	
 	public static void impactPerformance() throws IOException
 	{
-		int[] networkSizeSet={100,200,300,400,500,600};
-		int[] gatewayLimitSet={50,50,50,50,50,50};   //50
-		int[] transRangeSet={20,20,20,20,20,20};   //30    20 for distributed
-		int[] tourTimeSet={100,200,400,800,3200};    //100,200,400,800,3200,6400
+		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000,2000};
+		int[] gatewayLimitSet={50,50,50,50,50,50,50,50,50,50,50};   //50
+		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};   //30    20 for distributed
+		int[] tourTimeSet={100,200,400,800,3200,6400};    //100,200,400,800,3200,6400
 	
 			
 
@@ -303,9 +303,9 @@ public class NewMsTest {
 				pw1.close();
 				
 				
-				outputFile=tOutputFileName+"disOne-benefitgain-tour-T"+Integer.toString(tTourTime)+".txt";
+				outputFile=tOutputFileName+"disTra-utilitygain-tour-T"+Integer.toString(tTourTime)+".txt";
 				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
-				outputFile1=tOutputFileName1+"disOne-benefitgain-tour.txt";
+				outputFile1=tOutputFileName1+"disTra-utilitygain-tour.txt";
 				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
 				for(int j=0;j<networkSizeSet.length;j++)
 				{
@@ -323,19 +323,19 @@ public class NewMsTest {
 						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
 						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
 						double iniMinRange=1.75*transRange;
-						double iniMaxRange=2*transRange;
+						double iniMaxRange=2.25*transRange;
 						double deltaRange=0.05*transRange;
 						double iniSimilarity=0.1;
 						double deltaSimilarity=0.1;
 						
-						ArrayList<GateWay> solution=NewTourDesign.disOneMaxBenefitGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
+						ArrayList<GateWay> solution=NewTourDesign.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniSimilarity, deltaSimilarity);
 						
 						//begin of debug
 						for(int ti=0;ti<solution.size();ti++)
 						{
 								System.out.println(solution.get(ti));
 						}
-						System.out.println("!!!!!Completet--DisBenefitGain--<Round>"+k+"-<Node>"+networkSize);
+						System.out.println("!!!!!Completet--DisUtilityGain--<Round>"+k+"-<Node>"+networkSize);
 						//end of debug
 						
 						

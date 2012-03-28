@@ -1,5 +1,9 @@
 package network.dr.alg.anu.au;
 
+import generate.dr.alg.anu.au.NetworkGenerator;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1357,10 +1361,11 @@ public class GateWay implements Comparable<GateWay> {
 	
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		System.out.println("test");
 	}
 
 }
