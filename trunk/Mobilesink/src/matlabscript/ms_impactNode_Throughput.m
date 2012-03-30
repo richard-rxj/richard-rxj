@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactDiff50-11;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactWeight\ImpactDiff-T100-A320;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
@@ -12,15 +12,15 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactDiff50-11;
     
     
     %subplot(2,1,1);
-    C = load('unit-benefit-size-100.txt');
+    C = load('unit-utility-size-100.txt');
     N = C(:,1);
     [m,n]=size(N);
     RB = C(:,2);
     %subplot(1,2,1);
     %plot(N,CB,'-*r',N,WB,':pb');
-    h=bar(N,RB,'b');
+    h=bar(N,RB,0.4,'b');
     %title 'Min\_Benefit\_Cost';
-    axis([0 100 0 45000]);
+    axis([0 100 0 10]);
     
     
 %     subplot(2,1,2);
@@ -36,9 +36,9 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactDiff50-11;
   
     %set(gca,'XTickLabel',{'0' '0.1' '0.2' '0.3' '0.4' '0.5' '0.6' '0.7' '0.8' '0.9' '1'});
    
-    xlabel('Node Id');
+    xlabel('Node Number');
     %ylabel('total flow per second(byte)');
-    ylabel('Throughput');
+    ylabel('Accumulative Time');
     %title('Flow Comparison');
     
     set(gca,'fontsize',16,'fontname','Times');

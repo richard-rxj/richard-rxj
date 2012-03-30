@@ -1,8 +1,8 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactLocation\T800;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
-    C = load('random-benefitgain-tour-T100.txt');
+    C = load('max-benefit-location-20.txt');
     N = C(:,1);
     E(:,1)=N;
     [m,n]=size(N);
@@ -22,14 +22,14 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     
     hold on;
     
-%     C = load('unit-benefitgain-tour-T100.txt');
+%     C = load('max-benefitgain-tour-T100.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-ok');
     
 %     C = load('linear-weight-10.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-+g');
-    C = load('random-benefitgain-tour-T200.txt');
+    C = load('max-benefit-location-40.txt');
     RB = C(:,2);
     E(:,3)=RB;
     h=plot(N,RB,'-om');
@@ -40,7 +40,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 
 
     
-    C = load('random-benefitgain-tour-T400.txt');
+    C = load('max-benefit-location-60.txt');
     RB = C(:,2);
     E(:,4)=RB;
     h=plot(N,RB,'-pb');
@@ -49,7 +49,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 %     RB = C(:,2);
 %     plot(N,RB,'-pr');
     
-    C = load('random-benefitgain-tour-T800.txt');
+    C = load('max-benefit-location-80.txt');
     RB = C(:,2);
     E(:,5)=RB;
     h=plot(N,RB,'-sk');
@@ -58,28 +58,29 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 %     RB = C(:,2);
 %     plot(N,RB,'-sr');
     
-    C = load('random-benefitgain-tour-T3200.txt');
+    C = load('max-benefit-location-100.txt');
     RB = C(:,2);
-    
+    E(:,6)=RB;
     h=plot(N,RB,'-^m');
     set(h,'MarkerSize',12);
 %      C = load('linear-weight-70.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-<b');
     
-    C = load('random-benefitgain-tour-T6400.txt');
-    RB = C(:,2);
-    h=plot(N,RB,'-xm');
-    set(h,'Color',[0.3 0.3 0.025],'MarkerEdgeColor',[0.3 0.3 0.025],'MarkerSize',12);
+%     C = load('max-benefitgain-tour-T6400.txt');
+%     RB = C(:,2);
+%     E(:,7)=RB;
+%     h=plot(N,RB,'-xm');
+%     set(h,'Color',[0.3 0.3 0.025],'MarkerEdgeColor',[0.3 0.3 0.025],'MarkerSize',12);
     
     
 %     C = load('linear-weight-90.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-xr');
     
-     axis([100,600,0,0.2]);  
+     axis([100,600,0,0.1]);  
     
-    legend('T = 100','T = 200','T = 400','T = 800','T = 3200','T = 6400',2);
+    legend('|S| = 20','|S| = 40','|S| = 60','|S| = 80','|S| = 100',2);
 
 %     legend('\lambda =0','\lambda =0.05','\lambda =0.1','\lambda =0.2','\lambda =0.3','\lambda =0.4','\lambda =0.5','\lambda =0.6','\lambda =0.7','\lambda =0.8','\lambda =0.9','\lambda =1',2);
     %
@@ -102,16 +103,16 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     %saveas(gcf,v,'eps');
     
     
-      fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\time-throughput-random.txt','w');%写入文件路径
-[m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
-for i=1:1:m
-  for j=1:1:n
-     if j==n %如果一行的个数达到n个则换行，否则空格
-        fprintf(fid,'%6.6f\n',E(i,j));
-    else
-       fprintf(fid,'%6.6f\t',E(i,j));
-    end
-  end
-end
-  fclose(fid); 
+%       fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\location-throughput-max.txt','w');%写入文件路径
+% [m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
+% for i=1:1:m
+%   for j=1:1:n
+%      if j==n %如果一行的个数达到n个则换行，否则空格
+%         fprintf(fid,'%6.6f\n',E(i,j));
+%     else
+%        fprintf(fid,'%6.6f\t',E(i,j));
+%     end
+%   end
+% end
+%   fclose(fid); 
 

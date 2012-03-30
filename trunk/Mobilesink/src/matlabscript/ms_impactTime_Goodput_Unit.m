@@ -2,11 +2,11 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
-    C = load('random-benefitgain-tour-T100.txt');
+    C = load('unit-utilitygain-tour-T100.txt');
     N = C(:,1);
     E(:,1)=N;
     [m,n]=size(N);
-    RB = C(:,2);
+    RB = C(:,4);
     E(:,2)=RB;
     %subplot(1,2,1);
     %plot(N,CB,'-*r',N,WB,':pb');
@@ -22,15 +22,15 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     
     hold on;
     
-%     C = load('unit-benefitgain-tour-T100.txt');
+%     C = load('unit-utilitygain-tour-T100.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-ok');
     
 %     C = load('linear-weight-10.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-+g');
-    C = load('random-benefitgain-tour-T200.txt');
-    RB = C(:,2);
+    C = load('unit-utilitygain-tour-T200.txt');
+    RB = C(:,4);
     E(:,3)=RB;
     h=plot(N,RB,'-om');
     set(h,'Color',[0.113 0.020 0.025],'MarkerEdgeColor',[0.113 0.020 0.025],'MarkerSize',12);
@@ -40,8 +40,8 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 
 
     
-    C = load('random-benefitgain-tour-T400.txt');
-    RB = C(:,2);
+    C = load('unit-utilitygain-tour-T400.txt');
+    RB = C(:,4);
     E(:,4)=RB;
     h=plot(N,RB,'-pb');
     set(h,'MarkerSize',12);
@@ -49,8 +49,8 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 %     RB = C(:,2);
 %     plot(N,RB,'-pr');
     
-    C = load('random-benefitgain-tour-T800.txt');
-    RB = C(:,2);
+    C = load('unit-utilitygain-tour-T800.txt');
+    RB = C(:,4);
     E(:,5)=RB;
     h=plot(N,RB,'-sk');
     set(h,'MarkerSize',12);
@@ -58,17 +58,18 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 %     RB = C(:,2);
 %     plot(N,RB,'-sr');
     
-    C = load('random-benefitgain-tour-T3200.txt');
-    RB = C(:,2);
-    
+    C = load('unit-utilitygain-tour-T3200.txt');
+    RB = C(:,4);
+    E(:,6)=RB;
     h=plot(N,RB,'-^m');
     set(h,'MarkerSize',12);
 %      C = load('linear-weight-70.txt');
 %     RB = C(:,2);
 %     plot(N,RB,'-<b');
     
-    C = load('random-benefitgain-tour-T6400.txt');
-    RB = C(:,2);
+    C = load('unit-utilitygain-tour-T6400.txt');
+    RB = C(:,4);
+    E(:,7)=RB;
     h=plot(N,RB,'-xm');
     set(h,'Color',[0.3 0.3 0.025],'MarkerEdgeColor',[0.3 0.3 0.025],'MarkerSize',12);
     
@@ -77,7 +78,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
 %     RB = C(:,2);
 %     plot(N,RB,'-xr');
     
-     axis([100,600,0,0.2]);  
+    % axis([100,600,0,0.2]);  
     
     legend('T = 100','T = 200','T = 400','T = 800','T = 3200','T = 6400',2);
 
@@ -102,7 +103,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     %saveas(gcf,v,'eps');
     
     
-      fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\time-throughput-random.txt','w');%写入文件路径
+      fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\time-goodput-unit.txt','w');%写入文件路径
 [m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
 for i=1:1:m
   for j=1:1:n
