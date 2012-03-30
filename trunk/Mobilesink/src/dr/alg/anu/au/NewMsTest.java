@@ -1195,7 +1195,7 @@ public class NewMsTest {
 				
 				ExperimentSetting.utilityA=tWeight/10;
 				
-				String tOutputFileName="test/new/ImpartWeight/ImpactDiff-T"+tourTime+"-A"+tWeight+"/";
+				String tOutputFileName="test/new/ImpactWeight/ImpactDiff-T"+tourTime+"-A"+tWeight+"/";
 				File tf=new File(tOutputFileName);
 				if(!tf.exists())
 				{
@@ -2347,9 +2347,9 @@ public class NewMsTest {
 	public static void main(String[] args) throws IOException {
 		
 		
-		NewMsTest.impactPerformance();
-		//NewMsTest.impactWeightWithUtilityGain();
-		//NewMsTest.impactNodeDiff();
+		//NewMsTest.impactPerformance();
+		NewMsTest.impactWeightWithUtilityGain();
+		NewMsTest.impactNodeDiff();
 		//NewMsTest.impactLocation();
 
 		
