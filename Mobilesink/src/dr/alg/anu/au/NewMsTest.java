@@ -2347,10 +2347,10 @@ public class NewMsTest {
 	public static void main(String[] args) throws IOException {
 		
 		
-		//NewMsTest.impactPerformance();
+		NewMsTest.impactPerformance();
 		NewMsTest.impactWeightWithUtilityGain();
 		NewMsTest.impactNodeDiff();
-		//NewMsTest.impactLocation();
+		NewMsTest.impactLocation();
 
 		
 	}
