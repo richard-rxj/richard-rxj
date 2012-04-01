@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactWeight\ImpactDiff-T100-A320;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\start5050\ImpactWeight\ImpactDiff-T100-A20;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
@@ -20,7 +20,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactWeight\ImpactDiff-T100-A320;
     %plot(N,CB,'-*r',N,WB,':pb');
     h=bar(N,RB,0.4,'b');
     %title 'Min\_Benefit\_Cost';
-    axis([0 100 0 10]);
+    axis([0 100 0 11]);
     
     
 %     subplot(2,1,2);

@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance\T3200;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\start5050\ImpactPerformance\T800;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
@@ -76,7 +76,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance\T3200;
     %v='pratio';
     %saveas(gcf,v,'eps');
     
-fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\performance-goodput-T3200.txt','w');%写入文件路径
+fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\performance-goodput-T800.txt','w');%写入文件路径
 [m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
 for i=1:1:m
   for j=1:1:n

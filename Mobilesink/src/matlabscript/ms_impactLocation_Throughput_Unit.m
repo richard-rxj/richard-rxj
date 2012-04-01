@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactLocation\T800;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\start5050\ImpactLocation\T100;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
@@ -78,7 +78,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactLocation\T800;
 %     RB = C(:,2);
 %     plot(N,RB,'-xr');
     
-     axis([100,600,0,0.2]);  
+     axis([100,600,0,0.1]);  
     
     legend('|S| = 20','|S| = 40','|S| = 60','|S| = 80','|S| = 100',2);
 

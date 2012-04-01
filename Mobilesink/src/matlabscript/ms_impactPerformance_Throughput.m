@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance\T100;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\start5050\ImpactPerformance\T100;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
