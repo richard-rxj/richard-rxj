@@ -1,4 +1,4 @@
-cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
+cd D:\PhDWork\Jspace\Mobilesink\test\new\start5050\ImpactPerformance;
 
     %v = strcat(strcat('running_',int2str(i)),'.txt');
     Size=[100,200,300,400,500,600];
@@ -60,7 +60,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     
     C = load('random-benefitgain-tour-T3200.txt');
     RB = C(:,2);
-    
+    E(:,6)=RB; 
     h=plot(N,RB,'-^m');
     set(h,'MarkerSize',12);
 %      C = load('linear-weight-70.txt');
@@ -69,6 +69,7 @@ cd D:\PhDWork\Jspace\Mobilesink\test\new\ImpactPerformance;
     
     C = load('random-benefitgain-tour-T6400.txt');
     RB = C(:,2);
+    E(:,7)=RB;
     h=plot(N,RB,'-xm');
     set(h,'Color',[0.3 0.3 0.025],'MarkerEdgeColor',[0.3 0.3 0.025],'MarkerSize',12);
     
