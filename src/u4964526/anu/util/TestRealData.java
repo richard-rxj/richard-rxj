@@ -1400,7 +1400,7 @@ public class TestRealData {
   	    
 	    
 	    int[] gRouSet={100,110,0,20,40,80};  //0,0.2,0.4,0.6,0.8,1
-	    int[] gNodeSet={50,100,150,200};      //50,100,150,200,300
+	    int[] gNodeSet={50,100,150,200,250,300};      //50,100,150,200,300
 	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={9,8,7,6,5,4};  //9,8,7,6,5,4,3
@@ -1520,23 +1520,26 @@ public class TestRealData {
 		    				int gRou=gRouSet[gR];
 		    				
 		    				
-		    				//calculate weight
-		    				String fWData="test/topology/data_"+gNode+"_"+gT+"_"+(gI-1)+".txt";
-			    			String fWeight=tWeightFileName+"weight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
+		    				String fWData=null;
+		    				String fWeight=null;
+		    				
+		    				//GK calculate weight
+		    				fWData=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+gI+"-R"+gRou+".txt";
+			    			fWeight=tWeightFileName+"gweight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 							
 			    			
 			    			g=new Graph();
 							TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
-			    			RealDataHandler rdh=new RealDataHandler();
-							rdh.setDataSum(gDataSum);
-							rdh.setNodeSum(gNode);
+			    			RealDataHandler grdh=new RealDataHandler();
+							grdh.setDataSum(gDataSum);
+							grdh.setNodeSum(gNode);
 							if(gI==0)
 							{
-								rdh.outputWeightFile2(g, null, fWeight, gCThreshold*1.0/10, 0.03);      //first interval
+								grdh.outputWeightFile2(g, null, fWeight, gCThreshold*1.0/10, 0.03);      //first interval
 							}
 							else
 							{
-								rdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
+								grdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
 							}
 		    				
 		    				
@@ -1599,18 +1602,46 @@ public class TestRealData {
 					    	
 					    	//GKMSE calculate
 					    	String fSData1=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
-		    				DataQuality dq=new DataQuality();
+		    				
+					    	/*
+					    	 * !!!!!!!!!need to modify for utility
+					    	 */
+					    	DataQuality dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
-							double gkTemp=dq.computeMSE2(fRData, fGRate, 0, fWeight,0,fSData1)/gNode/100;
+							
+							double gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1);
 							if(gRou==100)
 							{
-								gkTemp=dq.computeMSE2(fRData, fGRate, 1, fWeight,0,fSData1)/gNode/100;
+								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1);
 							}
 		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp;
+		    				/*
+		    				 * end of utility
+		    				 */
+							
+							
+		    				//wf calculate Weight
+		    				fWData=twfSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+gI+"-R"+gRou+".txt";
+			    			fWeight=tWeightFileName+"wweight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
+							
+			    			
+			    			g=new Graph();
+							TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
+			    			RealDataHandler wrdh=new RealDataHandler();
+							wrdh.setDataSum(gDataSum);
+							wrdh.setNodeSum(gNode);
+							if(gI==0)
+							{
+								wrdh.outputWeightFile2(g, null, fWeight, gCThreshold*1.0/10, 0.03);      //first interval
+							}
+							else
+							{
+								wrdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
+							}
 		    				
-							
-							
+		    				
+		    				
 							
 							//WFrate allocation
 		    			    String fRate=twfRateFileName+"rate-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		
@@ -1676,18 +1707,22 @@ public class TestRealData {
 					    	
 		    				
 		    				
-		    				//WFMSE calculate
+		    				/*
+		    				 * need to modify for  utility  !!!!!!!!!!!!
+		    				 */
 					    	String fSData2=twfSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
 		    				dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
-							double wfTemp=dq.computeMSE2(fRData, fRate, 0, fWeight,0,fSData2)/gNode/100;
+							double wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2);
 							if(gRou==100)
 							{
-								wfTemp=dq.computeMSE2(fRData, fRate, 1, fWeight,0,fSData2)/gNode/100;
+								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2);
 							}
 		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp;
-		    			
+		    			    /*
+		    			     * end of utility !!!!!!!!!!!!!!
+		    			     */
 		    			}
 		    		}
 		    	}
@@ -1725,12 +1760,12 @@ public class TestRealData {
 	    			{
 	    				String fNode=tResultFileName+"Node-C"+gCThresholdSet[j]+"-R"+gRouSet[k]+"-A"+gAppr+".txt";
 	    				PrintWriter pwN=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fNode,true)));
-	    				double tTime=gResultSet[i][j][k][0]/intervalSum;
-	    				double tMSE=gResultSet[i][j][k][2]/intervalSum;
-	    				double t1MSE=gResultSet[i][j][0][2]/intervalSum;
-	    				double tGTime=gResultSet[i][j][k][3]/intervalSum;
-	    				double tGMSE=gResultSet[i][j][k][5]/intervalSum;
-	    				double t1GMSE=gResultSet[i][j][0][5]/intervalSum;
+	    				double tTime=gResultSet[i][j][k][0]/(gI+1);
+	    				double tMSE=gResultSet[i][j][k][2]/(gI+1);
+	    				double t1MSE=gResultSet[i][j][0][2]/(gI+1);
+	    				double tGTime=gResultSet[i][j][k][3]/(gI+1);
+	    				double tGMSE=gResultSet[i][j][k][5]/(gI+1);
+	    				double t1GMSE=gResultSet[i][j][0][5]/(gI+1);
 	    				pwN.println(gNodeSet[i]+" "+df.format(tMSE/t1MSE)+" "+df.format(tMSE)+" "+df.format(t1MSE)+" "+df.format(tTime)+" "+df.format(tGMSE/t1GMSE)+" "+df.format(tGMSE)+" "+df.format(t1GMSE)+" "+df.format(tGTime));
 	    				pwN.flush();
 	    				pwN.close();

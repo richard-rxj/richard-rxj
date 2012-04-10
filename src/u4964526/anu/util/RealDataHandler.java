@@ -676,6 +676,342 @@ public class RealDataHandler {
 		}
 		return rI;
 	}
+	
+	
+	public void statisticsData(String sourceFile,String dataFile)
+	{
+		try
+		{
+			double[] result=new double[54];
+			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+		    String tempString;
+		    
+			
+			while((tempString=bf.readLine())!=null)
+			{
+
+				
+				String[] temp=tempString.split(" ");
+				if(temp.length>4)
+				{
+					int nodeNum=Integer.parseInt(temp[3]);
+					if((nodeNum>=1)&&(nodeNum<=54))
+					{
+						result[nodeNum-1]++;	
+					}
+				}
+				
+			}
+			
+			
+			
+			
+			PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile)));
+			
+
+			
+			for(int i=0;i<result.length;i++)
+			{
+				
+				pw1.println((i+1)+"--"+result[i]);
+				pw1.flush();
+			}
+
+			pw1.close();
+			
+			bf.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	public void getData500Node(String sourceFile,String dataFile)
+	{
+		try
+		{
+			double[][] result=new double[500][1000];
+			BufferedReader bf=null;
+		    String tempString;
+		    
+
+
+			//1-50   <--->  101-1100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-101;
+	                    int tNode=Integer.parseInt(temp[3]);
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							System.out.println(temp[2]+" "+temp[3]);
+	                    	result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();		
+			
+			//51-100   <--->  1101-2100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-1101;
+	                    int tNode=Integer.parseInt(temp[3])+50;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();		
+			
+			//101-150   <--->  2101-3100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-2101;
+	                    int tNode=Integer.parseInt(temp[3])+100;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			
+			//151-200   <--->  3101-4100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-3101;
+	                    int tNode=Integer.parseInt(temp[3])+150;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//201-250   <--->  4101-5100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-4101;
+	                    int tNode=Integer.parseInt(temp[3])+200;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//251-300   <--->  5101-6100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-5101;
+	                    int tNode=Integer.parseInt(temp[3])+250;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//301-350   <--->  6101-7100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-6101;
+	                    int tNode=Integer.parseInt(temp[3])+300;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//351-400   <--->  7101-8100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-7101;
+	                    int tNode=Integer.parseInt(temp[3])+350;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//401-450   <--->  8101-9100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-8101;
+	                    int tNode=Integer.parseInt(temp[3])+400;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			//451-500   <--->  9101-10100	
+			bf=new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile)));
+				while((tempString=bf.readLine())!=null)
+				{
+					
+					
+					String[] temp=tempString.split(" ");
+				
+					if(temp.length>5)
+					{
+	                    int tSlot=Integer.parseInt(temp[2])-9101;
+	                    int tNode=Integer.parseInt(temp[3])+300;
+	                    if((tSlot>=0)&&(tSlot<1000)&&(tNode<=50))
+	                    {
+	
+							result[tNode-1][tSlot]=Double.parseDouble(temp[4]);
+							
+						}
+					}
+				}
+			bf.close();	
+			
+			
+			
+			int[] gNodeSet={50,100,150,200,250,300,350,400,450,500};
+			
+			for(int tN=0;tN<gNodeSet.length;tN++)
+			{
+				int gNode=gNodeSet[tN];
+				
+				for(int tT=0;tT<20;tT++)
+				{
+						int gT=tT;
+						
+						for(int tI=0;tI<10;tI++)
+						{
+							int gI=tI;
+							PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(dataFile+"data_"+gNode+"_"+gT+"_"+gI+".txt")));
+						
+			
+						
+							for(int i=0;i<gNode;i++)
+							{
+								for(int j=100*gI+0;j<100*gI+100;j++)
+								{
+									
+									{
+										pw1.print(result[i][j]+" ");
+									}
+									
+								}
+								pw1.println();
+								pw1.flush();
+							}
+							
+							pw1.close();
+						}
+				}
+			}
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -684,12 +1020,14 @@ public class RealDataHandler {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
 		RealDataHandler rdh=new RealDataHandler();
-		rdh.setDataSum(200);
-		rdh.setNodeSum(50);
-		for(int i=1;i<10;i++)
-		{
-			rdh.getData("2004-03-0"+i, "test/real/data.txt", "test/real/data/data-"+(i-1));
-		}
+		rdh.setDataSum(1000);
+		rdh.setNodeSum(500);
+		rdh.statisticsData("test/origin/data.txt", "test/origin/statisticsdata.txt");
+		//rdh.getData500Node("test/origin/data.txt", "test/origin/data/");
+//		for(int i=1;i<10;i++)
+//		{
+//			rdh.getData("2004-03-0"+i, "test/data.txt", "test/data/data-"+(i-1));
+//		}
 		//rdh.outputCTFile("test/real/Ndata.txt","test/real/ct.txt");
 		//rdh.outputDataFile("test/real/Ndata.txt", "test/real/labData/50/9/weight/weight-0.txt", "test/real/labData/50/9/data/data-0.txt");
 		//rdh.getGraph("test/real/Vertex.txt", "test/real/fVertex.txt", "test/real/fEdge.txt");
