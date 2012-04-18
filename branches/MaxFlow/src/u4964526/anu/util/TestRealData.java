@@ -23,8 +23,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={76800,61440,46080};   //76800,69120,61440
+	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={100,80,60};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
 	
@@ -559,32 +559,32 @@ public class TestRealData {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,110,0,20,40,80};  //0,0.2,0.4,0.6,0.8,1
-	    int[] gNodeSet={50,100,150,200,250,300};      //50,100,150,200,300
-	    int[] gTransSet={24,24,24,24,24,24,24};
-	    int[] gDataSumSet={100,100,100,100,100,100}; //100,100,100,100,100
-	    double[] gEISet={1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] gCThresholdSet={9,8,7,6,5,4};  //9,8,7,6,5,4,3
+	    int[] gRouSet={100,110,40,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
+	    int[] gNodeSet={50,100,200,300,400,500,600,700,800,900,1000};      //50,100,150,200,250,300
+	    double[] gTransSet={39,26,18.5,14.5,12.5,11,10,9,8.5,8,7.5};    //24,24,24,24,24,24
+	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
+	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
+	    int[] gCThresholdSet={8,6};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
-	    int topologySum=15;     //15
-	    int intervalSum=2;     //10
+	    int topologySum=10;     //15
+	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
-	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][6];
+	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    
 	    
 	    
 	    
 	    for(int gI=0;gI<intervalSum;gI++)
 	    {
-	    	double[][][][] tResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][6];
+	    	double[][][][] tResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    	
 	    	for(int gT=0;gT<topologySum;gT++)
 		    {
 	    		for(int gN=0;gN<gNodeSet.length;gN++)
 		    	{
 		    		int gNode=gNodeSet[gN];
-		    		int gTrans=gTransSet[gN];
+		    		double gTrans=gTransSet[gN];
 		    		int gDataSum=gDataSumSet[gN];
 		    		double gEI=gEISet[gN];
 		    		
@@ -616,14 +616,14 @@ public class TestRealData {
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String tgkSDataFileName="test/real/testinterval/gksdata/I"+gI+"/";
+    	    		String tgkSDataFileName="test/real/testinterval/gksdata/";
     	    		tf=new File(tgkSDataFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}		
     	    		
-    	    		String twfSDataFileName="test/real/testinterval/wfsdata/I"+gI+"/";
+    	    		String twfSDataFileName="test/real/testinterval/wfsdata/";
     	    		tf=new File(twfSDataFileName);
     	    		if(!tf.exists())
     	    		{
@@ -631,14 +631,14 @@ public class TestRealData {
     	    		}
     	    		
     	    		Graph g=new Graph();
-    	    		String fileName1="test/topology/vertex_"+gNode+"_"+gT+".txt";
-			    	String fileName2="test/topology/edge_"+gNode+"_"+gT+".txt";
+    	    		String fileName1="test/topology/node-"+gNode+"-"+gT+".txt";
+			    	//String fileName2="test/topology/edge_"+gNode+"_"+gT+".txt";
 			    	String fRData="test/topology/data_"+gNode+"_"+gT+"_"+gI+".txt";
     	    		
     	    		
     	    		//initial energy and maxrate
     	    		
-			    	TestRealData.initRealData(fileName1, fileName2, "1", g, 1,gEI,gTrans);
+			    	TestRealData.initRealData(fileName1, "0", "0", g, 1,gEI,gTrans);
 					String fVertex=tTopologyFileName+"vertex-N"+gNode+"-T"+gT+"-I"+gI+".txt";
 					String fEdge=tTopologyFileName+"edge-N"+gNode+"-T"+gT+"-I"+gI+".txt";
 					g.outputFile(fVertex, fEdge);
@@ -653,8 +653,18 @@ public class TestRealData {
 				    twFlow.seteTx(eTx);
 				    twFlow.setEpsilon(0.1);
 			    	twFlow.computeDWFFLow();
-			    	tWRateFactor=gRateIndicator/twFlow.getTopology().getSourceList().get(0).getRate();
-					
+			    	int tWRateFactorI=0;
+			    	while(tWRateFactor==0)
+			    	{
+			    		double tWRate=twFlow.getTopology().getSourceList().get(tWRateFactorI).getMaxRate();
+			    		if((tWRate>(gBaseMaxRate[0]*0.95))||(tWRateFactorI==(twFlow.getTopology().getSourceList().size()-1)))
+			    		{
+			    			tWRateFactor=gRateIndicator/twFlow.getTopology().getSourceList().get(tWRateFactorI).getRate();
+			    		}
+			    		tWRateFactorI++;
+			    		
+			    	}
+			    	//tWRateFactor=1;
     	    		
 			    	g=new Graph();
 					TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
@@ -665,10 +675,20 @@ public class TestRealData {
 				    tgFlow.seteTx(eTx);
 				    tgFlow.setEpsilon(0.1);
 			    	tgFlow.computeConcurrentFlow();
-			    	tGRateFactor=gRateIndicator/tgFlow.getTopology().getSourceList().get(0).getRate();
+//			    	int tGRateFactorI=0;
+//			    	while(tGRateFactor==0)
+//			    	{
+//			    		double tGRate=tgFlow.getTopology().getSourceList().get(tGRateFactorI++).getMaxRate();
+//			    		if((tGRate>(gBaseMaxRate[0]*0.95))||(tGRateFactorI==(tgFlow.getTopology().getSourceList().size()-1)))
+//			    		{
+//			    			tGRateFactor=gRateIndicator/tgFlow.getTopology().getSourceList().get(tGRateFactorI++).getRate();
+//			    		}
+//			    		tGRateFactorI++;
+//			    	}
+			    	tGRateFactor=tWRateFactor;
+			    	//tGRateFactor=1;
 			    	
-			    	
-		    		
+			    	System.out.println("Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---Initial");
 		    		
 		    		for(int gC=0;gC<gCThresholdSet.length;gC++)
 		    		{
@@ -682,11 +702,14 @@ public class TestRealData {
 		    				int gRou=gRouSet[gR];
 		    				
 		    				
+		    				System.out.println("Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---CThreshold<"+gCThreshold+">---Rou<"+gRou+">");
+		    				
+		    				
 		    				String fWData=null;
 		    				String fWeight=null;
 		    				
 		    				//GK calculate weight
-		    				fWData=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+gI+"-R"+gRou+".txt";
+		    				fWData=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 			    			fWeight=tWeightFileName+"gweight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 							
 			    			
@@ -704,7 +727,7 @@ public class TestRealData {
 								grdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
 							}
 		    				
-		    				
+		    				System.out.println("GK Weight Done");
 		    				
 							
 							//GK rate allocation
@@ -760,31 +783,38 @@ public class TestRealData {
 					    	tResultSet[gN][gC][gR][3]=tResultSet[gN][gC][gR][3]+tGTime;
 					    	tResultSet[gN][gC][gR][4]=tResultSet[gN][gC][gR][4]+tGRate;
 							
+					    	System.out.println("GK Rate Done");
+					    	
 							
 					    	
-					    	//GKMSE calculate
-					    	String fSData1=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
-		    				
 					    	/*
 					    	 * !!!!!!!!!need to modify for utility
 					    	 */
+					    	String fSData1=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
+		    				
+					    	
 					    	DataQuality dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
 							
-							double gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1);
+							double[] gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1);
 							if(gRou==100)
 							{
 								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1);
 							}
-		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp;
+		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp[0];
+		    				tResultSet[gN][gC][gR][7]=tResultSet[gN][gC][gR][7]+gkTemp[1];
+		    				
+		    				System.out.println("GK Utility Done");
 		    				/*
 		    				 * end of utility
 		    				 */
 							
+		    				
+		    				
 							
 		    				//wf calculate Weight
-		    				fWData=twfSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+gI+"-R"+gRou+".txt";
+		    				fWData=twfSDataFileName+"wdata-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 			    			fWeight=tWeightFileName+"wweight-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";
 							
 			    			
@@ -802,7 +832,7 @@ public class TestRealData {
 								wrdh.outputWeightFile2(g, fWData, fWeight, gCThreshold*1.0/10, 0.03);
 							}
 		    				
-		    				
+							System.out.println("Wf Weight Done");
 		    				
 							
 							//WFrate allocation
@@ -860,7 +890,7 @@ public class TestRealData {
 					    	tResultSet[gN][gC][gR][1]=tResultSet[gN][gC][gR][1]+tWRate;
 							
 							
-		    				
+					    	System.out.println("Wf Rate Done");
 		    				
 					    	
 					    	
@@ -872,16 +902,19 @@ public class TestRealData {
 		    				/*
 		    				 * need to modify for  utility  !!!!!!!!!!!!
 		    				 */
-					    	String fSData2=twfSDataFileName+"data-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-R"+gRou+".txt";      //data save for next interval          
+					    	String fSData2=twfSDataFileName+"wdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
 		    				dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
-							double wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2);
+							double[] wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2);
 							if(gRou==100)
 							{
 								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2);
 							}
-		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp;
+		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp[0];
+		    				tResultSet[gN][gC][gR][6]=tResultSet[gN][gC][gR][6]+wfTemp[1];
+		    				
+		    				System.out.println("Wf Utility Done");
 		    			    /*
 		    			     * end of utility !!!!!!!!!!!!!!
 		    			     */
@@ -889,6 +922,11 @@ public class TestRealData {
 		    		}
 		    	}
 		    }
+	    	
+	    	
+	    	
+	    	
+	    	
 	    	
 	    	for(int i=0;i<gNodeSet.length;i++)
 	    	{
@@ -902,12 +940,14 @@ public class TestRealData {
 	    				gResultSet[i][j][k][3]=gResultSet[i][j][k][3]+tResultSet[i][j][k][3]/topologySum;
 	    				gResultSet[i][j][k][4]=gResultSet[i][j][k][4]+tResultSet[i][j][k][4]/topologySum;
 	    				gResultSet[i][j][k][5]=gResultSet[i][j][k][5]+tResultSet[i][j][k][5]/topologySum;
+	    				gResultSet[i][j][k][6]=gResultSet[i][j][k][6]+tResultSet[i][j][k][6]/topologySum;
+	    				gResultSet[i][j][k][7]=gResultSet[i][j][k][7]+tResultSet[i][j][k][7]/topologySum;
 	    			}
 	    		}
 	    	}
 	    	
 	    	
-	    	//output result
+	    	//output result  and temp result
 		    String tResultFileName="test/real/testinterval/result/I"+gI+"/";
 			File tf=new File(tResultFileName);
 			if(!tf.exists())
@@ -928,9 +968,34 @@ public class TestRealData {
 	    				double tGTime=gResultSet[i][j][k][3]/(gI+1);
 	    				double tGMSE=gResultSet[i][j][k][5]/(gI+1);
 	    				double t1GMSE=gResultSet[i][j][0][5]/(gI+1);
-	    				pwN.println(gNodeSet[i]+" "+df.format(tMSE/t1MSE)+" "+df.format(tMSE)+" "+df.format(t1MSE)+" "+df.format(tTime)+" "+df.format(tGMSE/t1GMSE)+" "+df.format(tGMSE)+" "+df.format(t1GMSE)+" "+df.format(tGTime));
+	    				double tGUtility=gResultSet[i][j][k][7]/(gI+1);
+	    				double t1GUtility=gResultSet[i][j][0][7]/(gI+1);
+	    				double tUtility=gResultSet[i][j][k][6]/(gI+1);
+	    				double t1Utility=gResultSet[i][j][0][6]/(gI+1);
+	    				pwN.println(gNodeSet[i]+" "+df.format(tUtility/t1Utility)+" "+df.format(tUtility)+" "+df.format(t1Utility)+" "+df.format(tMSE/t1MSE)+" "+df.format(tMSE)+" "+df.format(t1MSE)+" "+df.format(tTime)+" "+df.format(tGUtility/t1GUtility)+" "+df.format(tGUtility)+" "+df.format(t1GUtility)+" "+df.format(tGMSE/t1GMSE)+" "+df.format(tGMSE)+" "+df.format(t1GMSE)+" "+df.format(tGTime));
 	    				pwN.flush();
 	    				pwN.close();
+	    				
+	    				
+	    				
+	    				String tfNode=tResultFileName+"TTTNode-C"+gCThresholdSet[j]+"-R"+gRouSet[k]+"-A"+gAppr+".txt";
+	    				PrintWriter tpwN=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tfNode,true)));
+	    				double ttTime=tResultSet[i][j][k][0]/(gI+1);
+	    				double ttMSE=tResultSet[i][j][k][2]/(gI+1);
+	    				double tt1MSE=tResultSet[i][j][0][2]/(gI+1);
+	    				double ttGTime=tResultSet[i][j][k][3]/(gI+1);
+	    				double ttGMSE=tResultSet[i][j][k][5]/(gI+1);
+	    				double tt1GMSE=tResultSet[i][j][0][5]/(gI+1);
+	    				double ttGUtility=tResultSet[i][j][k][7]/(gI+1);
+	    				double tt1GUtility=tResultSet[i][j][0][7]/(gI+1);
+	    				double ttUtility=tResultSet[i][j][k][6]/(gI+1);
+	    				double tt1Utility=tResultSet[i][j][0][6]/(gI+1);
+	    				tpwN.println(gNodeSet[i]+" "+df.format(ttUtility/tt1Utility)+" "+df.format(ttUtility)+" "+df.format(tt1Utility)+" "+df.format(ttMSE/tt1MSE)+" "+df.format(ttMSE)+" "+df.format(tt1MSE)+" "+df.format(ttTime)+" "+df.format(ttGUtility/tt1GUtility)+" "+df.format(ttGUtility)+" "+df.format(tt1GUtility)+" "+df.format(ttGMSE/tt1GMSE)+" "+df.format(ttGMSE)+" "+df.format(tt1GMSE)+" "+df.format(ttGTime));
+	    				tpwN.flush();
+	    				tpwN.close();
+	    				
+	    				
+	    				
 	    			}
 	    		}
 	    	}
@@ -964,11 +1029,7 @@ public class TestRealData {
 			//TestRealData.realTestOne();
 	
 			TestRealData.testIntervalSet(100);
-			System.out.println("100 complete");
-			TestRealData.testIntervalSet(200);
-			System.out.println("200 complete");
-			TestRealData.testIntervalSet(50);
-			System.out.println("50 complete");
+
 			
 				
 			
@@ -979,6 +1040,10 @@ public class TestRealData {
 			e.printStackTrace();
 		}
   }
+   
+   
+   
+   
    
    
 }
