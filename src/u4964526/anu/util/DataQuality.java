@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DataQuality {
 
@@ -25,22 +26,35 @@ public class DataQuality {
 	public void setDataSum(int dataSum) {
 		this.dataSum = dataSum;
 	}
-	private double computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate,double[] saveData)
+	
+	private double getSubUtility(double ratio)
 	{
-		double result=0;
-		if (slaveRate>slaveBase.length)
+		return 1-Math.pow((1-ratio),4);
+	}
+	
+	
+	private double[] computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate,double[] saveData, double slaveMaxRate, double masterMaxRate)
+	{
+		double[] result=new double[2];
+
+		
+		int tSlaveRate=(int) Math.floor(slaveRate);
+		int tMasterRate=(int) Math.floor(masterRate);
+		int bothRate=0;
+		
+		if (tSlaveRate>slaveBase.length)
 		{
-			slaveRate=slaveBase.length;
+			tSlaveRate=slaveBase.length;
 		}
-		if(masterRate>slaveBase.length)
+		if(tMasterRate>slaveBase.length)
 		{
-			masterRate=slaveBase.length;
+			tMasterRate=slaveBase.length;
 		}
+		
 		double[] tSlave=new double[slaveBase.length];
 		if(masterBase==null)
 		{
 			
-			int tSlaveRate=(int) Math.floor(slaveRate);
 			int tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
 			int ti=0;
 			tSlave[ti]=slaveBase[ti];
@@ -69,48 +83,66 @@ public class DataQuality {
 			{
 				tSlave[i]=tSlave[ti];			
 			}
+			
+			
+			result[1]=this.getSubUtility(tSlaveRate*1.0/slaveMaxRate);
+			
 		}
 		else
 		{
 			ArrayList<String> a=new ArrayList<String>();
-			int tSlaveRate=(int) Math.floor(slaveRate);
+
 			int ti=0;
 			int tStep=0;
 			int tiPre=0;
-			if(tSlaveRate>0)
+			
+			
+			
+			int tMStep=(int) Math.floor(slaveBase.length*1.0/tMasterRate);
+			int tMi=0;
+			
+			if(tSlaveRate==0)
 			{
-				tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
-				ti=0;
-				a.add(String.valueOf(ti));
-				tSlave[ti]=slaveBase[ti];
-				tiPre=0;
+				for(int i=0;i<tSlave.length;i++)
+				{
+					if(i==tMi)
+					{
+						tSlave[i]=masterBase[i];
+						a.add(String.valueOf(i));
+						tMi=tMi+tMStep;
+					}
+				}
 			}
 			else
 			{
-				ti=-1;
-			}
-			
-			
-			int tMasterRate=(int) Math.floor(masterRate);
-			int tMStep=(int) Math.floor(slaveBase.length*1.0/tMasterRate);
-			int tMi=0+tMStep;
-			ti=ti+tStep;
-			for(int i=1;i<tSlave.length;i++)
-			{
-				if(i==ti)
+				tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
+				
+				for(int i=0;i<tSlave.length;i++)
 				{
-					tSlave[i]=slaveBase[i];
-					a.add(String.valueOf(i));
-					ti=ti+tStep;
-				}
-				else if(i==tMi)
-				{
-					tSlave[i]=masterBase[i];
-					a.add(String.valueOf(i));
-					tMi=tMi+tMStep;
+
+				    if(i==ti)
+					{
+						tSlave[i]=slaveBase[i];
+						a.add(String.valueOf(i));
+						ti=ti+tStep;
+					}
+					else if(i==tMi)
+					{
+						tSlave[i]=masterBase[i];
+						a.add(String.valueOf(i));
+						tMi=tMi+tMStep;
+						bothRate++;
+					}
+					if(i>ti)
+					{
+						ti=ti+tStep;
+					}
+					if(i>tMi)
+					{
+						tMi=tMi+tMStep;
+					}
 				}
 			}
-			
 			
 			
 			tiPre=Integer.parseInt(a.get(0));
@@ -128,12 +160,19 @@ public class DataQuality {
 			{
 				tSlave[i]=tSlave[ti];			
 			}
+			
+			
+			double u1=tSlaveRate*1.0/slaveMaxRate;
+			double u2=(tSlaveRate+bothRate)*1.0/(slaveMaxRate+masterMaxRate);
+			result[1]=this.getSubUtility(Math.max(u1, u2));
+			
+			
 		}
 		
 		
 		for(int t=0;t<tSlave.length;t++)
 		{
-			result=result+Math.pow((tSlave[t]-slaveBase[t]), 2);
+			result[0]=result[0]+Math.pow((tSlave[t]-slaveBase[t]), 2);
 			saveData[t]=tSlave[t];
 		}
 
@@ -235,72 +274,72 @@ public class DataQuality {
 	 * 
 	 */
 	
-	public double computeMSE2(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
-	{
-		double result=0;
-		try
-		{
-			double[][] sData=new double[this.nodeSum][this.dataSum];
-			for(int i=0;i<this.nodeSum;i++)
-				for(int j=0;j<this.dataSum;j++)
-					sData[i][j]=0;
-			
-			
-			double[][] gData=loadData(dataFile);
-			double[] gRate=loadRate(rateFile);
-			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
-			String tempString;
-			int lineNum=0;
-			while((tempString=bf.readLine())!=null)
-			{
-				String[] temp=tempString.split(" ");
-				
-				
-				if((Double.parseDouble(temp[1])<1)&&(wOption<1))
-				{
-					int tSlaveId = (int)Double.parseDouble(temp[0]);
-					int tMasterId = (int)Double.parseDouble(temp[2]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId]);
-
-				}
-				else
-				{
-					int tSlaveId = (int)Double.parseDouble(temp[0]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId]);
-				}
-				lineNum++;
-			}
-			bf.close();
-			
-			if(saveFile!=null)
-			{
-				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(saveFile)));
-				for(int i=0;i<this.nodeSum;i++)
-				{
-					for(int j=0;j<this.dataSum;j++)
-					{
-						pw.print(sData[i][j]+" ");
-					}
-					pw.println();
-				}
-				pw.flush();
-				pw.close();
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return result;
-	}
+//	public double computeMSE2(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
+//	{
+//		double result=0;
+//		try
+//		{
+//			double[][] sData=new double[this.nodeSum][this.dataSum];
+//			for(int i=0;i<this.nodeSum;i++)
+//				for(int j=0;j<this.dataSum;j++)
+//					sData[i][j]=0;
+//			
+//			
+//			double[][] gData=loadData(dataFile);
+//			double[] gRate=loadRate(rateFile);
+//			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
+//			String tempString;
+//			int lineNum=0;
+//			while((tempString=bf.readLine())!=null)
+//			{
+//				String[] temp=tempString.split(" ");
+//				
+//				
+//				if((Double.parseDouble(temp[1])<1)&&(wOption<1))
+//				{
+//					int tSlaveId = (int)Double.parseDouble(temp[0]);
+//					int tMasterId = (int)Double.parseDouble(temp[2]);
+//					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId]);
+//
+//				}
+//				else
+//				{
+//					int tSlaveId = (int)Double.parseDouble(temp[0]);
+//					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId]);
+//				}
+//				lineNum++;
+//			}
+//			bf.close();
+//			
+//			if(saveFile!=null)
+//			{
+//				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(saveFile)));
+//				for(int i=0;i<this.nodeSum;i++)
+//				{
+//					for(int j=0;j<this.dataSum;j++)
+//					{
+//						pw.print(sData[i][j]+" ");
+//					}
+//					pw.println();
+//				}
+//				pw.flush();
+//				pw.close();
+//			}
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
 	
 	/*
 	 * begin utility calculation + data saving
 	 */
 	
-	public double computeUtility(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
+	public double[] computeUtility(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
 	{
-		double result=0;
+		double result[]=new double[2];
 		try
 		{
 			double[][] sData=new double[this.nodeSum][this.dataSum];
@@ -323,17 +362,24 @@ public class DataQuality {
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
 					int tMasterId = (int)Double.parseDouble(temp[2]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId]);
-
+					double tSlaveMaxRate=Double.parseDouble(temp[3]);
+					double tMasterMaxRate=Double.parseDouble(temp[4]);
+					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId],tSlaveMaxRate,tMasterMaxRate);
+					result[0]=result[0]+tResult[0];
+					result[1]=result[1]+tResult[1];
 				}
 				else
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
-					result=result+this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId]);
+					double tSlaveMaxRate=Double.parseDouble(temp[3]);
+					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId],tSlaveMaxRate,0);
+					result[0]=result[0]+tResult[0];
+					result[1]=result[1]+tResult[1];
 				}
 				lineNum++;
 			}
 			bf.close();
+			result[0]=result[0]/(this.nodeSum*this.dataSum);
 			
 			if(saveFile!=null)
 			{
@@ -370,11 +416,18 @@ public class DataQuality {
 		String fData="test/real/labData/50/data/data-1-2.txt";
 		String fWeight="test/real/labData/50/9/weight/weight-1.txt";
 		String fRate="test/real/labData/50/9/rate/rate-1-0.txt";
-		DataQuality dq=new DataQuality();
-		dq.setDataSum(100);
-		dq.setNodeSum(50);
+		//DataQuality dq=new DataQuality();
+		//dq.setDataSum(100);
+		//dq.setNodeSum(50);
 		//dq.computeMSE(fData, fRate, 0, fWeight,0);
-		
+		ArrayList<String> a=new ArrayList<String>();
+		a.add("1");
+		a.add("3");
+		a.add("2");
+		System.out.println(a);
+		System.out.println(a.contains("1"));
+		Arrays.sort(a.toArray());
+		System.out.println(a);
 		
 	}
 

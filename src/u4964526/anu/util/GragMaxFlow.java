@@ -52,14 +52,17 @@ public class GragMaxFlow {
 
 	public double getDelta()
 	{
-		double z=this.getTopology().getEdgeList().size()/(1-this.getEpsilon());
-		double x=Math.pow(z,(-1/this.getEpsilon()));
+		//double z=this.getTopology().getEdgeList().size()/(1-this.getEpsilon());    //now!!!
+		//double x=Math.pow(z,(-1/this.getEpsilon()));                               //now!!!
+		double z=(1-this.epsilon)/this.getTopology().getEdgeList().size();           //!!!
+		double x=Math.pow(z,(1/this.getEpsilon()));                                  //!!!
 		return x;
 	}
 
 
 	public double getGragScaleFactor() {
-		double y=Math.log(1/this.getDelta())/Math.log(1+this.getEpsilon());
+		//double y=Math.log(1/this.getDelta())/Math.log(1+this.getEpsilon());          //now!!!
+		double y=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);            //!!!
 		return y;
 	}
 
@@ -229,8 +232,9 @@ public class GragMaxFlow {
 			Vertex s=sourceList.get(i);
 			f.setStart(s);
 			f.setEnd(sink);
-			//f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());         !!!!!!!!!!!!!!!1027
-			f.setMaxRate(s.getMaxRate()*this.getGragScaleFactor());
+			//f.setMaxRate(s.getMaxRate()*s.getWeight()*this.getGragScaleFactor());         //!!!!!!!!!!!!!!!1027
+			f.setMaxRate(s.getMaxRate()*this.getGragScaleFactor());                     //now
+			//f.setMaxRate(s.getMaxRate()*s.getWeight());                                     //!!!
 			f.setRate(0);
 			fSolution.put(s, f);
 		}
@@ -279,7 +283,7 @@ public class GragMaxFlow {
 						 f.addPath(mPath);
 						 gD=0;
 						 //double addRate=mPath.getBottleNeck()/(this.geteRx()+this.geteTx());  //!!!!!!!!!!!!!!!!!1027
-						 double addRate=mSource.getWeight()*mPath.getBottleNeck()/(this.geteRx()+this.geteTx());
+						 double addRate=mSource.getWeight()*mPath.getBottleNeck()/(this.geteRx()+this.geteTx());   //!!!now
 						 if(addRate<f.getMaxRate())
 						 {
 							 w=true;
@@ -287,8 +291,8 @@ public class GragMaxFlow {
 							  * begin of update length and gD
 							  */
 							 double tFactor=this.getEpsilon()*mPath.getBottleNeck();
-							 //mPath.updateLength(tFactor);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1027
-							 mPath.updateLength(tFactor*mSource.getWeight());
+							 //mPath.updateLength(tFactor);    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1027
+							 mPath.updateLength(tFactor*mSource.getWeight());   //!!!now
 							 for(int ti=0;ti<edgeList.size();ti++)
 							 {
 								    Edge te=edgeList.get(ti);	
@@ -316,7 +320,7 @@ public class GragMaxFlow {
 								  * begin of update length and gD
 								  */
 								 double tFactor=this.getEpsilon()*f.getMaxRate()*(this.geteRx()+this.geteTx());
-								 mPath.updateLength(tFactor);
+								 mPath.updateLength(tFactor);  //!!!
 								 for(int ti=0;ti<edgeList.size();ti++)
 								 {
 									    Edge te=edgeList.get(ti);	
@@ -360,7 +364,7 @@ public class GragMaxFlow {
 			Vertex s=sourceList.get(i);
 		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
-		    r=r/this.getGragScaleFactor();
+		    r=r/this.getGragScaleFactor();    //now!!!
 		    f.setRate(r);
 		}
 		

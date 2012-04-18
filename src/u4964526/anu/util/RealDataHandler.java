@@ -549,7 +549,7 @@ public class RealDataHandler {
 		int rI=0;
 		try
 		{
-			double[][] result=new double[nodeSum][3];
+			double[][] result=new double[nodeSum][5];
 			
 
 			result[0][0]=0;
@@ -562,6 +562,8 @@ public class RealDataHandler {
 				result[ti][0]=ti;
 				result[ti][1]=1;
 				result[ti][2]=0;
+				result[ti][3]=g.getSourceList().get(i).getMaxRate();
+				result[ti][4]=0;
 			}
 			
 			if(dataFile!=null)
@@ -585,8 +587,18 @@ public class RealDataHandler {
 							rI++;
 							vSet.add(tT);
 							rI++;
-							result[tS.getVerValue()][1]=1-tD;
-							result[tS.getVerValue()][2]=tT.getVerValue();
+							if(tS.getBudgetEnergy()<tT.getBudgetEnergy())
+							{
+								result[tS.getVerValue()][1]=1-tD;
+								result[tS.getVerValue()][2]=tT.getVerValue();
+								result[tS.getVerValue()][4]=tT.getMaxRate();
+							}
+							else
+							{
+								result[tT.getVerValue()][1]=1-tD;
+								result[tT.getVerValue()][2]=tS.getVerValue();
+								result[tT.getVerValue()][4]=tS.getMaxRate();
+							}
 						}
 					}
 				}
@@ -596,7 +608,7 @@ public class RealDataHandler {
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(weightFile)));
 			for(int i=1;i<nodeSum;i++)
 			{
-				for(int j=0;j<3;j++)
+				for(int j=0;j<5;j++)
 				{
 					pw.print(result[i][j]+" ");
 				}
@@ -733,7 +745,7 @@ public class RealDataHandler {
 	{
 		try
 		{
-			double[][] result=new double[500][1000];
+			double[][] result=new double[1000][1000];
 			BufferedReader bf=null;
 		    String tempString;
 		    double[][] origin=new double[50][10000];
@@ -826,13 +838,30 @@ public class RealDataHandler {
 						tNum=0;
 						tNodeid=tNodeid+50;
 					}
+					
 				}
 			}
 			
 			
+			for(int i=0;i<origin.length;i++)
+			{
+				tNum=0;
+				tNodeid=i+500;
+				for(int j=0;j<origin[0].length;j++)
+				{				
+					result[tNodeid][tNum]=origin[i][j];
+					tNum++;
+					if(tNum>=1000)
+					{
+						tNum=0;
+						tNodeid=tNodeid+50;
+					}
+					
+				}
+			}
 			
 			
-			int[] gNodeSet={50,100,150,200,250,300,350,400,450,500};
+			int[] gNodeSet={50,100,150,200,250,300,350,400,450,500,600,700,800,900,1000};
 			
 			for(int tN=0;tN<gNodeSet.length;tN++)
 			{
@@ -892,7 +921,7 @@ public class RealDataHandler {
 		rdh.setDataSum(1000);
 		rdh.setNodeSum(500);
 		//rdh.statisticsData("test/origin/data.txt", "test/origin/statisticsdata.txt");
-		rdh.getData500Node("test/origin/data.txt", "test/origin/data/");
+		rdh.getData500Node("test/origin/data.txt", "test/origin/data1000/");
 //		for(int i=1;i<10;i++)
 //		{
 //			rdh.getData("2004-03-0"+i, "test/data.txt", "test/data/data-"+(i-1));
