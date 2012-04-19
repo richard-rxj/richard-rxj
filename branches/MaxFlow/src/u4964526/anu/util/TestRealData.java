@@ -554,17 +554,17 @@ public class TestRealData {
    
  
    
-   public static void testIntervalSet(int gAppr) throws FileNotFoundException
+   public static void testIntervalSet(int gAppr, String fileIn, String fileOut) throws FileNotFoundException
    {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,110,40,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
-	    int[] gNodeSet={50,100,200,300,400,500,600,700,800,900,1000};      //50,100,150,200,250,300
+	    int[] gRouSet={100,110,0,20,40,60,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
+	    int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
 	    double[] gTransSet={39,26,18.5,14.5,12.5,11,10,9,8.5,8,7.5};    //24,24,24,24,24,24
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] gCThresholdSet={8,6};  //9,8,7,6,5,4,3
+	    int[] gCThresholdSet={9,8,7,6,5,4,3};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
 	    int topologySum=10;     //15
@@ -588,42 +588,42 @@ public class TestRealData {
 		    		int gDataSum=gDataSumSet[gN];
 		    		double gEI=gEISet[gN];
 		    		
-		    		String tTopologyFileName="test/real/testinterval/topology/I"+gI+"/";
+		    		String tTopologyFileName=fileOut+"testinterval/topology/I"+gI+"/";
     	    		File tf=new File(tTopologyFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String tWeightFileName="test/real/testinterval/weight/I"+gI+"/";
+    	    		String tWeightFileName=fileOut+"testinterval/weight/I"+gI+"/";
     	    		tf=new File(tWeightFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}
     				
-    	    		String tgkRateFileName="test/real/testinterval/gkrate/I"+gI+"/";
+    	    		String tgkRateFileName=fileOut+"testinterval/gkrate/I"+gI+"/";
     	    		tf=new File(tgkRateFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String twfRateFileName="test/real/testinterval/wfrate/I"+gI+"/";
+    	    		String twfRateFileName=fileOut+"testinterval/wfrate/I"+gI+"/";
     	    		tf=new File(twfRateFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String tgkSDataFileName="test/real/testinterval/gksdata/";
+    	    		String tgkSDataFileName=fileOut+"testinterval/gksdata/";
     	    		tf=new File(tgkSDataFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
     	    		}		
     	    		
-    	    		String twfSDataFileName="test/real/testinterval/wfsdata/";
+    	    		String twfSDataFileName=fileOut+"testinterval/wfsdata/";
     	    		tf=new File(twfSDataFileName);
     	    		if(!tf.exists())
     	    		{
@@ -631,9 +631,9 @@ public class TestRealData {
     	    		}
     	    		
     	    		Graph g=new Graph();
-    	    		String fileName1="test/topology/node-"+gNode+"-"+gT+".txt";
+    	    		String fileName1=fileIn+"node-"+gNode+"-"+gT+".txt";
 			    	//String fileName2="test/topology/edge_"+gNode+"_"+gT+".txt";
-			    	String fRData="test/topology/data_"+gNode+"_"+gT+"_"+gI+".txt";
+			    	String fRData=fileIn+"data_"+gNode+"_"+gT+"_"+gI+".txt";
     	    		
     	    		
     	    		//initial energy and maxrate
@@ -948,7 +948,7 @@ public class TestRealData {
 	    	
 	    	
 	    	//output result  and temp result
-		    String tResultFileName="test/real/testinterval/result/I"+gI+"/";
+		    String tResultFileName=fileOut+"testinterval/result/I"+gI+"/";
 			File tf=new File(tResultFileName);
 			if(!tf.exists())
 			{
@@ -1017,22 +1017,20 @@ public class TestRealData {
 			logger.setLevel(Level.WARNING);
 			
 			
-			
-			
-						
-			//TestRealData.testSPTGK(50);
-			//TestRealData.testSPTGK(100);
-			//TestRealData.testSPTGK(200);
-			
-	
-			
-			//TestRealData.realTestOne();
-	
-			TestRealData.testIntervalSet(100);
 
-			
+	
+			//TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
+
+			//TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
 				
+			//TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
 			
+			
+			TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
+
+			//TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
+				
+			//TestRealData.testIntervalSet(50,"test/topologySynthetic/","test/synthetic/50/");
 			
 		}
 		catch(Exception e)

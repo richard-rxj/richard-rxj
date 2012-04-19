@@ -213,7 +213,7 @@ public class GragMaxFlow {
 	 * concurrent!!!!!!!!   
 	 */
 	{
-		topology.transit();
+		topology.transit();   //now!!!
 		ArrayList<Edge> edgeList=topology.getEdgeList();
 		ArrayList<Vertex> sourceList=topology.getSourceList();
 		Vertex sink=topology.getSinkList().get(0);

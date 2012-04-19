@@ -1,14 +1,18 @@
 package u4964526.anu.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class WSNGenerator {
 
@@ -622,45 +626,194 @@ public class WSNGenerator {
 		return result;
 	}
 	
+	
+	public Graph generateSyntheticData(String fileNode, String fileData) throws FileNotFoundException
+	{
+		Graph g=new Graph();
+		
+		
+		double[][] gData=new double[this.gNodeNum][this.gDataGroup*this.gDataNum];
+		for(int m=0;m<this.gNodeNum;m++)
+		{
+			for(int n=0;n<this.gDataGroup*this.gDataNum;n++)
+			{
+				gData[m][n]=-1;
+			}
+		}
+		
+		
+		Logger logger=Logger.getLogger("MaxFlow");
+		String tempString=null;
+		BufferedReader reader=null;
+		
+		/*
+		 * begin of initial Vertices
+		 */
+		try
+		{
+		   reader=new BufferedReader(new InputStreamReader(new FileInputStream(fileNode)));
+		   int lineNum=0;
+		   while((tempString=reader.readLine())!=null)
+		   {
+			   String[] b=tempString.split(" ");
+			   /*
+			    * begin of debug info
+			    */
+			   
+			   logger.fine(String.valueOf(lineNum));
+			   logger.fine(tempString);
+			   String detail="detail:(";
+			   for(int i=0;i<b.length;i++)
+			   {
+				   detail=detail+"<"+i+"-"+b[i]+">";
+			   }
+			   detail=detail+")\n";
+			   logger.fine(detail);
+			   /*
+			    * end of debug info
+			    */
+			   Vertex v1=new Vertex(""+lineNum);
+			   v1.setxLabel(Double.parseDouble(b[1]));
+			   v1.setyLabel(Double.parseDouble(b[2]));
+			   v1.setRate(0);
+			   v1.setWeight(1);
+			   g.addVertex(v1);
+			   if(lineNum==0)
+			   {
+				   g.addSink(v1);
+			   }
+			   else
+			   {
+				   g.addSource(v1);
+			   }
+			   ++lineNum;
+		   }
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(reader!=null)
+			{
+				try
+				{
+					reader.close();
+				}
+				catch(Exception e)
+				{
+				}
+			}
+		}
+		/*
+		 * end of initial Vertices
+		 */
+		
+		/*
+		 * begin of generate edges
+		 */
+		ArrayList<Vertex> vSet=g.getVertexList();
+		Iterator<Vertex> slowI=vSet.iterator();
+		Iterator<Vertex> fastI;
+		while(slowI.hasNext())
+		{
+			Vertex v1=slowI.next();
+			if(gData[v1.getVerValue()][0]==-1)
+			{
+				gData[v1.getVerValue()]=this.subData(null);
+			}
+			
+			fastI=vSet.iterator();
+			
+			while(fastI.next()!=v1)
+			{
+				
+			}
+			
+			Vertex v2;
+			while(fastI.hasNext())
+			{
+				v2=fastI.next();
+				double tRange=validTransRangePlusEdgeCapacity(v1, v2,this.gRadius);
+				if(tRange>0)
+				{
+					//double tV1=this.getgFactorRecv()*v1.getMaxRate()+this.getgFactorSend()*v1.getMaxRate()*Math.pow((tRange), 2);
+					Edge e1=new Edge(v1,v2,v1.getBudgetEnergy());
+					g.addEdge(e1);
+					
+					//double tV2=this.getgFactorRecv()*v2.getMaxRate()+this.getgFactorSend()*v2.getMaxRate()*Math.pow((tRange), 2);
+					Edge e2=new Edge(v2,v1,v2.getBudgetEnergy());
+					g.addEdge(e2);
+					
+					gData[v2.getVerValue()]=this.subData(gData[v1.getVerValue()]);
+				}
+			}
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		for(int m=0;m<this.gNodeNum;m++)
+		{
+			for(int n=0;n<this.gDataNum*this.gDataGroup;n++)
+			{
+				PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileData+"_"+n/this.gDataNum+".txt",true)));
+				pw1.print(gData[m][n]+" ");
+				if((n+1)%this.gDataNum==0)
+				{
+					pw1.println();
+				}
+				pw1.flush();
+				pw1.close();
+			}
+			
+			
+		}
+		
+
+		
+		
+		
+		return g;
+	}
+	
+	
+	
+	
 	public static void main(String[] args)
 	{
 		try
 		{
-			//int[] tNodeSet={50,60,70,80,90,100,110,120,130,140,150,200,250,300};
-			int[] tNodeSet={50,100,150,200,250,300};   //10,11,12,13,14,15,50,100,150,200,250,300,350,400,450,500
-			double[] tRadiusSet={21,21,21,21,21,21};
-			double tDensity=7.5;
-			int gLoop=10;
-			//int[] tXSet={100,100,100};
-			//int[] tYSet={100,100,100};
-			//int[] tRangeSet={25,25,25};
-			//Random r=new Random();
-			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream("test/topology/000000nodeDensity.txt")));
-			DecimalFormat df=new DecimalFormat("#.00");
-			pw.println("Node  Radius  NodeDensity");
-			for(int i=0;i<tNodeSet.length;i++)
-			{
-				double nodeDensity=tDensity;
-				//tRadiusSet[i]=Math.sqrt(100*100*tDensity/3.14/tNodeSet[i]);
-				pw.println(tNodeSet[i]+" "+df.format(tRadiusSet[i])+" "+df.format(nodeDensity));
-			}
-			pw.flush();
-			pw.close();
+			 int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
+			 double[] gTransSet={39,26,18.5,14.5,12.5,11,10,9,8.5,8,7.5};    //24,24,24,24,24,24
+			 int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 			
-			
-			for(int j=0+10;j<gLoop+10;j++)
-			{
-				for(int i=0;i<tNodeSet.length;i++)
-				{
-					WSNGenerator tGenerator=new WSNGenerator();
-					tGenerator.setgNodeNum(tNodeSet[i]);
-					tGenerator.setgRadius(tRadiusSet[i]);
-					//tGenerator.setgDataNum(10);
-					//tGenerator.setgDataGroup(3);
-					//tGenerator.setgSelfGroup(5);
-					tGenerator.generateGraph(String.valueOf(tNodeSet[i])+"_"+j);
-				}
-			}
+			 for(int i=0;i<10;i++)
+			 {
+				 for(int gN=0;gN<gNodeSet.length;gN++)
+			    	{
+			    		int gNode=gNodeSet[gN];
+			    		double gTrans=gTransSet[gN];
+			    		int gDataSum=gDataSumSet[gN];
+			    		
+			    		String fileNode="test/topologySynthetic/node-"+gNode+"-"+i+".txt";
+			    		String fileData="test/topologySynthetic/data_"+gNode+"_"+i;
+			    		
+			    		WSNGenerator tGene=new WSNGenerator();
+			    		tGene.setgDataNum(gDataSum);
+			    		tGene.setgNodeNum(gNode);
+			    		tGene.setgRadius(gTrans);
+			    		
+			    		tGene.generateSyntheticData(fileNode, fileData);
+			    	}
+			 }
+			 
+			 
 		}
 		catch(Exception e)
 		{
