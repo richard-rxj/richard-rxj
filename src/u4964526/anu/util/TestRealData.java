@@ -646,7 +646,7 @@ public class TestRealData {
 					
 					g=new Graph();
 					TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
-					double tWRateFactor=0;
+					double tWRateFactor=-1;
 					WfMaxFlow twFlow=new WfMaxFlow();
 			    	twFlow.setTopology(g);
 				    twFlow.seteRx(eRx);
@@ -654,7 +654,7 @@ public class TestRealData {
 				    twFlow.setEpsilon(0.1);
 			    	twFlow.computeDWFFLow();
 			    	int tWRateFactorI=0;
-			    	while(tWRateFactor==0)
+			    	while(tWRateFactor<0)
 			    	{
 			    		double tWRate=twFlow.getTopology().getSourceList().get(tWRateFactorI).getMaxRate();
 			    		if((tWRate>(gBaseMaxRate[0]*0.95))||(tWRateFactorI==(twFlow.getTopology().getSourceList().size()-1)))
@@ -668,7 +668,7 @@ public class TestRealData {
     	    		
 			    	g=new Graph();
 					TestRealData.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
-					double tGRateFactor=0;
+					double tGRateFactor=-1;
 					GragMaxFlow tgFlow=new GragMaxFlow();
 			    	tgFlow.setTopology(g);
 				    tgFlow.seteRx(eRx);
@@ -688,7 +688,7 @@ public class TestRealData {
 			    	tGRateFactor=tWRateFactor;
 			    	//tGRateFactor=1;
 			    	
-			    	System.out.println("Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---Initial");
+			    	System.out.println(gAppr+fileOut+"-Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---Initial");
 		    		
 		    		for(int gC=0;gC<gCThresholdSet.length;gC++)
 		    		{
@@ -702,7 +702,7 @@ public class TestRealData {
 		    				int gRou=gRouSet[gR];
 		    				
 		    				
-		    				System.out.println("Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---CThreshold<"+gCThreshold+">---Rou<"+gRou+">");
+		    				System.out.println(gAppr+fileOut+"-Interval<"+gI+">---Topology<"+gT+">---Node<"+gNode+">---CThreshold<"+gCThreshold+">---Rou<"+gRou+">");
 		    				
 		    				
 		    				String fWData=null;
@@ -1019,18 +1019,18 @@ public class TestRealData {
 			
 
 	
-			//TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
+			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
 
-			//TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
+			TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
 				
-			//TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
+			TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
 			
 			
 			TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
 
-			//TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
+			TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
 				
-			//TestRealData.testIntervalSet(50,"test/topologySynthetic/","test/synthetic/50/");
+			TestRealData.testIntervalSet(50,"test/topologySynthetic/","test/synthetic/50/");
 			
 		}
 		catch(Exception e)
