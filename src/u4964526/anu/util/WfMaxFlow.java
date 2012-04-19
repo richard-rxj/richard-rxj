@@ -250,7 +250,7 @@ public class WfMaxFlow {
 	
 	public double computeDWFFLow()
 	{
-		topology.transit();
+		topology.transit();               //now!!!
 		ArrayList<Edge> edgeList=topology.getEdgeList();
 		ArrayList<Vertex> sourceList=topology.getVertexList();
 		Vertex sink=topology.getSinkList().get(0);
