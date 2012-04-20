@@ -120,7 +120,12 @@ public class DataQuality {
 				for(int i=0;i<tSlave.length;i++)
 				{
 
-				    if(i==ti)
+				    if((i==ti)&&(i==tMi))
+				    {
+				    	bothRate++;
+				    }
+					
+					if(i==ti)
 					{
 						tSlave[i]=slaveBase[i];
 						a.add(String.valueOf(i));
@@ -131,7 +136,6 @@ public class DataQuality {
 						tSlave[i]=masterBase[i];
 						a.add(String.valueOf(i));
 						tMi=tMi+tMStep;
-						bothRate++;
 					}
 					if(i>ti)
 					{
