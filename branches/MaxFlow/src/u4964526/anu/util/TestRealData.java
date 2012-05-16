@@ -1020,13 +1020,15 @@ public class TestRealData {
 
 	
 			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
+			
+			TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
 
 			TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
 				
 			TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
 			
 			
-			TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
+
 
 			TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
 				
