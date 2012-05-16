@@ -259,6 +259,11 @@ public class GragMaxFlow {
 				{
 					continue;
 				}
+				
+				if(mSource.getWeight()<0.0001)
+				{
+					continue;
+				}
 				//double wd=mPath.getwULength();
 				
 				++loopSum;
