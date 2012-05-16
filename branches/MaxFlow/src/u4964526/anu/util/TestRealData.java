@@ -653,7 +653,7 @@ public class TestRealData {
 				    twFlow.seteTx(eTx);
 				    twFlow.setEpsilon(0.1);
 			    	twFlow.computeDWFFLow();
-			    	int tWRateFactorI=0;
+			    	int tWRateFactorI=10;
 			    	while(tWRateFactor<0)
 			    	{
 			    		double tWRate=twFlow.getTopology().getSourceList().get(tWRateFactorI).getMaxRate();
