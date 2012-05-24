@@ -561,13 +561,13 @@ public class TestRealData {
 	    
 	    int[] gRouSet={100,110,0,20,40,60,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
 	    int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
-	    double[] gTransSet={39,26,18.5,14.5,12.5,11,10,9,8.5,8,7.5};    //24,24,24,24,24,24
+	    double[] gTransSet={30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5};    //24,24,24,24,24,24
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] gCThresholdSet={9,8,7,6,5,4,3};  //9,8,7,6,5,4,3
+	    int[] gCThresholdSet={8,6,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
-	    int topologySum=10;     //15
+	    int topologySum=3;     //15
 	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
