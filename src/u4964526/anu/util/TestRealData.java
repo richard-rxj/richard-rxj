@@ -24,7 +24,7 @@ public class TestRealData {
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
 	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={1000,800,600};   //{100,80,60}  76800,61440,46080
+	private static double[] gBaseMaxRate={10000,8000,6000};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
 	
@@ -567,7 +567,7 @@ public class TestRealData {
 	    int[] gCThresholdSet={8,6,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
-	    int topologySum=3;     //15
+	    int topologySum=5;     //15
 	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
