@@ -29,7 +29,7 @@ public class DataQuality {
 	
 	private double getSubUtility(double ratio)
 	{
-		return 1-Math.pow((1-ratio),4);
+		return 1-Math.pow((1-ratio),2);   //a=2
 	}
 	
 	
