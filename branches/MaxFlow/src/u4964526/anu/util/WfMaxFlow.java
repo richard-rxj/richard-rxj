@@ -121,6 +121,7 @@ public class WfMaxFlow {
 			f.setStart(s);
 			f.setEnd(sink);
 			f.setMaxRate(s.getMaxRate()*s.getWeight());  
+			s.setMaxRate(f.getMaxRate());
 			f.setRate(0);
 			fSolution.put(s, f);
 		}
@@ -156,7 +157,7 @@ public class WfMaxFlow {
 						/*
 						 *  for debug
 						 */
-						tsumMaxRate=tsumMaxRate+te.getWfNodeSet().get(j).getMaxRate()*te.getWfNodeSet().get(j).getWeight();
+						tsumMaxRate=tsumMaxRate+te.getWfNodeSet().get(j).getMaxRate();
 					}
 					double tLamda=te.getCapacity()/((this.geteTx()+this.geteRx())*tsumMaxRate);
 					te.setWfFactor(tsumMaxRate);
@@ -252,160 +253,4 @@ public class WfMaxFlow {
 		return endTime-startTime;
 	}
 	
-	
-//	public double computeDWFFLow()
-//	{
-//		topology.transit();               //now!!!
-//		ArrayList<Edge> edgeList=topology.getEdgeList();
-//		ArrayList<Vertex> sourceList=topology.getVertexList();
-//		Vertex sink=topology.getSinkList().get(0);
-//		double gD=0;
-//		
-//		for(int i=0;i<edgeList.size();i++)
-//		{
-//			double mlTemp=this.getWfMinlength()/edgeList.get(i).getCapacity();
-//			edgeList.get(i).setLength(mlTemp);
-//			gD=gD+this.getWfMinlength();
-//		}
-//		
-//		
-//		for(int i=0;i<sourceList.size();i++)
-//		{
-//			Vertex s=sourceList.get(i);
-//			//double tRate=s.getMaxRate()*s.getWeight()*this.getWfScaleFactor()/this.getTau();   //now
-//			double tRate=s.getMaxRate()*s.getWeight()/this.getTau();    //
-//			s.setMaxRate(tRate);
-//		}
-//		
-//		boolean w=false;
-//		if(gD<1)
-//		{
-//			w=true;
-//		}
-//		int loopSum=0;
-//		double startTime=System.currentTimeMillis();
-//		while(w)
-//		{
-//			w=false;
-//			
-//			if(gD>=1)
-//			{
-//				continue;
-//			}
-//			
-//			HashMap<Vertex,Path> tPathSet=this.topology.getShortPathAndDSNode(sink);
-//			double wfFactor=1;
-//			if(sink.getMinKey()<1)
-//			{
-//				wfFactor=sink.getMinKey()/(this.geteTx()+this.geteRx());
-//			}
-//			
-//			sink.setMinKey(1);
-//			/*
-//			for(int i=0;i<topology.getEdgeList().size();i++)
-//			{
-//				Edge te=topology.getEdgeList().get(i);
-//				if(te.isWasTreed())
-//				{
-//					double tsumMaxRate=te.getWfFactor();
-//					
-//					double twfFactor=te.getCapacity()/((this.geteTx()+this.geteRx())*tsumMaxRate);
-//					
-//					
-//					if(wfFactor>twfFactor)
-//					{
-//						wfFactor=twfFactor;
-//					}
-//					
-//					
-//					
-//									
-//				}
-//			}
-//			*/
-//			
-//			++loopSum;
-//			/*
-//			 * begin of debug info
-//			 *
-//			
-//			System.out.println("********Wfloop--"+loopSum+"*******\n");
-//			System.out.println("********WfgD--"+gD+"*******\n");
-//			System.out.println("********WfFactor--"+wfFactor+"*******\n");
-//			//System.out.println(this.getMaxG());
-//			/*
-//			 * end of debug info
-//			 */
-//			
-//			
-//			
-//			
-//			
-//			gD=0;
-//			for(int i=0;i<topology.getEdgeList().size();i++)
-//			{
-//				Edge te=topology.getEdgeList().get(i);
-//				if(te.isWasTreed())
-//				{
-//					double tLength=te.getLength();
-//					double tadd=(1+this.getEpsilon()*(this.geteRx()+this.geteTx())*wfFactor*te.getWfSum()/te.getCapacity());
-//					tLength=tLength*tadd;
-//					
-//					te.setLength(tLength);
-//					te.setWasTreed(false);
-//					te.getWfNodeSet().clear();
-//					te.setWfSum(0);
-//					
-//				}
-//				gD=gD+te.getCapacity()*te.getLength();
-//			}
-//			
-//			
-//			for(int i=0;i<sourceList.size();i++)
-//			{
-//
-//				Vertex mSource=sourceList.get(i);
-//				
-//				
-//				if(mSource.isWasConnected()&&mSource.getMaxRate()>0)
-//				{
-//					/*
-//					 * begin of update rates and length for next loop
-//					 */
-//					 
-//						 double addRate=wfFactor*mSource.getMaxRate();
-//						 w=true;
-//						 double tRate=mSource.getRate();
-//						 double mRate=mSource.getMaxRate();
-//						 tRate=tRate+addRate;
-//						 mRate=mRate-addRate;
-//						 mSource.setRate(tRate);
-//						 mSource.setMaxRate(mRate);
-//					/*
-//					 * end of update rates and length for next loop
-//					 */
-//				}
-//				
-//			}
-//			
-//			
-//		}
-//		double endTime=System.currentTimeMillis();
-//		/*
-//		 * begin of compute the real rate
-//		 */
-//		sink.setMaxRate(loopSum);
-//		
-//		for(int i=0;i<sourceList.size();i++)
-//		{
-//			Vertex s=sourceList.get(i);
-//		    double r=s.getRate();
-//		    r=r*this.getTau()/this.getWfScaleFactor();
-//		    s.setRate(r);
-//		}
-//		return endTime-startTime;
-//		/*
-//		 * end of compute the real rate
-//		 */
-//	}
 }
