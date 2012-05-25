@@ -20,8 +20,7 @@ public class Edge {
 	private double length=1;
 	private double realCap=0;
 	private ArrayList<Vertex> wfNodeSet;
-	private double wfFactor=1;
-	private double wfSum=0;
+	private double wfFactor=0;
 	private boolean wasTreed=false;
 	private boolean wasFaked=false;
 	
@@ -108,20 +107,6 @@ public class Edge {
 
 
 
-	public double getWfSum() {
-		return wfSum;
-	}
-
-
-
-
-
-	public void setWfSum(double wfSum) {
-		this.wfSum = wfSum;
-	}
-
-
-
 
 
 	public double getWfFactor() {
@@ -172,8 +157,6 @@ public class Edge {
     public void addWfNode(Vertex e)
     {
     	wfNodeSet.add(e);
-    	wfSum=wfSum+e.getMaxRate();
-    	wfFactor=this.capacity/this.wfSum;
     }
 
 

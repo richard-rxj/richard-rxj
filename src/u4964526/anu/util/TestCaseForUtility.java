@@ -23,8 +23,8 @@ public class TestCaseForUtility {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.000653,0,000653};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={1000};   //{100,80,60}  76800,61440,46080
+	private static double[] gBaseBudgetEnergy={0.00653,0,00653};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={10000};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
 	

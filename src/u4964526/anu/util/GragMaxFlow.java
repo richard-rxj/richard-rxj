@@ -52,8 +52,6 @@ public class GragMaxFlow {
 
 	public double getDelta()
 	{
-		//double z=this.getTopology().getEdgeList().size()/(1-this.getEpsilon());    //now!!!
-		//double x=Math.pow(z,(-1/this.getEpsilon()));                               //now!!!
 		double z=(1-this.epsilon)/this.getTopology().getEdgeList().size();           //!!!
 		double x=Math.pow(z,(1/this.getEpsilon()));                                  //!!!
 		return x;
@@ -61,7 +59,6 @@ public class GragMaxFlow {
 
 
 	public double getGragScaleFactor() {
-		//double y=Math.log(1/this.getDelta())/Math.log(1+this.getEpsilon());          //now!!!
 		//double y=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);            //!!!
 		double y=1;
         for(int i=0;i<this.topology.getEdgeList().size();i++)
@@ -108,7 +105,7 @@ public class GragMaxFlow {
 		{
 			double mlTemp=this.getDelta()/edgeList.get(i).getCapacity();
 			edgeList.get(i).setLength(mlTemp);
-			gD=gD+this.getDelta();
+			gD=gD+edgeList.get(i).getLength()*edgeList.get(i).getCapacity();
 		}
 		
 		for(int i=0;i<sourceList.size();i++)
@@ -187,7 +184,6 @@ public class GragMaxFlow {
 							 {
 								    Edge te=edgeList.get(ti);	
 								    te.getWfNodeSet().clear();
-								    te.setWfSum(0);
 									gD=gD+te.getLength()*te.getCapacity();
 							 }
 							 /*
@@ -216,7 +212,6 @@ public class GragMaxFlow {
 								 {
 									    Edge te=edgeList.get(ti);	
 									    te.getWfNodeSet().clear();
-									    te.setWfSum(0);
 										gD=gD+te.getLength()*te.getCapacity();
 								 }
 								 /*
