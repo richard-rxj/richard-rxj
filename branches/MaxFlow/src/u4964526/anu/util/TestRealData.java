@@ -797,10 +797,10 @@ public class TestRealData {
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
 							
-							double[] gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1);
+							double[] gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1,null);
 							if(gRou==100)
 							{
-								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1);
+								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1,null);
 							}
 		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp[0];
 		    				tResultSet[gN][gC][gR][7]=tResultSet[gN][gC][gR][7]+gkTemp[1];
@@ -906,10 +906,10 @@ public class TestRealData {
 		    				dq=new DataQuality();
 							dq.setDataSum(gDataSum);
 							dq.setNodeSum(gNode);
-							double[] wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2);
+							double[] wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2,null);
 							if(gRou==100)
 							{
-								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2);
+								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2,null);
 							}
 		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp[0];
 		    				tResultSet[gN][gC][gR][6]=tResultSet[gN][gC][gR][6]+wfTemp[1];

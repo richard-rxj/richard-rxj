@@ -612,8 +612,22 @@ public class TestCaseForUtility {
     	    			tf.mkdirs();
     	    		}
     	    		
+    	    		String tgkUtilityFileName=fileOut+"testinterval/gkutility/I"+gI+"/";
+    	    		tf=new File(tgkUtilityFileName);
+    	    		if(!tf.exists())
+    	    		{
+    	    			tf.mkdirs();
+    	    		}
+    	    		
     	    		String twfRateFileName=fileOut+"testinterval/wfrate/I"+gI+"/";
     	    		tf=new File(twfRateFileName);
+    	    		if(!tf.exists())
+    	    		{
+    	    			tf.mkdirs();
+    	    		}
+    	    		
+    	    		String twfUtilityFileName=fileOut+"testinterval/wfutility/I"+gI+"/";
+    	    		tf=new File(twfUtilityFileName);
     	    		if(!tf.exists())
     	    		{
     	    			tf.mkdirs();
@@ -667,7 +681,7 @@ public class TestCaseForUtility {
 			    		tWRateFactorI++;
 			    		
 			    	}
-			    	tWRateFactor=1;
+			    	//tWRateFactor=1;
     	    		
 			    	g=new Graph();
 					TestCaseForUtility.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
@@ -712,7 +726,7 @@ public class TestCaseForUtility {
 		    				
 		    				
 		    				String fWeight=tWeightFileName+"weight-N"+gNode+".txt";
-		    				
+		    				String fRData=tWeightFileName+"data.txt";
 		    						
 			    			
 			    			
@@ -777,28 +791,29 @@ public class TestCaseForUtility {
 					    	
 							
 					    	
-//					    	/*
-//					    	 * !!!!!!!!!need to modify for utility
-//					    	 */
-//					    	String fSData1=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
-//		    				
-//					    	
-//					    	DataQuality dq=new DataQuality();
-//							dq.setDataSum(gDataSum);
-//							dq.setNodeSum(gNode);
-//							
-//							double[] gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1);
-//							if(gRou==100)
-//							{
-//								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1);
-//							}
-//		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp[0];
-//		    				tResultSet[gN][gC][gR][7]=tResultSet[gN][gC][gR][7]+gkTemp[1];
-//		    				
-//		    				System.out.println("GK Utility Done");
-//		    				/*
-//		    				 * end of utility
-//		    				 */
+					    	/*
+					    	 * !!!!!!!!!need to modify for utility
+					    	 */
+					    	String fSData1=tgkSDataFileName+"gdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
+					    	String fGUtility=tgkUtilityFileName+"gutility-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		
+				    		
+					    	
+					    	DataQuality dq=new DataQuality();
+							dq.setDataSum(gDataSum);
+							dq.setNodeSum(gNode);
+							
+							double[] gkTemp=dq.computeUtility(fRData, fGRate, 0, fWeight,0,fSData1,fGUtility);
+							if(gRou==100)
+							{
+								gkTemp=dq.computeUtility(fRData, fGRate, 1, fWeight,0,fSData1,fGUtility);
+							}
+		    				tResultSet[gN][gC][gR][5]=tResultSet[gN][gC][gR][5]+gkTemp[0];
+		    				tResultSet[gN][gC][gR][7]=tResultSet[gN][gC][gR][7]+gkTemp[1];
+		    				
+		    				System.out.println("GK Utility Done");
+		    				/*
+		    				 * end of utility
+		    				 */
 							
 		    				
 		    										
@@ -872,25 +887,28 @@ public class TestCaseForUtility {
 					    	
 		    				
 		    				
-//		    				/*
-//		    				 * need to modify for  utility  !!!!!!!!!!!!
-//		    				 */
-//					    	String fSData2=twfSDataFileName+"wdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
-//		    				dq=new DataQuality();
-//							dq.setDataSum(gDataSum);
-//							dq.setNodeSum(gNode);
-//							double[] wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2);
-//							if(gRou==100)
-//							{
-//								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2);
-//							}
-//		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp[0];
-//		    				tResultSet[gN][gC][gR][6]=tResultSet[gN][gC][gR][6]+wfTemp[1];
-//		    				
-//		    				System.out.println("Wf Utility Done");
-//		    			    /*
-//		    			     * end of utility !!!!!!!!!!!!!!
-//		    			     */
+		    				/*
+		    				 * need to modify for  utility  !!!!!!!!!!!!
+		    				 */
+					    	String fSData2=twfSDataFileName+"wdata-N"+gNode+"-T"+gT+"-I"+(gI+1)+"-C"+gCThreshold+"-R"+gRou+".txt";      //data save for next interval          
+					    	String fWUtility=twfUtilityFileName+"wutility-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		
+				    		
+					    	
+					    	dq=new DataQuality();
+							dq.setDataSum(gDataSum);
+							dq.setNodeSum(gNode);
+							double[] wfTemp=dq.computeUtility(fRData, fRate, 0, fWeight,0,fSData2, fWUtility);
+							if(gRou==100)
+							{
+								wfTemp=dq.computeUtility(fRData, fRate, 1, fWeight,0,fSData2,fWUtility);
+							}
+		    				tResultSet[gN][gC][gR][2]=tResultSet[gN][gC][gR][2]+wfTemp[0];
+		    				tResultSet[gN][gC][gR][6]=tResultSet[gN][gC][gR][6]+wfTemp[1];
+		    				
+		    				System.out.println("Wf Utility Done");
+		    			    /*
+		    			     * end of utility !!!!!!!!!!!!!!
+		    			     */
 					    	
                             String fResult=fileOut+"result/result-N"+gNode+"-T"+gT+"-I"+gI+"-C"+gCThreshold+"-R"+gRou+".txt";		    		  
 					    	PrintWriter pw3=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fResult)));
