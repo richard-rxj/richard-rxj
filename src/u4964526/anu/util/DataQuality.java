@@ -201,6 +201,8 @@ public class DataQuality {
 					result[lineNum][i]=Double.parseDouble(tData[i]);
 				}
 				lineNum++;
+				if(lineNum>=nodeSum)
+					break;
 			}
 			bf.close();
 		}
@@ -341,11 +343,13 @@ public class DataQuality {
 	 * begin utility calculation + data saving
 	 */
 	
-	public double[] computeUtility(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile)
+	public double[] computeUtility(String dataFile, String rateFile, int wOption,String weightFile,int dOption,String saveFile, String utilityFile)
 	{
 		double result[]=new double[2];
+		
 		try
 		{
+			double[][] sUtility=new double[this.nodeSum][3];
 			double[][] sData=new double[this.nodeSum][this.dataSum];
 			for(int i=0;i<this.nodeSum;i++)
 				for(int j=0;j<this.dataSum;j++)
@@ -371,6 +375,9 @@ public class DataQuality {
 					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId],tSlaveMaxRate,tMasterMaxRate);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
+					sUtility[tSlaveId][0]=gRate[tSlaveId-1];
+					sUtility[tSlaveId][1]=tSlaveMaxRate;
+					sUtility[tSlaveId][2]=tResult[1];
 				}
 				else
 				{
@@ -379,6 +386,9 @@ public class DataQuality {
 					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId],tSlaveMaxRate,0);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
+					sUtility[tSlaveId][0]=gRate[tSlaveId-1];
+					sUtility[tSlaveId][1]=tSlaveMaxRate;
+					sUtility[tSlaveId][2]=tResult[1];
 				}
 				lineNum++;
 			}
@@ -395,6 +405,19 @@ public class DataQuality {
 						pw.print(sData[i][j]+" ");
 					}
 					pw.println();
+				}
+				pw.flush();
+				pw.close();
+			}
+			
+			if(utilityFile!=null)
+			{
+				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(utilityFile)));
+				for(int i=0;i<this.nodeSum;i++)
+				{
+					
+				    pw.println(i+" "+sUtility[i][0]+" "+sUtility[i][1]+" "+sUtility[i][2]+" ");
+					
 				}
 				pw.flush();
 				pw.close();
