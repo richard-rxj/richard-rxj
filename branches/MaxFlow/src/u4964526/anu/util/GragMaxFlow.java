@@ -59,7 +59,7 @@ public class GragMaxFlow {
 
 
 	public double getGragScaleFactor() {
-		//double y=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);            //!!!
+		double ty=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);            //!!!
 		double y=1;
         for(int i=0;i<this.topology.getEdgeList().size();i++)
         {
@@ -244,12 +244,13 @@ public class GragMaxFlow {
 		 */
 		sink.setMaxRate(loopSum);
 		
+		double tScaleFactor=this.getGragScaleFactor();
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
 		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
-		    r=r/this.getGragScaleFactor();    //now!!!
+		    r=r/tScaleFactor;    //now!!!
 		    f.setRate(r);
 		}
 		

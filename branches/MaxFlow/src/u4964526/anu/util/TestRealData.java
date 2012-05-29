@@ -23,8 +23,8 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={10000,8000,6000};   //{100,80,60}  76800,61440,46080
+	private static double[] gBaseBudgetEnergy={0.000653,0.001365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={100,80,60};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
 	
@@ -560,15 +560,15 @@ public class TestRealData {
   	    
 	    
 	    int[] gRouSet={100,110,0,20,40,60,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
-	    int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
+	    int[] gNodeSet={50,100,200};      //50,100,200,300,400,500,600,700,800,900,1000
 	    double[] gTransSet={30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5};    //24,24,24,24,24,24
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={8,6,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
-	    int topologySum=5;     //15
-	    int intervalSum=10;     //10
+	    int topologySum=3;     //15
+	    int intervalSum=2;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    
