@@ -11,7 +11,6 @@ public class WfMaxFlow {
 	private double eTx;
 	private double eRx;
 	private double epsilon;
-	private double tau=1;
 	private Graph topology;
 	private HashMap<Vertex,Flow> fSolution;
 	
@@ -61,7 +60,7 @@ public class WfMaxFlow {
 
 
 	public double getWfScaleFactor() {
-		//double y=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);
+		double ty=Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon);
         double y=1;
         for(int i=0;i<this.topology.getEdgeList().size();i++)
         {
@@ -76,13 +75,6 @@ public class WfMaxFlow {
 	}
 
 
-	public double getTau() {
-		return tau;
-	}
-
-	public void setTau(double slotNum) {
-		this.tau = slotNum;
-	}
 
 	public HashMap<Vertex, Flow> getFSolution() {
 		return fSolution;
@@ -238,12 +230,14 @@ public class WfMaxFlow {
 		 * begin of compute the real rate
 		 */
 		
+		double tScaleFactor=this.getWfScaleFactor();
+		
 		for(int i=0;i<sourceList.size();i++)
 		{
 			Vertex s=sourceList.get(i);
 		    Flow f=fSolution.get(s);	
 		    double r=f.getRate();
-		    r=r*this.getTau()/this.getWfScaleFactor();
+		    r=r/tScaleFactor;
 		    f.setRate(r);
 		}
 		
