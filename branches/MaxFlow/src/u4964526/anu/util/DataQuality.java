@@ -412,13 +412,19 @@ public class DataQuality {
 			
 			if(utilityFile!=null)
 			{
+				double t1=0;
+				double t2=0;
+				double t3=0;
 				PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(utilityFile)));
 				for(int i=0;i<this.nodeSum;i++)
 				{
 					
 				    pw.println(i+" "+sUtility[i][0]+" "+sUtility[i][1]+" "+sUtility[i][2]+" ");
-					
+					t1=t1+sUtility[i][0];
+					t2=t2+sUtility[i][1];
+					t3=t3+sUtility[i][2];
 				}
+				pw.println("sum "+t1+" "+t2+" "+t3+" ");
 				pw.flush();
 				pw.close();
 			}

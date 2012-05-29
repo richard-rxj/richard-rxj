@@ -23,8 +23,8 @@ public class TestCaseForUtility {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.00653,0,00653};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
-	private static double[] gBaseMaxRate={10000};   //{100,80,60}  76800,61440,46080
+	private static double[] gBaseBudgetEnergy={0.01365,0.01365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseMaxRate={100};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
 	
@@ -38,12 +38,17 @@ public class TestCaseForUtility {
 
 	private static double getBudgetEnergy()
 	{
-		return gBaseBudgetEnergy[0]+Math.random()*(gBaseBudgetEnergy[1]-gBaseBudgetEnergy[0]);  //7(100,150)  1.2(real)  19(300)  3(50) 12(200)
+		
+		double y=gBaseBudgetEnergy[0];
+		double x=Math.random()*(gBaseBudgetEnergy[1]-gBaseBudgetEnergy[0]);  
+		double z=y-x;
+	    return z;
 	}
 
    private static double getVertexMaxRate()
    {
-		return gBaseMaxRate[new Random().nextInt(gBaseMaxRate.length)];
+		double y=gBaseMaxRate[new Random().nextInt(gBaseMaxRate.length)];
+		return y;
    }
 	
    private static double validTransRangePlusEdgeCapacity(Vertex v1, Vertex v2,double transRange)
@@ -100,7 +105,7 @@ public class TestCaseForUtility {
 			   v1.setxLabel(Double.parseDouble(b[1]));
 			   v1.setyLabel(Double.parseDouble(b[2]));
 			   v1.setMaxRate(getVertexMaxRate());
-			   v1.setBudgetEnergy(getBudgetEnergy()*eOption);
+			   v1.setBudgetEnergy(getBudgetEnergy());
 			   v1.setRate(0);
 			   v1.setWeight(1);
 			   g.addVertex(v1);
@@ -560,11 +565,11 @@ public class TestCaseForUtility {
   	    
 	    
 	    int[] gRouSet={100,110,0,20,40,60,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
-	    int[] gNodeSet={20,100};      
-	    double[] gTransSet={48,26};    
+	    int[] gNodeSet={50,100};      
+	    double[] gTransSet={30,20};    
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; 
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         
-	    int[] gCThresholdSet={8};  // manual match
+	    int[] gCThresholdSet={8,6,4};  // manual match
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
 	    int topologySum=1;     
@@ -612,7 +617,7 @@ public class TestCaseForUtility {
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String tgkUtilityFileName=fileOut+"testinterval/gkutility/I"+gI+"/";
+    	    		String tgkUtilityFileName=fileOut+"result/I"+gI+"/";
     	    		tf=new File(tgkUtilityFileName);
     	    		if(!tf.exists())
     	    		{
@@ -626,7 +631,7 @@ public class TestCaseForUtility {
     	    			tf.mkdirs();
     	    		}
     	    		
-    	    		String twfUtilityFileName=fileOut+"testinterval/wfutility/I"+gI+"/";
+    	    		String twfUtilityFileName=fileOut+"result/I"+gI+"/";
     	    		tf=new File(twfUtilityFileName);
     	    		if(!tf.exists())
     	    		{
@@ -681,7 +686,7 @@ public class TestCaseForUtility {
 			    		tWRateFactorI++;
 			    		
 			    	}
-			    	//tWRateFactor=1;
+			    	tWRateFactor=1;
     	    		
 			    	g=new Graph();
 					TestCaseForUtility.initRealDataRou(fVertex, fEdge, "", g, 1,1*1.0/100);
@@ -1020,7 +1025,7 @@ public class TestCaseForUtility {
 			
 
 	
-			TestCaseForUtility.testIntervalSet(100,"test/testcase/Topology/","test/testcase/");
+			TestCaseForUtility.testIntervalSet(100,"test/testcase/topology/","test/testcase/");
 			
 			
 			
