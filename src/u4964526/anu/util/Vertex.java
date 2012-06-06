@@ -16,6 +16,7 @@ public class Vertex implements Comparable<Vertex> {
     private double value=0;
     private int verValue=0;
     private double maxRate=Double.POSITIVE_INFINITY;
+    private double tMaxRate=Double.POSITIVE_INFINITY;
     private double rate=0;
     private boolean wasVisited=false;
     private double xLabel=0;
@@ -78,6 +79,14 @@ public class Vertex implements Comparable<Vertex> {
 
 	public void setMaxRate(double maxRate) {
 		this.maxRate = maxRate;
+	}
+
+	public double gettMaxRate() {
+		return tMaxRate;
+	}
+
+	public void settMaxRate(double tMaxRate) {
+		this.tMaxRate = tMaxRate;
 	}
 
 	public boolean isWasSource() {

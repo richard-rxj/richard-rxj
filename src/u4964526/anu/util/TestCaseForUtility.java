@@ -105,6 +105,7 @@ public class TestCaseForUtility {
 			   v1.setxLabel(Double.parseDouble(b[1]));
 			   v1.setyLabel(Double.parseDouble(b[2]));
 			   v1.setMaxRate(getVertexMaxRate());
+			   v1.settMaxRate(getVertexMaxRate());
 			   v1.setBudgetEnergy(getBudgetEnergy());
 			   v1.setRate(0);
 			   v1.setWeight(1);
@@ -339,6 +340,7 @@ public class TestCaseForUtility {
 			   v1.setxLabel(Double.parseDouble(b[1]));
 			   v1.setyLabel(Double.parseDouble(b[2]));
 			   v1.setMaxRate(Double.parseDouble(b[4]));
+			   v1.settMaxRate(Double.parseDouble(b[4]));
 			   //v1.setMaxRate(TestRealData.getVertexMaxRate());
 			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 			   //v1.setBudgetEnergy(TestRealData.getBudgetEnergy());
@@ -678,7 +680,7 @@ public class TestCaseForUtility {
 			    	int tWRateFactorI=10;
 			    	while(tWRateFactor<0)
 			    	{
-			    		double tWRate=twFlow.getTopology().getSourceList().get(tWRateFactorI).getMaxRate();
+			    		double tWRate=twFlow.getTopology().getSourceList().get(tWRateFactorI).gettMaxRate();
 			    		if((tWRate>(gBaseMaxRate[0]*0.95))||(tWRateFactorI==(twFlow.getTopology().getSourceList().size()-1)))
 			    		{
 			    			tWRateFactor=gRateIndicator/twFlow.getTopology().getSourceList().get(tWRateFactorI).getRate();
@@ -779,7 +781,7 @@ public class TestCaseForUtility {
 					    	for(int i=0;i<gFlow.getTopology().getSourceList().size();i++)
 					    	{
 					    		Vertex tVertex=gFlow.getTopology().getSourceList().get(i);
-					    		pw1.println(tVertex.getVerValue()+" "+tVertex.getRate()*tGRateFactor+" "+tVertex.getWeight()+" "+tVertex.getRate());
+					    		pw1.println(tVertex.getVerValue()+" "+tVertex.getRate()*tGRateFactor+" "+tVertex.getWeight()+" "+tVertex.getRate()+" "+tVertex.gettMaxRate());
 					    		pw1.flush();
 					    		tGFlow=tGFlow+tVertex.getRate()*(eRx+eTx);
 								tGRate=tGRate+tVertex.getRate();
@@ -869,7 +871,7 @@ public class TestCaseForUtility {
 					    	for(int i=0;i<wFlow.getTopology().getSourceList().size();i++)
 					    	{
 					    		Vertex tVertex=wFlow.getTopology().getSourceList().get(i);
-					    		pw2.println(tVertex.getVerValue()+" "+tVertex.getRate()*tWRateFactor+" "+tVertex.getWeight()+" "+tVertex.getRate());
+					    		pw2.println(tVertex.getVerValue()+" "+tVertex.getRate()*tWRateFactor+" "+tVertex.getWeight()+" "+tVertex.getRate()+" "+tVertex.gettMaxRate());
 					    		pw2.flush();
 					    		tWFlow=tWFlow+tVertex.getRate()*(eRx+eTx);
 								tWRate=tWRate+tVertex.getRate();

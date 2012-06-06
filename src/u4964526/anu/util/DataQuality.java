@@ -213,9 +213,9 @@ public class DataQuality {
 		return result;
 	}
 	
-	private double[] loadRate(String rateFile)
+	private double[][] loadRate(String rateFile)
 	{
-		double[] result=new double[nodeSum];
+		double[][] result=new double[nodeSum][2];
 		try
 		{
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(rateFile)));
@@ -224,7 +224,8 @@ public class DataQuality {
 			while((tempString=bf.readLine())!=null)
 			{
 				String[] tData=tempString.split(" ");
-				result[lineNum]=Double.parseDouble(tData[1]);
+				result[lineNum][0]=Double.parseDouble(tData[1]);
+				result[lineNum][1]=Double.parseDouble(tData[4]);
 				lineNum++;
 			}
 			bf.close();
@@ -357,7 +358,7 @@ public class DataQuality {
 			
 			
 			double[][] gData=loadData(dataFile);
-			double[] gRate=loadRate(rateFile);
+			double[][] gRate=loadRate(rateFile);
 			BufferedReader bf=new BufferedReader(new InputStreamReader(new FileInputStream(weightFile)));			
 			String tempString;
 			int lineNum=0;
@@ -372,22 +373,22 @@ public class DataQuality {
 					int tMasterId = (int)Double.parseDouble(temp[2]);
 					double tSlaveMaxRate=Double.parseDouble(temp[3]);
 					double tMasterMaxRate=Double.parseDouble(temp[4]);
-					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], gData[tMasterId], gRate[tMasterId-1],sData[tSlaveId],tSlaveMaxRate,tMasterMaxRate);
+					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1][0], gData[tMasterId], gRate[tMasterId-1][0],sData[tSlaveId],gRate[tSlaveId-1][1],gRate[tMasterId-1][1]);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
-					sUtility[tSlaveId][0]=gRate[tSlaveId-1];
-					sUtility[tSlaveId][1]=tSlaveMaxRate;
+					sUtility[tSlaveId][0]=gRate[tSlaveId-1][0];
+					sUtility[tSlaveId][1]=gRate[tSlaveId-1][1];
 					sUtility[tSlaveId][2]=tResult[1];
 				}
 				else
 				{
 					int tSlaveId = (int)Double.parseDouble(temp[0]);
 					double tSlaveMaxRate=Double.parseDouble(temp[3]);
-					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1], null, 0,sData[tSlaveId],tSlaveMaxRate,0);
+					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1][0], null, 0,sData[tSlaveId],gRate[tSlaveId-1][1],0);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
-					sUtility[tSlaveId][0]=gRate[tSlaveId-1];
-					sUtility[tSlaveId][1]=tSlaveMaxRate;
+					sUtility[tSlaveId][0]=gRate[tSlaveId-1][0];
+					sUtility[tSlaveId][1]=gRate[tSlaveId-1][1];
 					sUtility[tSlaveId][2]=tResult[1];
 				}
 				lineNum++;
