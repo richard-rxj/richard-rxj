@@ -35,7 +35,7 @@ public class DataQuality {
 	
 	private double[] computeSubMSE(int dOption,double[] slaveBase, double slaveRate, double[] masterBase, double masterRate,double[] saveData, double slaveMaxRate, double masterMaxRate)
 	{
-		double[] result=new double[2];
+		double[] result=new double[3];
 
 		
 		int tSlaveRate=(int) Math.floor(slaveRate);
@@ -86,6 +86,7 @@ public class DataQuality {
 			
 			
 			result[1]=this.getSubUtility(tSlaveRate*1.0/slaveMaxRate);
+			result[2]=0;
 			
 		}
 		else
@@ -103,6 +104,7 @@ public class DataQuality {
 			
 			if(tSlaveRate==0)
 			{
+				int tMSum=0;
 				for(int i=0;i<tSlave.length;i++)
 				{
 					if(i==tMi)
@@ -110,6 +112,12 @@ public class DataQuality {
 						tSlave[i]=masterBase[i];
 						a.add(String.valueOf(i));
 						tMi=tMi+tMStep;
+						tMSum++;
+					}
+					
+					if(tMSum==tMasterRate)
+					{
+						tMi=tSlave.length*2;
 					}
 				}
 			}
@@ -117,34 +125,59 @@ public class DataQuality {
 			{
 				tStep=(int) Math.floor(slaveBase.length*1.0/tSlaveRate);
 				
+				int tSum=0;
+				int tMSum=0;
+				
 				for(int i=0;i<tSlave.length;i++)
 				{
 
 				    if((i==ti)&&(i==tMi))
 				    {
+				    	tSlave[i]=slaveBase[i];
+						a.add(String.valueOf(i));
 				    	bothRate++;
+				    	ti=ti+tStep;
+				    	tSum++;
+				    	tMi=tMi+tMStep;
+				    	tMSum++;
 				    }
 					
-					if(i==ti)
+					if((i==ti)&&(i!=tMi))
 					{
 						tSlave[i]=slaveBase[i];
 						a.add(String.valueOf(i));
 						ti=ti+tStep;
+						tSum++;
 					}
-					else if(i==tMi)
+					
+					if((i==tMi)&&(i!=ti))
 					{
 						tSlave[i]=masterBase[i];
 						a.add(String.valueOf(i));
 						tMi=tMi+tMStep;
+						tMSum++;
 					}
 					if(i>ti)
 					{
 						ti=ti+tStep;
+						tSum++;
 					}
 					if(i>tMi)
 					{
 						tMi=tMi+tMStep;
+						tMSum++;
 					}
+					
+					if(tSum==tSlaveRate)
+					{
+						ti=tSlave.length*2;
+					}
+					
+					if(tMSum==tMasterRate)
+					{
+						tMi=tSlave.length*2;
+					}
+					
 				}
 			}
 			
@@ -167,9 +200,9 @@ public class DataQuality {
 			
 			
 			double u1=tSlaveRate*1.0/slaveMaxRate;
-			double u2=(tSlaveRate+tMasterRate-bothRate)*1.0/(slaveMaxRate+masterMaxRate);
+			double u2=(tSlaveRate+tMasterRate-bothRate)*1.0/(slaveMaxRate+masterMaxRate);   //!!!
 			result[1]=this.getSubUtility(Math.max(u1, u2));
-			
+			result[2]=tMasterRate-bothRate;
 			
 		}
 		
@@ -350,7 +383,7 @@ public class DataQuality {
 		
 		try
 		{
-			double[][] sUtility=new double[this.nodeSum][3];
+			double[][] sUtility=new double[this.nodeSum][4];
 			double[][] sData=new double[this.nodeSum][this.dataSum];
 			for(int i=0;i<this.nodeSum;i++)
 				for(int j=0;j<this.dataSum;j++)
@@ -376,9 +409,10 @@ public class DataQuality {
 					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1][0], gData[tMasterId], gRate[tMasterId-1][0],sData[tSlaveId],gRate[tSlaveId-1][1],gRate[tMasterId-1][1]);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
-					sUtility[tSlaveId][0]=gRate[tSlaveId-1][0];
-					sUtility[tSlaveId][1]=gRate[tSlaveId-1][1];
+					sUtility[tSlaveId][0]=(int)Math.floor(gRate[tSlaveId-1][0]);
+					sUtility[tSlaveId][1]=(int)Math.floor(gRate[tSlaveId-1][1]);
 					sUtility[tSlaveId][2]=tResult[1];
+					sUtility[tSlaveId][3]=tResult[2];
 				}
 				else
 				{
@@ -387,9 +421,11 @@ public class DataQuality {
 					double[] tResult=this.computeSubMSE(dOption,gData[tSlaveId], gRate[tSlaveId-1][0], null, 0,sData[tSlaveId],gRate[tSlaveId-1][1],0);
 					result[0]=result[0]+tResult[0];
 					result[1]=result[1]+tResult[1];
-					sUtility[tSlaveId][0]=gRate[tSlaveId-1][0];
-					sUtility[tSlaveId][1]=gRate[tSlaveId-1][1];
+					sUtility[tSlaveId][0]=(int)Math.floor(gRate[tSlaveId-1][0]);
+					sUtility[tSlaveId][1]=(int)Math.floor(gRate[tSlaveId-1][1]);
 					sUtility[tSlaveId][2]=tResult[1];
+					sUtility[tSlaveId][3]=tResult[2];
+					
 				}
 				lineNum++;
 			}
@@ -420,7 +456,7 @@ public class DataQuality {
 				for(int i=0;i<this.nodeSum;i++)
 				{
 					
-				    pw.println(i+" "+sUtility[i][0]+" "+sUtility[i][1]+" "+sUtility[i][2]+" ");
+				    pw.println(i+" "+sUtility[i][0]+" "+sUtility[i][1]+" "+sUtility[i][2]+" "+sUtility[i][3]+" "+(sUtility[i][0]+sUtility[i][3])+" ");
 					t1=t1+sUtility[i][0];
 					t2=t2+sUtility[i][1];
 					t3=t3+sUtility[i][2];
@@ -446,22 +482,20 @@ public class DataQuality {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String tFileName="test/real/100/9/";
-		String fData="test/real/labData/50/data/data-1-2.txt";
-		String fWeight="test/real/labData/50/9/weight/weight-1.txt";
-		String fRate="test/real/labData/50/9/rate/rate-1-0.txt";
-		//DataQuality dq=new DataQuality();
-		//dq.setDataSum(100);
-		//dq.setNodeSum(50);
-		//dq.computeMSE(fData, fRate, 0, fWeight,0);
-		ArrayList<String> a=new ArrayList<String>();
-		a.add("1");
-		a.add("3");
-		a.add("2");
-		System.out.println(a);
-		System.out.println(a.contains("1"));
-		Arrays.sort(a.toArray());
-		System.out.println(a);
+		
+		double[] sBase={0,1,2,3,4,5,6,7,8,9};
+		double[] mBase={10,11,12,13,14,15,16,17,18,19};
+		int sRate=0;
+		int sMaxRate=8;
+		int mRate=7;
+		int mMaxRate=10;
+		double[] sData=new double[10];
+		
+		DataQuality dq=new DataQuality();
+		dq.setDataSum(10);
+		dq.setNodeSum(10);
+		dq.computeSubMSE(0,sBase, sRate, mBase, mRate,sData,sMaxRate,mMaxRate);
+		
 		
 	}
 
