@@ -461,7 +461,7 @@ public class DataQuality {
 					t2=t2+sUtility[i][1];
 					t3=t3+sUtility[i][2];
 				}
-				pw.println("sum "+t1+" "+t2+" "+t3+" ");
+				//pw.println("sum "+t1+" "+t2+" "+t3+" ");
 				pw.flush();
 				pw.close();
 			}
