@@ -569,7 +569,7 @@ public class TestRealData {
 	    int[] gCThresholdSet={8,6,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=60;
-	    int topologySum=10;     //15
+	    int topologySum=5;     //15
 	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
@@ -1041,7 +1041,7 @@ public class TestRealData {
 	
 			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
 			
-			TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
+			//TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");
 
 			TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
 				
@@ -1050,9 +1050,9 @@ public class TestRealData {
 			
 
 
-			TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
+			//TestRealData.testIntervalSet(200,"test/topologySynthetic/","test/synthetic/200/");
 				
-			TestRealData.testIntervalSet(50,"test/topologySynthetic/","test/synthetic/50/");
+			//TestRealData.testIntervalSet(50,"test/topologySynthetic/","test/synthetic/50/");
 			
 		}
 		catch(Exception e)
