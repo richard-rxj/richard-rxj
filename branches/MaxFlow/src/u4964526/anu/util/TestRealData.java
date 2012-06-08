@@ -568,7 +568,7 @@ public class TestRealData {
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={8,6,4};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
-	    double gRateIndicator=60;
+	    double gRateIndicator=50;
 	    int topologySum=5;     //15
 	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
