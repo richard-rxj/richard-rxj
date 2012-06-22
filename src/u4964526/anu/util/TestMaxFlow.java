@@ -304,7 +304,7 @@ public class TestMaxFlow {
         mFlow.seteTx(eTx);
         
        
-        mFlow.computeGragFlow();
+        mFlow.computeConcurrentFlow();
         
         /*
         *output the flow information
@@ -420,7 +420,7 @@ public class TestMaxFlow {
         mFlow.seteTx(eTx);
         
        
-        mFlow.computeWFFLow();
+        mFlow.computeDWFFLow();
         
         /*
         //output the flow information
@@ -537,9 +537,9 @@ public class TestMaxFlow {
 		long endTime=0;
 		int gNode=0;
 		int [] gNodeSet={100,150,200,250,300};
-		int lMax=10;
+		int lMax=2;
 		
-		double[] apprFactorSet={0.3,0.2,0.1,0.05};
+		double[] apprFactorSet={0.3,0.2,0.1,0.05,0.01};
 		String tFileAdd="test/simulation/"+rOption+"-"+eOption;
 		File tFile=new File(tFileAdd);
 		if(!tFile.exists())
@@ -906,7 +906,7 @@ public class TestMaxFlow {
 		fh.setLevel(Level.WARNING);
 		logger.addHandler(fh);
 		//TestMaxFlow.performanceTask();
-		//TestMaxFlow.runningTask();
+		TestMaxFlow.runningTask(3, 3);
 		//TestMaxFlow.mainTaskDWF();
 		//TestMaxFlow.mainTaskConcurrent();
 		
