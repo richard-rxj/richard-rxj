@@ -200,7 +200,7 @@ public class DataQuality {
 			
 			
 			double u1=tSlaveRate*1.0/slaveMaxRate;
-			double u2=(tSlaveRate+tMasterRate-bothRate)*1.0/(slaveMaxRate+masterMaxRate);   //!!!
+			double u2=(tSlaveRate+tMasterRate-bothRate)*1.0/(slaveMaxRate);   //!!!   slaveMaxRate+masterMaxRate
 			result[1]=this.getSubUtility(Math.max(u1, u2));
 			result[2]=tMasterRate-bothRate;
 			
