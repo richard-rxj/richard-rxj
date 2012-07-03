@@ -127,9 +127,9 @@ public class GragMaxFlow {
 		}
 		int loopSum=0;
 		double startTime=System.currentTimeMillis();
-		while(w)
+		while(gD<1)
 		{
-			w=false;
+			//w=false;                     //old!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			
 			for(int i=0;i<sourceList.size();i++)
 			{
@@ -161,7 +161,8 @@ public class GragMaxFlow {
 				 */
 				
                 Flow f=fSolution.get(mSource);
-				if((gD<1)&&(f.getMaxRate()>0))
+                f.setMaxRate(mSource.getMaxRate()*mSource.getWeight());   //new!!!!!!!!!!!!!!!!!!!
+				while((gD<1)&&(f.getMaxRate()>0))
 				{
 					/*
 					 * begin of update rates and length for next loop
