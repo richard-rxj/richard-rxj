@@ -334,10 +334,10 @@ public class TestRealData {
 			   Vertex v1=new Vertex(b[0]);
 			   v1.setxLabel(Double.parseDouble(b[1]));
 			   v1.setyLabel(Double.parseDouble(b[2]));
-			   //v1.setMaxRate(Double.parseDouble(b[4]));                //!!!!!!!!!!!!!!!
-			   //v1.settMaxRate(Double.parseDouble(b[4]));              //!!!!!!!!!!!!!!!!!!!!!!
-			   v1.setMaxRate(Double.parseDouble(b[4])*1000);
-			   v1.settMaxRate(Double.parseDouble(b[4])*1000);
+			   v1.setMaxRate(Double.parseDouble(b[4]));                //!!!!!!!!!!!!!!!
+			   v1.settMaxRate(Double.parseDouble(b[4]));              //!!!!!!!!!!!!!!!!!!!!!!
+			   //v1.setMaxRate(Double.parseDouble(b[4])*1000);
+			  
 
 			   v1.setBudgetEnergy(Double.parseDouble(b[5]));
 
@@ -563,16 +563,16 @@ public class TestRealData {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,40,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
+	    int[] gRouSet={100,20,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
 	    int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
-	    double[] gTransSet={30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5};    //24,24,24,24,24,24
+	    double[] gTransSet={30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5};    //30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
 	    int[] gCThresholdSet={8,6};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=50;
-	    int topologySum=3;     //15
-	    int intervalSum=3;     //10
+	    int topologySum=10;     //15
+	    int intervalSum=10;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    
@@ -583,7 +583,7 @@ public class TestRealData {
 	    {
 	    	double[][][][] tResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    	
-	    	for(int gT=0;gT<topologySum;gT++)
+	    	for(int gT=1;gT<topologySum;gT++)
 		    {
 	    		for(int gN=0;gN<gNodeSet.length;gN++)
 		    	{
@@ -1042,13 +1042,17 @@ public class TestRealData {
 			
 
 	
-			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
 			
+			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
 			
 
 			TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
+			
+			
+			TestRealData.testIntervalSet(300,"test/topology/","test/real/300/");
 				
-			TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
+			
+			//TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
 			
 			
 			//TestRealData.testIntervalSet(100,"test/topologySynthetic/","test/synthetic/100/");

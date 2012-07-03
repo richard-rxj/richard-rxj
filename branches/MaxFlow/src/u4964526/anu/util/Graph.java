@@ -400,6 +400,10 @@ public class Graph {
 					adjMat[se1][j].setWasTreed(true);
 					adjMat[se1][j].addWfNode(s1);
 				}
+				else
+				{
+					//break;
+				}
 				se1=j;
 			}
 			
