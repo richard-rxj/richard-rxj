@@ -26,7 +26,7 @@ public class ExperimentSetting {
 	public static double roadLength=18000;
 	public static double batteryCapacity=10000;
 	public static double[] harvestRate={0.0011,0.0022}; // J/s
-	public static double[] mSpeed={5,10,20};   // m/s   
+	//public static double[] mSpeed={5,10,20};   // m/s   
 	public static double eCom=0.3;    //  J/s
 	public static Random ran=new Random();
 	public static int cishu=15;
