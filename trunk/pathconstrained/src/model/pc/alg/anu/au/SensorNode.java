@@ -150,7 +150,7 @@ public class SensorNode extends Node {
 		
 		double add=transRate*ExperimentSetting.unitSlot;
 		this.throughput=this.throughput+add;
-		this.utility=this.utility+ExperimentSetting.getUtility(add);
+		this.utility=ExperimentSetting.getUtility(this.throughput);
 	}
 
 

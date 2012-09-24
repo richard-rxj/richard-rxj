@@ -54,7 +54,10 @@ public class CentralAllocate extends Allocate {
 				}
 			}
 			
-			
+			if(tList.size()==0)
+			{
+				continue;
+			}
 			/*
 			 * choose a slot with maxGain
 			 */

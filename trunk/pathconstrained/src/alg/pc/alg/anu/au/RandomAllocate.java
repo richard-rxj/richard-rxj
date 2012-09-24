@@ -53,6 +53,11 @@ public class RandomAllocate extends Allocate {
 			}
 			
 			
+			if(tList.size()==0)
+			{
+				continue;
+			}
+			
 			/*
 			 * choose a slot randomly
 			 */

@@ -50,7 +50,7 @@ public class DistributeAllocate extends Allocate {
 			/*
 			 * initial slotList
 			 */
-			int ti=i;
+			int ti=i+1;  //the i slot used for communication
 			int tEnd=i+ExperimentSetting.interval;
 			ArrayList<TimeSlotNode>  tSlotSet=new ArrayList<TimeSlotNode>();
 			while((ti<tEnd)&&(ti<gSlotSet.size()))
@@ -96,7 +96,10 @@ public class DistributeAllocate extends Allocate {
 				}
 			}
 			
-			
+			if(tList.size()==0)
+			{
+				continue;
+			}
 			/*
 			 * choose a slot with maxGain
 			 */
