@@ -27,7 +27,7 @@ public class TestWork {
         DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={100,200,300,400,500,600};
+        int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000};
 		double[] speedSet={5,10,20};
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CenAlg","DisAlg","RanAlg"};
@@ -87,7 +87,7 @@ public class TestWork {
 					
 					for(int tC=0;tC<cishu;tC++)
 					{
-						String tSensorTxt=tFileName+"node-"+tNetworkSize+"-"+tC+".txt";
+						String tSensorTxt="test/topology/node-"+tNetworkSize+"-"+tC+".txt";
 						
 						switch(tA)
 						{

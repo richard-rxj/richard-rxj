@@ -51,7 +51,8 @@ public class ExperimentSetting {
 	
     public static double  getUtility(double t)
     {
-    	return Math.log(t+1);
+    	//return Math.log(t+1);
+    	return Math.pow(t, 0.5);
     }
 	
 	
@@ -60,7 +61,7 @@ public class ExperimentSetting {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+        System.out.println(Math.log(250000));
 	}
 
 }
