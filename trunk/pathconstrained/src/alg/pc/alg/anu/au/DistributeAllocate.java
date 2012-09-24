@@ -25,7 +25,7 @@ public class DistributeAllocate extends Allocate {
 		ArrayList<SensorNode> gSensorSet=super.getgNet().getSensorSet();
 		ArrayList<TimeSlotNode>  gSlotSet=super.getgNet().getTimeSlotSet();
 		
-		for(int i=0;i<gSlotSet.size();i=i+10)
+		for(int i=0;i<gSlotSet.size();i=i+ExperimentSetting.interval)
 		{
 			TimeSlotNode tSlot=gSlotSet.get(i);
 			
@@ -51,7 +51,7 @@ public class DistributeAllocate extends Allocate {
 			 * initial slotList
 			 */
 			int ti=i;
-			int tEnd=i+10;
+			int tEnd=i+ExperimentSetting.interval;
 			ArrayList<TimeSlotNode>  tSlotSet=new ArrayList<TimeSlotNode>();
 			while((ti<tEnd)&&(ti<gSlotSet.size()))
 			{
