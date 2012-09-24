@@ -22,7 +22,49 @@ public class DistributeAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
-		maxGainAllocate(super.getgNet().getSensorSet(),super.getgNet().getTimeSlotSet());
+		ArrayList<SensorNode> gSensorSet=super.getgNet().getSensorSet();
+		ArrayList<TimeSlotNode>  gSlotSet=super.getgNet().getTimeSlotSet();
+		
+		for(int i=0;i<gSlotSet.size();i=i+10)
+		{
+			TimeSlotNode tSlot=gSlotSet.get(i);
+			
+			/*
+			 * initial neighbourList
+			 */
+			ArrayList<SensorNode>  tSensorSet=new ArrayList<SensorNode>();
+			for(int j=0;j<gSensorSet.size();j++)
+			{
+				SensorNode tSensor=gSensorSet.get(j);
+				double tDistance=CommonFacility.computeDistance(tSlot, tSensor);
+				if(tDistance<=ExperimentSetting.transRange)
+				{
+					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
+					{
+						tSensorSet.add(tSensor);
+					}
+				}
+			}
+			
+			
+			/*
+			 * initial slotList
+			 */
+			int ti=i;
+			int tEnd=i+10;
+			ArrayList<TimeSlotNode>  tSlotSet=new ArrayList<TimeSlotNode>();
+			while((ti<tEnd)&&(ti<gSlotSet.size()))
+			{
+				tSlotSet.add(gSlotSet.get(ti));
+				ti++;
+			}
+			
+			/*
+			 * allocate for this interval
+			 */
+			this.maxGainAllocate(tSensorSet, tSlotSet);
+		}
+		
 	}
 
 	
