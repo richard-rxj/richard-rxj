@@ -144,9 +144,11 @@ public class SensorNode extends Node {
 		AllocationPair temp=new AllocationPair(slotID,transRate);
 		this.allocation.add(temp);
 		
-		double add=transRate*ExperimentSetting.unitSlot;		
+		
 		double eCom=ExperimentSetting.eCom*ExperimentSetting.unitSlot;
 		this.residualBudget=this.residualBudget-eCom;
+		
+		double add=transRate*ExperimentSetting.unitSlot;
 		this.throughput=this.throughput+add;
 		this.utility=this.utility+ExperimentSetting.getUtility(add);
 	}
