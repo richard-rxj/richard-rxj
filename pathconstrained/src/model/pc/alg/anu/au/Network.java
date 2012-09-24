@@ -43,7 +43,7 @@ public class Network {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
 		String sensorTxt="test/topology/node-100-1.txt";
-		double speed=ExperimentSetting.mSpeed[1];
+		double speed=10;
 		
 		Network tNetwork=CommonFacility.getNetwork(sensorTxt, speed);
 		System.out.println(tNetwork);
