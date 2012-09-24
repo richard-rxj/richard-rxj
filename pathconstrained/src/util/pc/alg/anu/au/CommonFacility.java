@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import model.pc.alg.anu.au.Network;
+import model.pc.alg.anu.au.Node;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
 
@@ -79,7 +80,11 @@ public class CommonFacility {
 	}
 	
 
-	
+	public static double computeDistance(Node a, Node b)
+	{
+		double result=Math.sqrt(Math.pow(a.getX()-b.getX(), 2)+Math.pow(a.getY()-b.getY(), 2));
+		return result;
+	}
 	
 
 	
@@ -92,6 +97,14 @@ public class CommonFacility {
 		System.out.println(CommonFacility.getID());
 		System.out.println(CommonFacility.getID());
 		
+		
+		SensorNode a=new SensorNode();
+		TimeSlotNode b=new TimeSlotNode();
+		a.setX(0);
+		b.setX(3);
+		a.setY(0);
+		b.setY(4);
+		System.out.println(CommonFacility.computeDistance(a, b));
 	}
 
 }

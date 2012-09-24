@@ -109,6 +109,8 @@ public class UtilityGainComparator<V> implements Comparator<V> {
 		Object[] gSet=a.toArray();
 		UtilityGainComparator gLCom=new UtilityGainComparator(false);
 		Arrays.sort(gSet, gLCom);
+	    SensorNode t=(SensorNode)gSet[1];
+		t.setUtilityGain(80);
 		
 		for(int i=0;i<gSet.length;i++)
 		{
