@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
 
-import util.pc.alg.anu.au.CommonFacility;
+public class DistributeAllocate extends Allocate {
 
-public class CentralAllocate extends Allocate {
-
-	public CentralAllocate(String sensorTxt, double speed)
+	public DistributeAllocate(String sensorTxt, double speed)
 			throws RuntimeException, IOException {
 		super(sensorTxt, speed);
 		// TODO Auto-generated constructor stub
@@ -19,7 +17,7 @@ public class CentralAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
-		maxGainAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
+		maxGainAllocate(super.getgNet().getSensorSet(),super.getgNet().getTimeSlotSet());
 	}
 
 	
@@ -30,6 +28,5 @@ public class CentralAllocate extends Allocate {
 	{
 		
 	}
-	
 	
 }
