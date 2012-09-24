@@ -35,6 +35,13 @@ public class AllocationPair {
 	}
 
 
+	@Override
+	public String toString() {
+		return "AllocationPair [slotID=" + slotID + ", transRate=" + transRate
+				+ "]";
+	}
+
+
 	/**
 	 * @param args
 	 */
