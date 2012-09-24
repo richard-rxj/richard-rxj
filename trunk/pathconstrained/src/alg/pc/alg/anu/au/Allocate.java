@@ -25,6 +25,20 @@ public abstract class Allocate {
 	public abstract void schedule();
 
 
+	
+	public double getNetworkUtility()
+	{
+		double result=0;
+		
+		for(int i=0;i<gNet.getSensorSet().size();i++)
+		{
+			result=result+gNet.getSensorSet().get(i).getUtility();
+		}
+		
+		
+		return result;
+	}
+	
 
 	/**
 	 * @param args
