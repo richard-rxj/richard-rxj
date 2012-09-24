@@ -78,22 +78,10 @@ public class CommonFacility {
 		return result;
 	}
 	
-	/*
-	 * allocate a set of time slot to a set of sensors with maxmize utility
-	 */
-	public static void maxGainAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
-	{
-		
-	}
+
 	
 	
-	/*
-	 * allocate a set of time slot to a set of sensors randomly
-	 */
-	public static void randomAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
-	{
-		
-	}
+
 	
 	/**
 	 * @param args
