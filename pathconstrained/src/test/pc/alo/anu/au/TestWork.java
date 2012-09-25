@@ -27,8 +27,8 @@ public class TestWork {
         DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000};
-		double[] speedSet={5,10,20};
+        int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500};
+		double[] speedSet={5,10,15,20,25,30};
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CenAlg","DisAlg","RanAlg"};
 		
@@ -39,7 +39,7 @@ public class TestWork {
 			tf.mkdirs();
 		}
 		
-		
+		System.out.println("begin...");
 		
 		/*
 		 * initial writers
@@ -111,8 +111,8 @@ public class TestWork {
 					pwSpeedSet[tS].print(" "+df.format(tUtility));
 					pwSpeedSet[tS].flush();
 					
-					pwAlgSet[tS].print(" "+df.format(tUtility));
-					pwAlgSet[tS].flush();
+					pwAlgSet[tA].print(" "+df.format(tUtility));
+					pwAlgSet[tA].flush();
 					
 				}
 			}

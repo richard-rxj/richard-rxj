@@ -29,7 +29,7 @@ public class ExperimentSetting {
 	//public static double[] mSpeed={5,10,20};   // m/s   
 	public static double eCom=0.3;    //  J/s
 	public static Random ran=new Random();
-	public static int cishu=15;
+	public static int cishu=30;
 	public static int unitSlot=1;     //s
 	public static int interval=10;
 	

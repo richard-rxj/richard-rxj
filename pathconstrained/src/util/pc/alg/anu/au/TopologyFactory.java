@@ -46,7 +46,7 @@ public class TopologyFactory {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000};
+		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500};
 		int cishu=ExperimentSetting.cishu;
 		
 		
