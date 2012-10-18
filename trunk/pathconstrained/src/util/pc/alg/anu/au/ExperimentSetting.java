@@ -31,7 +31,7 @@ public class ExperimentSetting {
 	public static Random ran=new Random();
 	public static int cishu=100;
 	public static int unitSlot=1;     //s
-	public static int interval=10;
+	public static int interval=10;    //fixed interval for distributed
 	
 	
 	public static double getTransRate(double distance)
@@ -51,8 +51,9 @@ public class ExperimentSetting {
 	
     public static double  getUtility(double t)
     {
-    	//return Math.log(t+1);
-    	return Math.pow(t, 0.5);
+    
+    	//return Math.pow(t, 0.5);   // non-linear
+    	return t;                  // linear 
     }
 	
 	
