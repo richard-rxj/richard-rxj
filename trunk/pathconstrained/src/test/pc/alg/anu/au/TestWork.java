@@ -1,4 +1,4 @@
-package test.pc.alo.anu.au;
+package test.pc.alg.anu.au;
 
 import java.io.File;
 import java.io.FileOutputStream;
