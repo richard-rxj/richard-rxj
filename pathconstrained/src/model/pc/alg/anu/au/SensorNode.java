@@ -154,6 +154,25 @@ public class SensorNode extends Node {
 	}
 
 
+	public void restore(int slotID, double transRate)
+	{
+		for(int i=0; i<this.allocation.size();i++)
+		{
+			AllocationPair temp=this.allocation.get(i);
+			if(temp.getSlotID()==slotID)
+			{
+				this.allocation.remove(i);
+				break;
+			}
+		}
+		
+		double eCom=ExperimentSetting.eCom*ExperimentSetting.unitSlot;
+		this.residualBudget=this.residualBudget+eCom;
+		
+		double add=transRate*ExperimentSetting.unitSlot;
+		this.throughput=this.throughput-add;
+		this.utility=ExperimentSetting.getUtility(this.throughput);
+	}
 
 	
 
