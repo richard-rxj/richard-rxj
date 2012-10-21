@@ -206,8 +206,19 @@ public class SensorNode extends Node {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(new SensorNode());
-
+		//System.out.println(new SensorNode());
+		
+		SensorNode s1=new SensorNode();
+		AllocationPair a1=new AllocationPair(1,1);
+		AllocationPair a2=new AllocationPair(2,2);
+		AllocationPair a3=new AllocationPair(3,3);
+		s1.allocation.add(a1);
+		s1.allocation.add(a2);
+		s1.allocation.add(a3);
+		System.out.println(s1.allocation);
+		AllocationPair a4=new AllocationPair(2,2);
+        s1.allocation.remove(a4);
+        System.out.println(s1.allocation);
 	}
 
 

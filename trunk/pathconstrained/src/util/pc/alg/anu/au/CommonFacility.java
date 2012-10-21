@@ -36,16 +36,19 @@ public class CommonFacility {
 		 */
 		String tempString=null;
 		BufferedReader nReader=new BufferedReader(new InputStreamReader(new FileInputStream(sensorTxt)));
-	
+	    
+		int i=0;
 		while((tempString=nReader.readLine())!=null)
 		{
 			String[] b=tempString.split(" ");
 			SensorNode tSensor=new SensorNode();
+			tSensor.setId(i);
 			tSensor.setX(Double.parseDouble(b[0]));
 			tSensor.setY(Double.parseDouble(b[1]));
 			tSensor.setBatteryCapacity(ExperimentSetting.batteryCapacity);
 			tSensor.setEnergyBudget(Double.parseDouble(b[2])*ExperimentSetting.roadLength/speed);
 			sensorSet.add(tSensor);
+			i++;
 		}
 		
 		
@@ -56,17 +59,21 @@ public class CommonFacility {
 		/*
 		 * initial timeSlotSet
 		 */
+		i=0;
 		double x=ExperimentSetting.roadBeginX;
 		double y=ExperimentSetting.roadBeginY;
 		x=x+0.5*speed*ExperimentSetting.unitSlot;
 		TimeSlotNode tSlot=new TimeSlotNode();
+		tSlot.setId(i);
 		tSlot.setX(x);
 		tSlot.setY(y);
 		timeSlotSet.add(tSlot);
 		while((x+speed*ExperimentSetting.unitSlot)<=ExperimentSetting.roadEndX)
 		{
+			i++;
 			x=x+speed*ExperimentSetting.unitSlot;
 			tSlot=new TimeSlotNode();
+			tSlot.setId(i);
 			tSlot.setX(x);
 			tSlot.setY(y);
 			timeSlotSet.add(tSlot);

@@ -34,6 +34,11 @@ public class AllocationPair {
 		this.transRate = transRate;
 	}
 
+	
+	public AllocationPair() {
+		super();
+	}
+	
 
 	@Override
 	public String toString() {
