@@ -12,7 +12,12 @@ public class Node {
 	public Node() {
 		super();
 		// TODO Auto-generated constructor stub
-		this.id=CommonFacility.getID();
+		//this.id=CommonFacility.getID();
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 
