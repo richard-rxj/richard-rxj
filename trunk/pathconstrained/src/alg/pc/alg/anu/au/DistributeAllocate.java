@@ -13,10 +13,17 @@ import model.pc.alg.anu.au.TimeSlotNode;
 
 public class DistributeAllocate extends Allocate {
 
+	
+	
 	public DistributeAllocate(String sensorTxt, double speed)
 			throws RuntimeException, IOException {
 		super(sensorTxt, speed);
 		// TODO Auto-generated constructor stub
+		
+		/*
+		 * reconfigure interval according to speed-----every interval length is R
+		 */
+		ExperimentSetting.interval=(int)Math.floor(ExperimentSetting.transRange/(speed*ExperimentSetting.unitSlot));
 	}
 
 	@Override

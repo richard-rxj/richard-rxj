@@ -112,7 +112,23 @@ public class CApproAllocate extends Allocate {
 				if((tp.getTransRate()>0) && (slotBudget>0))
 				{
 					slotBudget--;
-					tVector[tp.getSlotID()]=v.getId();
+					/*
+					 * update sensors' information according to the final allocation
+					 */
+					int vPrevious=tVector[tp.getSlotID()];
+					if(vPrevious<0)    //first allocate
+					{						
+						v.update(tp.getSlotID(), tp.getTransRate());
+					}
+					else               //reallocate
+					{
+						v.update(tp.getSlotID(), tp.getTransRate());
+						SensorNode tPreSensor=sensorSet.get(vPrevious);
+						tPreSensor.restore(tp.getSlotID(), rateMatrix[tp.getSlotID()][vPrevious]);
+					}
+					
+					
+					tVector[tp.getSlotID()]=v.getId();					
 				}
 				else
 				{
@@ -131,8 +147,7 @@ public class CApproAllocate extends Allocate {
 			int j=tVector[i];
 			if(j>=0)
 			{
-				SensorNode v=sensorSet.get(j);
-				v.update(i, rateMatrix[i][j]);
+				
 			}
 		}
 		
