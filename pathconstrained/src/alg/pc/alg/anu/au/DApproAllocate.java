@@ -72,7 +72,8 @@ public class DApproAllocate extends Allocate {
 			/*
 			 * initial slotList
 			 */
-			int ti=i+1;  //the i slot used for communication
+			//int ti=i+1;  //the i slot used for communication
+			int ti=i;
 			int tEnd=i+ExperimentSetting.interval;
 			ArrayList<TimeSlotNode>  tSlotSet=new ArrayList<TimeSlotNode>();
 			while((ti<tEnd)&&(ti<gSlotSet.size()))
