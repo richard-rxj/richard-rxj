@@ -17,8 +17,8 @@ public class ExperimentSetting {
 
 	
 	public static double transRange=200;        
-	public static double xRange=360;
-	public static double yRange=18000;
+	public static double xRange=18000;
+	public static double yRange=360;
 	public static double roadBeginX=0;      
 	public static double roadBeginY=180;  
 	public static double roadEndX=18000;      

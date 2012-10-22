@@ -58,6 +58,12 @@ public class CApproAllocate extends Allocate {
 		for(int i=0; i<tVector.length; i++)
 		{
 			tVector[i]=-1;
+			timeSlotSet.get(i).setTid(i);    //reindex
+		}
+		
+		for(int i=0; i<sensorSet.size();i++)
+		{
+			sensorSet.get(i).setTid(i);      //reindex
 		}
 		
 		/*
@@ -71,9 +77,10 @@ public class CApproAllocate extends Allocate {
 			{
 				SensorNode v=sensorSet.get(j);
 				double tDistance=CommonFacility.computeDistance(v, t);
-				rateMatrix[t.getId()][v.getId()]=ExperimentSetting.getTransRate(tDistance);
+				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getTransRate(tDistance);
 			}
 		}
+
 		
 		
 		/*
@@ -82,6 +89,8 @@ public class CApproAllocate extends Allocate {
 		for(int i=0;i<sensorSet.size();i++)
 		{
 			SensorNode v=sensorSet.get(i);
+			
+			//System.out.println(v);   //debug
 			/* 
 			 *   construct profit function --- here use all the slots
 			 */
@@ -89,20 +98,19 @@ public class CApproAllocate extends Allocate {
 			for(int j=0; j<timeSlotSet.size();j++)
 			{
 				TimeSlotNode t=timeSlotSet.get(j);
-				if(tVector[t.getId()]>=0)
-				{
-					AllocationPair tp=new AllocationPair();
-					tp.setSlotID(t.getId());
-					double tr=rateMatrix[t.getId()][v.getId()]-rateMatrix[t.getId()][tVector[t.getId()]];
+				AllocationPair tp=new AllocationPair();
+				tp.setSlotID(t.getTid());
+				if(tVector[t.getTid()]>=0)
+				{					
+					double tr=rateMatrix[t.getTid()][v.getTid()]-rateMatrix[t.getTid()][tVector[t.getTid()]];
 					tp.setTransRate(tr);
 				}
 				else
 				{
-					AllocationPair tp=new AllocationPair();
-					tp.setSlotID(t.getId());
-					double tr=rateMatrix[t.getId()][v.getId()];
+					double tr=rateMatrix[t.getTid()][v.getTid()];
 					tp.setTransRate(tr);
 				}
+				p.add(tp);
 			}
 			/*
 			 *   sorting and selecting time slots
@@ -121,19 +129,21 @@ public class CApproAllocate extends Allocate {
 					 * update sensors' information according to the final allocation
 					 */
 					int vPrevious=tVector[tp.getSlotID()];
+					TimeSlotNode cSlot=timeSlotSet.get(tp.getSlotID());
+					
 					if(vPrevious<0)    //first allocate
 					{						
-						v.update(tp.getSlotID(), tp.getTransRate());
+						v.update(cSlot.getId(), tp.getTransRate());
 					}
 					else               //reallocate
 					{
-						v.update(tp.getSlotID(), tp.getTransRate());
+						v.update(cSlot.getId(), tp.getTransRate());
 						SensorNode tPreSensor=sensorSet.get(vPrevious);
-						tPreSensor.restore(tp.getSlotID(), rateMatrix[tp.getSlotID()][vPrevious]);
+						tPreSensor.restore(cSlot.getId(), rateMatrix[tp.getSlotID()][vPrevious]);
 					}
 					
 					
-					tVector[tp.getSlotID()]=v.getId();					
+					tVector[tp.getSlotID()]=v.getTid();					
 				}
 				else
 				{
@@ -143,18 +153,7 @@ public class CApproAllocate extends Allocate {
 		}
 		
 		
-		
-		/*
-		 * update sensors' information according to the final allocation
-		 */
-		for(int i=0;i<tVector.length;i++)
-		{
-			int j=tVector[i];
-			if(j>=0)
-			{
-				
-			}
-		}
+
 		
 		
 		
