@@ -7,6 +7,7 @@ public class Node {
 	private double x;
 	private double y;
 	private int id;
+	private int tid;
 	
 	
 	public Node() {
@@ -48,6 +49,16 @@ public class Node {
 
 	
 	
+	public int getTid() {
+		return tid;
+	}
+
+
+	public void setTid(int tid) {
+		this.tid = tid;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Node [id=" + id + ", x=" + x + ", y=" + y + "]";
