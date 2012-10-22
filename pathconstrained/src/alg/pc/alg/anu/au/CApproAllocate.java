@@ -11,6 +11,7 @@ import java.util.Collections;
 import util.pc.alg.anu.au.AllocationPairComparator;
 import util.pc.alg.anu.au.CommonFacility;
 import util.pc.alg.anu.au.ExperimentSetting;
+import util.pc.alg.anu.au.SensorXComparator;
 
 import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.SensorNode;
@@ -46,6 +47,10 @@ public class CApproAllocate extends Allocate {
 	
 	private void approAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
+		/*
+         * sort sensor according to its X-index
+         */
+		Collections.sort(sensorSet, new SensorXComparator(true));
 		/*
 		 * initial T vector which indicate timeslot allocation
 		 */

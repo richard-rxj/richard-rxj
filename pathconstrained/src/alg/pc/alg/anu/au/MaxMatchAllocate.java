@@ -84,7 +84,9 @@ public class MaxMatchAllocate extends Allocate {
 	
 	private void maxMatch(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
-		
+		/*
+		 * uncomplete
+		 */
 	}
 	
 	
