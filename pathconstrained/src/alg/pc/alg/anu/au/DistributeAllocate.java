@@ -57,7 +57,8 @@ public class DistributeAllocate extends Allocate {
 			/*
 			 * initial slotList
 			 */
-			int ti=i+1;  //the i slot used for communication
+			//int ti=i+1;  //the i slot used for communication
+			int ti=i;      // ignore communication time
 			int tEnd=i+ExperimentSetting.interval;
 			ArrayList<TimeSlotNode>  tSlotSet=new ArrayList<TimeSlotNode>();
 			while((ti<tEnd)&&(ti<gSlotSet.size()))

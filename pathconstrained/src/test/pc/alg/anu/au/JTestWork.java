@@ -33,7 +33,7 @@ public class JTestWork {
         int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000};
 		double[] speedSet={5,10,15,20,25,30};
         int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CAppro","DAppro","CMaxHeu"};
+		String[] algSet={"CAppro","DAppro","CMaxHeu", "DMaxHeu", "RanHeu"};
 		
 		String tFileName="test/journal-data/";
 		File tf=new File(tFileName);
@@ -100,6 +100,10 @@ public class JTestWork {
 							      tAllo=new DApproAllocate(tSensorTxt,tSpeed);break;
 						   case 2:
 							      tAllo=new CentralAllocate(tSensorTxt,tSpeed);break;
+						   case 3:
+							      tAllo=new DistributeAllocate(tSensorTxt,tSpeed);break;
+						   case 4:
+							      tAllo=new RandomAllocate(tSensorTxt,tSpeed);break;
 						}
 						
 						tAllo.schedule();
