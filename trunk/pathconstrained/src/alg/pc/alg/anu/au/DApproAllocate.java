@@ -14,6 +14,7 @@ import model.pc.alg.anu.au.TimeSlotNode;
 import util.pc.alg.anu.au.AllocationPairComparator;
 import util.pc.alg.anu.au.CommonFacility;
 import util.pc.alg.anu.au.ExperimentSetting;
+import util.pc.alg.anu.au.SensorXComparator;
 
 /**
  * @author u4964526
@@ -91,6 +92,11 @@ public class DApproAllocate extends Allocate {
 	
 	private void approAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
+        /*
+         * sort sensor according to its X-index
+         */
+		Collections.sort(sensorSet, new SensorXComparator(true));
+		
 		/*
 		 * initial T vector which indicate timeslot allocation
 		 */
