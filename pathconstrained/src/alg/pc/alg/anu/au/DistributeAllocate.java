@@ -15,7 +15,7 @@ public class DistributeAllocate extends Allocate {
 
 	
 	
-	public DistributeAllocate(String sensorTxt, double speed)
+	public DistributeAllocate(String sensorTxt, double speed,double interRange)
 			throws RuntimeException, IOException {
 		super(sensorTxt, speed);
 		// TODO Auto-generated constructor stub
@@ -23,7 +23,7 @@ public class DistributeAllocate extends Allocate {
 		/*
 		 * reconfigure interval according to speed-----every interval length is R
 		 */
-		ExperimentSetting.interval=(int)Math.floor(ExperimentSetting.transRange/(speed*ExperimentSetting.unitSlot));
+		ExperimentSetting.interval=(int)Math.floor(interRange/(speed*ExperimentSetting.unitSlot));
 	}
 
 	@Override

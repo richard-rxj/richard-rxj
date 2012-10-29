@@ -28,14 +28,14 @@ public class DApproAllocate extends Allocate {
 	 * @throws RuntimeException
 	 * @throws IOException
 	 */
-	public DApproAllocate(String sensorTxt, double speed)
+	public DApproAllocate(String sensorTxt, double speed, double range)
 			throws RuntimeException, IOException {
 		super(sensorTxt, speed);
 		// TODO Auto-generated constructor stub
 		/*
 		 * reconfigure interval according to speed-----every interval length is R
 		 */
-		ExperimentSetting.interval=(int)Math.floor(ExperimentSetting.transRange/(speed*ExperimentSetting.unitSlot));
+		ExperimentSetting.interval=(int)Math.floor(range/(speed*ExperimentSetting.unitSlot));
 	}
 
 	/* (non-Javadoc)

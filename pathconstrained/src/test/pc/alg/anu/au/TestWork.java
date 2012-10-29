@@ -94,7 +94,7 @@ public class TestWork {
 						   case 0:
 							      tAllo=new CentralAllocate(tSensorTxt,tSpeed);break;
 						   case 1:
-							      tAllo=new DistributeAllocate(tSensorTxt,tSpeed);break;
+							      tAllo=new DistributeAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);break;
 						   case 2:
 							      tAllo=new RandomAllocate(tSensorTxt,tSpeed);break;
 						}
