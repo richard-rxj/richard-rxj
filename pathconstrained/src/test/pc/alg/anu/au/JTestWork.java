@@ -56,7 +56,7 @@ public class JTestWork {
 		PrintWriter[]  pwAlgSet=new PrintWriter[algSet.length];
 		for(int i=0;i<algSet.length;i++)
 		{
-			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+".txt",true)));
+			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-R.txt",true)));
 		}
 		
 		

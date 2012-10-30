@@ -43,13 +43,10 @@ public class DistributeAllocate extends Allocate {
 			for(int j=0;j<gSensorSet.size();j++)
 			{
 				SensorNode tSensor=gSensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(tSlot, tSensor);
+				double tDistance=CommonFacility.computeDistance(tSlot.getX(),tSlot.getY(), tSensor.getX(), tSensor.getY());
 				if(tDistance<=ExperimentSetting.transRange)
 				{
-					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
-					{
-						tSensorSet.add(tSensor);
-					}
+					tSensorSet.add(tSensor);
 				}
 			}
 			
@@ -92,14 +89,14 @@ public class DistributeAllocate extends Allocate {
 			for(int j=0;j<sensorSet.size();j++)
 			{
 				SensorNode tSensor=sensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(tSlot, tSensor);
+				double tDistance=CommonFacility.computeDistance(tSlot.getX(),tSlot.getY(), tSensor.getX(),tSensor.getY());
 				if(tDistance<=ExperimentSetting.transRange)
 				{
 					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
 					{
 						tList.add(tSensor);
-						double tTransRate=ExperimentSetting.getTransRate(tDistance);
-						tSensor.updateUtilityGain(ExperimentSetting.unitSlot*tTransRate);
+						double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
+						tSensor.updateUtilityGain(tSlotData);
 					}
 				}
 			}
@@ -120,9 +117,9 @@ public class DistributeAllocate extends Allocate {
 			/*
 			 * allocate and update
 			 */
-			double cDistance=CommonFacility.computeDistance(tSlot, cSensor);
-			double cTransRate=ExperimentSetting.getTransRate(cDistance);
-			cSensor.update(tSlot.getId(), cTransRate);
+			//double cDistance=CommonFacility.computeDistance(tSlot, cSensor);
+			double cSlotData=ExperimentSetting.getSlotData(cSensor, tSlot);
+			cSensor.update(tSlot.getId(), cSlotData);
 			
 		}
 	}

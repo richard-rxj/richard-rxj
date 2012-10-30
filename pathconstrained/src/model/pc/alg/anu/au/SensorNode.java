@@ -139,22 +139,22 @@ public class SensorNode extends Node {
 
 
 
-	public void update(int slotID, double transRate)
+	public void update(int slotID, double slotData)
 	{
-		AllocationPair temp=new AllocationPair(slotID,transRate);
+		AllocationPair temp=new AllocationPair(slotID,slotData);
 		this.allocation.add(temp);
 		
 		
 		double eCom=ExperimentSetting.eCom*ExperimentSetting.unitSlot;
 		this.residualBudget=this.residualBudget-eCom;
 		
-		double add=transRate*ExperimentSetting.unitSlot;
-		this.throughput=this.throughput+add;
+		//double add=transRate*ExperimentSetting.unitSlot;
+		this.throughput=this.throughput+slotData;
 		this.utility=ExperimentSetting.getUtility(this.throughput);
 	}
 
 
-	public void restore(int slotID, double transRate)
+	public void restore(int slotID, double slotData)
 	{
 		for(int i=0; i<this.allocation.size();i++)
 		{
@@ -169,8 +169,8 @@ public class SensorNode extends Node {
 		double eCom=ExperimentSetting.eCom*ExperimentSetting.unitSlot;
 		this.residualBudget=this.residualBudget+eCom;
 		
-		double add=transRate*ExperimentSetting.unitSlot;
-		this.throughput=this.throughput-add;
+		//double add=transRate*ExperimentSetting.unitSlot;
+		this.throughput=this.throughput-slotData;
 		this.utility=ExperimentSetting.getUtility(this.throughput);
 	}
 

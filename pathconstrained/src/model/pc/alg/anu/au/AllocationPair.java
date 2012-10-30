@@ -3,7 +3,7 @@ package model.pc.alg.anu.au;
 public class AllocationPair {
 
 	private int slotID;
-	private double transRate;
+	private double slotData;
 	
 	
 	public int getSlotID() {
@@ -16,22 +16,24 @@ public class AllocationPair {
 	}
 
 
-	public double getTransRate() {
-		return transRate;
-	}
-
-
-	public void setTransRate(double transRate) {
-		this.transRate = transRate;
-	}
 
 
 	
 	
-	public AllocationPair(int slotID, double transRate) {
+	public double getSlotData() {
+		return slotData;
+	}
+
+
+	public void setSlotData(double slotData) {
+		this.slotData = slotData;
+	}
+
+
+	public AllocationPair(int slotID, double slotData) {
 		super();
 		this.slotID = slotID;
-		this.transRate = transRate;
+		this.slotData = slotData;
 	}
 
 	
@@ -42,7 +44,7 @@ public class AllocationPair {
 
 	@Override
 	public String toString() {
-		return "AllocationPair [slotID=" + slotID + ", transRate=" + transRate
+		return "AllocationPair [slotID=" + slotID + ", transRate=" + slotData
 				+ "]";
 	}
 

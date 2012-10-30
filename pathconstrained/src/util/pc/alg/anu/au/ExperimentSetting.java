@@ -7,6 +7,9 @@ package util.pc.alg.anu.au;
 import java.util.ArrayList;
 import java.util.Random;
 
+import model.pc.alg.anu.au.SensorNode;
+import model.pc.alg.anu.au.TimeSlotNode;
+
 
 
 /**
@@ -32,9 +35,10 @@ public class ExperimentSetting {
 	public static int cishu=50;
 	public static int unitSlot=1;     //s
 	public static int interval=10;    //fixed interval for distributed
+	public static int rateFactor=5;   //used for eastimate the profit of a time slot
 	
 	
-	public static double getTransRate(double distance)
+	private static double getTransRateByDistance(double distance)
 	{
 		if(distance<=20)
 			return 250000;
@@ -48,6 +52,22 @@ public class ExperimentSetting {
 			return 0;
 			
 	}
+	
+	public static double getSlotData(SensorNode s, TimeSlotNode t)
+	{
+		double result=0;
+		double start=t.getX();
+		double end=t.getX2();
+		for(double i=start;i<end;i=i+ExperimentSetting.rateFactor)
+		{
+			double x=i+0.5*ExperimentSetting.rateFactor;
+			double td=CommonFacility.computeDistance(s.getX(), s.getY(), x, t.getY());
+			result=result+ExperimentSetting.getTransRateByDistance(td)*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+		}
+		
+		return result;
+	}
+	
 	
     public static double  getUtility(double t)
     {

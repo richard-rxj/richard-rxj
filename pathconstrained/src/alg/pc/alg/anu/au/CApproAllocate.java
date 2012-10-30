@@ -76,8 +76,8 @@ public class CApproAllocate extends Allocate {
 			for(int j=0; j<rateMatrix[i].length;j++)
 			{
 				SensorNode v=sensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(v, t);
-				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getTransRate(tDistance);
+				//double tDistance=CommonFacility.computeDistance(v, t);
+				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getSlotData(v, t);
 			}
 		}
 
@@ -103,12 +103,12 @@ public class CApproAllocate extends Allocate {
 				if(tVector[t.getTid()]>=0)
 				{					
 					double tr=rateMatrix[t.getTid()][v.getTid()]-rateMatrix[t.getTid()][tVector[t.getTid()]];
-					tp.setTransRate(tr);
+					tp.setSlotData(tr);
 				}
 				else
 				{
 					double tr=rateMatrix[t.getTid()][v.getTid()];
-					tp.setTransRate(tr);
+					tp.setSlotData(tr);
 				}
 				p.add(tp);
 			}
@@ -119,10 +119,20 @@ public class CApproAllocate extends Allocate {
 			
 			double energyBudget=v.getResidualBudget();
 			int slotBudget=(int)Math.floor(energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot));
+		    /*
+		     *   tuning the slot budget. For example, if the slotbudget is 2.3, it will be 3 with 30% probability
+		     */
+			double tSlotBudgetVar=energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot)-slotBudget;
+			if(Math.random()<tSlotBudgetVar)
+			{
+				slotBudget++;
+			}
+			
+			
 			for(int j=0;j<p.size();j++)
 			{
 				AllocationPair tp=p.get(j);
-				if((tp.getTransRate()>0) && (slotBudget>0))
+				if((tp.getSlotData()>0) && (slotBudget>0))
 				{
 					slotBudget--;
 					/*
@@ -133,11 +143,11 @@ public class CApproAllocate extends Allocate {
 					
 					if(vPrevious<0)    //first allocate
 					{						
-						v.update(cSlot.getId(), tp.getTransRate());
+						v.update(cSlot.getId(), tp.getSlotData());
 					}
 					else               //reallocate
 					{
-						v.update(cSlot.getId(), tp.getTransRate());
+						v.update(cSlot.getId(), tp.getSlotData());
 						SensorNode tPreSensor=sensorSet.get(vPrevious);
 						tPreSensor.restore(cSlot.getId(), rateMatrix[tp.getSlotID()][vPrevious]);
 					}
