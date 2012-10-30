@@ -29,13 +29,13 @@ public class AllocationPairComparator implements Comparator<AllocationPair> {
 	@Override
 	public int compare(AllocationPair arg0, AllocationPair arg1) {
 		// TODO Auto-generated method stub
-		if((arg0.getTransRate()>arg1.getTransRate()&& this.ascendingOrder)
-			|| (arg0.getTransRate()<arg1.getTransRate()&& !this.ascendingOrder))
+		if((arg0.getSlotData()>arg1.getSlotData()&& this.ascendingOrder)
+			|| (arg0.getSlotData()<arg1.getSlotData()&& !this.ascendingOrder))
 		{
 			return  1;
 		}
-		else if((arg0.getTransRate()<arg1.getTransRate()&& this.ascendingOrder)
-				|| (arg0.getTransRate()>arg1.getTransRate()&& !this.ascendingOrder))
+		else if((arg0.getSlotData()<arg1.getSlotData()&& this.ascendingOrder)
+				|| (arg0.getSlotData()>arg1.getSlotData()&& !this.ascendingOrder))
 		{
 			return  -1;
 		}

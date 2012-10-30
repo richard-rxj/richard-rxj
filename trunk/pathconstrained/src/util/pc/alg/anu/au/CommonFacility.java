@@ -62,19 +62,27 @@ public class CommonFacility {
 		i=0;
 		double x=ExperimentSetting.roadBeginX;
 		double y=ExperimentSetting.roadBeginY;
-		x=x+0.5*speed*ExperimentSetting.unitSlot;
+		double x2=0;
+		x2=x+1*speed*ExperimentSetting.unitSlot;
 		TimeSlotNode tSlot=new TimeSlotNode();
 		tSlot.setId(i);
 		tSlot.setX(x);
+		tSlot.setX2(x2);
 		tSlot.setY(y);
 		timeSlotSet.add(tSlot);
-		while((x+speed*ExperimentSetting.unitSlot)<=ExperimentSetting.roadEndX)
+		while((x+speed*ExperimentSetting.unitSlot)<ExperimentSetting.roadEndX)
 		{
 			i++;
 			x=x+speed*ExperimentSetting.unitSlot;
+			x2=x+1*speed*ExperimentSetting.unitSlot;
+			if(x2>ExperimentSetting.roadEndX)
+			{
+				x2=ExperimentSetting.roadEndX;
+			}
 			tSlot=new TimeSlotNode();
 			tSlot.setId(i);
 			tSlot.setX(x);
+			tSlot.setX2(x2);
 			tSlot.setY(y);
 			timeSlotSet.add(tSlot);
 		}
@@ -87,9 +95,9 @@ public class CommonFacility {
 	}
 	
 
-	public static double computeDistance(Node a, Node b)
+	public static double computeDistance(double x1, double y1, double x2, double y2)
 	{
-		double result=Math.sqrt(Math.pow(a.getX()-b.getX(), 2)+Math.pow(a.getY()-b.getY(), 2));
+		double result=Math.sqrt(Math.pow((x1-x2), 2)+Math.pow((y1-y2), 2));
 		return result;
 	}
 	
@@ -114,7 +122,7 @@ public class CommonFacility {
 		b.setX(3);
 		a.setY(0);
 		b.setY(4);
-		System.out.println(CommonFacility.computeDistance(a, b));
+
 	}
 
 }
