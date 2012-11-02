@@ -119,7 +119,7 @@ public class TopologyFactory {
 		
 	}
 	
-	private static void generateLinerTopology(int nSize, String nFile, double distance) throws IOException
+	private static void generateLinearTopology(int nSize, String nFile, double distance) throws IOException
 	{
 		DecimalFormat df=new DecimalFormat("#.000000");
 		PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
@@ -180,7 +180,7 @@ public class TopologyFactory {
 		int cishu=ExperimentSetting.cishu;
 		
 		
-		String tFileName="test/topology/";
+		String tFileName="test/gridtopology/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{
@@ -194,7 +194,9 @@ public class TopologyFactory {
 			for(int j=0;j<cishu;j++)
 			{
 				String nFile=tFileName+"node-"+tnetworkSize+"-"+j+".txt";
-				TopologyFactory.generateTopology(tnetworkSize, nFile);
+				//TopologyFactory.generateTopology(tnetworkSize, nFile);    //Random
+				//TopologyFactory.generateLinearTopology(tnetworkSize, nFile,new Random().nextInt(100));   //Linear
+				//TopologyFactory.generateSquareGridTopology(tnetworkSize, nFile);    //Grid
 				System.out.println("execute "+"[node-"+tnetworkSize+" j-"+j+"]");
 			}
 		}	
