@@ -13,7 +13,7 @@ import alg.pc.alg.anu.au.Allocate;
 import alg.pc.alg.anu.au.CApproAllocate;
 import alg.pc.alg.anu.au.DApproAllocate;
 
-public class JTestWork_Slot {
+public class JTestWork_Slot_N {
 
 	/**
 	 * @param args
@@ -26,7 +26,7 @@ public class JTestWork_Slot {
         
         
         int[] networkSizeSet={100,200,300,400,500,600};
-		double speed=10;
+		int speed=5;    //5   10
 		int[] tauSet={1,2,4,8,16};
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CAppro","DAppro"};
@@ -47,7 +47,7 @@ public class JTestWork_Slot {
 		PrintWriter[]  pwAlgSet=new PrintWriter[algSet.length];
 		for(int i=0;i<algSet.length;i++)
 		{
-			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-Slot.txt",true)));
+			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-Slot-N-Speed"+speed+".txt",true)));
 		}
 		
 		

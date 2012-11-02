@@ -1,7 +1,6 @@
 package test.pc.alg.anu.au;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -11,12 +10,9 @@ import java.text.DecimalFormat;
 import util.pc.alg.anu.au.ExperimentSetting;
 import alg.pc.alg.anu.au.Allocate;
 import alg.pc.alg.anu.au.CApproAllocate;
-import alg.pc.alg.anu.au.CentralAllocate;
 import alg.pc.alg.anu.au.DApproAllocate;
-import alg.pc.alg.anu.au.DistributeAllocate;
-import alg.pc.alg.anu.au.RandomAllocate;
 
-public class JTestWork {
+public class JTestWork_Speed_Slot {
 
 	/**
 	 * @param args
@@ -25,13 +21,12 @@ public class JTestWork {
 	 */
 	public static void main(String[] args) throws RuntimeException, IOException {
 		// TODO Auto-generated method stub
-
-		
-		DecimalFormat df=new DecimalFormat("#.0000");
+DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={100,200,300,400,500,600};
-		double[] speedSet={5,10,20,30};
+        int networkSize=600;   //300 600
+		int[] speedSet={5,10,20,30};
+		int[] tauSet={1,2,4,6};
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CAppro","DAppro"};
 		
@@ -47,31 +42,22 @@ public class JTestWork {
 		/*
 		 * initial writers
 		 */
-		PrintWriter[]  pwSpeedSet=new PrintWriter[speedSet.length];
-		for(int i=0;i<speedSet.length;i++)
-		{
-			pwSpeedSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+"Speed-"+speedSet[i]+".txt",true)));
-		}
 		
 		PrintWriter[]  pwAlgSet=new PrintWriter[algSet.length];
 		for(int i=0;i<algSet.length;i++)
 		{
-			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-R.txt",true)));
+			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-Speed-Slot-N"+networkSize+"-2.txt",true)));
 		}
 		
 		
-		for(int tN=0;tN<networkSizeSet.length;tN++)
+		for(int tN=0;tN<tauSet.length;tN++)
 		{
-			int tNetworkSize=networkSizeSet[tN];
+			int tTau=tauSet[tN];
+			ExperimentSetting.unitSlot=tTau;
 			
-			for(int i=0;i<speedSet.length;i++)
-			{
-				pwSpeedSet[i].print(tNetworkSize);
-				pwSpeedSet[i].flush();
-			}
 			for(int i=0;i<algSet.length;i++)
 			{
-				pwAlgSet[i].print(tNetworkSize);
+				pwAlgSet[i].print(tTau);
 				pwAlgSet[i].flush();
 			}
 			
@@ -80,7 +66,7 @@ public class JTestWork {
 			
 			for(int tS=0;tS<speedSet.length;tS++)
 			{
-				double tSpeed=speedSet[tS];
+                int tSpeed=speedSet[tS];
 
 			
 				for(int tA=0;tA<algSet.length;tA++)
@@ -90,7 +76,7 @@ public class JTestWork {
 					
 					for(int tC=0;tC<cishu;tC++)
 					{
-						String tSensorTxt="test/topology/node-"+tNetworkSize+"-"+tC+".txt";
+						String tSensorTxt="test/topology/node-"+networkSize+"-"+tC+".txt";
 						
 						switch(tA)
 						{
@@ -98,12 +84,7 @@ public class JTestWork {
 							      tAllo=new CApproAllocate(tSensorTxt,tSpeed);break;
 						   case 1:
 							      tAllo=new DApproAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);break;
-						   case 2:
-							      tAllo=new CentralAllocate(tSensorTxt,tSpeed);break;
-						   case 3:
-							      tAllo=new DistributeAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);break;
-						   case 4:
-							      tAllo=new RandomAllocate(tSensorTxt,tSpeed);break;
+
 						}
 						
 						tAllo.schedule();
@@ -115,8 +96,6 @@ public class JTestWork {
 					/*
 					 * output to files
 					 */
-					pwSpeedSet[tS].print(" "+df.format(tUtility));
-					pwSpeedSet[tS].flush();
 					
 					pwAlgSet[tA].print(" "+df.format(tUtility));
 					pwAlgSet[tA].flush();
@@ -125,11 +104,7 @@ public class JTestWork {
 			}
 			
 			
-			for(int i=0;i<speedSet.length;i++)
-			{
-				pwSpeedSet[i].println();
-				pwSpeedSet[i].flush();
-			}
+
 			for(int i=0;i<algSet.length;i++)
 			{
 				pwAlgSet[i].println();
@@ -142,15 +117,11 @@ public class JTestWork {
 		/*
 		 * close printwriters
 		 */
-		for(int i=0;i<speedSet.length;i++)
-		{
-			pwSpeedSet[i].close();
-		}
+
 		for(int i=0;i<algSet.length;i++)
 		{
 			pwAlgSet[i].close();
 		}
-		
 	}
 
 }
