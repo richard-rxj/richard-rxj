@@ -21,22 +21,19 @@ public class ExperimentSetting {
 
 	
 	public static double transRange=200;        
-	public static double xRange=10000;
-	public static double yRange=360;
 	public static double roadBeginX=0;      
-	public static double roadBeginY=180;  
-	public static double roadEndX=10000;      
-	public static double roadEndY=180;
-	public static double roadLength=10000;
+	public static double roadY=180;  
+	public static double roadEndX=2000;   //10000      
+	public static double yRange=360;
 	public static double batteryCapacity=10000;
 	public static double[] harvestRate={0.0011,0.0022}; // J/s
 	//public static double[] mSpeed={5,10,20};   // m/s   
 	public static double eCom=0.3;    //  J/s
 	public static Random ran=new Random();
-	public static int cishu=50;
+	public static int cishu=10;    //50
 	public static int unitSlot=1;     //s
 	public static int interval=10;    //fixed interval for distributed
-	public static int rateFactor=5;   //used for eastimate the profit of a time slot
+	public static int rateFactor=1;   //used for eastimate the profit of a time slot
 	
 	
 	private static double getTransRateByDistance(double distance)

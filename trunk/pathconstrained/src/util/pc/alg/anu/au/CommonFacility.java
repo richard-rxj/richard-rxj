@@ -46,7 +46,7 @@ public class CommonFacility {
 			tSensor.setX(Double.parseDouble(b[0]));
 			tSensor.setY(Double.parseDouble(b[1]));
 			tSensor.setBatteryCapacity(ExperimentSetting.batteryCapacity);
-			tSensor.setEnergyBudget(Double.parseDouble(b[2])*ExperimentSetting.roadLength/speed);
+			tSensor.setEnergyBudget(Double.parseDouble(b[2])*(ExperimentSetting.roadEndX-ExperimentSetting.roadBeginX)/speed);
 			sensorSet.add(tSensor);
 			i++;
 		}
@@ -61,7 +61,7 @@ public class CommonFacility {
 		 */
 		i=0;
 		double x=ExperimentSetting.roadBeginX;
-		double y=ExperimentSetting.roadBeginY;
+		double y=ExperimentSetting.roadY;
 		double x2=0;
 		x2=x+1*speed*ExperimentSetting.unitSlot;
 		TimeSlotNode tSlot=new TimeSlotNode();

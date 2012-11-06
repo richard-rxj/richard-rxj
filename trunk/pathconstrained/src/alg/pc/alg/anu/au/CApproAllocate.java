@@ -122,11 +122,11 @@ public class CApproAllocate extends Allocate {
 		    /*
 		     *   tuning the slot budget. For example, if the slotbudget is 2.3, it will be 3 with 30% probability
 		     */
-			double tSlotBudgetVar=energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot)-slotBudget;
-			if(Math.random()<tSlotBudgetVar)
-			{
-				slotBudget++;
-			}
+//			double tSlotBudgetVar=energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot)-slotBudget;
+//			if(Math.random()<tSlotBudgetVar)
+//			{
+//				slotBudget++;
+//			}
 			
 			
 			for(int j=0;j<p.size();j++)

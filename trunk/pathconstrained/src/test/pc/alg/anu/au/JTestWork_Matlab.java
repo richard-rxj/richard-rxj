@@ -137,10 +137,8 @@ public class JTestWork_Matlab {
 		DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={20,30,40,50,60,70,80,90,100};
-		double speed=10;
-		ExperimentSetting.cishu=10;
-		ExperimentSetting.unitSlot=1;
+        int[] networkSizeSet={20,30,40,50,60};
+		double speed=2;
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CAppro","DAppro"};
 		

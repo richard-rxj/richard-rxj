@@ -22,7 +22,7 @@ public class TopologyFactory {
 		
 		for(int i=0;i<nSize;i++)
 		{
-			double x=ExperimentSetting.ran.nextDouble()*ExperimentSetting.xRange;
+			double x=ExperimentSetting.roadBeginX+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.roadEndX-ExperimentSetting.roadBeginX);
 			double y=ExperimentSetting.ran.nextDouble()*ExperimentSetting.yRange;
 			double e=ExperimentSetting.harvestRate[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]);
 				
@@ -65,29 +65,7 @@ public class TopologyFactory {
 	
 	
 	
-	private static void generatePoissonTopology(int nSize, String nFile) throws IOException
-	{
-		DecimalFormat df=new DecimalFormat("#.000000");
-		PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
-		
-		for(int i=0;i<nSize;i++)
-		{
-			double x=ExperimentSetting.ran.nextDouble()*ExperimentSetting.xRange;
-			double y=ExperimentSetting.ran.nextDouble()*ExperimentSetting.yRange;
-			double e=ExperimentSetting.harvestRate[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]);
-				
-			pw.println(df.format(x)+" "+df.format(y)+" "+df.format(e));
-			pw.flush();
-		}
-		
-		
-		
-		
-		pw.flush();
-		pw.close();
-		
-		
-	}
+	
 	
 	
 	private static void generateSquareGridTopology(int nSize, String nFile) throws IOException
@@ -96,7 +74,7 @@ public class TopologyFactory {
 		PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
 		
 		
-		double tInterval=Math.sqrt(ExperimentSetting.xRange*ExperimentSetting.yRange/nSize);
+		double tInterval=Math.sqrt((ExperimentSetting.roadEndX-ExperimentSetting.roadBeginX)*ExperimentSetting.yRange/nSize);
 		
 
 		for(double  x=ExperimentSetting.roadBeginX+0.5*tInterval;x<ExperimentSetting.roadEndX;x=x+tInterval)
@@ -124,12 +102,12 @@ public class TopologyFactory {
 		DecimalFormat df=new DecimalFormat("#.000000");
 		PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(nFile)));
 		
-		double tInterval=ExperimentSetting.xRange/((nSize/2)-1);
+		double tInterval=(ExperimentSetting.roadEndX-ExperimentSetting.roadBeginX)/((nSize/2)-1);
 		
 		/*
 		 * fill one side
 		 */
-		double y=ExperimentSetting.roadBeginY+distance;
+		double y=ExperimentSetting.roadY+distance;
 		double x=ExperimentSetting.roadBeginX;
 		for(int i=0;i<nSize/2;i++)
 		{
@@ -146,7 +124,7 @@ public class TopologyFactory {
 		/*
 		 * fill the other side;
 		 */
-		y=ExperimentSetting.roadBeginY-distance;
+		y=ExperimentSetting.roadY-distance;
 		x=ExperimentSetting.roadBeginX;
 		for(int i=0;i<nSize/2;i++)
 		{
@@ -176,10 +154,7 @@ public class TopologyFactory {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		ExperimentSetting.roadEndX=2000;
-		ExperimentSetting.xRange=2000;
-		ExperimentSetting.cishu=10;
-		int[] networkSizeSet={20,30,40,50,60,70,80,90,100};    //for matlab
+		int[] networkSizeSet={20,30,40,50,60};    //for matlab
 		
 		//int[] networkSizeSet={100,200,300,400,500,600};   
 		int cishu=ExperimentSetting.cishu;
