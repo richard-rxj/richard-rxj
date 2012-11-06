@@ -176,11 +176,16 @@ public class TopologyFactory {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		int[] networkSizeSet={100,200,300,400,500,600};
+		ExperimentSetting.roadEndX=2000;
+		ExperimentSetting.xRange=2000;
+		ExperimentSetting.cishu=10;
+		int[] networkSizeSet={20,40,60,80,100};    //for matlab
+		
+		//int[] networkSizeSet={100,200,300,400,500,600};   
 		int cishu=ExperimentSetting.cishu;
 		
 		
-		String tFileName="test/gridtopology/";
+		String tFileName="test/matlab/topology/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{
@@ -194,21 +199,12 @@ public class TopologyFactory {
 			for(int j=0;j<cishu;j++)
 			{
 				String nFile=tFileName+"node-"+tnetworkSize+"-"+j+".txt";
-				//TopologyFactory.generateTopology(tnetworkSize, nFile);    //Random
-				//TopologyFactory.generateLinearTopology(tnetworkSize, nFile,new Random().nextInt(100));   //Linear
-				//TopologyFactory.generateSquareGridTopology(tnetworkSize, nFile);    //Grid
+				TopologyFactory.generateTopology(tnetworkSize, nFile);    //Random
 				System.out.println("execute "+"[node-"+tnetworkSize+" j-"+j+"]");
 			}
 		}	
 		
-//		for(int i = 0; i <= 600; i++)
-//        {
-//            System.out.println();
-//            for(int j = 0; j <= 10; j++)
-//            {
-//                System.out.print(poissonDistribute(i) + ", ");
-//            }
-//        }
+
 		
 	}
 

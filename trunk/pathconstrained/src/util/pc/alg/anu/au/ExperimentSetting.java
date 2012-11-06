@@ -5,6 +5,7 @@ package util.pc.alg.anu.au;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import model.pc.alg.anu.au.SensorNode;
@@ -83,6 +84,8 @@ public class ExperimentSetting {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         System.out.println(Math.log(250000));
+        int[] a={1,2,3};
+        System.out.print(Arrays.toString(a));
 	}
 
 }
