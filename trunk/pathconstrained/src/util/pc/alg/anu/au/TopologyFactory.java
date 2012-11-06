@@ -179,7 +179,7 @@ public class TopologyFactory {
 		ExperimentSetting.roadEndX=2000;
 		ExperimentSetting.xRange=2000;
 		ExperimentSetting.cishu=10;
-		int[] networkSizeSet={20,40,60,80,100};    //for matlab
+		int[] networkSizeSet={20,30,40,50,60,70,80,90,100};    //for matlab
 		
 		//int[] networkSizeSet={100,200,300,400,500,600};   
 		int cishu=ExperimentSetting.cishu;
