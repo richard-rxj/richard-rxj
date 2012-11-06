@@ -63,7 +63,7 @@ public class JTestWork_Matlab {
 				TimeSlotNode tSlot=slotSet.get(j);
 				double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
 				
-				pwF.print(Math.floor(tSlotData)+" ");
+				pwF.println((-1)*Math.floor(tSlotData));
 
 				tA[i*slotSet.size()+j]=1;
 				if(tSlotData<=0)
@@ -137,7 +137,7 @@ public class JTestWork_Matlab {
 		DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={20,40,60,80,100};
+        int[] networkSizeSet={20,30,40,50,60,70,80,90,100};
 		double speed=10;
 		ExperimentSetting.cishu=10;
 		ExperimentSetting.unitSlot=1;
