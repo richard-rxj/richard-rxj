@@ -4,6 +4,8 @@ public class AllocationPair {
 
 	private int slotID;
 	private double slotData;
+	private double energyCost=1;
+	private double perCost;
 	
 	
 	public int getSlotID() {
@@ -27,6 +29,23 @@ public class AllocationPair {
 
 	public void setSlotData(double slotData) {
 		this.slotData = slotData;
+		this.perCost=this.slotData/this.energyCost;
+	}
+
+
+	public void setEnergyCost(double energyCost) {
+		this.energyCost = energyCost;
+		this.perCost=this.slotData/this.energyCost;
+	}
+
+
+	public double getEnergyCost() {
+		return energyCost;
+	}
+
+
+	public double getPerCost() {
+		return perCost;
 	}
 
 

@@ -154,7 +154,7 @@ public class TopologyFactory {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		int[] networkSizeSet={20,30,40,50,60};    //for matlab
+		int[] networkSizeSet={20,30,40,50,60,70,80,90,100};    //for matlab
 		
 		//int[] networkSizeSet={100,200,300,400,500,600};   
 		int cishu=ExperimentSetting.cishu;
