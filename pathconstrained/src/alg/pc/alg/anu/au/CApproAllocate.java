@@ -45,7 +45,7 @@ public class CApproAllocate extends Allocate {
 	}
 
 	
-	private void approAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
+	public static void approAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
 		/*
          * sort sensor according to its X-index
@@ -69,7 +69,7 @@ public class CApproAllocate extends Allocate {
 		/*
 		 * initial rate matrix
 		 */
-		double[][] rateMatrix=new double[timeSlotSet.size()][sensorSet.size()];
+		AllocationPair[][] rateMatrix=new AllocationPair[timeSlotSet.size()][sensorSet.size()];
 		for(int i=0; i<rateMatrix.length; i++)
 		{
 			TimeSlotNode  t=timeSlotSet.get(i);			
@@ -77,7 +77,7 @@ public class CApproAllocate extends Allocate {
 			{
 				SensorNode v=sensorSet.get(j);
 				//double tDistance=CommonFacility.computeDistance(v, t);
-				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getSlotData(v, t);
+				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getSlotPart(v, t);
 			}
 		}
 
@@ -100,14 +100,16 @@ public class CApproAllocate extends Allocate {
 				TimeSlotNode t=timeSlotSet.get(j);
 				AllocationPair tp=new AllocationPair();
 				tp.setSlotID(t.getTid());
+				tp.setEnergyCost(rateMatrix[t.getTid()][v.getTid()].getEnergyCost());
 				if(tVector[t.getTid()]>=0)
 				{					
-					double tr=rateMatrix[t.getTid()][v.getTid()]-rateMatrix[t.getTid()][tVector[t.getTid()]];
+					double tr=rateMatrix[t.getTid()][v.getTid()].getSlotData()-rateMatrix[t.getTid()][tVector[t.getTid()]].getSlotData();
 					tp.setSlotData(tr);
+					
 				}
 				else
 				{
-					double tr=rateMatrix[t.getTid()][v.getTid()];
+					double tr=rateMatrix[t.getTid()][v.getTid()].getSlotData();
 					tp.setSlotData(tr);
 				}
 				p.add(tp);
@@ -118,7 +120,7 @@ public class CApproAllocate extends Allocate {
 			Collections.sort(p,new AllocationPairComparator(false));   //descending order
 			
 			double energyBudget=v.getResidualBudget();
-			int slotBudget=(int)Math.floor(energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot));
+			//int slotBudget=(int)Math.floor(energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot));
 		    /*
 		     *   tuning the slot budget. For example, if the slotbudget is 2.3, it will be 3 with 30% probability
 		     */
@@ -132,9 +134,9 @@ public class CApproAllocate extends Allocate {
 			for(int j=0;j<p.size();j++)
 			{
 				AllocationPair tp=p.get(j);
-				if((tp.getSlotData()>0) && (slotBudget>0))
+				if((tp.getSlotData()>0) && (v.getResidualBudget()>tp.getEnergyCost()))
 				{
-					slotBudget--;
+					//slotBudget--;
 					/*
 					 * update sensors' information according to the final allocation
 					 */
@@ -143,13 +145,13 @@ public class CApproAllocate extends Allocate {
 					
 					if(vPrevious<0)    //first allocate
 					{						
-						v.update(cSlot.getId(), tp.getSlotData());
+						v.update(cSlot.getId(), tp.getSlotData(),tp.getEnergyCost());
 					}
 					else               //reallocate
 					{
-						v.update(cSlot.getId(), tp.getSlotData());
+						v.update(cSlot.getId(), tp.getSlotData(),tp.getEnergyCost());
 						SensorNode tPreSensor=sensorSet.get(vPrevious);
-						tPreSensor.restore(cSlot.getId(), rateMatrix[tp.getSlotID()][vPrevious]);
+						tPreSensor.restore(cSlot.getId());
 					}
 					
 					

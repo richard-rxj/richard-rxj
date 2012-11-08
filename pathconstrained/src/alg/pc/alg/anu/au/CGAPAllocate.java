@@ -25,11 +25,11 @@ public class CGAPAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
-		approAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
+		gapAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
 	}
 
 	
-	private void approAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
+	public static void gapAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
 		/*
          * sort sensor according to its X-index
@@ -53,7 +53,7 @@ public class CGAPAllocate extends Allocate {
 		/*
 		 * initial rate matrix
 		 */
-		double[][] rateMatrix=new double[timeSlotSet.size()][sensorSet.size()];
+		AllocationPair[][] rateMatrix=new AllocationPair[timeSlotSet.size()][sensorSet.size()];
 		for(int i=0; i<rateMatrix.length; i++)
 		{
 			TimeSlotNode  t=timeSlotSet.get(i);			
@@ -61,7 +61,7 @@ public class CGAPAllocate extends Allocate {
 			{
 				SensorNode v=sensorSet.get(j);
 				//double tDistance=CommonFacility.computeDistance(v, t);
-				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getSlotData(v, t);
+				rateMatrix[t.getTid()][v.getTid()]=ExperimentSetting.getSlotPart(v, t);
 			}
 		}
 
@@ -84,78 +84,112 @@ public class CGAPAllocate extends Allocate {
 				TimeSlotNode t=timeSlotSet.get(j);
 				AllocationPair tp=new AllocationPair();
 				tp.setSlotID(t.getTid());
+				tp.setEnergyCost(rateMatrix[t.getTid()][v.getTid()].getEnergyCost());
 				if(tVector[t.getTid()]>=0)
 				{					
-					double tr=rateMatrix[t.getTid()][v.getTid()]-rateMatrix[t.getTid()][tVector[t.getTid()]];
+					double tr=rateMatrix[t.getTid()][v.getTid()].getSlotData()-rateMatrix[t.getTid()][tVector[t.getTid()]].getSlotData();
 					tp.setSlotData(tr);
 				}
 				else
 				{
-					double tr=rateMatrix[t.getTid()][v.getTid()];
+					double tr=rateMatrix[t.getTid()][v.getTid()].getSlotData();
 					tp.setSlotData(tr);
 				}
-				p.add(tp);
-			}
-			/*
-			 *   sorting and selecting time slots
-			 */
-			Collections.sort(p,new AllocationPairComparator(false));   //descending order
-			
-			double energyBudget=v.getResidualBudget();
-			int slotBudget=(int)Math.floor(energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot));
-		    /*
-		     *   tuning the slot budget. For example, if the slotbudget is 2.3, it will be 3 with 30% probability
-		     */
-//			double tSlotBudgetVar=energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot)-slotBudget;
-//			if(Math.random()<tSlotBudgetVar)
-//			{
-//				slotBudget++;
-//			}
-			
-			
-			for(int j=0;j<p.size();j++)
-			{
-				AllocationPair tp=p.get(j);
-				if((tp.getSlotData()>0) && (slotBudget>0))
+				
+				/*
+				 * only consider time slots with positive profit
+				 */
+				if(tp.getSlotData()>0)
 				{
-					slotBudget--;
-					/*
-					 * update sensors' information according to the final allocation
-					 */
-					int vPrevious=tVector[tp.getSlotID()];
-					TimeSlotNode cSlot=timeSlotSet.get(tp.getSlotID());
+					p.add(tp);
+				}
+			}
+			
+			/*
+			 *   using knapsack algorithm to allocate time slots to this sensor
+			 */			
+			ArrayList<AllocationPair> tSelected=CGAPAllocate.approKnapsack(v, p, ExperimentSetting.epsilon);
+		    
+			
+			
+			for(int j=0;j<tSelected.size();j++)
+			{
+				AllocationPair tp=tSelected.get(j);
+				int vPrevious=tVector[tp.getSlotID()];    // the slotID is Tid
+				TimeSlotNode cSlot=timeSlotSet.get(tp.getSlotID());
 					
 					if(vPrevious<0)    //first allocate
 					{						
-						v.update(cSlot.getId(), tp.getSlotData());
+						v.update(cSlot.getId(), tp.getSlotData(), tp.getEnergyCost());
 					}
 					else               //reallocate
 					{
-						v.update(cSlot.getId(), tp.getSlotData());
+						v.update(cSlot.getId(), tp.getSlotData(), tp.getEnergyCost());
 						SensorNode tPreSensor=sensorSet.get(vPrevious);
-						tPreSensor.restore(cSlot.getId(), rateMatrix[tp.getSlotID()][vPrevious]);
+						tPreSensor.restore(cSlot.getId());
 					}
 					
 					
 					tVector[tp.getSlotID()]=v.getTid();					
-				}
-				else
-				{
-					break;
-				}
+				
+				
 			}
 		}
-		
-		
-
-		
-		
-		
+				
 	}
 	
-	private static void approKnapsack(SensorNode tSensor, ArrayList<AllocationPair> tPairSet,  ArrayList<AllocationPair> resultSet)
+	
+	/*
+	 * FPTAS algorithm with a parameter epsilon---------Z*-z =< epsilon * (Z*) 
+	 */
+	private static ArrayList<AllocationPair> approKnapsack(SensorNode tSensor, ArrayList<AllocationPair> tSlotPairSet, double epsilon)
+	
 	{
-		
+		  ArrayList<AllocationPair> resultSet=new ArrayList<AllocationPair>();
+		  if(tSlotPairSet.size()==0)   //exception:  no slots
+		  {
+			  return resultSet;
+		  }
+		  
+		  /*
+		   * find critical item s
+		   */
+		  int s=0;
+		  Collections.sort(tSlotPairSet, new AllocationPairComparator(false));
+		  double tBinSize=tSensor.getResidualBudget();
+		  for(int i=0; i<tSlotPairSet.size();i++)
+		  {
+			  AllocationPair tp=tSlotPairSet.get(i);
+			  resultSet.add(tp);
+			  tBinSize=tBinSize-tp.getEnergyCost();
+			  if(tBinSize==0)
+			  {
+				  return resultSet;
+			  }
+			  if(tBinSize<0)
+			  {
+				  s=i;
+				  break;
+			  }
+		  }
+		  if (s==0)
+		  {
+			  return resultSet;
+		  }
+		  
+		  /*
+		   * allocate based on epsilon
+		   */
+		  resultSet.clear();	  
+			  
+			  
+			  
+		 
+		  
+		  
+		  
+		  
+		  return resultSet;
 	}
 
 	/**
