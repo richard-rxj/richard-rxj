@@ -52,9 +52,9 @@ public class AllocationPairComparator implements Comparator<AllocationPair> {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         ArrayList<AllocationPair> p=new ArrayList<AllocationPair>();
-        p.add(new AllocationPair(1,2.0));
-        p.add(new AllocationPair(2,3.0));
-        p.add(new AllocationPair(3,1.0));
+        p.add(new AllocationPair(1,2.0,3));
+        p.add(new AllocationPair(2,3.0,3));
+        p.add(new AllocationPair(3,1.0,3));
         Collections.sort(p, new AllocationPairComparator(false));
         System.out.println(p);
 	}

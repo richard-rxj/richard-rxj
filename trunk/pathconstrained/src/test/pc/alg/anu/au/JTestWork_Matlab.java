@@ -20,6 +20,7 @@ import alg.pc.alg.anu.au.DApproAllocate;
 import util.pc.alg.anu.au.CommonFacility;
 import util.pc.alg.anu.au.ExperimentSetting;
 
+import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.Network;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
@@ -50,10 +51,10 @@ public class JTestWork_Matlab {
 		{
 			SensorNode tSensor=sensorSet.get(i);
 			
-			pwB.println(Math.floor(tSensor.getEnergyBudget()/ExperimentSetting.eCom));   //  capacity for each sensor
+			pwB.println(Math.floor(tSensor.getEnergyBudget()));   //  capacity for each sensor
 			pwBEq.println(0);                                                             // non avaible slots
 			
-			int[] tA=new int[gDim];
+			double[] tA=new double[gDim];
 			int[] tAEq=new int[gDim];
 			Arrays.fill(tA, 0);
 			Arrays.fill(tAEq, 0);
@@ -61,11 +62,13 @@ public class JTestWork_Matlab {
 			for(int j=0; j<slotSet.size();j++)
 			{
 				TimeSlotNode tSlot=slotSet.get(j);
-				double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
+				AllocationPair tSlotPair=ExperimentSetting.getSlotPart(tSensor, tSlot);
+				double tSlotData=tSlotPair.getSlotData();
+				double tEnergyCost=tSlotPair.getEnergyCost();
 				
 				pwF.println((-1)*Math.floor(tSlotData));
 
-				tA[i*slotSet.size()+j]=1;
+				tA[i*slotSet.size()+j]=tEnergyCost;
 				if(tSlotData<=0)
 				{
 					tAEq[i*slotSet.size()+j]=1;

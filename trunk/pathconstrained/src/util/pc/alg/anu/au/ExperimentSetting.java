@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
 
@@ -28,7 +29,8 @@ public class ExperimentSetting {
 	public static double batteryCapacity=10000;
 	public static double[] harvestRate={0.0011,0.0066}; // J/s   0.0011--0.0022
 	//public static double[] mSpeed={5,10,20};   // m/s   
-	public static double eCom=0.3;    //  J/s
+	public static double[] transPowerSet={0.3,0.3,0.3,0.3};    //  J/s    //transmission power set
+	public static double[] transRateSet={250000,19200,9600,4800};     //bps
 	public static Random ran=new Random();
 	public static int cishu=10;    //50
 	public static int unitSlot=1;     //s
@@ -52,18 +54,50 @@ public class ExperimentSetting {
 			
 	}
 	
-	public static double getSlotData(SensorNode s, TimeSlotNode t)
+	public static AllocationPair getSlotPart(SensorNode s, TimeSlotNode t)
 	{
-		double result=0;
+		AllocationPair result=new AllocationPair();
+		double slotData=0;
+		double energyCost=0;
 		double start=t.getX();
 		double end=t.getX2();
 		for(double i=start;i<end;i=i+ExperimentSetting.rateFactor)
 		{
 			double x=i+0.5*ExperimentSetting.rateFactor;
 			double td=CommonFacility.computeDistance(s.getX(), s.getY(), x, t.getY());
-			result=result+ExperimentSetting.getTransRateByDistance(td)*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+			if(td<=20)
+		    {
+				slotData=slotData+ExperimentSetting.transRateSet[0]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				energyCost=energyCost+ExperimentSetting.transPowerSet[0]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+		    }
+			else if(td<=50)
+			{
+				slotData=slotData+ExperimentSetting.transRateSet[1]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				energyCost=energyCost+ExperimentSetting.transPowerSet[1]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+		    }
+			else if(td<=120)
+			{
+				slotData=slotData+ExperimentSetting.transRateSet[2]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				energyCost=energyCost+ExperimentSetting.transPowerSet[2]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+		    }
+			else if(td<=200)
+			{
+				slotData=slotData+ExperimentSetting.transRateSet[3]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				energyCost=energyCost+ExperimentSetting.transPowerSet[3]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+		    }
+			else 
+			{
+				slotData=slotData+0;
+				energyCost=energyCost+0;
+		    }
+			
+			
 		}
 		
+		
+		result.setSlotID(t.getId());
+		result.setSlotData(slotData);
+		result.setEnergyCost(energyCost);
 		return result;
 	}
 	

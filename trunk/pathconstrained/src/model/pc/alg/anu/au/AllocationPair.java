@@ -49,10 +49,11 @@ public class AllocationPair {
 	}
 
 
-	public AllocationPair(int slotID, double slotData) {
+	public AllocationPair(int slotID, double slotData, double energyCost) {
 		super();
 		this.slotID = slotID;
 		this.slotData = slotData;
+		this.energyCost=energyCost;
 	}
 
 	
