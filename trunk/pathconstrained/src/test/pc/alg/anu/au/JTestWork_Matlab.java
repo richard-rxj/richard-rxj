@@ -15,7 +15,9 @@ import java.util.Arrays;
 
 import alg.pc.alg.anu.au.Allocate;
 import alg.pc.alg.anu.au.CApproAllocate;
+import alg.pc.alg.anu.au.CGAPAllocate;
 import alg.pc.alg.anu.au.DApproAllocate;
+import alg.pc.alg.anu.au.DGAPAllocate;
 
 import util.pc.alg.anu.au.CommonFacility;
 import util.pc.alg.anu.au.ExperimentSetting;
@@ -51,10 +53,10 @@ public class JTestWork_Matlab {
 		{
 			SensorNode tSensor=sensorSet.get(i);
 			
-			pwB.println(Math.floor(tSensor.getEnergyBudget()));   //  capacity for each sensor
+			pwB.println((int)Math.floor(tSensor.getResidualBudget()/0.01));   //  capacity for each sensor
 			pwBEq.println(0);                                                             // non avaible slots
 			
-			double[] tA=new double[gDim];
+			int[] tA=new int[gDim];
 			int[] tAEq=new int[gDim];
 			Arrays.fill(tA, 0);
 			Arrays.fill(tAEq, 0);
@@ -66,9 +68,9 @@ public class JTestWork_Matlab {
 				double tSlotData=tSlotPair.getSlotData();
 				double tEnergyCost=tSlotPair.getEnergyCost();
 				
-				pwF.println((-1)*Math.floor(tSlotData));
+				pwF.println((-1)*(int)Math.floor(tSlotData));
 
-				tA[i*slotSet.size()+j]=tEnergyCost;
+				tA[i*slotSet.size()+j]=(int)(tEnergyCost/0.01);
 				if(tSlotData<=0)
 				{
 					tAEq[i*slotSet.size()+j]=1;
@@ -140,10 +142,11 @@ public class JTestWork_Matlab {
 		DecimalFormat df=new DecimalFormat("#.0000");
         
         
-        int[] networkSizeSet={20,30,40,50,60,70,80,90,100};
-		double speed=5;
-        int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CAppro","DAppro"};
+        int[] networkSizeSet={10,20,30,40,50,60,70,80,90,100};
+		double speed=30;
+        //int cishu=ExperimentSetting.cishu;
+		int cishu=1;
+		String[] algSet={"CGAP","DGAP","CAppro","DAppro"};
 		
 		String tFileName="test/matlab/journal-data/";
 		File tf=new File(tFileName);
@@ -190,12 +193,17 @@ public class JTestWork_Matlab {
 						switch(tA)
 						{
 						   case 0:
-							      tAllo=new CApproAllocate(tSensorTxt,speed);break;
+							      tAllo=new CGAPAllocate(tSensorTxt,speed);break;
 						   case 1:
+							      tAllo=new DGAPAllocate(tSensorTxt,speed,ExperimentSetting.transRange);break;
+						   case 2:
+							      tAllo=new CApproAllocate(tSensorTxt,speed);break;
+						   case 3:
 							      tAllo=new DApproAllocate(tSensorTxt,speed,ExperimentSetting.transRange);break;
 
 						}
 						
+						System.out.println(tA+"----"+algSet[tA]);
 						tAllo.schedule();
 					    	
 						tUtility=tUtility+tAllo.getNetworkUtility();

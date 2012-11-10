@@ -119,7 +119,7 @@ public class CApproAllocate extends Allocate {
 			 */
 			Collections.sort(p,new AllocationPairComparator(false));   //descending order
 			
-			double energyBudget=v.getResidualBudget();
+			//double energyBudget=v.getResidualBudget();
 			//int slotBudget=(int)Math.floor(energyBudget/(ExperimentSetting.eCom*ExperimentSetting.unitSlot));
 		    /*
 		     *   tuning the slot budget. For example, if the slotbudget is 2.3, it will be 3 with 30% probability

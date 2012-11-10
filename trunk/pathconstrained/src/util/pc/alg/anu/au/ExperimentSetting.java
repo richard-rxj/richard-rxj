@@ -24,10 +24,10 @@ public class ExperimentSetting {
 	public static double transRange=200;        
 	public static double roadBeginX=0;      
 	public static double roadY=180;  
-	public static double roadEndX=3000;   //10000      
+	public static double roadEndX=1800;   //10000      
 	public static double yRange=360;
 	public static double batteryCapacity=10000;
-	public static double[] harvestRate={0.0011,0.0066}; // J/s   0.0011--0.0022
+	public static double[] harvestRate={0.008,0.016}; // J/s   0.0011--0.0022
 	//public static double[] mSpeed={5,10,20};   // m/s   
 	public static double[] transPowerSet={0.3,0.3,0.3,0.3};    //  J/s    //transmission power set
 	public static double[] transRateSet={250000,19200,9600,4800};     //bps
