@@ -154,35 +154,37 @@ public class CGAPAllocate extends Allocate {
 		  /*
 		   * find critical item s
 		   */
+		  double z=0;
 		  int s=0;
-		  Collections.sort(tSlotPairSet, new AllocationPairComparator(false));
 		  double tBinSize=tSensor.getResidualBudget();
+		  Collections.sort(tSlotPairSet, new AllocationPairComparator(false));
+		  
 		  for(int i=0; i<tSlotPairSet.size();i++)
 		  {
 			  AllocationPair tp=tSlotPairSet.get(i);
-			  resultSet.add(tp);
-			  tBinSize=tBinSize-tp.getEnergyCost();
+			  
+			  if(tBinSize-tp.getEnergyCost()>0)
+			  {
+				  resultSet.add(tp);
+				  tBinSize=tBinSize-tp.getEnergyCost();
+			  }
+			  
 			  if(tBinSize==0)
 			  {
 				  return resultSet;
 			  }
-			  if(tBinSize<0)
-			  {
-				  s=i;
-				  break;
-			  }
 		  }
-		  if (s==0)
-		  {
-			  return resultSet;
-		  }
+
 		  
 		  /*
-		   * allocate based on epsilon
+		   * allocate based on epsilon  
+		   * need further improve!!!!
 		   */
-		  resultSet.clear();	  
-			  
-			  
+//		  resultSet.clear();	  
+//		  double delta=z/Math.pow((epsilon/3), 2);
+//		  int q=(int)Math.floor(z/delta);
+//		  ArrayList<int> S=new ArrayList
+//		  int[] T=new int[q+1];	  
 			  
 		 
 		  
