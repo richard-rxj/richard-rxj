@@ -1,6 +1,7 @@
 package test.pc.alg.anu.au;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -10,12 +11,14 @@ import java.text.DecimalFormat;
 import util.pc.alg.anu.au.ExperimentSetting;
 import alg.pc.alg.anu.au.Allocate;
 import alg.pc.alg.anu.au.CApproAllocate;
+import alg.pc.alg.anu.au.CGAPAllocate;
 import alg.pc.alg.anu.au.CentralAllocate;
 import alg.pc.alg.anu.au.DApproAllocate;
+import alg.pc.alg.anu.au.DGAPAllocate;
 import alg.pc.alg.anu.au.DistributeAllocate;
 import alg.pc.alg.anu.au.RandomAllocate;
 
-public class JTestWork_D {
+public class JTestWork_N_Speed {
 
 	/**
 	 * @param args
@@ -24,16 +27,20 @@ public class JTestWork_D {
 	 */
 	public static void main(String[] args) throws RuntimeException, IOException {
 		// TODO Auto-generated method stub
-        DecimalFormat df=new DecimalFormat("#.0000");
+
+		
+		DecimalFormat df=new DecimalFormat("#.0000");
         
         
         int[] networkSizeSet={100,200,300,400,500,600};
-		double speed=10;
-		double[] dSet={100,200,300,400};
-        int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CAppro","DAppro"};
+		double[] speedSet={5,10,30};
+		ExperimentSetting.unitSlot=4;
+		int tau=ExperimentSetting.unitSlot;
+        int cishu=1;
+		//int cishu=ExperimentSetting.cishu;
+		String[] algSet={"CGAP","DGAP","CAppro","DAppro"};
 		
-		String tFileName="test/journal-data/";
+		String tFileName="test/journal-data/GAP/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{
@@ -45,11 +52,16 @@ public class JTestWork_D {
 		/*
 		 * initial writers
 		 */
+		PrintWriter[]  pwSpeedSet=new PrintWriter[speedSet.length];
+		for(int i=0;i<speedSet.length;i++)
+		{
+			pwSpeedSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+"Speed-"+speedSet[i]+"-slot"+tau+".txt",true)));
+		}
 		
 		PrintWriter[]  pwAlgSet=new PrintWriter[algSet.length];
 		for(int i=0;i<algSet.length;i++)
 		{
-			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-D.txt",true)));
+			pwAlgSet[i]=new PrintWriter(new OutputStreamWriter(new FileOutputStream(tFileName+algSet[i]+"-R-slot"+tau+".txt",true)));
 		}
 		
 		
@@ -57,6 +69,11 @@ public class JTestWork_D {
 		{
 			int tNetworkSize=networkSizeSet[tN];
 			
+			for(int i=0;i<speedSet.length;i++)
+			{
+				pwSpeedSet[i].print(tNetworkSize);
+				pwSpeedSet[i].flush();
+			}
 			for(int i=0;i<algSet.length;i++)
 			{
 				pwAlgSet[i].print(tNetworkSize);
@@ -66,9 +83,9 @@ public class JTestWork_D {
 			
 			
 			
-			for(int tS=0;tS<dSet.length;tS++)
+			for(int tS=0;tS<speedSet.length;tS++)
 			{
-                double tD=dSet[tS];
+				double tSpeed=speedSet[tS];
 
 			
 				for(int tA=0;tA<algSet.length;tA++)
@@ -83,10 +100,20 @@ public class JTestWork_D {
 						switch(tA)
 						{
 						   case 0:
-							      tAllo=new CApproAllocate(tSensorTxt,speed);break;
+							      tAllo=new CGAPAllocate(tSensorTxt,tSpeed);
+							      break;
 						   case 1:
-							      tAllo=new DApproAllocate(tSensorTxt,speed,tD);break;
-
+							      tAllo=new DGAPAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);
+							      break;
+						   case 2:
+							      tAllo=new CentralAllocate(tSensorTxt,tSpeed);
+							      break;
+						   case 3:
+							      tAllo=new DistributeAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);
+							      break;
+						   case 4:
+							      tAllo=new RandomAllocate(tSensorTxt,tSpeed);
+							      break;
 						}
 						
 						tAllo.schedule();
@@ -98,6 +125,8 @@ public class JTestWork_D {
 					/*
 					 * output to files
 					 */
+					pwSpeedSet[tS].print(" "+df.format(tUtility));
+					pwSpeedSet[tS].flush();
 					
 					pwAlgSet[tA].print(" "+df.format(tUtility));
 					pwAlgSet[tA].flush();
@@ -106,7 +135,11 @@ public class JTestWork_D {
 			}
 			
 			
-
+			for(int i=0;i<speedSet.length;i++)
+			{
+				pwSpeedSet[i].println();
+				pwSpeedSet[i].flush();
+			}
 			for(int i=0;i<algSet.length;i++)
 			{
 				pwAlgSet[i].println();
@@ -119,11 +152,15 @@ public class JTestWork_D {
 		/*
 		 * close printwriters
 		 */
-
+		for(int i=0;i<speedSet.length;i++)
+		{
+			pwSpeedSet[i].close();
+		}
 		for(int i=0;i<algSet.length;i++)
 		{
 			pwAlgSet[i].close();
 		}
+		
 	}
 
 }

@@ -3,6 +3,7 @@ package alg.pc.alg.anu.au;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
 
@@ -40,15 +41,13 @@ public class RandomAllocate extends Allocate {
 			for(int j=0;j<sensorSet.size();j++)
 			{
 				SensorNode tSensor=sensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(tSlot.getX(),tSlot.getY(), tSensor.getX(),tSensor.getY());
-				if(tDistance<=ExperimentSetting.transRange)
+				AllocationPair tp=ExperimentSetting.getSlotPart(tSensor, tSlot);
+				
+				
+				if((tp.getSlotData()>0)&&(tSensor.getResidualBudget()>=tp.getEnergyCost()))
 				{
-					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
-					{
-						tList.add(tSensor);
-						double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
-						tSensor.updateUtilityGain(tSlotData);
-					}
+					tList.add(tSensor);
+					tSensor.updateUtilityGain(tp.getSlotData());
 				}
 			}
 			
@@ -69,8 +68,8 @@ public class RandomAllocate extends Allocate {
 			 * allocate and update
 			 */
 			//double cDistance=CommonFacility.computeDistance(tSlot, cSensor);
-			double cSlotData=ExperimentSetting.getSlotData(cSensor, tSlot);
-			cSensor.update(tSlot.getId(), cSlotData);
+			AllocationPair cp=ExperimentSetting.getSlotPart(cSensor, tSlot);
+			cSensor.update(tSlot.getId(),cp.getSlotData(),cp.getEnergyCost());
 			
 		}
 	}

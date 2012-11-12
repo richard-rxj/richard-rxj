@@ -173,7 +173,6 @@ public class SensorNode extends Node {
 
 		this.residualBudget=this.residualBudget+energyCost;
 		
-		//double add=transRate*ExperimentSetting.unitSlot;
 		this.throughput=this.throughput-slotData;
 		this.utility=ExperimentSetting.getUtility(this.throughput);
 	}

@@ -18,7 +18,7 @@ public class DGAPAllocate extends Allocate {
 			throws RuntimeException, IOException {
 		super(sensorTxt, speed);
 		// TODO Auto-generated constructor stub
-		ExperimentSetting.interval=(int)Math.floor(range/(speed*ExperimentSetting.unitSlot));
+		ExperimentSetting.interval=(int)Math.round(range/(speed*ExperimentSetting.unitSlot));
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +78,9 @@ public class DGAPAllocate extends Allocate {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		int i=(int)Math.round(2.5);
+		System.out.println(i);
+		System.out.println(Math.rint(2.5));
 	}
 
 }
