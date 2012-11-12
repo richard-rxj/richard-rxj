@@ -10,7 +10,9 @@ import java.text.DecimalFormat;
 import util.pc.alg.anu.au.ExperimentSetting;
 import alg.pc.alg.anu.au.Allocate;
 import alg.pc.alg.anu.au.CApproAllocate;
+import alg.pc.alg.anu.au.CGAPAllocate;
 import alg.pc.alg.anu.au.DApproAllocate;
+import alg.pc.alg.anu.au.DGAPAllocate;
 
 public class JTestWork_Speed_Slot {
 
@@ -28,7 +30,7 @@ DecimalFormat df=new DecimalFormat("#.0000");
 		int[] speedSet={5,10,20,30};
 		int[] tauSet={1,2,4,6};
         int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CAppro","DAppro"};
+		String[] algSet={"CGAP","DGAP","CAppro","DAppro"};
 		
 		String tFileName="test/journal-data/";
 		File tf=new File(tFileName);
@@ -81,8 +83,12 @@ DecimalFormat df=new DecimalFormat("#.0000");
 						switch(tA)
 						{
 						   case 0:
-							      tAllo=new CApproAllocate(tSensorTxt,tSpeed);break;
+							      tAllo=new CGAPAllocate(tSensorTxt,tSpeed);break;
 						   case 1:
+							      tAllo=new DGAPAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);break;
+						   case 2:
+							      tAllo=new CApproAllocate(tSensorTxt,tSpeed);break;
+						   case 3:
 							      tAllo=new DApproAllocate(tSensorTxt,tSpeed,ExperimentSetting.transRange);break;
 
 						}

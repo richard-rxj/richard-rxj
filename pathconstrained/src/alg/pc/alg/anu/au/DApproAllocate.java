@@ -35,7 +35,7 @@ public class DApproAllocate extends Allocate {
 		/*
 		 * reconfigure interval according to speed-----every interval length is R
 		 */
-		ExperimentSetting.interval=(int)Math.floor(range/(speed*ExperimentSetting.unitSlot));
+		ExperimentSetting.interval=(int)Math.round(range/(speed*ExperimentSetting.unitSlot));
 	}
 
 	/* (non-Javadoc)

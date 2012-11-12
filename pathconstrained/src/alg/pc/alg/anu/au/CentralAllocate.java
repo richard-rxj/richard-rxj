@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.SensorNode;
 import model.pc.alg.anu.au.TimeSlotNode;
 
@@ -12,6 +13,9 @@ import util.pc.alg.anu.au.ExperimentSetting;
 import util.pc.alg.anu.au.UtilityGainComparator;
 
 public class CentralAllocate extends Allocate {
+	/*
+	 * heuristic
+	 */
 
 	public CentralAllocate(String sensorTxt, double speed)
 			throws RuntimeException, IOException {
@@ -29,7 +33,7 @@ public class CentralAllocate extends Allocate {
 	/*
 	 * allocate a set of time slot to a set of sensors with maximise utility
 	 */
-	private void maxGainAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
+	public static void maxGainAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
 	{
 		for(int i=0;i<timeSlotSet.size();i++)
 		{
@@ -42,16 +46,15 @@ public class CentralAllocate extends Allocate {
 			for(int j=0;j<sensorSet.size();j++)
 			{
 				SensorNode tSensor=sensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(tSlot.getX(),tSlot.getY(), tSensor.getX(),tSensor.getY());
-				if(tDistance<=ExperimentSetting.transRange)
+				AllocationPair tp=ExperimentSetting.getSlotPart(tSensor, tSlot);
+				
+				
+				if((tp.getSlotData()>0)&&(tSensor.getResidualBudget()>=tp.getEnergyCost()))
 				{
-					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
-					{
-						tList.add(tSensor);
-						double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
-						tSensor.updateUtilityGain(tSlotData);
-					}
+					tList.add(tSensor);
+					tSensor.updateUtilityGain(tp.getSlotData());
 				}
+				
 			}
 			
 			if(tList.size()==0)
@@ -70,9 +73,8 @@ public class CentralAllocate extends Allocate {
 			/*
 			 * allocate and update
 			 */
-			//double cDistance=CommonFacility.computeDistance(tSlot, cSensor);
-			double cSlotData=ExperimentSetting.getSlotData(cSensor, tSlot);
-			cSensor.update(tSlot.getId(), cSlotData);
+			AllocationPair cp=ExperimentSetting.getSlotPart(cSensor, tSlot);
+			cSensor.update(tSlot.getId(),cp.getSlotData(),cp.getEnergyCost());
 			
 		}
 	}

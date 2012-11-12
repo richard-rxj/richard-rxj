@@ -13,7 +13,9 @@ import model.pc.alg.anu.au.TimeSlotNode;
 
 public class DistributeAllocate extends Allocate {
 
-	
+	/*
+	 * distributed  heuristic 
+	 */
 	
 	public DistributeAllocate(String sensorTxt, double speed,double interRange)
 			throws RuntimeException, IOException {
@@ -23,7 +25,7 @@ public class DistributeAllocate extends Allocate {
 		/*
 		 * reconfigure interval according to speed-----every interval length is R
 		 */
-		ExperimentSetting.interval=(int)Math.floor(interRange/(speed*ExperimentSetting.unitSlot));
+		ExperimentSetting.interval=(int)Math.round(interRange/(speed*ExperimentSetting.unitSlot));
 	}
 
 	@Override
@@ -67,61 +69,12 @@ public class DistributeAllocate extends Allocate {
 			/*
 			 * allocate for this interval
 			 */
-			this.maxGainAllocate(tSensorSet, tSlotSet);
+			CentralAllocate.maxGainAllocate(tSensorSet, tSlotSet);
 		}
 		
 	}
 
 	
-	/*
-	 * allocate a set of time slot to a set of sensors with maximise utility
-	 */
-	private void maxGainAllocate(ArrayList<SensorNode> sensorSet, ArrayList<TimeSlotNode> timeSlotSet)
-	{
-		for(int i=0;i<timeSlotSet.size();i++)
-		{
-			TimeSlotNode tSlot=timeSlotSet.get(i);
-			ArrayList<SensorNode> tList=new ArrayList<SensorNode>();
-			
-			/*
-			 * fill tList
-			 */
-			for(int j=0;j<sensorSet.size();j++)
-			{
-				SensorNode tSensor=sensorSet.get(j);
-				double tDistance=CommonFacility.computeDistance(tSlot.getX(),tSlot.getY(), tSensor.getX(),tSensor.getY());
-				if(tDistance<=ExperimentSetting.transRange)
-				{
-					if(tSensor.getResidualBudget()>=(ExperimentSetting.eCom*ExperimentSetting.unitSlot))
-					{
-						tList.add(tSensor);
-						double tSlotData=ExperimentSetting.getSlotData(tSensor, tSlot);
-						tSensor.updateUtilityGain(tSlotData);
-					}
-				}
-			}
-			
-			if(tList.size()==0)
-			{
-				continue;
-			}
-			/*
-			 * choose a slot with maxGain
-			 */
-			Object[] tSet=tList.toArray();
-			UtilityGainComparator tCom=new UtilityGainComparator(false);
-			Arrays.sort(tSet, tCom);
-			SensorNode cSensor=(SensorNode)tSet[0];
-			
-			
-			/*
-			 * allocate and update
-			 */
-			//double cDistance=CommonFacility.computeDistance(tSlot, cSensor);
-			double cSlotData=ExperimentSetting.getSlotData(cSensor, tSlot);
-			cSensor.update(tSlot.getId(), cSlotData);
-			
-		}
-	}
+	
 	
 }
