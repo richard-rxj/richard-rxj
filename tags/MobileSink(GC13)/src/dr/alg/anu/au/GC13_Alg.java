@@ -11,7 +11,6 @@ import network.dr.alg.anu.au.BiNetwork;
 import network.dr.alg.anu.au.GateWay;
 import network.dr.alg.anu.au.GateWayPriorityWeightComparator;
 import network.dr.alg.anu.au.GateWayUnitUtilityGainComparator;
-import network.dr.alg.anu.au.GateWayUtilityGainComparator;
 import network.dr.alg.anu.au.LabResult;
 import network.dr.alg.anu.au.Node;
 
@@ -21,7 +20,7 @@ import network.dr.alg.anu.au.Node;
  */
 public class GC13_Alg {
 
-	public static LabResult disTraMaxUtilityGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniTimeStamp, double deltaTimeStamp) throws IOException
+	public static LabResult disTraMaxUtilityGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniTimeStamp, double deltaTimeStamp, ArrayList<GateWay> solution) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -38,7 +37,7 @@ public class GC13_Alg {
 		
 		
 		
-		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		//ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
 		double tTourTime=ExperimentSetting.tourTime;
 		//double tLossWeight=TourDesign.lossWeight;
@@ -146,7 +145,7 @@ public class GC13_Alg {
 			if(tDistanceGateWaySet.size()==0)
 			{
 				flag=false;
-				return solution;
+				return result;
 			}
 			
 			
@@ -183,10 +182,10 @@ public class GC13_Alg {
 			Arrays.sort(gSet,gCom);
 			GateWay realGateWay=(GateWay)gSet[0];
 			
-			realGateWay.calcUtilityGain(lastBackTime, tTourTime, false);
+			realGateWay.calcUnitUtilityGain(lastBackTime, tTourTime, false);
 			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
 			{
-				realGateWay.calcBenefitGain(lastBackTime,tTourTime, true);   //last sojourn location
+				realGateWay.calcUnitUtilityGain(lastBackTime,tTourTime, true);   //last sojourn location
 			}
 			realGateWay.setTimeStamp(tUsedTime+realGateWay.getMovingTime()+realGateWay.getSojournTime());
 			
@@ -278,7 +277,7 @@ public class GC13_Alg {
 	
 	
 	
-	public static LabResult randomUtilityGainTourDesign(BiNetwork bNet) throws IOException
+	public static LabResult randomUtilityGainTourDesign(BiNetwork bNet,ArrayList<GateWay> solution) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -295,7 +294,7 @@ public class GC13_Alg {
 		double totalMovingTime=0;
 		
 		
-		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		//ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
 		double tTourTime=ExperimentSetting.tourTime;
 		//double tLossWeight=TourDesign.lossWeight;
@@ -348,7 +347,7 @@ public class GC13_Alg {
 			if(tGateWaySet.size()==0)
 			{
 				flag=false;
-				return solution;
+				return result;
 			}
 			
 			Object[] gSet=tGateWaySet.toArray();
@@ -442,7 +441,7 @@ public class GC13_Alg {
 	
 	
 	
-	public static LabResult maxUnitUtilityGainTourDesign(BiNetwork bNet) throws IOException
+	public static LabResult maxUnitUtilityGainTourDesign(BiNetwork bNet,ArrayList<GateWay> solution) throws IOException
 	{
 		/*
 		 * initial network topology 
@@ -467,7 +466,7 @@ public class GC13_Alg {
 		
 		
 		
-		ArrayList<GateWay> solution=new ArrayList<GateWay>();
+		//ArrayList<GateWay> solution=new ArrayList<GateWay>();
 		boolean flag=true;
 		double tTourTime=ExperimentSetting.tourTime;
 		//double tLossWeight=TourDesign.lossWeight;

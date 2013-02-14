@@ -3,7 +3,7 @@ package network.dr.alg.anu.au;
 import java.util.ArrayList;
 
 import dr.alg.anu.au.ExperimentSetting;
-import dr.alg.anu.au.NewTourDesign;
+
 
 public class Node implements Comparable<Node> {
 
@@ -23,10 +23,6 @@ public class Node implements Comparable<Node> {
 	private double Y=0;
 	private double tTime = 0;
 	private double uploadTime =0;
-	private double lWeight= 1;
-	private double fWeight= 1;
-	private double lBenefit = 0;
-	private double fBenefit = 0;
 	private double survivalTime=0; // new
 	private double totalSojournTime=0; // new
 	private double benefitGain=0;     //new
@@ -185,37 +181,7 @@ public class Node implements Comparable<Node> {
 		this.uploadTime = uploadTime;
 	}
 
-	public double getlWeight() {
-		return lWeight;
-	}
-
-	public void setlWeight(double lWeight) {
-		this.lWeight = lWeight;
-	}
-
-	public double getfWeight() {
-		return fWeight;
-	}
-
-	public void setfWeight(double fWeight) {
-		this.fWeight = fWeight;
-	}
-
-	public double getlBenefit() {
-		return lBenefit;
-	}
-
-	public void setlBenefit(double lBenefit) {
-		this.lBenefit = lBenefit;
-	}
-
-	public double getfBenefit() {
-		return fBenefit;
-	}
-
-	public void setfBenefit(double fBenefit) {
-		this.fBenefit = fBenefit;
-	}
+	
 
 	public int compareTo(Node vertex2) {
 		// TODO Auto-generated method stub
@@ -278,43 +244,10 @@ public class Node implements Comparable<Node> {
 		return result;
 	}
 	
-	public double calcLBenefit(double tSojournTime)
-	{
-		double result=0;
-		
-		result=this.lWeight*this.tRate*tSojournTime;
-		
-		this.lBenefit=result;
-		return result;
-		
-	}
-	
-	public double calcFBenefit(double tSojournTime)
-	{
-		double result=0;
-		
-		result=this.fWeight*this.tRate*tSojournTime;
-		
-		this.fBenefit=result;
-		return result;
-		
-	}
+
 	
 	
-	public double updateFweight()
-	{
-		double result=0;
-		result = 1-((this.cData-this.rData)/this.cData)*((this.cData-this.rData)/this.cData);
-		this.fWeight = result;
-		return result;
-	}
 	
-	
-	public double updateLweight()
-	{
-		
-		return this.lWeight;
-	}
 	
 	
 	public double getSurvivalTime() {
@@ -356,16 +289,6 @@ public class Node implements Comparable<Node> {
 	}
 
 	
-	public double calcSurvivalTime(double movingTime, double eConsumption)
-	{
-		double result=0;
-		double tConsumption=eConsumption*this.tRate;
-		if(tConsumption<ExperimentSetting.minEConsumption)
-			tConsumption=ExperimentSetting.minEConsumption;
-		result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
-		this.setSurvivalTime(result);
-		return result;
-	}
 	
 	
 	public double calcUtilityGain(double sojournTime)   //modify for GLOBECOM 2013
