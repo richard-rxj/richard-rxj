@@ -21,10 +21,10 @@ public class ExperimentSetting {
 	public static double minLeftTime=0.001;
 	public static double xRange=100;
 	public static double yRange=100;
-	public static double initSinkX=50;   //50    0 for distributed
-	public static double initSinkY=50;   //50    0 for distributed
+	public static double initSinkX=0;   //50    0 for distributed
+	public static double initSinkY=0;   //50    0 for distributed
 	public static double gRate= 1000; //  bps
-	public static double tRate= 1000; //  bps    old 20000
+	public static double tRate= 20000; //  bps    old 20000
 	public static double tourTime=100;  //  s    -----------------------varible
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
 	public static double mSpeed=2;   // m/s   
@@ -34,7 +34,7 @@ public class ExperimentSetting {
 	public static double minEConsumption=0.002;   //J/s   
 	public static double utilityA=2;
 	public static Random ran=new Random();
-	public static int cishu=15;
+	public static int cishu=50;
 	
 	
 	public static double calcVariance(ArrayList<Node> nList)

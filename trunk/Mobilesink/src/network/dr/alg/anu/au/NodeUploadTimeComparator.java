@@ -114,7 +114,7 @@ public class NodeUploadTimeComparator<V> implements Comparator<V> {
 		for(int i=0;i<nSet.length;i++)
 		{
 			Node nt=(Node)nSet[i];
-			nt.setId(10);
+			//nt.setId(10);
 			System.out.println(nt);
 		}
 		
