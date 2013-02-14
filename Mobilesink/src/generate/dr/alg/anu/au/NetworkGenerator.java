@@ -56,8 +56,8 @@ public class NetworkGenerator   {
 			Node n=new Node(i);
 			n.setX(NetworkGenerator.ran.nextDouble()*ExperimentSetting.xRange);
 			n.setY(NetworkGenerator.ran.nextDouble()*ExperimentSetting.yRange);
-			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
-			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.setcData(0);
+			n.setrData(0);
 			n.sethEnergy(ExperimentSetting.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]));
 		
 			result.getnList().add(n);
@@ -93,8 +93,8 @@ public class NetworkGenerator   {
 			nnn++;
 			String[] b=tempString.split(" ");
 			Node n=new Node(nnn);
-			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
-			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
+			n.setcData(0);
+			n.setrData(0);
 			n.sethEnergy(ExperimentSetting.harvestRate[0]+NetworkGenerator.ran.nextDouble()*(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0]));
 			n.setX(Double.parseDouble(b[1]));
 			n.setY(Double.parseDouble(b[2]));
@@ -153,10 +153,8 @@ public class NetworkGenerator   {
 		{
 			String[] b=tempString.split(" ");
 			Node n=new Node(Integer.parseInt(b[0]));
-			//n.setcData(Double.parseDouble(b[1]));
-			n.setcData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
-			n.setrData(ExperimentSetting.gRate*ExperimentSetting.tourTime);
-			//n.setrData(Double.parseDouble(b[2]));
+			n.setcData(Double.parseDouble(b[1]));
+			n.setrData(Double.parseDouble(b[2]));
 			n.setcEnergy(Double.parseDouble(b[3]));
 			n.setrEnergy(Double.parseDouble(b[4]));
 			n.sethEnergy(Double.parseDouble(b[5]));

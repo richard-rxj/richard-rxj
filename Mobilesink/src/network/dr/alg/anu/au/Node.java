@@ -11,12 +11,12 @@ public class Node implements Comparable<Node> {
 	private int name;  //0-------node      1-------gateway
 	private int active; //0-------non-select 1--------select
 	private double rEnergy =0;
-	private double cEnergy =100;  //battery capacity 100 Jules
+	private double cEnergy =10000;  //battery capacity 10000 Jules
 	private double hEnergy=0;
 	private double rData=0;
 	private double cData=0;
-	private double gRate = 1000;
-	private double tRate = 1000;   // transmission rate = generation rate
+	private double gRate = ExperimentSetting.gRate;
+	private double tRate = ExperimentSetting.tRate;   
 	private double xLabel = 0;
 	private double yLabel = 0;
 	private double X=0;
@@ -136,17 +136,17 @@ public class Node implements Comparable<Node> {
 		return gRate;
 	}
 
-	public void setgRate(double gRate) {
-		this.gRate = gRate;
-	}
+//	public void setgRate(double gRate) {
+//		this.gRate = gRate;
+//	}
 
 	public double gettRate() {
 		return tRate;
 	}
 
-	public void settRate(double tRate) {
-		this.tRate = tRate;
-	}
+//	public void settRate(double tRate) {
+//		this.tRate = tRate;
+//	}
 
 	public double getxLabel() {
 		return xLabel;
@@ -256,11 +256,11 @@ public class Node implements Comparable<Node> {
 	}
 	
 	
-	public double calcUploadTime(double movingTime, double eConsumption)
+	public double calcUploadTime(double movingTime, double eConsumption)   //for GLOBECOM 2013
 	{
 		double result=0;
 		double result1=0;
-		result1 = this.rData / this.tRate;
+		result1 = (this.rData+this.gRate*movingTime) / (this.tRate-this.gRate);
 		if(eConsumption*this.tRate>this.hEnergy)
 		{
 			result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
@@ -368,13 +368,22 @@ public class Node implements Comparable<Node> {
 	}
 	
 	
-	public double calcUtilityGain(double sojournTime)
+	public double calcUtilityGain(double sojournTime)   //modify for GLOBECOM 2013
 	{
 		double result=0;
 		double tA=ExperimentSetting.utilityA;
 		double tTourTime=ExperimentSetting.tourTime;
-		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
-		double tNew=1-Math.pow((1-(this.totalSojournTime+sojournTime)/tTourTime),tA);
+		double tPrevious=Math.sqrt(this.totalSojournTime*this.tRate/tTourTime*this.gRate);
+		
+		double tUploadTime=this.uploadTime;
+		if(tUploadTime>sojournTime)
+		{
+			tUploadTime=sojournTime;
+		}
+		
+		double tNew=Math.sqrt((this.totalSojournTime+tUploadTime)*this.tRate/tTourTime*this.gRate);
+		
+		
 		result=tNew-tPrevious;
 		return result;
 	}
