@@ -29,8 +29,8 @@ import java.util.Iterator;
 import java.util.Random;
 
 import dr.alg.anu.au.ExperimentSetting;
-import dr.alg.anu.au.NewTourDesign;
-import dr.alg.anu.au.TourDesign;
+
+
 
 import network.dr.alg.anu.au.BiNetwork;
 import network.dr.alg.anu.au.GateWay;
