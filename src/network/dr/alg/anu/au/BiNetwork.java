@@ -44,7 +44,7 @@ public class BiNetwork {
 		{
 			Node n=this.nList.get(i);
 			
-			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+df.format(n.getcEnergy())+" "+df.format(n.getrEnergy())+" "+df1.format(n.gethEnergy())+" "+df.format(n.getX())+" "+df.format(n.getY()));
+			pwNode.println(n.getId()+" "+n.getcData()+" "+n.getrData()+" "+df.format(n.getcEnergy())+" "+df.format(n.getaEnergy())+" "+df1.format(n.gethEnergy())+" "+df.format(n.getX())+" "+df.format(n.getY()));
 			pwNode.flush();
 		}
 		

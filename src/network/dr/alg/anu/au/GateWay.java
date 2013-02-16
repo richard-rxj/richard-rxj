@@ -17,24 +17,19 @@ public class GateWay implements Comparable<GateWay> {
 	private int name; 
 	private double X=0;
 	private double Y=0;
-	private double benefit = 0;
 	private double utility=0;
-	private double throughput=0;
 	private ArrayList<Node> neighborNodes;
 	private ArrayList<Double> eConSet;
 	private ArrayList<Node> activeNodes;
 	private double sojournTime =0;
 	private double movingTime=0;
 	private double backTime=0;
-	private double benefitGain=0;     //new
-	private double unitBenefitGain=0; //new
 	private double utilityGain=0;     //new
 	private double unitUtilityGain=0; //new
 	private int    feasible=0;        // 0-non feasible 1-feasible
 	private double timeStamp=0;
 	private double priorityWeight=0;
 	private double distance=0;
-	private double similarity=0;
 	
 	public GateWay(int id) {
 		this.id = id;
@@ -50,9 +45,7 @@ public class GateWay implements Comparable<GateWay> {
 		this.name = g.name;
 		this.X = g.X;
 		this.Y = g.Y;
-		this.benefit = g.benefit;
 		this.utility = g.utility;
-		this.throughput = g.throughput;
 		this.sojournTime=g.sojournTime;
 		this.movingTime=g.movingTime;
 		this.neighborNodes =new ArrayList<Node>();
@@ -72,8 +65,6 @@ public class GateWay implements Comparable<GateWay> {
 			this.eConSet.add(g.eConSet.get(i));
 		}
 		this.backTime=g.backTime;
-		this.benefitGain=g.benefitGain;
-		this.unitBenefitGain=g.unitBenefitGain;
 		this.unitUtilityGain=g.unitUtilityGain;
 		this.utilityGain=g.utilityGain;
 	}
@@ -138,13 +129,6 @@ public class GateWay implements Comparable<GateWay> {
 		Y = y;
 	}
 
-	public double getBenefit() {
-		return benefit;
-	}
-
-	public void setBenefit(double benefit) {
-		this.benefit = benefit;
-	}
 
 	
 
@@ -158,14 +142,6 @@ public class GateWay implements Comparable<GateWay> {
 	}
 
 
-	public double getThroughput() {
-		return throughput;
-	}
-
-
-	public void setThroughput(double throughput) {
-		this.throughput = throughput;
-	}
 
 
 	public ArrayList<Node> getNeighborNodes() {
@@ -214,24 +190,6 @@ public class GateWay implements Comparable<GateWay> {
 	}
 
 
-	public double getBenefitGain() {
-		return benefitGain;
-	}
-
-
-	public void setBenefitGain(double benefitGain) {
-		this.benefitGain = benefitGain;
-	}
-
-
-	public double getUnitBenefitGain() {
-		return unitBenefitGain;
-	}
-
-
-	public void setUnitBenefitGain(double unitBenefitGain) {
-		this.unitBenefitGain = unitBenefitGain;
-	}
 
 
 	public double getUtilityGain() {
@@ -283,10 +241,6 @@ public class GateWay implements Comparable<GateWay> {
 		this.distance = distance;
 	}
 
-
-	public double getSimilarity() {
-		return similarity;
-	}
 
 
 	public int getFeasible() {
@@ -351,9 +305,9 @@ public class GateWay implements Comparable<GateWay> {
 				
 				double tUtilityGain=0;
 				double tBenefitGain=0;
-				for(int j=0;j<this.activeNodes.size();j++)
+				for(int j=0;j<this.neighborNodes.size();j++)
 				{
-					tUtilityGain= tUtilityGain+this.activeNodes.get(i).calcUtilityGain(tSojournTime);
+					tUtilityGain= tUtilityGain+this.neighborNodes.get(i).calcUtilityGain(tSojournTime);
 					//tBenefitGain= tBenefitGain+this.activeNodes.get(i).gettRate()*tSojournTime;
 				}
 				
@@ -383,7 +337,6 @@ public class GateWay implements Comparable<GateWay> {
 				GateWay result=(GateWay)gSet[0];
 				this.utilityGain=result.utilityGain;
 				this.unitUtilityGain=result.unitUtilityGain;
-				this.benefitGain=result.benefitGain;
 				this.sojournTime=result.sojournTime;
 //				this.activeNodes.clear();
 //				for(int i=0;i<result.activeNodes.size();i++)
@@ -407,7 +360,7 @@ public class GateWay implements Comparable<GateWay> {
 			else
 			{
 				this.feasible=0;
-	        	this.utilityGain=Double.NEGATIVE_INFINITY;
+	        	this.utilityGain=0;
 	        	this.unitUtilityGain=Double.NEGATIVE_INFINITY;
 	        	this.sojournTime=0;
 	        	this.activeNodes.clear();
@@ -469,7 +422,6 @@ public class GateWay implements Comparable<GateWay> {
 				GateWay result=(GateWay)gSet[0];
 				this.utilityGain=result.utilityGain;
 				this.unitUtilityGain=result.unitUtilityGain;
-				this.benefitGain=result.benefitGain;
 				this.sojournTime=result.sojournTime;
 //				this.activeNodes.clear();
 //				for(int i=0;i<result.activeNodes.size();i++)
@@ -502,7 +454,7 @@ public class GateWay implements Comparable<GateWay> {
 			else
 			{
 				this.feasible=0;
-	        	this.utilityGain=Double.NEGATIVE_INFINITY;
+	        	this.utilityGain=0;
 	        	this.unitUtilityGain=Double.NEGATIVE_INFINITY;
 	        	this.sojournTime=0;
 	        	this.activeNodes.clear();
@@ -518,41 +470,7 @@ public class GateWay implements Comparable<GateWay> {
 	/*
 	 * used for distributed
 	 */
-	public void calcSimilarity(ArrayList<Node> tList)
-	{
-		ArrayList<Node> l1=new ArrayList<Node>();
-		l1.addAll(this.neighborNodes);
-		l1.retainAll(tList);
-		this.similarity=l1.size()*1.0/this.neighborNodes.size();
-	}
 	
-	
-	public void calcOnePriorityWeight(double tUsedTime, double tDistance, double tMaxTraTime, double tMinTraTime)
-	{
-
-		double tD=Math.abs(this.distance-tDistance)/this.distance;
-		double tT=(this.movingTime+this.backTime-tMinTraTime)/(tMaxTraTime-tMinTraTime);
-		double tS=this.similarity;
-		this.priorityWeight=tD+tT+tS;
-
-	}
-	
-	
-	public void calcNeiSimTimTraPriorityWeight(double tUsedTime)
-	{
-
-
-		this.priorityWeight=(1-this.similarity)*(tUsedTime-this.timeStamp-this.movingTime-this.backTime)*this.neighborNodes.size();
-
-	}
-	
-	public void calcTimTraPriorityWeight(double tUsedTime)
-	{
-
-
-		this.priorityWeight=tUsedTime-this.timeStamp-this.movingTime-this.backTime;
-		
-	}
 	
 	public void calcTraPriorityWeight(double tUsedTime)
 	{
@@ -562,11 +480,13 @@ public class GateWay implements Comparable<GateWay> {
 	}
 	
 	
+	
+	
 
 	public String toString() {
 		DecimalFormat df=new DecimalFormat("#.0000");
 		
-		return "gateway " + id+"-(m)"+df.format(this.movingTime)+"-(s)"+df.format(this.sojournTime)+"-(active)"+this.activeNodes.toString()+"-(neighbor)"+this.neighborNodes.toString();
+		return "gateway " + id+"-(m)"+df.format(this.movingTime)+"-(s)"+df.format(this.sojournTime)+"-(t)"+this.timeStamp+"-(neighbor)"+this.neighborNodes.toString();
 	}
 	
 	

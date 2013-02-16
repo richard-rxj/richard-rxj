@@ -10,7 +10,7 @@ public class Node implements Comparable<Node> {
 	private int id;
 	private int name;  //0-------node      1-------gateway
 	private int active; //0-------non-select 1--------select
-	private double rEnergy =0;
+	private double aEnergy =0;
 	private double cEnergy =10000;  //battery capacity 10000 Jules
 	private double hEnergy=0;
 	private double rData=0;
@@ -23,10 +23,8 @@ public class Node implements Comparable<Node> {
 	private double Y=0;
 	private double tTime = 0;
 	private double uploadTime =0;
-	private double survivalTime=0; // new
 	private double totalSojournTime=0; // new
-	private double benefitGain=0;     //new
-	private double utilityGain=0;      //new
+	private double totalUtility=0;      //new
 	
 	
 
@@ -43,7 +41,7 @@ public class Node implements Comparable<Node> {
 		this.id = ni.id;
 		this.X = ni.x;
 		this.Y = ni.y;
-		this.rEnergy = ni.re;
+		this.aEnergy = ni.re;
 		this.cEnergy = ni.ce;
 	}
 
@@ -55,7 +53,7 @@ public class Node implements Comparable<Node> {
 		this.X = v.getX();
 		this.Y = v.getY();
 		this.cEnergy = v.getcEnergy();
-		this.rEnergy = v.getrEnergy();
+		this.aEnergy = v.getaEnergy();
 	}
 	
 	public Node(Node another){
@@ -64,7 +62,7 @@ public class Node implements Comparable<Node> {
 		this.name = another.name;
 		this.X = another.X;
 		this.Y = another.Y;
-		this.rEnergy = another.rEnergy;
+		this.aEnergy = another.aEnergy;
 	}
 
 	
@@ -88,12 +86,12 @@ public class Node implements Comparable<Node> {
 	}
 
 
-	public double getrEnergy() {
-		return rEnergy;
+	public double getaEnergy() {
+		return aEnergy;
 	}
 
-	public void setrEnergy(double rEnergy) {
-		this.rEnergy = rEnergy;
+	public void setaEnergy(double aEnergy) {
+		this.aEnergy = aEnergy;
 	}
 
 	public double getcEnergy() {
@@ -185,9 +183,9 @@ public class Node implements Comparable<Node> {
 
 	public int compareTo(Node vertex2) {
 		// TODO Auto-generated method stub
-		if (rEnergy > vertex2.getrEnergy()) {
+		if (aEnergy > vertex2.getaEnergy()) {
 			return 1;
-		} else if (rEnergy < vertex2.getrEnergy()) {
+		} else if (aEnergy < vertex2.getaEnergy()) {
 			return -1;
 		} else
 			return 0;
@@ -227,9 +225,18 @@ public class Node implements Comparable<Node> {
 		double result=0;
 		double result1=0;
 		result1 = (this.rData+this.gRate*movingTime) / (this.tRate-this.gRate);
-		if(eConsumption*this.tRate>this.hEnergy)
+		double tEnergy=eConsumption*this.tRate;
+		if(tEnergy>this.hEnergy)
 		{
-			result = (this.rEnergy+this.hEnergy*movingTime)/(eConsumption*this.tRate-this.hEnergy);
+			result = (this.aEnergy+this.hEnergy*movingTime)/(tEnergy-this.hEnergy);
+		
+			//begin of debug
+			if(result<0)
+			{
+				System.out.println("nodeid:"+this.id+"--hVate("+this.hEnergy+")--rData("+this.rData+")--uploadtime("+result1+")--rEnergy("+this.aEnergy+")--survivalTime("+result+")");
+			}
+			//end of debug
+			
 			if(result>result1)
 			{
 				result=result1;
@@ -241,22 +248,14 @@ public class Node implements Comparable<Node> {
 		
 		
 		this.uploadTime=result;
+		
+		
+		
 		return result;
 	}
 	
 
-	
-	
-	
-	
-	
-	public double getSurvivalTime() {
-		return survivalTime;
-	}
 
-	public void setSurvivalTime(double survivalTime) {
-		this.survivalTime = survivalTime;
-	}
 
 	public double getTotalSojournTime() {
 		return totalSojournTime;
@@ -264,31 +263,20 @@ public class Node implements Comparable<Node> {
 
 	public void setTotalSojournTime(double totalSojournTime) {
 		this.totalSojournTime = totalSojournTime;
-		this.benefitGain=totalSojournTime*this.tRate;
 		double tA=ExperimentSetting.utilityA;
 		double tTourTime=ExperimentSetting.tourTime;
-		double tPrevious=1-Math.pow((1-this.totalSojournTime/tTourTime),tA);
-		this.utilityGain=tPrevious;
+		double tPrevious=Math.sqrt(this.totalSojournTime*this.tRate/(tTourTime*this.gRate));
+		this.totalUtility=tPrevious;
 
 	}
 
-	public double getBenefitGain() {
-		return benefitGain;
+
+
+	public double getTotalUtility() {
+		return this.totalUtility;
 	}
 
-	public void setBenefitGain(double benefitGain) {
-		this.benefitGain = benefitGain;
-	}
 
-	public double getUtilityGain() {
-		return utilityGain;
-	}
-
-	public void setUtilityGain(double utilityGain) {
-		this.utilityGain = utilityGain;
-	}
-
-	
 	
 	
 	public double calcUtilityGain(double sojournTime)   //modify for GLOBECOM 2013
@@ -296,7 +284,7 @@ public class Node implements Comparable<Node> {
 		double result=0;
 		double tA=ExperimentSetting.utilityA;
 		double tTourTime=ExperimentSetting.tourTime;
-		double tPrevious=Math.sqrt(this.totalSojournTime*this.tRate/tTourTime*this.gRate);
+		double tPrevious=Math.sqrt(this.totalSojournTime*this.tRate/(tTourTime*this.gRate));
 		
 		double tUploadTime=this.uploadTime;
 		if(tUploadTime>sojournTime)
@@ -304,7 +292,7 @@ public class Node implements Comparable<Node> {
 			tUploadTime=sojournTime;
 		}
 		
-		double tNew=Math.sqrt((this.totalSojournTime+tUploadTime)*this.tRate/tTourTime*this.gRate);
+		double tNew=Math.sqrt((this.totalSojournTime+tUploadTime)*this.tRate/(tTourTime*this.gRate));
 		
 		
 		result=tNew-tPrevious;

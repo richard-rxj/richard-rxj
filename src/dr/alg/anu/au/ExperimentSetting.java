@@ -34,7 +34,7 @@ public class ExperimentSetting {
 	public static double minEConsumption=0.002;   //J/s   
 	public static double utilityA=2;
 	public static Random ran=new Random();
-	public static int cishu=50;
+	public static int cishu=20;    //20
 	
 	
 	public static double calcVariance(ArrayList<Node> nList)
