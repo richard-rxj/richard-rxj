@@ -93,17 +93,14 @@ public class GateWayMovingTimeComparator<V> implements Comparator<V> {
 		// TODO Auto-generated method stub
 		ArrayList<GateWay> a=new ArrayList<GateWay>();
 		GateWay n1=new GateWay(10);
-		n1.setBenefit(100);
 		n1.setMovingTime(100);
 		a.add(n1);
 		
 		GateWay n2=new GateWay(2);
-		n2.setBenefit(80);
 		n2.setMovingTime(80);
 		a.add(n2);
 		
 		GateWay n3=new GateWay(3);
-		n3.setBenefit(200);
 		n3.setMovingTime(200);
 		a.add(n3);
 		

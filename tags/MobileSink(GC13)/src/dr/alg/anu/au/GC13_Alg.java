@@ -31,7 +31,7 @@ public class GC13_Alg {
 		
 		//initial 
 		LabResult result=new LabResult();
-		double totalUtilityGain=0;
+		double totalUtility=0;
 		double totalSojournTime=0;
 		double totalMovingTime=0;
 		
@@ -53,15 +53,17 @@ public class GC13_Alg {
 		double lastBackTime=0;
 		
 		
-		
-		
+		for(int i=0;i<gatewaySet.size();i++)
+		{
+			GateWay tGateWay=gatewaySet.get(i);
+			tGateWay.setTimeStamp(tUsedTime-iniTimeStamp-deltaTimeStamp);
+		}
 		
 		
 		while(flag)
 		{
 			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
 			ArrayList<GateWay> tDistanceGateWaySet=new ArrayList<GateWay>();
-			ArrayList<Node>    tTimeStampSet=new ArrayList<Node>();
 
 			
 			for(int i=0;i<gatewaySet.size();i++)
@@ -78,7 +80,7 @@ public class GC13_Alg {
 				tD=Math.sqrt(tX*tX+tY*tY);
 				tGateWay.setBackTime(tD/tSinkSpeed);
 				
-				tGateWay.setTimeStamp(tUsedTime-iniTimeStamp-deltaTimeStamp);
+				
 				/*
 				 * first select 
 				 */
@@ -114,7 +116,7 @@ public class GC13_Alg {
 					}
 				}
 				
-				if(tDistanceGateWaySet.size()>0)
+				if(tDistanceGateWaySet.size()>2)
 				{
 					distanceFlag=false;
 				}
@@ -137,16 +139,18 @@ public class GC13_Alg {
 				}
 				
 			}
-			/*
-			 * 
-			 */
 			
-						
 			if(tDistanceGateWaySet.size()==0)
 			{
 				flag=false;
 				return result;
 			}
+			
+			/*
+			 * 
+			 */
+			
+						
 			
 			
 			/*
@@ -171,6 +175,29 @@ public class GC13_Alg {
 					timeStampFlag=false;
 				}
 				tTimeStamp=tTimeStamp-deltaTimeStamp;
+				if(tTimeStamp<=1.5)
+				{
+					timeStampFlag=false;
+				}
+				
+			}
+			
+			if(tGateWaySet.size()==0)
+			{
+				flag=false;
+				
+				
+				for(int i=0;i<nodeSet.size();i++)
+				{
+					totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+				}
+				
+				result.setTourTime(ExperimentSetting.tourTime);
+				result.setNetworkSize(bNet.getnList().size());
+				result.setTotalMovingTime(totalMovingTime);
+				result.setTotalSojournTime(totalSojournTime);
+				result.setTotalUtility(totalUtility);
+				return result;
 			}
 			/*
 			 * 
@@ -186,7 +213,19 @@ public class GC13_Alg {
 			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
 			{
 				realGateWay.calcUnitUtilityGain(lastBackTime,tTourTime, true);   //last sojourn location
+				flag=false;
+				//return result;
 			}
+			
+//			/*
+//			 * begin of debug
+//			 */
+//			System.out.println(realGateWay);
+//			
+//			/*
+//			 * end of debug
+//			 */
+			
 			realGateWay.setTimeStamp(tUsedTime+realGateWay.getMovingTime()+realGateWay.getSojournTime());
 			
 			GateWay chosenGateWay=new GateWay(realGateWay);
@@ -201,7 +240,6 @@ public class GC13_Alg {
 			
 			totalMovingTime=totalMovingTime+tMovingTime;
 			totalSojournTime=totalSojournTime+tSojournTime;
-			totalUtilityGain=totalUtilityGain+chosenGateWay.getUtilityGain();
 			
 			
 			/*
@@ -219,16 +257,30 @@ public class GC13_Alg {
 			for(int i=0;i<nodeSet.size();i++)
 			{
 				Node tNode=nodeSet.get(i);
-				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
 				if(tREnergy>tNode.getcEnergy())
 				{
 					tREnergy=tNode.getcEnergy();
 				}
-				tNode.setrEnergy(tREnergy);
+				tNode.setaEnergy(tREnergy);
+				
+//				//begin of debug
+//				if(tREnergy<0)
+//				{
+//					System.out.println(tREnergy);
+//				}
+//				//end of debug
 				
 				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
 				tNode.setrData(tRData);
-							
+				
+//				//begin of debug
+//				if(tRData<0)
+//				{
+//					System.out.println(tRData);
+//				}
+//				//end of debug
+
 				
 			}
 			
@@ -239,18 +291,53 @@ public class GC13_Alg {
 				Node tNode=chosenGateWay.getNeighborNodes().get(i);
 				double eCom=chosenGateWay.geteConSet().get(i);
 				
-				tNode.calcUploadTime(tMovingTime, eCom);
-                double tUploadTime=tNode.getUploadTime();
+				
+				//compare uploadtime and sojourtime
+                double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
+                double tDataTime=tNode.getrData()/tNode.gettRate();
+                if(tUploadTime>tDataTime)
+                {
+                	tUploadTime=tDataTime;
+                }
+                
+                
+                //
+                
+                
                 if(tUploadTime>tSojournTime)
                 {
                 	tUploadTime=tSojournTime;
                 }
                 
 					double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
+					
+					//begin of debug
+					if(tRData<0)
+					{
+						//System.out.println(tRData);
+						tRData=0;
+					}
+					//end of debug
+					
 					tNode.setrData(tRData);
 					
-					double tREnergy=tNode.getrEnergy()-tRData*eCom;
-					tNode.setrEnergy(tREnergy);
+					
+
+					
+					
+					double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
+					
+					//begin of debug
+					if(tREnergy<0)
+					{
+						//System.out.println(tREnergy);
+						tREnergy=0;
+					}
+					//end of debug
+					
+					tNode.setaEnergy(tREnergy);
+					
+
 					
 					double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
 					tNode.setTotalSojournTime(tTotalSojournTime);
@@ -265,12 +352,16 @@ public class GC13_Alg {
 			
 		}
 		
+		for(int i=0;i<nodeSet.size();i++)
+		{
+			totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+		}
 		
 		result.setTourTime(ExperimentSetting.tourTime);
 		result.setNetworkSize(bNet.getnList().size());
 		result.setTotalMovingTime(totalMovingTime);
 		result.setTotalSojournTime(totalSojournTime);
-		result.setTotalUtility(totalUtilityGain);
+		result.setTotalUtility(totalUtility);
 		return result;
 	}
 	
@@ -289,7 +380,7 @@ public class GC13_Alg {
 		
 		//initial 
 		LabResult result=new LabResult();
-		double totalUtilityGain=0;
+		double totalUtility=0;
 		double totalSojournTime=0;
 		double totalMovingTime=0;
 		
@@ -347,6 +438,17 @@ public class GC13_Alg {
 			if(tGateWaySet.size()==0)
 			{
 				flag=false;
+				
+				for(int i=0;i<nodeSet.size();i++)
+				{
+					totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+				}
+				
+				result.setTourTime(ExperimentSetting.tourTime);
+				result.setNetworkSize(bNet.getnList().size());
+				result.setTotalMovingTime(totalMovingTime);
+				result.setTotalSojournTime(totalSojournTime);
+				result.setTotalUtility(totalUtility);
 				return result;
 			}
 			
@@ -363,7 +465,6 @@ public class GC13_Alg {
 			
 			totalMovingTime=totalMovingTime+tMovingTime;
 			totalSojournTime=totalSojournTime+tSojournTime;
-			totalUtilityGain=totalUtilityGain+chosenGateWay.getUtilityGain();
 			
 			
 			/*
@@ -381,16 +482,30 @@ public class GC13_Alg {
 			for(int i=0;i<nodeSet.size();i++)
 			{
 				Node tNode=nodeSet.get(i);
-				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
 				if(tREnergy>tNode.getcEnergy())
 				{
 					tREnergy=tNode.getcEnergy();
 				}
-				tNode.setrEnergy(tREnergy);
+				tNode.setaEnergy(tREnergy);
+				
+//				//begin of debug
+//				if(tREnergy<0)
+//				{
+//					System.out.println(tREnergy);
+//				}
+//				//end of debug
 				
 				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
 				tNode.setrData(tRData);
-							
+				
+//				//begin of debug
+//				if(tRData<0)
+//				{
+//					System.out.println(tRData);
+//				}
+//				//end of debug
+
 				
 			}
 			
@@ -401,18 +516,53 @@ public class GC13_Alg {
 				Node tNode=chosenGateWay.getNeighborNodes().get(i);
 				double eCom=chosenGateWay.geteConSet().get(i);
 				
-				tNode.calcUploadTime(tMovingTime, eCom);
-                double tUploadTime=tNode.getUploadTime();
+				
+				//compare uploadtime and sojourtime
+                double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
+                double tDataTime=tNode.getrData()/tNode.gettRate();
+                if(tUploadTime>tDataTime)
+                {
+                	tUploadTime=tDataTime;
+                }
+                
+                
+                //
+                
+                
                 if(tUploadTime>tSojournTime)
                 {
                 	tUploadTime=tSojournTime;
                 }
                 
 					double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
+					
+					//begin of debug
+					if(tRData<0)
+					{
+						//System.out.println(tRData);
+						tRData=0;
+					}
+					//end of debug
+					
 					tNode.setrData(tRData);
 					
-					double tREnergy=tNode.getrEnergy()-tRData*eCom;
-					tNode.setrEnergy(tREnergy);
+					
+
+					
+					
+					double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
+					
+					//begin of debug
+					if(tREnergy<0)
+					{
+						//System.out.println(tREnergy);
+						tREnergy=0;
+					}
+					//end of debug
+					
+					tNode.setaEnergy(tREnergy);
+					
+
 					
 					double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
 					tNode.setTotalSojournTime(tTotalSojournTime);
@@ -428,11 +578,16 @@ public class GC13_Alg {
 		}
 		
 		
+		for(int i=0;i<nodeSet.size();i++)
+		{
+			totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+		}
+		
 		result.setTourTime(ExperimentSetting.tourTime);
 		result.setNetworkSize(bNet.getnList().size());
 		result.setTotalMovingTime(totalMovingTime);
 		result.setTotalSojournTime(totalSojournTime);
-		result.setTotalUtility(totalUtilityGain);
+		result.setTotalUtility(totalUtility);
 		return result;
 	}
 	
@@ -450,6 +605,13 @@ public class GC13_Alg {
 		ArrayList<Node> nodeSet = bNet.getnList(); //
 		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
 		
+//		//begin debug
+//		for(int i=0;i<nodeSet.size();i++)
+//		{
+//			Node t=nodeSet.get(i);
+//			System.out.println("node:"+t.getId()+"--rData("+t.getrData()+")--rEnergy("+t.getaEnergy()+")--hEnergy("+t.gethEnergy());
+//		}
+//		//end debug
 //		if(gNet!=null)
 //		{
 //			gNet=bNet;
@@ -457,7 +619,7 @@ public class GC13_Alg {
 		
 		//initial 
 		LabResult result=new LabResult();
-		double totalUtilityGain=0;
+		double totalUtility=0;
 		double totalSojournTime=0;
 		double totalMovingTime=0;
 		
@@ -480,6 +642,9 @@ public class GC13_Alg {
 		double tSinkSpeed=ExperimentSetting.mSpeed;
 		//double tLossPSec=tLossWeight*nodeSet.size()*TourDesign.gRate;
 		double lastBackTime=0;
+		
+		
+		
 		
 		
 		while(flag)
@@ -519,6 +684,18 @@ public class GC13_Alg {
 			if(tGateWaySet.size()==0)
 			{
 				flag=false;
+				
+				for(int i=0;i<nodeSet.size();i++)
+				{
+					Node tNode=nodeSet.get(i);
+					totalUtility=totalUtility+tNode.getTotalUtility();
+				}
+				
+				result.setTourTime(ExperimentSetting.tourTime);
+				result.setNetworkSize(bNet.getnList().size());
+				result.setTotalMovingTime(totalMovingTime);
+				result.setTotalSojournTime(totalSojournTime);
+				result.setTotalUtility(totalUtility);
 				return result;
 			}
 			
@@ -536,7 +713,6 @@ public class GC13_Alg {
 			
 			totalMovingTime=totalMovingTime+tMovingTime;
 			totalSojournTime=totalSojournTime+tSojournTime;
-			totalUtilityGain=totalUtilityGain+chosenGateWay.getUtilityGain();
 			/*
 			 *  move to chosen sojourn location to collect data
 			 *  then update both mobilesink, and node status
@@ -554,16 +730,30 @@ public class GC13_Alg {
 			for(int i=0;i<nodeSet.size();i++)
 			{
 				Node tNode=nodeSet.get(i);
-				double tREnergy=tNode.getrEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
 				if(tREnergy>tNode.getcEnergy())
 				{
 					tREnergy=tNode.getcEnergy();
 				}
-				tNode.setrEnergy(tREnergy);
+				tNode.setaEnergy(tREnergy);
+				
+//				//begin of debug
+//				if(tREnergy<0)
+//				{
+//					System.out.println(tREnergy);
+//				}
+//				//end of debug
 				
 				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
 				tNode.setrData(tRData);
-							
+				
+//				//begin of debug
+//				if(tRData<0)
+//				{
+//					System.out.println(tRData);
+//				}
+//				//end of debug
+
 				
 			}
 			
@@ -574,23 +764,61 @@ public class GC13_Alg {
 				Node tNode=chosenGateWay.getNeighborNodes().get(i);
 				double eCom=chosenGateWay.geteConSet().get(i);
 				
-				tNode.calcUploadTime(tMovingTime, eCom);
-                double tUploadTime=tNode.getUploadTime();
+				
+				//compare uploadtime and sojourtime
+                double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
+                double tDataTime=tNode.getrData()/tNode.gettRate();
+                if(tUploadTime>tDataTime)
+                {
+                	tUploadTime=tDataTime;
+                }
+                
+                
+                //
+                
+                
                 if(tUploadTime>tSojournTime)
                 {
                 	tUploadTime=tSojournTime;
                 }
                 
 					double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
+					
+					//begin of debug
+					if(tRData<0)
+					{
+						//System.out.println(tRData);
+						tRData=0;
+					}
+					//end of debug
+					
 					tNode.setrData(tRData);
 					
-					double tREnergy=tNode.getrEnergy()-tRData*eCom;
-					tNode.setrEnergy(tREnergy);
+					
+
+					
+					
+					double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
+					
+					//begin of debug
+					if(tREnergy<0)
+					{
+						//System.out.println(tREnergy);
+						tREnergy=0;
+					}
+					//end of debug
+					
+					tNode.setaEnergy(tREnergy);
+					
+
 					
 					double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
 					tNode.setTotalSojournTime(tTotalSojournTime);
 				
 			}
+			
+			
+			
 			
 			
 			if(tTourTime <=0)
@@ -601,61 +829,22 @@ public class GC13_Alg {
 		}
 		
 		
-		
+		for(int i=0;i<nodeSet.size();i++)
+		{
+			Node tNode=nodeSet.get(i);
+			totalUtility=totalUtility+tNode.getTotalUtility();
+		}
 		
 		result.setTourTime(ExperimentSetting.tourTime);
 		result.setNetworkSize(bNet.getnList().size());
 		result.setTotalMovingTime(totalMovingTime);
 		result.setTotalSojournTime(totalSojournTime);
-		result.setTotalUtility(totalUtilityGain);
+		result.setTotalUtility(totalUtility);
 		return result;
 	}
 	
 	
 	
-	
-	
-	
-	public static LabResult getSimInfo(ArrayList<GateWay> solution, BiNetwork bNet, double tourTime)
-	{
-		
-		LabResult result=new LabResult();
-		int activeNodes=0;
-		double totalUtilityGain=0;
-		double totalBenefitGain=0;
-		double totalSojournTime=0;
-		double totalMovingTime=0;
-		ArrayList<Node> tempList=new ArrayList<Node>();
-		
-		for(int i=0; i<solution.size();i++)
-		{
-			GateWay g=solution.get(i);
-			totalUtilityGain=totalUtilityGain+g.getUtilityGain();
-			totalBenefitGain=totalBenefitGain+g.getBenefitGain();
-			totalSojournTime=totalSojournTime+g.getSojournTime();
-			totalMovingTime=totalMovingTime+g.getMovingTime();
-			for(int j=0;j<g.getActiveNodes().size();j++)
-			{
-				Node n=g.getActiveNodes().get(j);
-				if(!tempList.contains(n))
-				{
-					tempList.add(n);
-				}
-			}
-		}
-		activeNodes=tempList.size();
-		
-		result.setTourTime(tourTime);
-		result.setNetworkSize(bNet.getnList().size());
-		result.setActiveNodes(activeNodes);
-		result.setTotalMovingTime(totalMovingTime);
-		result.setTotalSojournTime(totalSojournTime);
-		result.setTotalThroughput(totalBenefitGain);
-		result.setTotalUtility(totalUtilityGain);
-		result.setVariance(ExperimentSetting.calcVariance(bNet.getnList()));
-		
-		return result;
-	}
 	
 	
 	

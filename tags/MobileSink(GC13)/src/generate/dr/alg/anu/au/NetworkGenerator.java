@@ -156,7 +156,7 @@ public class NetworkGenerator   {
 			n.setcData(Double.parseDouble(b[1]));
 			n.setrData(Double.parseDouble(b[2]));
 			n.setcEnergy(Double.parseDouble(b[3]));
-			n.setrEnergy(Double.parseDouble(b[4]));
+			n.setaEnergy(Double.parseDouble(b[4]));
 			n.sethEnergy(Double.parseDouble(b[5]));
 			n.setX(Double.parseDouble(b[6]));
 			n.setY(Double.parseDouble(b[7]));
@@ -206,7 +206,7 @@ public class NetworkGenerator   {
 		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000,2000};
 		int[] gatewayLimitSet={50,50,50,50,50,50,50,50,50,50,50};  
 		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};
-		int cishu=20;
+		int cishu=ExperimentSetting.cishu;
 		
 		
 		String tFileName="test/new/topology/";

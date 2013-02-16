@@ -17,11 +17,8 @@ public class LabResult {
 	int activeNodes=0;
 	double tourTime=0;
 	double totalUtility=0;
-	double totalThroughput=0;
 	double totalSojournTime=0;
 	double totalMovingTime=0;
-	double totalThroughputRatio=0;
-	double variance=0;
 	
 	
 	
@@ -73,16 +70,6 @@ public class LabResult {
 
 
 
-	public double getTotalThroughput() {
-		return totalThroughput;
-	}
-
-
-
-	public void setTotalThroughput(double totalThroughput) {
-		this.totalThroughput = totalThroughput;
-		this.totalThroughputRatio=this.totalThroughput/(this.tourTime*this.networkSize*ExperimentSetting.gRate);
-	}
 
 
 
@@ -109,28 +96,14 @@ public class LabResult {
 	}
 
 
-	public double getTotalThroughputRatio() {
-		return totalThroughputRatio;
-	}
 
-
-
-	public double getVariance() {
-		return variance;
-	}
-
-
-
-	public void setVariance(double variance) {
-		this.variance = variance;
-	}
 
 
 
 	public String toString() {
 		DecimalFormat df=new DecimalFormat("#.0000");
 		String result="";
-		result=result+" "+df.format(this.totalThroughputRatio)+" "+df.format(this.totalThroughput)+" "+df.format(this.totalUtility)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime)+" "+df.format(this.variance)+" "+Double.toString(activeNodes);
+		result=result+" "+df.format(this.totalUtility)+" "+df.format(this.totalSojournTime)+" "+df.format(this.totalMovingTime);
 		return result;
 	}
 	

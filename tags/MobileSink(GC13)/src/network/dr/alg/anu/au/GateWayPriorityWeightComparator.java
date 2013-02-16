@@ -93,18 +93,12 @@ public class GateWayPriorityWeightComparator<V> implements Comparator<V> {
 		// TODO Auto-generated method stub
 		ArrayList<GateWay> a=new ArrayList<GateWay>();
 		GateWay n1=new GateWay(10);
-		n1.setBenefitGain(100);
-		n1.setBenefit(10);
 		a.add(n1);
 		
 		GateWay n2=new GateWay(2);
-		n2.setBenefitGain(80);
-		n2.setBenefit(20);
 		a.add(n2);
 		
 		GateWay n3=new GateWay(3);
-		n3.setBenefitGain(200);
-		n2.setBenefit(30);
 		a.add(n3);
 		
 		Object[] gSet=a.toArray();
