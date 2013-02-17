@@ -552,7 +552,7 @@ public class GateWay implements Comparable<GateWay> {
 	 */
 	
 	
-	public void calcTraPriorityWeight(double tUsedTime)
+	public void calcPriorityWeight(double tUsedTime)
 	{
 
 		

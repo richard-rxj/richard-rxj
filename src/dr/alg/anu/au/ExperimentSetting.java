@@ -24,7 +24,7 @@ public class ExperimentSetting {
 	public static double initSinkX=0;   //50    0 for distributed
 	public static double initSinkY=0;   //50    0 for distributed
 	public static double gRate= 1000; //  bps
-	public static double tRate= 20000; //  bps    old 20000
+	public static double tRate= 5000; //  bps    old 20000
 	public static double tourTime=100;  //  s    -----------------------varible
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
 	public static double mSpeed=2;   // m/s   
