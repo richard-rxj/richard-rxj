@@ -61,7 +61,6 @@ public class GC13_Test {
 			
 			
 			
-			
 			for(int i=0;i<tourTimeSet.length;i++)
 			{
 				int tTourTime=tourTimeSet[i];
@@ -157,6 +156,97 @@ public class GC13_Test {
 				
 				
 				
+				
+				
+				/*
+				 * end of utility
+				 */
+				
+				
+				
+				/*
+				 * begin of distributed   section
+				 */
+
+				
+				
+				
+				outputFile=tOutputFileName+"dis-T"+Integer.toString(tTourTime)+".txt";
+				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+				outputFile1=tOutputFileName1+"dis.txt";
+				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
+				for(int j=0;j<networkSizeSet.length;j++)
+				{
+					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
+					int networkSize=networkSizeSet[j];
+					int transRange=transRangeSet[j];
+					int gatewayLimit=gatewayLimitSet[j];
+					
+					for(int k=0;k<ExperimentSetting.cishu;k++)   //debug k=0
+					{
+											
+						
+						
+						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
+						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
+						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
+						double iniMinRange=2*transRange;
+						double iniMaxRange=3*transRange;
+						double deltaRange=0.05*transRange;
+						double iniTimeStamp=20;
+						double deltaTimeStamp=5;
+						
+						
+						
+						ArrayList<GateWay> solution=new ArrayList<GateWay>();
+						LabResult tResult=GC13_Alg.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp,solution);
+
+						//begin of debug
+						for(int ti=0;ti<solution.size();ti++)
+						{
+								System.out.println(solution.get(ti));
+						}
+						System.out.println("T--"+tTourTime+"!!!!!Completet--Dis--<Round>"+k+"-<Node>"+networkSize);
+						//end of debug
+						
+						resultSet.add(tResult);
+					}
+					
+					LabResult gResult=new LabResult();
+					int activeNodes=0;
+					double totalUtility=0;
+					double totalSojournTime=0;
+					double totalMovingTime=0;
+					for(int k=0;k<resultSet.size();k++)
+					{
+						LabResult tResult=resultSet.get(k);
+						activeNodes=activeNodes+tResult.getActiveNodes();
+						totalUtility=totalUtility+tResult.getTotalUtility();
+						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
+						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
+					}
+					gResult.setNetworkSize(networkSize);
+					gResult.setTourTime(ExperimentSetting.tourTime);
+					gResult.setTotalUtility(totalUtility/resultSet.size());
+					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
+					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
+					
+					//begin of debug
+					
+					System.out.println(gResult.getTotalUtility());
+					//end of debug
+					
+					pw.println(networkSize+" "+gResult);
+					pw.flush();
+					pw1.println(networkSize+" "+gResult);
+					pw1.flush();
+				}
+				pw.close();
+				pw1.close();
+				
+		
+				
+				//random
 				outputFile=tOutputFileName+"random-T"+Integer.toString(tTourTime)+".txt";
 				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
 				outputFile1=tOutputFileName1+"random.txt";
@@ -221,96 +311,6 @@ public class GC13_Test {
 				}
 				pw.close();
 				pw1.close();
-				
-				/*
-				 * end of utility
-				 */
-				
-				
-				
-				/*
-				 * begin of distributed   section
-				 */
-
-				
-				
-				
-				outputFile=tOutputFileName+"dis-T"+Integer.toString(tTourTime)+".txt";
-				pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
-				outputFile1=tOutputFileName1+"dis.txt";
-				pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile1)));
-				for(int j=0;j<networkSizeSet.length;j++)
-				{
-					ArrayList<LabResult> resultSet=new ArrayList<LabResult>();
-					int networkSize=networkSizeSet[j];
-					int transRange=transRangeSet[j];
-					int gatewayLimit=gatewayLimitSet[j];
-					
-					for(int k=0;k<ExperimentSetting.cishu;k++)   //debug k=0
-					{
-											
-						
-						
-						String nFile=tFileName+"node-"+networkSize+"-"+k+".txt";
-						String gFile=tFileName+"gateway-"+networkSize+"-"+k+".txt";
-						BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
-						double iniMinRange=1.75*transRange;
-						double iniMaxRange=2.25*transRange;
-						double deltaRange=0.05*transRange;
-						double iniTimeStamp=20;
-						double deltaTimeStamp=5;
-						
-						
-						
-						ArrayList<GateWay> solution=new ArrayList<GateWay>();
-						LabResult tResult=GC13_Alg.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp,solution);
-
-						//begin of debug
-						for(int ti=0;ti<solution.size();ti++)
-						{
-								System.out.println(solution.get(ti));
-						}
-						System.out.println("T--"+tTourTime+"!!!!!Completet--Dis--<Round>"+k+"-<Node>"+networkSize);
-						//end of debug
-						
-						resultSet.add(tResult);
-					}
-					
-					LabResult gResult=new LabResult();
-					int activeNodes=0;
-					double totalUtility=0;
-					double totalSojournTime=0;
-					double totalMovingTime=0;
-					for(int k=0;k<resultSet.size();k++)
-					{
-						LabResult tResult=resultSet.get(k);
-						activeNodes=activeNodes+tResult.getActiveNodes();
-						totalUtility=totalUtility+tResult.getTotalUtility();
-						totalSojournTime=totalSojournTime+tResult.getTotalSojournTime();
-						totalMovingTime=totalMovingTime+tResult.getTotalMovingTime();				
-					}
-					gResult.setNetworkSize(networkSize);
-					gResult.setTourTime(ExperimentSetting.tourTime);
-					gResult.setTotalUtility(totalUtility/resultSet.size());
-					gResult.setTotalSojournTime(totalSojournTime/resultSet.size());
-					gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
-					
-					//begin of debug
-					
-					System.out.println(gResult.getTotalUtility());
-					//end of debug
-					
-					pw.println(networkSize+" "+gResult);
-					pw.flush();
-					pw1.println(networkSize+" "+gResult);
-					pw1.flush();
-				}
-				pw.close();
-				pw1.close();
-				
-		
-				
-				
 				
 		}
 	}
