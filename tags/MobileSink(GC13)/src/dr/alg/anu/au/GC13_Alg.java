@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -161,7 +162,7 @@ public class GC13_Alg {
 					if(tGateWay.getTimeStamp()<tUsedTime-tTimeStamp)
 					{
 						tGateWaySet.add(tGateWay);
-						tGateWay.calcTraPriorityWeight(tUsedTime);
+						tGateWay.calcPriorityWeight(tUsedTime);
 					}					
 				}
 				if(tGateWaySet.size()>0)
@@ -396,6 +397,183 @@ public class GC13_Alg {
 		}
 		
 		
+		/*
+		 * begin of go to longest location
+		 */
+		
+		ArrayList<GateWay> longGateWaySet=new ArrayList<GateWay>();
+		for(int i=0;i<gatewaySet.size();i++)
+		{
+			GateWay tGateWay=gatewaySet.get(i);
+			double tX=tSinkX-tGateWay.getX();
+			double tY=tSinkY-tGateWay.getY();
+			double tD=Math.sqrt(tX*tX+tY*tY);
+			tGateWay.setDistance(tD);
+			tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+			
+			tX=ExperimentSetting.initSinkX-tGateWay.getX();
+			tY=ExperimentSetting.initSinkY-tGateWay.getY();
+			tD=Math.sqrt(tX*tX+tY*tY);
+			tGateWay.setBackTime(tD/tSinkSpeed);
+			
+			
+			if((tGateWay.getMovingTime()+tGateWay.getBackTime())<tTourTime)
+			{
+				longGateWaySet.add(tGateWay);
+				tGateWay.calcPriorityWeight(tUsedTime);
+			}
+			
+	      }
+		
+		Object[] longSet=longGateWaySet.toArray();
+		GateWayPriorityWeightComparator longCom=new GateWayPriorityWeightComparator(false);
+		Arrays.sort(longSet,longCom);
+		GateWay longGateWay=(GateWay)longSet[0];
+		
+		longGateWay.calcUtilityGain(lastBackTime, tTourTime, false);
+		if(longGateWay.getSojournTime()>(tTourTime-longGateWay.getMovingTime()-longGateWay.getBackTime()))
+		{
+			longGateWay.calcUtilityGain(lastBackTime,tTourTime, true);   //last sojourn location
+			flag=false;
+		}
+		
+//		/*
+//		 * begin of debug
+//		 */
+//		System.out.println(realGateWay);
+//		
+//		/*
+//		 * end of debug
+//		 */
+		
+		longGateWay.setTimeStamp(tUsedTime+longGateWay.getMovingTime()+longGateWay.getSojournTime());
+		
+		GateWay chosenLongGateWay=new GateWay(longGateWay);
+		
+		solution.add(chosenLongGateWay);
+		tMovingTime=chosenLongGateWay.getMovingTime();
+		tSojournTime=chosenLongGateWay.getSojournTime();
+		tTourTime=tTourTime-tMovingTime-tSojournTime;
+		tUsedTime=tUsedTime+tMovingTime+tSojournTime;
+		lastBackTime=chosenLongGateWay.getBackTime();
+		
+		
+		totalMovingTime=totalMovingTime+tMovingTime;
+		totalSojournTime=totalSojournTime+tSojournTime;
+		
+		
+		/*
+		 *  move to chosen sojourn location to collect data
+		 *  then update both mobilesink, and node status
+		 *  including:
+		 *  mobilesink(X,Y)
+		 *  
+		 *  node(rEnergy, rData, hEnergy, and fWeight)  
+		 */
+		tSinkX=chosenLongGateWay.getX();
+		tSinkY=chosenLongGateWay.getY();
+		
+		//update all nodes
+		for(int i=0;i<nodeSet.size();i++)
+		{
+			Node tNode=nodeSet.get(i);
+			double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+			if(tREnergy>tNode.getcEnergy())
+			{
+				tREnergy=tNode.getcEnergy();
+			}
+			tNode.setaEnergy(tREnergy);
+			
+//			//begin of debug
+//			if(tREnergy<0)
+//			{
+//				System.out.println(tREnergy);
+//			}
+//			//end of debug
+			
+			double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+			tNode.setrData(tRData);
+			
+//			//begin of debug
+//			if(tRData<0)
+//			{
+//				System.out.println(tRData);
+//			}
+//			//end of debug
+
+			
+		}
+		
+		
+		//only update neighboring nodes
+		for(int i=0;i<chosenLongGateWay.getNeighborNodes().size();i++)
+		{
+			Node tNode=chosenLongGateWay.getNeighborNodes().get(i);
+			double eCom=chosenLongGateWay.geteConSet().get(i);
+			
+			
+			//compare uploadtime and sojourtime
+            double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
+            double tDataTime=tNode.getrData()/tNode.gettRate();
+            if(tUploadTime>tDataTime)
+            {
+            	tUploadTime=tDataTime;
+            }
+            
+            
+            //
+            
+            
+            if(tUploadTime>tSojournTime)
+            {
+            	tUploadTime=tSojournTime;
+            }
+            
+				double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
+				
+				//begin of debug
+				if(tRData<0)
+				{
+					//System.out.println(tRData);
+					tRData=0;
+				}
+				//end of debug
+				
+				tNode.setrData(tRData);
+				
+				
+
+				
+				
+				double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
+				
+				//begin of debug
+				if(tREnergy<0)
+				{
+					//System.out.println(tREnergy);
+					tREnergy=0;
+				}
+				//end of debug
+				
+				tNode.setaEnergy(tREnergy);
+				
+
+				
+				double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
+				tNode.setTotalSojournTime(tTotalSojournTime);
+			
+		}
+		
+		
+		if(tTourTime <=0)
+		{
+			flag=false;
+		}
+		
+		/*
+		 * end of go to longest location
+		 */
+		
 		while(flag)
 		{
 			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
@@ -503,7 +681,7 @@ public class GC13_Alg {
 					if(tGateWay.getTimeStamp()<tUsedTime-tTimeStamp)
 					{
 						tGateWaySet.add(tGateWay);
-						tGateWay.calcTraPriorityWeight(tUsedTime);
+						tGateWay.calcPriorityWeight(tUsedTime);
 					}					
 				}
 				if(tGateWaySet.size()>0)
@@ -685,6 +863,223 @@ public class GC13_Alg {
 			}
 			
 		}
+		
+		for(int i=0;i<nodeSet.size();i++)
+		{
+			totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+		}
+		
+		result.setTourTime(ExperimentSetting.tourTime);
+		result.setNetworkSize(bNet.getnList().size());
+		result.setTotalMovingTime(totalMovingTime);
+		result.setTotalSojournTime(totalSojournTime);
+		result.setTotalUtility(totalUtility);
+		return result;
+	}
+	
+	
+	public static LabResult randomUnitUtilityGainTourDesign(BiNetwork bNet,ArrayList<GateWay> solution) throws IOException
+	{
+
+		ArrayList<Node> nodeSet = bNet.getnList(); //
+		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
+		
+		
+		//initial 
+		LabResult result=new LabResult();
+		double totalUtility=0;
+		double totalSojournTime=0;
+		double totalMovingTime=0;
+		
+		
+		boolean flag=true;
+		double tTourTime=ExperimentSetting.tourTime;
+
+		
+		double tMovingTime=0;
+		double tSojournTime=0;
+		
+		double tSinkX=ExperimentSetting.initSinkX;
+		double tSinkY=ExperimentSetting.initSinkY;
+		
+		double tSinkSpeed=ExperimentSetting.mSpeed;
+		double lastBackTime=0;
+		
+		
+		while(flag)
+		{
+			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
+			for(int i=0;i<gatewaySet.size();i++)
+			{
+				GateWay tGateWay=gatewaySet.get(i);
+				double tX=tSinkX-tGateWay.getX();
+				double tY=tSinkY-tGateWay.getY();
+				double tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
+				
+				tX=ExperimentSetting.initSinkX-tGateWay.getX();
+				tY=ExperimentSetting.initSinkY-tGateWay.getY();
+				tD=Math.sqrt(tX*tX+tY*tY);
+				tGateWay.setBackTime(tD/tSinkSpeed);
+				
+				if((tTourTime-tGateWay.getMovingTime()-tGateWay.getBackTime())>0)
+					tGateWaySet.add(tGateWay);
+			}
+			
+
+			
+			
+			if(tGateWaySet.size()==0)
+			{
+				flag=false;
+				
+				for(int i=0;i<nodeSet.size();i++)
+				{
+					totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
+				}
+				
+				result.setTourTime(ExperimentSetting.tourTime);
+				result.setNetworkSize(bNet.getnList().size());
+				result.setTotalMovingTime(totalMovingTime);
+				result.setTotalSojournTime(totalSojournTime);
+				result.setTotalUtility(totalUtility);
+				return result;
+			}
+			
+			if(tGateWaySet.size()==1)
+			{
+				flag=false;
+			}
+			Object[] gSet=tGateWaySet.toArray();
+
+			GateWay chosenGateWay=new GateWay((GateWay)gSet[ExperimentSetting.ran.nextInt(gSet.length)]);
+			chosenGateWay.calcUnitUtilityGain(lastBackTime, tTourTime, false);
+			if(chosenGateWay.getSojournTime()>(tTourTime-chosenGateWay.getMovingTime()-chosenGateWay.getBackTime()))
+			{
+				flag=false;
+				chosenGateWay.calcUnitUtilityGain(lastBackTime, tTourTime, true);
+			}
+			solution.add(chosenGateWay);
+			
+			tMovingTime=chosenGateWay.getMovingTime();
+			tSojournTime=chosenGateWay.getSojournTime();
+			tTourTime=tTourTime-tMovingTime-tSojournTime;
+			lastBackTime=chosenGateWay.getBackTime();
+			
+			totalMovingTime=totalMovingTime+tMovingTime;
+			totalSojournTime=totalSojournTime+tSojournTime;
+			
+			
+			/*
+			 *  move to chosen sojourn location to collect data
+			 *  then update both mobilesink, and node status
+			 *  including:
+			 *  mobilesink(X,Y)
+			 *  
+			 *  node(rEnergy, rData, hEnergy, and fWeight)  
+			 */
+			tSinkX=chosenGateWay.getX();
+			tSinkY=chosenGateWay.getY();
+			
+			//update all nodes
+			for(int i=0;i<nodeSet.size();i++)
+			{
+				Node tNode=nodeSet.get(i);
+				double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
+				if(tREnergy>tNode.getcEnergy())
+				{
+					tREnergy=tNode.getcEnergy();
+				}
+				tNode.setaEnergy(tREnergy);
+				
+//				//begin of debug
+//				if(tREnergy<0)
+//				{
+//					System.out.println(tREnergy);
+//				}
+//				//end of debug
+				
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+				tNode.setrData(tRData);
+				
+//				//begin of debug
+//				if(tRData<0)
+//				{
+//					System.out.println(tRData);
+//				}
+//				//end of debug
+
+				
+			}
+			
+			
+			//only update neighboring nodes
+			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
+			{
+				Node tNode=chosenGateWay.getNeighborNodes().get(i);
+				double eCom=chosenGateWay.geteConSet().get(i);
+				
+				
+				//compare uploadtime and sojourtime
+                double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
+                double tDataTime=tNode.getrData()/tNode.gettRate();
+                if(tUploadTime>tDataTime)
+                {
+                	tUploadTime=tDataTime;
+                }
+                
+                
+                //
+                
+                
+                if(tUploadTime>tSojournTime)
+                {
+                	tUploadTime=tSojournTime;
+                }
+                
+					double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
+					
+					//begin of debug
+					if(tRData<0)
+					{
+						//System.out.println(tRData);
+						tRData=0;
+					}
+					//end of debug
+					
+					tNode.setrData(tRData);
+					
+					
+
+					
+					
+					double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
+					
+					//begin of debug
+					if(tREnergy<0)
+					{
+						//System.out.println(tREnergy);
+						tREnergy=0;
+					}
+					//end of debug
+					
+					tNode.setaEnergy(tREnergy);
+					
+
+					
+					double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
+					tNode.setTotalSojournTime(tTotalSojournTime);
+				
+			}
+			
+			
+			if(tTourTime <ExperimentSetting.minSojournTime)
+			{
+				flag=false;
+			}
+			
+		}
+		
 		
 		for(int i=0;i<nodeSet.size();i++)
 		{
