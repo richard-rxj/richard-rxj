@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.FileHandler;
@@ -32,17 +33,22 @@ public class GC13_Test {
 	/**
 	 * @param args
 	 * @throws IOException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws NoSuchMethodException 
+	 * @throws IllegalArgumentException 
+	 * @throws SecurityException 
 	 */
 	
 	
 	
-	public static void impactPerformance() throws IOException
+	public static void impactPerformance() throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
 	{
 		int[] networkSizeSet={100,200,300,400,500,600,700,800,900,1000};                     //100,200,300,400,500,600,700,800,900,1000,2000
 		int[] gatewayLimitSet={50,50,50,50,50,50,50,50,50,50,50};   //50
 		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};   //30    20 for distributed
 		int[] tourTimeSet={100,200,400,800,1600,3200,6400};    //100,200,400,800,1600,3200,6400
-	    String[] algSet={"maxUnit","max","randomUnit","random","dis1","dis2"};
+	    String[] algSet={"maxUnit","max","randomUnit","random","dis2-3","disCombine","disCombineMoving"};
 	    DecimalFormat df=new DecimalFormat("#.0");	
 
 			String tOutputFileName="test/new/ImpactPerformance/";
@@ -110,11 +116,7 @@ public class GC13_Test {
 							BiNetwork bNet=NetworkGenerator.createFromFile(nFile, gFile, gatewayLimit, transRange);
 						
 							
-							double iniMinRange=2*transRange;
-							double iniMaxRange=10*transRange;
-							double deltaRange=0.05*transRange;
-							double iniTimeStamp=50;
-							double deltaTimeStamp=5;
+							
 						
 							
 							ArrayList<GateWay> solution=new ArrayList<GateWay>();
@@ -131,10 +133,35 @@ public class GC13_Test {
 							 case 3:
 								 tResult=GC13_Alg.randomUtilityGainTourDesign(bNet,solution); break;
 							 case 4:
-								 tResult=GC13_Alg.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution); break;
+							 	{
+							 		double iniMinRange=2*transRange;
+									double iniMaxRange=3*transRange;
+									double deltaRange=0.05*transRange;
+									double iniTimeStamp=50;
+									double deltaTimeStamp=5;
+									tResult=GC13_Alg.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution); 
+									break;
+							 	}
 							 case 5:
-								 tResult=GC13_Alg.dis2TraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution); break;			 
-							 
+							 	{
+							 		double iniMinRange=2*transRange;
+									double iniMaxRange=10*transRange;
+									double deltaRange=0.05*transRange;
+									double iniTimeStamp=0;    // means no timestamp constraint
+									double deltaTimeStamp=5;
+									tResult=GC13_Alg.dis2TraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution, "calcPriorityWeight"); 
+									break;
+							 	}		
+							 case 6:
+							 	{
+							 		double iniMinRange=2*transRange;
+									double iniMaxRange=10*transRange;
+									double deltaRange=0.05*transRange;
+									double iniTimeStamp=0;    // means no timestamp constraint
+									double deltaTimeStamp=5;
+									tResult=GC13_Alg.dis2TraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution,"calcPriorityWeightPlusMoving"); 
+									break;
+							 	}							 
 							}
 							//begin of debug
 //							for(int ti=0;ti<solution.size();ti++)
@@ -146,7 +173,7 @@ public class GC13_Test {
 							resultSet.add(tResult);
 							
 							
-							pwAlgSet[algI].print("(r"+k+")"+df.format(tResult.getTotalUtility())+" ");
+
 						}
 						
 						
@@ -172,7 +199,7 @@ public class GC13_Test {
 						gResult.setTotalMovingTime(totalMovingTime/resultSet.size());
 						
 						
-						pwAlgSet[algI].println(df.format(gResult.getTotalUtility()));
+						pwAlgSet[algI].println("utility:"+df.format(gResult.getTotalUtility())+" movingtime:"+df.format(gResult.getTotalMovingTime())+" sojourntime"+df.format(gResult.getTotalSojournTime()));
 						pwAlgSet[algI].flush();
 						
 						
@@ -213,7 +240,7 @@ public class GC13_Test {
 
 	
 	
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws IOException, SecurityException, IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException 
 	{
 			
 		GC13_Test.impactPerformance();
