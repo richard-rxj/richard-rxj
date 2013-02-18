@@ -23,349 +23,11 @@ import network.dr.alg.anu.au.Node;
  */
 public class GC13_Alg {
 
-	public static LabResult disTraMaxUtilityGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniTimeStamp, double deltaTimeStamp, ArrayList<GateWay> solution) throws IOException
-	{
 
-		ArrayList<Node> nodeSet = bNet.getnList(); //
-		ArrayList<GateWay> gatewaySet = bNet.getgList(); //
-		
-		//initial 
-		LabResult result=new LabResult();
-		double totalUtility=0;
-		double totalSojournTime=0;
-		double totalMovingTime=0;
-		
-		
-		
-		boolean flag=true;
-		double tTourTime=ExperimentSetting.tourTime;
-		double tUsedTime=0;
-		double tMovingTime=0;
-		double tSojournTime=0;
-		
-		double tSinkX=ExperimentSetting.initSinkX;
-		double tSinkY=ExperimentSetting.initSinkY;
-		
-		double tSinkSpeed=ExperimentSetting.mSpeed;
-		double lastBackTime=0;
-		
-		
-		for(int i=0;i<gatewaySet.size();i++)
-		{
-			GateWay tGateWay=gatewaySet.get(i);
-			tGateWay.setTimeStamp(tUsedTime-iniTimeStamp-deltaTimeStamp);
-		}
-		
-		
-		while(flag)
-		{
-			ArrayList<GateWay> tGateWaySet=new ArrayList<GateWay>();
-			ArrayList<GateWay> tDistanceGateWaySet=new ArrayList<GateWay>();
 
-			
-			for(int i=0;i<gatewaySet.size();i++)
-			{
-				GateWay tGateWay=gatewaySet.get(i);
-				double tX=tSinkX-tGateWay.getX();
-				double tY=tSinkY-tGateWay.getY();
-				double tD=Math.sqrt(tX*tX+tY*tY);
-				tGateWay.setDistance(tD);
-				tGateWay.setMovingTime(tD/tSinkSpeed);  //calculate moving time
-				
-				tX=ExperimentSetting.initSinkX-tGateWay.getX();
-				tY=ExperimentSetting.initSinkY-tGateWay.getY();
-				tD=Math.sqrt(tX*tX+tY*tY);
-				tGateWay.setBackTime(tD/tSinkSpeed);
-				
-				
-				/*
-				 * first select 
-				 */
-				if((tGateWay.getMovingTime()+tGateWay.getBackTime())>tTourTime)
-				{
-					tGateWay.setFeasible(0);
-				}
-				else
-				{
-					tGateWay.setFeasible(1);
-				}
-																												
-			}
-			
-			/*
-			 * Step1----distance
-			 */
-			double min=iniMinRange;                    //1.5R
-			double max=iniMaxRange;                      //3R
-			boolean distanceFlag=true;
-			while(distanceFlag)
-			{	
-				for(int i=0;i<gatewaySet.size();i++)
-				{
-					GateWay tGateWay=gatewaySet.get(i);
-					if(tGateWay.getFeasible()>0)
-					{
-						if((tGateWay.getDistance()>=min) && (tGateWay.getDistance()<=max))
-						{
-							tDistanceGateWaySet.add(tGateWay);
-
-						}
-					}
-				}
-				
-				if(tDistanceGateWaySet.size()>2)
-				{
-					distanceFlag=false;
-				}
-			
-				
-				min=min-deltaRange;
-				if(min <0)
-				{
-					min=0;
-				}
-				max=max+deltaRange;
-				double maxRange=Math.sqrt(Math.pow(ExperimentSetting.xRange, 2)+Math.pow(ExperimentSetting.yRange, 2));
-				if(max >maxRange)
-				{
-					max=maxRange;
-				}
-				if((min==0) && (max==maxRange))
-				{
-					distanceFlag=false;
-				}
-				
-			}
-			
-			if(tDistanceGateWaySet.size()==0)
-			{
-				flag=false;
-				return result;
-			}
-			
-			/*
-			 * 
-			 */
-			
-						
-			
-			
-			/*
-			 * Step 2---timestamp
-			 */
-			boolean timeStampFlag=true;
-			double tTimeStamp=iniTimeStamp;
-			while(timeStampFlag)
-			{
-
-				for(int i=0;i<tDistanceGateWaySet.size();i++)
-				{
-					GateWay tGateWay=tDistanceGateWaySet.get(i);
-					if(tGateWay.getTimeStamp()<tUsedTime-tTimeStamp)
-					{
-						tGateWaySet.add(tGateWay);
-						//tGateWay.calcPriorityWeight(tUsedTime);
-					}					
-				}
-				if(tGateWaySet.size()>0)
-				{
-					timeStampFlag=false;
-				}
-				tTimeStamp=tTimeStamp-deltaTimeStamp;
-				if(tTimeStamp<=1.5)
-				{
-					timeStampFlag=false;
-				}
-				
-			}
-			
-			if(tGateWaySet.size()==0)
-			{
-				flag=false;
-				
-				
-				for(int i=0;i<nodeSet.size();i++)
-				{
-					totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
-				}
-				
-				result.setTourTime(ExperimentSetting.tourTime);
-				result.setNetworkSize(bNet.getnList().size());
-				result.setTotalMovingTime(totalMovingTime);
-				result.setTotalSojournTime(totalSojournTime);
-				result.setTotalUtility(totalUtility);
-				return result;
-			}
-			/*
-			 * 
-			 */
-			
-			Object[] gSet=tGateWaySet.toArray();
-			GateWayMovingTimeComparator gCom=new GateWayMovingTimeComparator(true);
-			Arrays.sort(gSet,gCom);
-			GateWay realGateWay=(GateWay)gSet[0];
-			
-			realGateWay.calcUtilityGain(lastBackTime, tTourTime, false);
-			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
-			{
-				realGateWay.calcUtilityGain(lastBackTime,tTourTime, true);   //last sojourn location
-				flag=false;
-			}
-			
-//			/*
-//			 * begin of debug
-//			 */
-//			System.out.println(realGateWay);
-//			
-//			/*
-//			 * end of debug
-//			 */
-			
-			realGateWay.setTimeStamp(tUsedTime+realGateWay.getMovingTime()+realGateWay.getSojournTime());
-			
-			GateWay chosenGateWay=new GateWay(realGateWay);
-			
-			solution.add(chosenGateWay);
-			tMovingTime=chosenGateWay.getMovingTime();
-			tSojournTime=chosenGateWay.getSojournTime();
-			tTourTime=tTourTime-tMovingTime-tSojournTime;
-			tUsedTime=tUsedTime+tMovingTime+tSojournTime;
-			lastBackTime=chosenGateWay.getBackTime();
-			
-			
-			totalMovingTime=totalMovingTime+tMovingTime;
-			totalSojournTime=totalSojournTime+tSojournTime;
-			
-			
-			/*
-			 *  move to chosen sojourn location to collect data
-			 *  then update both mobilesink, and node status
-			 *  including:
-			 *  mobilesink(X,Y)
-			 *  
-			 *  node(rEnergy, rData, hEnergy, and fWeight)  
-			 */
-			tSinkX=chosenGateWay.getX();
-			tSinkY=chosenGateWay.getY();
-			
-			//update all nodes
-			for(int i=0;i<nodeSet.size();i++)
-			{
-				Node tNode=nodeSet.get(i);
-				double tREnergy=tNode.getaEnergy()+tNode.gethEnergy()*(tMovingTime+tSojournTime);
-				if(tREnergy>tNode.getcEnergy())
-				{
-					tREnergy=tNode.getcEnergy();
-				}
-				tNode.setaEnergy(tREnergy);
-				
-//				//begin of debug
-//				if(tREnergy<0)
-//				{
-//					System.out.println(tREnergy);
-//				}
-//				//end of debug
-				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
-				
-//				//begin of debug
-//				if(tRData<0)
-//				{
-//					System.out.println(tRData);
-//				}
-//				//end of debug
-
-				
-			}
-			
-			
-			//only update neighboring nodes
-			for(int i=0;i<chosenGateWay.getNeighborNodes().size();i++)
-			{
-				Node tNode=chosenGateWay.getNeighborNodes().get(i);
-				double eCom=chosenGateWay.geteConSet().get(i);
-				
-				
-				//compare uploadtime and sojourtime
-                double tUploadTime=tNode.getaEnergy()/(tNode.gettRate()*eCom);
-                double tDataTime=tNode.getrData()/tNode.gettRate();
-                if(tUploadTime>tDataTime)
-                {
-                	tUploadTime=tDataTime;
-                }
-                
-                
-                //
-                
-                
-                if(tUploadTime>tSojournTime)
-                {
-                	tUploadTime=tSojournTime;
-                }
-                
-					double tRData=tNode.getrData()-tNode.gettRate()*tUploadTime;
-					
-					//begin of debug
-					if(tRData<0)
-					{
-						//System.out.println(tRData);
-						tRData=0;
-					}
-					//end of debug
-					
-					tNode.setrData(tRData);
-					
-					
-
-					
-					
-					double tREnergy=tNode.getaEnergy()-tNode.gettRate()*tUploadTime*eCom;
-					
-					//begin of debug
-					if(tREnergy<0)
-					{
-						//System.out.println(tREnergy);
-						tREnergy=0;
-					}
-					//end of debug
-					
-					tNode.setaEnergy(tREnergy);
-					
-
-					
-					double tTotalSojournTime=tNode.getTotalSojournTime()+tUploadTime;
-					tNode.setTotalSojournTime(tTotalSojournTime);
-				
-			}
-			
-			
-			if(tTourTime <=0)
-			{
-				flag=false;
-			}
-			
-		}
-		
-		for(int i=0;i<nodeSet.size();i++)
-		{
-			totalUtility=totalUtility+nodeSet.get(i).getTotalUtility();
-		}
-		
-		result.setTourTime(ExperimentSetting.tourTime);
-		result.setNetworkSize(bNet.getnList().size());
-		result.setTotalMovingTime(totalMovingTime);
-		result.setTotalSojournTime(totalSojournTime);
-		result.setTotalUtility(totalUtility);
-		return result;
-	}
 	
 	
-	/*
-	 * unit utility gain
-	 */
-	
-	public static LabResult dis2TraMaxUtilityGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniTimeStamp, double deltaTimeStamp, ArrayList<GateWay> solution,String weightMethod) throws IOException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	public static LabResult disTraMaxUtilityGainTourDesign(BiNetwork bNet, double iniMinRange, double iniMaxRange, double deltaRange, double iniTimeStamp, double deltaTimeStamp, ArrayList<GateWay> solution,String weightMethod, String utilityMethod) throws IOException, SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
 
 		ArrayList<Node> nodeSet = bNet.getnList(); //
@@ -507,7 +169,10 @@ public class GC13_Alg {
 					{
 						tGateWaySet.add(tGateWay);
 						//tGateWay.calcPriorityWeight(tUsedTime,bNet.getnList().size());
-						tGateWay.getClass().getMethod(weightMethod, double.class,int.class).invoke(tGateWay, tUsedTime,bNet.getnList().size());
+						if(weightMethod!=null)
+						{
+							tGateWay.getClass().getMethod(weightMethod, double.class,int.class).invoke(tGateWay, tUsedTime,bNet.getnList().size());
+						}
 					}					
 				}
 				if(tGateWaySet.size()>0)
@@ -548,10 +213,23 @@ public class GC13_Alg {
 			Arrays.sort(gSet,gCom);
 			GateWay realGateWay=(GateWay)gSet[0];
 			
-			realGateWay.calcUtilityGain(lastBackTime, tTourTime, false);
+			if(utilityMethod!=null)
+			{
+				//realGateWay.calcUtilityGain(lastBackTime, tTourTime, false);
+				realGateWay.getClass().
+				getMethod(utilityMethod, double.class,double.class,boolean.class).
+				invoke(realGateWay, lastBackTime,tTourTime,false);
+			}
 			if(realGateWay.getSojournTime()>(tTourTime-realGateWay.getMovingTime()-realGateWay.getBackTime()))
 			{
-				realGateWay.calcUtilityGain(lastBackTime,tTourTime, true);   //last sojourn location
+				if(utilityMethod!=null)
+				{
+					//realGateWay.calcUtilityGain(lastBackTime,tTourTime, true);   
+					//last sojourn location
+					realGateWay.getClass().
+					getMethod(utilityMethod, double.class,double.class,boolean.class).
+					invoke(realGateWay, lastBackTime,tTourTime,true);
+				}
 				flag=false;
 			}
 			
