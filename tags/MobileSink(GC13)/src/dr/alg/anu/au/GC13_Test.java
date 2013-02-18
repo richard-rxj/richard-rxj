@@ -48,7 +48,7 @@ public class GC13_Test {
 		int[] gatewayLimitSet={50,50,50,50,50,50,50,50,50,50,50};   //50
 		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};   //30    20 for distributed
 		int[] tourTimeSet={100,200,400,800,1600,3200,6400};    //100,200,400,800,1600,3200,6400
-	    String[] algSet={"maxUnit","max","randomUnit","random","dis2-3","disCombine","disCombineMoving"};
+	    String[] algSet={"maxUnit","max","randomUnit","random","dis2-3","dis1.5-3","disCombine"};
 	    DecimalFormat df=new DecimalFormat("#.0");	
 
 			String tOutputFileName="test/new/ImpactPerformance/";
@@ -137,19 +137,19 @@ public class GC13_Test {
 							 		double iniMinRange=2*transRange;
 									double iniMaxRange=3*transRange;
 									double deltaRange=0.05*transRange;
-									double iniTimeStamp=50;
+									double iniTimeStamp=20;
 									double deltaTimeStamp=5;
 									tResult=GC13_Alg.disTraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution); 
 									break;
 							 	}
 							 case 5:
 							 	{
-							 		double iniMinRange=2*transRange;
-									double iniMaxRange=10*transRange;
+							 		double iniMinRange=1.5*transRange;
+									double iniMaxRange=3*transRange;
 									double deltaRange=0.05*transRange;
-									double iniTimeStamp=0;    // means no timestamp constraint
+									double iniTimeStamp=50;    // means no timestamp constraint
 									double deltaTimeStamp=5;
-									tResult=GC13_Alg.dis2TraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution, "calcPriorityWeight"); 
+									tResult=GC13_Alg.dis2TraMaxUtilityGainTourDesign(bNet, iniMinRange, iniMaxRange, deltaRange, iniTimeStamp, deltaTimeStamp, solution,"calcMovingTime"); 
 									break;
 							 	}		
 							 case 6:

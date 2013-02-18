@@ -550,7 +550,11 @@ public class GateWay implements Comparable<GateWay> {
 	/*
 	 * used for distributed
 	 */
-	
+	public void calcMovingTime(double tUsedTime, int networkSize)
+	{
+
+	    this.priorityWeight=-1*this.movingTime;
+	}
 	
 	public void calcPriorityWeight(double tUsedTime, int networkSize)
 	{
