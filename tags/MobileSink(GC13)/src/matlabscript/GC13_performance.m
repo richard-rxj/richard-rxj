@@ -1,8 +1,7 @@
 cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
 
-    %v = strcat(strcat('running_',int2str(i)),'.txt');
-    %Size=[100,200,300,400,500,600];
-    C = load('T1600.txt');
+
+    C = load('T100.txt');
     N = C(:,1);
     RB = C(:,2);
     h=plot(N,RB,'-dr');
@@ -12,9 +11,9 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     %legend('Garg and K.','TPath',2);
     
     xlabel('Network Size');
-    %ylabel('total flow per second(byte)');
+
     ylabel('Network Data Quality');
-    %title('Flow Comparison');
+
     
     hold on;
    
@@ -46,7 +45,7 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     
     
     
-    %axis([100 1000 0 300]);
+    axis([100 1000 0 350]);
     legend('Max\_Utility','Dis\_Max\_Utility','Random\_Utility',2);
   
     set(gca,'fontsize',16,'fontname','Times');
@@ -54,8 +53,7 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     set(get(gca,'ylabel'),'fontsize',18);
     set(get(gca,'title'),'fontsize',18);
     set(findobj(get(gca,'Children'),'LineWidth',0.5),'LineWidth',2);
-    %v='pratio';
-    %saveas(gcf,v,'eps');
+
     
 % fid=fopen('D:\PhDWork\Jspace\Mobilesink\test\xmgracedata\performance-goodput-T800.txt','w');%写入文件路径
 % [m,n]=size(E); %获取矩阵的大小，p为要输出的矩阵
