@@ -49,7 +49,7 @@ public class GC13_Test {
 		int[] transRangeSet={20,20,20,20,20,20,20,20,20,20,20};   //30    20 for distributed
 		int[] tourTimeSet={100,200,400,800,1600,3200,6400};    //100,200,400,800,1600,3200,6400
 
-	    String[] algSet={"maxUnit","max","randomUnit","random","dis2-3-utility","dis2-3-unitutility","disCombine-utility","disCombine-unitutility"};
+	    String[] algSet={"maxUnit","max","randomUnit","random","dis2-3-unitutility","dis2-3-utility","disCombine-unitutility","disCombine-utility"};
 
 	    DecimalFormat df=new DecimalFormat("#.0");	
 
