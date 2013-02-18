@@ -27,7 +27,7 @@ public class ExperimentSetting {
 	public static double tRate= 5000; //  bps    old 20000
 	public static double tourTime=100;  //  s    -----------------------varible
 	public static double[] harvestRate={0.0004,0.0009}; // J/s
-	public static double mSpeed=2;   // m/s   
+	public static double mSpeed=1;   // 2m/s   
 	public static double lossWeight=0.4;  //--------------------------------varible
 	public static double beta=0.000000015; //J/b/m^2    0.0000000006;J/b/m^3     need to reset
 	public static double eComM=2;
