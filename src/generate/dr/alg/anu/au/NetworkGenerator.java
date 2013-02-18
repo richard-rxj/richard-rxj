@@ -154,7 +154,7 @@ public class NetworkGenerator   {
 			String[] b=tempString.split(" ");
 			Node n=new Node(Integer.parseInt(b[0]));
 			n.setcData(Double.parseDouble(b[1]));
-			n.setrData(Double.parseDouble(b[2]));
+			//n.setrData(Double.parseDouble(b[2]));
 			n.setcEnergy(Double.parseDouble(b[3]));
 			n.setaEnergy(Double.parseDouble(b[4]));
 			n.sethEnergy(Double.parseDouble(b[5]));
