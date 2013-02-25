@@ -13,7 +13,8 @@ public class Node implements Comparable<Node> {
 	private double aEnergy =0;
 	private double cEnergy =10000;  //battery capacity 10000 Jules
 	private double hEnergy=0;
-	private double rData=ExperimentSetting.gRate*ExperimentSetting.tourTime;
+	//private double rData=ExperimentSetting.gRate*ExperimentSetting.tourTime;  //enough data
+	private double rData=0;                                                     //not enough data
 	private double cData=0;
 	private double gRate = ExperimentSetting.gRate;
 	private double tRate = ExperimentSetting.tRate;   
@@ -224,8 +225,8 @@ public class Node implements Comparable<Node> {
 	{
 		double result=0;
 		double result1=0;
-		//result1 = (this.rData+this.gRate*movingTime) / (this.tRate-this.gRate);
-		result1=this.rData/this.tRate;
+		result1 = (this.rData+this.gRate*movingTime) / (this.tRate-this.gRate);    //not enough data
+		//result1=this.rData/this.tRate;                  //enough data
 		double tEnergy=eConsumption*this.tRate;
 		if(tEnergy>this.hEnergy)
 		{
