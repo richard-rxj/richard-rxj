@@ -287,8 +287,8 @@ public class GC13_Alg {
 //				}
 //				//end of debug
 				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+				tNode.setrData(tRData);
 				
 //				//begin of debug
 //				if(tRData<0)
@@ -503,8 +503,8 @@ public class GC13_Alg {
 //				}
 //				//end of debug
 				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+				tNode.setrData(tRData);
 				
 //				//begin of debug
 //				if(tRData<0)
@@ -722,8 +722,8 @@ public class GC13_Alg {
 //				}
 //				//end of debug
 				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+			    tNode.setrData(tRData);
 				
 //				//begin of debug
 //				if(tRData<0)
@@ -968,8 +968,8 @@ public class GC13_Alg {
 //				}
 //				//end of debug
 				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+			    tNode.setrData(tRData);
 				
 //				//begin of debug
 //				if(tRData<0)
@@ -1215,8 +1215,8 @@ public class GC13_Alg {
 //				}
 //				//end of debug
 				
-//				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
-//				tNode.setrData(tRData);
+				double tRData=tNode.getrData()+tNode.getgRate()*(tMovingTime+tSojournTime);
+				tNode.setrData(tRData);
 				
 //				//begin of debug
 //				if(tRData<0)
