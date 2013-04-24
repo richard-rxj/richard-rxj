@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * @author u4964526
@@ -29,11 +30,15 @@ public class BasicPredictionSolver extends PredictionSolver {
 	 * @see pre.alg.anu.PredictionSolver#predict(java.lang.String, java.lang.String, int, int, int)
 	 */
 	@Override
-	public void predict(String inFile, String outFile, int nPast, double alpha,
+	public PredictionResult predict(String inFile, int nPast, double alpha,
 			int nResult) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader in=new BufferedReader(new InputStreamReader(new FileInputStream(inFile)));
-		PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outFile,false)),true);
+		PredictionResult result=new PredictionResult();
+		
+		
+		
+		
 		
 		double[][] gGrid=new double[nPast+nResult][11]; //double[Days][Hours]
 		//pass the first line
@@ -54,7 +59,6 @@ public class BasicPredictionSolver extends PredictionSolver {
 		
 		
 		in.close();
-		out.close();
 	}
 
 	/**
