@@ -34,13 +34,13 @@ public class BasicPredictionSolver extends PredictionSolver {
 			int nResult) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader in=new BufferedReader(new InputStreamReader(new FileInputStream(inFile)));
-		PredictionResult result=new PredictionResult();
+		PredictionResult result=new PredictionResult(nResult);
 		
 		
 		
 		
 		
-		double[][] gGrid=new double[nPast+nResult][11]; //double[Days][Hours]
+		String[][] gGrid=new String[nPast+nResult][11]; //double[Days][Hours]
 		//pass the first line
 		String tempString=in.readLine();
 		//fill gGrid using data from inFile
@@ -50,15 +50,16 @@ public class BasicPredictionSolver extends PredictionSolver {
 			String[] temp=tempString.split(" ");
 			for(int j=0; j<gGrid[0].length; j++)
 			{
-				gGrid[i][j]=Double.parseDouble(temp[j+1]);
+				gGrid[i][j]=temp[j];
 			}
 			System.out.println(gGrid[i][0]);   //for debug
 		}
 		
 		
 		
-		
+
 		in.close();
+		return result;
 	}
 
 	/**
@@ -69,10 +70,11 @@ public class BasicPredictionSolver extends PredictionSolver {
 		// TODO Auto-generated method stub
         String inFile="test/solar.txt";
         String outFile="test/result_basic.txt";
-        int nPast=10;
-        double alpha=0.7;
-        int nResult=10;
-        new BasicPredictionSolver().predict(inFile, outFile, nPast, alpha, nResult);
+        int nPast=ParameterSetting.nPast;
+        double alpha=ParameterSetting.alpha;
+        int nResult=ParameterSetting.nPast;
+        
+        new BasicPredictionSolver().predict(inFile, nPast, alpha, nResult);
 	}
 
 }

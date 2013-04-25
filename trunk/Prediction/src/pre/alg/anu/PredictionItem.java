@@ -51,6 +51,18 @@ public class PredictionItem {
 
 
 
+	public double getError() {
+		return error;
+	}
+
+
+
+	public void setError(double error) {
+		this.error = error;
+	}
+
+
+
 	/**
 	 * error is used for evaluation
 	 */
@@ -59,6 +71,14 @@ public class PredictionItem {
 		this.error=Math.abs(1-this.real/this.estimate);
 		return error;
 	}
+
+	@Override
+	public String toString() {
+		return "[error=" + error + ", estimate=" + estimate
+				+ ", real=" + real + ", label=" + label + "]";
+	}
+
+
 
 	/**
 	 * @param args
