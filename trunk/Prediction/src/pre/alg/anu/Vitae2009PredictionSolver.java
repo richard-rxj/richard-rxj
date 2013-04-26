@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  * @author u4964526
  *
  */
-public class Dcoss2009PredictionSolver extends PredictionSolver {
+public class Vitae2009PredictionSolver extends PredictionSolver {
 
 	/* (non-Javadoc)
 	 * @see pre.alg.anu.PredictionSolver#predict(java.lang.String, java.lang.String, int, double, int)
@@ -91,7 +91,7 @@ public class Dcoss2009PredictionSolver extends PredictionSolver {
         double alpha=ParameterSetting.alpha;
         int nResult=ParameterSetting.nPast;
         
-        new Dcoss2009PredictionSolver().predict(inFile, outFile, nPast, alpha, nResult);
+        new Vitae2009PredictionSolver().predict(inFile, outFile, nPast, alpha, nResult);
 	}
 
 }
