@@ -57,9 +57,7 @@ public class PredictionItem {
 
 
 
-	public void setError(double error) {
-		this.error = error;
-	}
+	
 
 
 
