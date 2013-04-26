@@ -20,7 +20,7 @@ public abstract class PredictionSolver {
 	 *          alpha:int--------weight factor
 	 *          nResult:int------number of prediction days required
 	 */
-	public abstract PredictionResult predict(String inFile, int nPast, double alpha, int nResult) throws IOException;
+	public abstract PredictionResult predict(String inFile, String outFile, int nPast, double alpha, int nResult) throws IOException;
 	
 	
 
