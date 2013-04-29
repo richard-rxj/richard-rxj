@@ -50,9 +50,10 @@ public class TestTogether {
 			out=new PrintWriter(new OutputStreamWriter(System.out));
 		}
 		
+		int gHour=0;
 		for(int gI=0;gI<resultBasic.getResultSet().size();gI++)
 		{
-			int gHour=0;
+
 			for(int i=0;i<8;i++)
 			{
 				out.println(gHour+" "+0+" "+0+" "+0+" "+0);
