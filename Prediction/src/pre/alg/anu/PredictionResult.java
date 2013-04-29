@@ -30,6 +30,10 @@ public class PredictionResult {
 		}
 	}
 	
+	public ArrayList<ArrayList<PredictionItem>> getResultSet() {
+		return resultSet;
+	}
+
 	public void addResult(int day, PredictionItem resultItem)
 	{
 		resultSet.get(day-1).add(resultItem);
@@ -63,6 +67,8 @@ public class PredictionResult {
 		
 	}
 
+	
+	
 	/**
 	 * @param args
 	 */
