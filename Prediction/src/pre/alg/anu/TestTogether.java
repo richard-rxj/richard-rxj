@@ -22,11 +22,12 @@ public class TestTogether {
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String inFile="test/solar.txt";
-        String outFileVitae2009="test"+File.separator+"result_vitae2009.txt";
-        String outFileDcoss2009="test"+File.separator+"result_dcoss2009.txt";
-        String outFileBasic="test"+File.separator+"result_basic.txt";
-        String outFile="test"+File.separator+"result.txt";
+		String baseDir="test"+File.separator+"NREL";
+		String inFile=baseDir+File.separator+"solar_NREL.txt";
+        String outFileVitae2009=baseDir+File.separator+"result_vitae2009.txt";
+        String outFileDcoss2009=baseDir+File.separator+"result_dcoss2009.txt";
+        String outFileBasic=baseDir+File.separator+"result_basic.txt";
+        String outFile=baseDir+File.separator+"result.txt";
         int nPast=ParameterSetting.nPast;
         double alpha=ParameterSetting.alpha;
         int nResult=ParameterSetting.nPast;
@@ -56,7 +57,7 @@ public class TestTogether {
 
 			for(int i=0;i<8;i++)
 			{
-				out.println(gHour+" "+0+" "+0+" "+0+" "+0);
+				out.println(gHour+" "+0+" "+0+" "+0+" "+0+" "+0+" "+0);
 				gHour++;
 			}
 			
@@ -73,7 +74,7 @@ public class TestTogether {
 			
 			for(int i=0;i<5;i++)
 			{
-				out.println(gHour+" "+0+" "+0+" "+0+" "+0);
+				out.println(gHour+" "+0+" "+0+" "+0+" "+0+" "+0+" "+0);
 				gHour++;
 			}
 		}
