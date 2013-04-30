@@ -43,7 +43,8 @@ public class DataExtract {
 					String[] thour=temp[1].split(":");
 					if((Integer.parseInt(thour[0])>=8) && (Integer.parseInt(thour[0])<=18))
 					{
-						out.print(temp[3]+" ");
+						//out.print(temp[3]+" ");
+						out.print(temp[2]+" ");     //for nrel
 					}
 				}
 				else   //enter a different day
@@ -51,6 +52,14 @@ public class DataExtract {
 					out.println();
 					out.print(temp[0]+" ");
 					gDate=tDate;
+					
+					//check the hour between 8am-18pm
+					String[] thour=temp[1].split(":");
+					if((Integer.parseInt(thour[0])>=8) && (Integer.parseInt(thour[0])<=18))
+					{
+						//out.print(temp[3]+" ");
+						out.print(temp[2]+" ");     //for nrel
+					}
 				}
 			}
 			
@@ -76,7 +85,7 @@ public class DataExtract {
 	 */
 	public static void main(String[] args) throws IOException, ParseException {
 		// TODO Auto-generated method stub
-		generateData("test/solar_origin.txt","test/solar.txt");
+		generateData("test/NREL/solar_origin_NREL.txt","test/NREL/solar_NREL.txt");
 		
 	}
 
