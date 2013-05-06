@@ -33,7 +33,7 @@ public class DataExtract {
 			//examine each line
 			while((tempString=in.readLine())!=null)
 			{
-				String[] temp=tempString.split("\t");
+				String[] temp=tempString.split(",");   //split!!!!!!!!!!!!!!!!!
 				
 				//check date
 				Date tDate=sdf.parse(temp[0]);
@@ -41,10 +41,10 @@ public class DataExtract {
 				{
 					//check the hour between 8am-18pm
 					String[] thour=temp[1].split(":");
-					if((Integer.parseInt(thour[0])>=8) && (Integer.parseInt(thour[0])<=18))
+					if((Integer.parseInt(thour[0])>=9) && (Integer.parseInt(thour[0])<=17))
 					{
-						//out.print(temp[3]+" ");
-						out.print(temp[2]+" ");     //for nrel
+						out.print(temp[3]+" ");
+						//out.print(temp[2]+" ");     //for nrel!!!!!!!!!!!!!!!!!!!!
 					}
 				}
 				else   //enter a different day
@@ -57,8 +57,8 @@ public class DataExtract {
 					String[] thour=temp[1].split(":");
 					if((Integer.parseInt(thour[0])>=8) && (Integer.parseInt(thour[0])<=18))
 					{
-						//out.print(temp[3]+" ");
-						out.print(temp[2]+" ");     //for nrel
+						out.print(temp[3]+" ");
+						//out.print(temp[2]+" ");     //for nrel!!!!!!!!!!!!!!!!!!!!
 					}
 				}
 			}
@@ -85,8 +85,12 @@ public class DataExtract {
 	 */
 	public static void main(String[] args) throws IOException, ParseException {
 		// TODO Auto-generated method stub
-		generateData("test/NREL/solar_origin_NREL.txt","test/NREL/solar_NREL.txt");
-		
+		//generateData("test/NSRDB/origin/solar_origin.txt","test/NSRDB/solar.txt");
+		generateData("test/NSRDB/origin/solar_origin1.csv","test/NSRDB/solar1.txt");
+		generateData("test/NSRDB/origin/solar_origin2.csv","test/NSRDB/solar2.txt");
+		generateData("test/NSRDB/origin/solar_origin3.csv","test/NSRDB/solar3.txt");
+		generateData("test/NSRDB/origin/solar_origin4.csv","test/NSRDB/solar4.txt");
+		generateData("test/NSRDB/origin/solar_origin5.csv","test/NSRDB/solar5.txt");
 	}
 
 }
