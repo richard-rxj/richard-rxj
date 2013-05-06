@@ -18,7 +18,14 @@ public class PredictionResult {
 
 	private ArrayList<ArrayList<PredictionItem>> resultSet;
 	private int totalSum;
+	private double averageError;
 	
+	public double getAverageError() {
+		return averageError;
+	}
+
+
+
 	public PredictionResult(int nDays) {
 		super();
 		resultSet=new ArrayList<ArrayList<PredictionItem>>();
@@ -63,7 +70,14 @@ public class PredictionResult {
 			}
 			out.println();
 		}
-		out.println("average error="+totalError/this.totalSum);
+		
+		
+		//set the average error
+		this.averageError=totalError/this.totalSum;
+		
+		out.println("average error="+this.averageError);
+		
+
 		
 	}
 

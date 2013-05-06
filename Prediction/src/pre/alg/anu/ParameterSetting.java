@@ -10,6 +10,6 @@ package pre.alg.anu;
 public class ParameterSetting {
 
 	public static double alpha=0.5;
-	public static int nPast=30;
+	public static int nPast=100;
 	public static int nResult=10;
 }

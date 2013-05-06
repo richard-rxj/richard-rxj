@@ -22,8 +22,8 @@ public class TestTogether {
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String baseDir="test"+File.separator+"NREL";
-		String inFile=baseDir+File.separator+"solar_NREL.txt";
+		String baseDir="test"+File.separator+"NSRDB";
+		String inFile=baseDir+File.separator+"solar.txt";
         String outFileVitae2009=baseDir+File.separator+"result_vitae2009.txt";
         String outFileDcoss2009=baseDir+File.separator+"result_dcoss2009.txt";
         String outFileBasic=baseDir+File.separator+"result_basic.txt";
@@ -81,6 +81,7 @@ public class TestTogether {
 		/*
 		 * end: output result
 		 */
+		out.close();
 	}
 
 
