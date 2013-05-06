@@ -105,8 +105,8 @@ public class ExperimentSetting {
     public static double  getUtility(double t)
     {
     
-    	//return Math.pow(t, 0.5);   // non-linear
-    	return t;                  // linear 
+    	return Math.pow(t, 0.5);   // non-linear
+    	//return t;                  // linear 
     }
 	
 	
