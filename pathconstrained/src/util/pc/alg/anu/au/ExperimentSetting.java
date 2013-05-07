@@ -37,6 +37,7 @@ public class ExperimentSetting {
 	public static int interval=10;    //fixed interval for distributed
 	public static int rateFactor=1;   //used for eastimate the profit of a time slot
 	public static double epsilon=0.2;     //1+alpha---->alpha=0.25
+	public static double[] linkReliable={1,1};   //unreliable link reliability
 	
 	
 	private static double getTransRateByDistance(double distance)

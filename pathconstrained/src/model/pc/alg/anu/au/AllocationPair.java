@@ -1,5 +1,7 @@
 package model.pc.alg.anu.au;
 
+import util.pc.alg.anu.au.ExperimentSetting;
+
 public class AllocationPair {
 
 	private int slotID;
@@ -28,7 +30,8 @@ public class AllocationPair {
 
 
 	public void setSlotData(double slotData) {
-		this.slotData = slotData;
+		//this.slotData = slotData;       //link reliability=1  perfect
+		this.slotData=slotData*(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
 		if(this.energyCost>0)
 		{
 			this.perCost=this.slotData/this.energyCost;
