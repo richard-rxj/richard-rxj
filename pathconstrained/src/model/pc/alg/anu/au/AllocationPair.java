@@ -30,8 +30,7 @@ public class AllocationPair {
 
 
 	public void setSlotData(double slotData) {
-		//this.slotData = slotData;       //link reliability=1  perfect
-		this.slotData=slotData*(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
+		this.slotData = slotData;
 		if(this.energyCost>0)
 		{
 			this.perCost=this.slotData/this.energyCost;

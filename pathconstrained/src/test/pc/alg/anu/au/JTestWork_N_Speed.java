@@ -34,11 +34,11 @@ public class JTestWork_N_Speed {
         
         int[] networkSizeSet={100,200,300,400,500,600};
 		double[] speedSet={5,10,30};
-		ExperimentSetting.unitSlot=4;
+		ExperimentSetting.unitSlot=1;
 		int tau=ExperimentSetting.unitSlot;
-        int cishu=1;
-		//int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CGAP","DGAP","CAppro","DAppro"};
+        //int cishu=1;
+		int cishu=ExperimentSetting.cishu;
+		String[] algSet={"CGAP","DGAP"};
 		
 		String tFileName="test/journal-data/GAP/";
 		File tf=new File(tFileName);
