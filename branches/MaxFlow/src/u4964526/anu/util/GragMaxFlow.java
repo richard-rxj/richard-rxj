@@ -131,6 +131,8 @@ public class GragMaxFlow {
 		{
 			//w=false;                     //old!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			
+			++loopSum;
+			
 			for(int i=0;i<sourceList.size();i++)
 			{
 
@@ -148,10 +150,10 @@ public class GragMaxFlow {
 				}
 				//double wd=mPath.getwULength();
 				
-				++loopSum;
+				
 				/*
 				 * begin of debug info
-				 *
+				 */
 				
 				System.out.println("********Gragloop--"+loopSum+"*******\n");
 				System.out.println("********GraggD--"+gD+"*******\n");
@@ -239,6 +241,22 @@ public class GragMaxFlow {
 				
 			}
 		}
+		
+		
+		/*
+		 * debug
+		 */
+		
+		System.out.println("delta-----"+this.getDelta());
+		System.out.println("loop------"+loopSum);
+		System.out.println("scale-----"+Math.log((1+this.epsilon)/this.getDelta())/Math.log(1+this.epsilon));
+		System.out.println("scale-----"+this.getGragScaleFactor());
+		
+		/*
+		 * 
+		 */
+		
+		
 		double endTime=System.currentTimeMillis();
 		/*
 		 * begin of compute the real rate
