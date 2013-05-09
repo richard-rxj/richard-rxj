@@ -23,7 +23,7 @@ public class TestRealData {
 	private static double eTx=0.0000144;  //dB
 	private static double eRx=0.00000576;  //dB
 	private static double epsilon=0.1; 
-	private static double[] gBaseBudgetEnergy={0.00653,0.01365};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
+	private static double[] gBaseBudgetEnergy={0.02,0.03};  //{0.00653,0.01365}  0.01365,0.01221,0.01079,0.00937,0.00795,0.00653
 	private static double[] gBaseMaxRate={100,80,60};   //{100,80,60}  76800,61440,46080
 	//private static double transRange=25;
 
@@ -563,16 +563,16 @@ public class TestRealData {
 	   DecimalFormat df=new DecimalFormat("#.0000");
   	    
 	    
-	    int[] gRouSet={100,20,80};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
-	    int[] gNodeSet={50,100,200,300,400,500};      //50,100,200,300,400,500,600,700,800,900,1000
+	    int[] gRouSet={100};  //100,110,0,20,40,60,80{0,0.2,0.4,0.6,0.8,1}
+	    int[] gNodeSet={50};      //50,100,200,300,400,500,600,700,800,900,1000
 	    double[] gTransSet={30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5};    //30,20,14,10,8.5,7.5,6.5,6,5.5,5.5,5.5
 	    int[] gDataSumSet={100,100,100,100,100,100,100,100,100,100,100}; //100,100,100,100,100
 	    double[] gEISet={1,1,1,1,1,1,1,1,1,1,1};         //3,7,9,12,19   0.7,3,3,3,3,11
-	    int[] gCThresholdSet={8,6};  //9,8,7,6,5,4,3
+	    int[] gCThresholdSet={8};  //9,8,7,6,5,4,3
 	    double[][] gPairSet=new double[gNodeSet.length][gCThresholdSet.length];
 	    double gRateIndicator=50;
-	    int topologySum=10;     //15
-	    int intervalSum=10;     //10
+	    int topologySum=2;     //15
+	    int intervalSum=1;     //10
 	    //0--SPTtime 1--SPTFlow 2--SPTMSE  3--GKtime  4--GKFlow  5--GKMSE
 	    double[][][][] gResultSet=new double[gNodeSet.length][gCThresholdSet.length][gRouSet.length][8];
 	    
@@ -660,9 +660,9 @@ public class TestRealData {
     	    		
     	    		//initial energy and maxrate
     	    		
-			    	//TestRealData.initRealData(fileName1, "0", "0", g, 1,gEI,gTrans);
+			    	TestRealData.initRealData(fileName1, "0", "0", g, 1,gEI,gTrans);
 					
-					//g.outputFile(fVertex, fEdge);
+					g.outputFile(fVertex, fEdge);
 					
 					
 					g=new Graph();
@@ -673,7 +673,7 @@ public class TestRealData {
 				    twFlow.seteRx(eRx);
 				    twFlow.seteTx(eTx);
 				    twFlow.setEpsilon(0.1);
-			    	twFlow.computeDWFFLow();
+			    	//twFlow.computeDWFFLow();
 			    	int tWRateFactorI=10;
 			    	while(tWRateFactor<0)
 			    	{
@@ -1046,10 +1046,10 @@ public class TestRealData {
 			TestRealData.testIntervalSet(100,"test/topology/","test/real/100/");
 			
 
-			TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
+			//TestRealData.testIntervalSet(200,"test/topology/","test/real/200/");
 			
 			
-			TestRealData.testIntervalSet(300,"test/topology/","test/real/300/");
+			//TestRealData.testIntervalSet(300,"test/topology/","test/real/300/");
 				
 			
 			//TestRealData.testIntervalSet(50,"test/topology/","test/real/50/");
