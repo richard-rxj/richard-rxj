@@ -29,7 +29,8 @@ public class ExperimentSetting {
 	public static double batteryCapacity=10000;
 	public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022
 	//public static double[] mSpeed={5,10,20};   // m/s   
-	public static double[] transPowerSet={0.17,0.22,0.3,0.33};    // 0.3 J/s    //transmission power set
+	//public static double[] transPowerSet={0.17,0.22,0.3,0.33};    //general case
+	public static double[] transPowerSet={0.3,0.3,0.3,0.3};    //special case
 	public static double[] transRateSet={250000,19200,9600,4800};     //bps
 	public static Random ran=new Random();
 	public static int cishu=50;    //50
@@ -37,7 +38,7 @@ public class ExperimentSetting {
 	public static int interval=10;    //fixed interval for distributed
 	public static int rateFactor=1;   //used for eastimate the profit of a time slot
 	public static double epsilon=0.2;     //1+alpha---->alpha=0.25
-	public static double[] linkReliable={1,1};   //unreliable link reliability
+	public static double[] linkReliable={0,1};   //unreliable link reliability
 	
 	
 	private static double getTransRateByDistance(double distance)
@@ -68,22 +69,26 @@ public class ExperimentSetting {
 			double td=CommonFacility.computeDistance(s.getX(), s.getY(), x, t.getY());
 			if(td<=20)
 		    {
-				slotData=slotData+ExperimentSetting.transRateSet[0]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				slotData=slotData+ExperimentSetting.transRateSet[0]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot
+				         *(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
 				energyCost=energyCost+ExperimentSetting.transPowerSet[0]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
 		    }
 			else if(td<=50)
 			{
-				slotData=slotData+ExperimentSetting.transRateSet[1]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				slotData=slotData+ExperimentSetting.transRateSet[1]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot
+				         *(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
 				energyCost=energyCost+ExperimentSetting.transPowerSet[1]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
 		    }
 			else if(td<=120)
 			{
-				slotData=slotData+ExperimentSetting.transRateSet[2]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				slotData=slotData+ExperimentSetting.transRateSet[2]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot
+				         *(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
 				energyCost=energyCost+ExperimentSetting.transPowerSet[2]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
 		    }
 			else if(td<=200)
 			{
-				slotData=slotData+ExperimentSetting.transRateSet[3]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
+				slotData=slotData+ExperimentSetting.transRateSet[3]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot
+				         *(ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]));
 				energyCost=energyCost+ExperimentSetting.transPowerSet[3]*ExperimentSetting.rateFactor/(end-start)*ExperimentSetting.unitSlot;
 		    }
 			else 
@@ -92,6 +97,7 @@ public class ExperimentSetting {
 				energyCost=energyCost+0;
 		    }
 			
+			//System.out.println(i+"---energy<"+energyCost+">---distance<"+td+">");
 			
 		}
 		
@@ -116,9 +122,16 @@ public class ExperimentSetting {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-        System.out.println(Math.log(250000));
-        int[] a={1,2,3};
-        System.out.print(Arrays.toString(a));
+		int[] r=new int[10];
+        for(int i=0;i<1000000;i++)
+        {
+        	double t=ExperimentSetting.linkReliable[0]+ExperimentSetting.ran.nextDouble()*(ExperimentSetting.linkReliable[1]-ExperimentSetting.linkReliable[0]);
+        	int index=(int)(t/0.1);
+        	r[index]++;
+        }
+        for(int i=0;i<r.length;i++)
+        {
+        	System.out.println(r[i]);	
+        }
 	}
-
 }

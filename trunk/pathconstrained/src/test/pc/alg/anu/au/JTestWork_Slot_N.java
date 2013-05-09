@@ -26,8 +26,8 @@ public class JTestWork_Slot_N {
         
         
         int[] networkSizeSet={100,200,300,400,500,600};
-		int speed=5;    //5   10
-		int[] tauSet={1,2,4,8,16};
+		int speed=30;    //5   10
+		int[] tauSet={1,2,4,6,8,10};    //1,2,4,8,16
         int cishu=ExperimentSetting.cishu;
 		String[] algSet={"CAppro","DAppro"};
 		
