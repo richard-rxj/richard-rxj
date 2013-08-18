@@ -17,6 +17,10 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	private double residualLifetime;
 	private double maxEnergy;
 	
+	private double weight1;   //  nearest
+	private double weight2;   //  nearest including backing time
+	
+	private int  id;        //unique ID
 	/**
 	 * @return the xAxis
 	 */
@@ -129,6 +133,57 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	}
 
 
+
+
+
+	/**
+	 * @return the weight1
+	 */
+	public double getWeight1() {
+		return weight1;
+	}
+
+
+	/**
+	 * @param weight1 the weight1 to set
+	 */
+	public void setWeight1(double weight1) {
+		this.weight1 = weight1;
+	}
+
+
+	/**
+	 * @return the weight2
+	 */
+	public double getWeight2() {
+		return weight2;
+	}
+
+
+	/**
+	 * @param weight2 the weight2 to set
+	 */
+	public void setWeight2(double weight2) {
+		this.weight2 = weight2;
+	}
+
+
+	/**
+	 * @return the ssn
+	 */
+	public int getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param ssn the ssn to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	/**
 	 * @param args
 	 */
@@ -153,6 +208,16 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 			return AFTER;
 		
 		return EQUAL;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ChargingRequest [xAxis=" + xAxis + ", yAxis=" + yAxis
+				+ ", releaseTime=" + releaseTime + ", id=" + id + "]";
 	}
 
 }
