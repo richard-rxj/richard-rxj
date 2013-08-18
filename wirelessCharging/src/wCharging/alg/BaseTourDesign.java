@@ -3,8 +3,11 @@
  */
 package wCharging.alg;
 
+import java.util.ArrayList;
+
 import wCharging.model.ChargingRequest;
-import wCharging.model.SortedQueue;
+import wCharging.model.ChargingRequestQueue;
+
 
 /**
  * @author user
@@ -12,8 +15,7 @@ import wCharging.model.SortedQueue;
  */
 public abstract class BaseTourDesign {
 
-	private SortedQueue<ChargingRequest>  requestQueue;
-	private double  timeLimit;
+	private ChargingRequestQueue  requestQueue;
 	
 	
 
@@ -22,20 +24,15 @@ public abstract class BaseTourDesign {
 	/**
 	 * @param requestQueue the requestQueue to set
 	 */
-	public void setRequestQueue(SortedQueue<ChargingRequest> requestQueue) {
+	public void setRequestQueue(ChargingRequestQueue requestQueue) {
 		this.requestQueue = requestQueue;
 	}
 
 
-	/**
-	 * @param timeLimit the timeLimit to set
-	 */
-	public void setTimeLimit(double timeLimit) {
-		this.timeLimit = timeLimit;
-	}
 
 
-	public abstract void design();
+
+	public abstract ArrayList<ChargingRequest> design(double TimeLimit);
 	
 
 	/**
