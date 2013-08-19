@@ -3,7 +3,10 @@
  */
 package wCharging.model;
 
+import java.util.Collections;
 import java.util.LinkedList;
+
+import wCharging.util.TravelTimeComparator;
 
 /**
  * @author user
@@ -43,7 +46,7 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 	   return false;
    }
    
-   public ChargingRequestQueue getSubQueueByTime(double time)
+   public ChargingRequestQueue getSubQueueByReleaseTime(double time)
    {
 	   ChargingRequestQueue subQueue=new ChargingRequestQueue();
 	   for(int index=0;index<this.size();index++)
@@ -57,6 +60,22 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 	   }
 	   return subQueue;
    }
+   
+   public ChargingRequestQueue getSubQueueByTimeLimit(double time)
+   {
+	   ChargingRequestQueue subQueue=new ChargingRequestQueue();
+	   for(int index=0;index<this.size();index++)
+	   {
+		   ChargingRequest current=this.get(index);
+		   if(current.getTravelPlusBackTime()>time)
+		   {
+			   break;
+		   }
+		   subQueue.add(current);
+	   }
+	   return subQueue;
+   }
+   
    
 	/**
 	 * @param args
@@ -72,17 +91,21 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 			cSet[i]=new ChargingRequest();
 			cSet[i].setId(i);
 			cSet[i].setReleaseTime(i*10);
+			cSet[i].setTravelTime(i*100);
 		}
 			
 		cSet[3].setReleaseTime(72);
 		cSet[9].setReleaseTime(5);
+		
+		cSet[1].setTravelTime(750);
+		cSet[7].setTravelTime(150);
 		
 		for(ChargingRequest c:cSet)
 		{
 			q.add(c);
 		}
 		
-		ChargingRequestQueue sub=q.getSubQueueByTime(71);
+		ChargingRequestQueue sub=q.getSubQueueByReleaseTime(71);
 		
 		q.removeById(cSet[5].getId());
 		
@@ -93,6 +116,15 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 		}
 		
 		System.out.println("***************");
+		
+	    for(ChargingRequest c:q)
+		{
+			System.out.println(c);
+		}
+	    
+	    Collections.sort(q,new TravelTimeComparator(true));
+	    
+       System.out.println("-----------------");
 		
 	    for(ChargingRequest c:q)
 		{

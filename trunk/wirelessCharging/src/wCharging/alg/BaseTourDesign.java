@@ -15,10 +15,11 @@ import wCharging.model.ChargingRequestQueue;
  */
 public abstract class BaseTourDesign {
 
-	private ChargingRequestQueue  requestQueue;
-	private double timeLimit;
-    private double startX;
-    private double startY;
+	protected ChargingRequestQueue  requestQueue;
+	protected double timeLimit;
+	protected double currentTime;
+    protected double startX;
+    protected double startY;
 
 
 
@@ -35,6 +36,22 @@ public abstract class BaseTourDesign {
 
 	public void setTimeLimit(double timeLimit) {
 		this.timeLimit = timeLimit;
+	}
+
+
+
+
+
+	public double getCurrentTime() {
+		return currentTime;
+	}
+
+
+
+
+
+	public void setCurrentTime(double currentTime) {
+		this.currentTime = currentTime;
 	}
 
 

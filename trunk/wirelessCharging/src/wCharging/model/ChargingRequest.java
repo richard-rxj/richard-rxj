@@ -3,6 +3,8 @@
  */
 package wCharging.model;
 
+import wCharging.test.SimulationSetting;
+
 /**
  * @author user
  *
@@ -17,8 +19,10 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	private double residualLifetime;
 	private double maxEnergy;
 	
-	private double weight1;   //  nearest
-	private double weight2;   //  nearest including backing time
+	private double travelTime;   //  nearest
+	private double travelPlusBackTime;   //  including backing time
+	
+	private double processTime;
 	
 	private int  id;        //unique ID
 	/**
@@ -136,35 +140,47 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 
 
 
-	/**
-	 * @return the weight1
-	 */
-	public double getWeight1() {
-		return weight1;
+	
+
+
+	public double getTravelTime() {
+		return travelTime;
 	}
 
 
-	/**
-	 * @param weight1 the weight1 to set
-	 */
-	public void setWeight1(double weight1) {
-		this.weight1 = weight1;
+
+
+
+	public double getTravelPlusBackTime() {
+		return travelPlusBackTime;
 	}
 
 
-	/**
-	 * @return the weight2
-	 */
-	public double getWeight2() {
-		return weight2;
+	public void setTravelTime(double travelTime) {
+		this.travelTime = travelTime;
 	}
 
 
-	/**
-	 * @param weight2 the weight2 to set
-	 */
-	public void setWeight2(double weight2) {
-		this.weight2 = weight2;
+	public void setTravelPlusBackTime(double travelPlusBackTime) {
+		this.travelPlusBackTime = travelPlusBackTime;
+	}
+
+
+	public void ComputeBothTime(double currentX, double currentY, double startX, double startY) {
+		double tTime=Math.sqrt(Math.pow(currentX-this.xAxis, 2)+Math.pow(currentY-this.yAxis, 2));
+		double bTime=Math.sqrt(Math.pow(startX-this.xAxis, 2)+Math.pow(startY-this.yAxis, 2));
+		this.travelTime = tTime+SimulationSetting.chargingConstant;
+		this.travelPlusBackTime = tTime+bTime+SimulationSetting.chargingConstant;
+	}
+
+
+	public double getProcessTime() {
+		return processTime;
+	}
+
+
+	public void setProcessTime(double processTime) {
+		this.processTime = processTime;
 	}
 
 
@@ -216,8 +232,8 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	 */
 	@Override
 	public String toString() {
-		return "ChargingRequest [xAxis=" + xAxis + ", yAxis=" + yAxis
-				+ ", releaseTime=" + releaseTime + ", id=" + id + "]";
+		return "ChargingRequest [id="+ id +", xAxis=" + xAxis + ", yAxis=" + yAxis
+				+ ", releaseTime=" + releaseTime + ", travelTime=" + travelTime + ", travelPlusBackTime=" + travelPlusBackTime +"]";
 	}
 
 }
