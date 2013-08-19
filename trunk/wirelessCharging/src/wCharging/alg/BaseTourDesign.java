@@ -17,7 +17,8 @@ public abstract class BaseTourDesign {
 
 	private ChargingRequestQueue  requestQueue;
 	private double timeLimit;
-	
+    private double startX;
+    private double startY;
 
 
 
@@ -40,7 +41,29 @@ public abstract class BaseTourDesign {
 
 
 
-	public abstract ArrayList<ChargingRequest> design(double currentTime);
+	/**
+	 * @param startX the startX to set
+	 */
+	public void setStartX(double startX) {
+		this.startX = startX;
+	}
+
+
+
+
+
+	/**
+	 * @param startY the startY to set
+	 */
+	public void setStartY(double startY) {
+		this.startY = startY;
+	}
+
+
+
+
+
+	public abstract ArrayList<ChargingRequest> design();
 	
 
 	/**
