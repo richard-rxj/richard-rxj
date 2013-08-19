@@ -9,11 +9,13 @@ package wCharging.test;
  */
 public class SimulationSetting {
 	
-	private static final double timeLimit=0;
-	private static final double travelSpeed=0;
-	private static final double chargingConstant=0;
-	private static final double startX=0;
-	private static final double startY=0;
+	public static final int kValue=0;
+	public static final double timeLimit=0;
+	public static final double travelSpeed=0;
+    public static final double chargingConstant=0;
+    public static final double stepWaitingConstant=0;   //if no feasible then wait~~
+	public static final double startX=0;
+	public static final double startY=0;
 
 	/**
 	 * @param args
