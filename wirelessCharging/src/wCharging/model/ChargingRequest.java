@@ -167,8 +167,8 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 
 
 	public void ComputeBothTime(double currentX, double currentY, double startX, double startY) {
-		double tTime=Math.sqrt(Math.pow(currentX-this.xAxis, 2)+Math.pow(currentY-this.yAxis, 2));
-		double bTime=Math.sqrt(Math.pow(startX-this.xAxis, 2)+Math.pow(startY-this.yAxis, 2));
+		double tTime=Math.sqrt(Math.pow(currentX-this.xAxis, 2)+Math.pow(currentY-this.yAxis, 2))/SimulationSetting.travelSpeed;
+		double bTime=Math.sqrt(Math.pow(startX-this.xAxis, 2)+Math.pow(startY-this.yAxis, 2))/SimulationSetting.travelSpeed;
 		this.travelTime = tTime+SimulationSetting.chargingConstant;
 		this.travelPlusBackTime = tTime+bTime+SimulationSetting.chargingConstant;
 	}
