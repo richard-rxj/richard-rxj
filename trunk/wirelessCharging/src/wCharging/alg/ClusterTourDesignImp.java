@@ -83,11 +83,40 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	}
 
 	
+	private ArrayList<ChargingRequest>[] kCluster(ChargingRequestQueue currentQueue)
+	{
+		ArrayList<ChargingRequest>[] result=new ArrayList[this.kValue];
+		//coding here
+		return result;
+	}
+	
+	private double clusterEvaluation(ArrayList<ChargingRequest> k)
+	{
+		double result=0;
+		//coding here
+		return result;
+	}
+	
+
 	private ArrayList<ChargingRequest> subClusterDesign(double currentX, double currenY, double currentTime, ChargingRequestQueue currentQueue)
 	{
-		ArrayList<ChargingRequest> result=new ArrayList<ChargingRequest>();
 		
-		return result;
+		//divide currentQueue to K clusters
+		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue);
+		
+		//evaluate every cluster and choose the largest cluster
+		ArrayList<ChargingRequest>  gMax=null;
+		double gMaxValue=0;
+		for(ArrayList<ChargingRequest> k:kList)
+		{
+			double tMaxValue=this.clusterEvaluation(k);
+			if(tMaxValue>gMaxValue)
+			{
+				gMax=k;
+			}
+		}
+		
+		return gMax;
 	}
 	/**
 	 * @param args

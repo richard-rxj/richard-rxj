@@ -3,6 +3,7 @@
  */
 package wCharging.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -76,6 +77,17 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 	   return subQueue;
    }
    
+   public ChargingRequestQueue getSubQueueByRequestList(ArrayList<ChargingRequest> rList)
+   {
+	   ChargingRequestQueue subQueue=(ChargingRequestQueue) this.clone();
+	   
+	   for(int index=0;index<rList.size();index++)
+	   {
+		   subQueue.removeById(rList.get(index).getId());
+	   }
+	   
+	   return subQueue;
+   }
    
 	/**
 	 * @param args
@@ -117,19 +129,33 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 		
 		System.out.println("***************");
 		
-	    for(ChargingRequest c:q)
-		{
-			System.out.println(c);
-		}
 	    
-	    Collections.sort(q,new TravelTimeComparator(true));
-	    
-       System.out.println("-----------------");
+		ArrayList<ChargingRequest> rList=new ArrayList<ChargingRequest>();
+		rList.add(cSet[2]);
+		rList.add(cSet[6]);
 		
-	    for(ChargingRequest c:q)
+		ChargingRequestQueue sub2=q.getSubQueueByRequestList(rList);
+		
+		for(ChargingRequest c:sub2)
 		{
 			System.out.println(c);
 		}
+		
+		System.out.println("~~~~~~~~~~~~~~~~~~~~");
+		
+		for(ChargingRequest c:q)
+		{
+			System.out.println(c);
+		}
+	    
+//	    Collections.sort(q,new TravelTimeComparator(true));
+//	    
+//       System.out.println("-----------------");
+//		
+//	    for(ChargingRequest c:q)
+//		{
+//			System.out.println(c);
+//		}
 	}
 
 }
