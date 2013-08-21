@@ -4,6 +4,7 @@
 package wCharging.alg;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
@@ -84,7 +85,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 
 	
 	private ArrayList<ChargingRequest>[] kCluster(ChargingRequestQueue currentQueue)
-	//IP
+	//  divide into K cluster
 	{
 		ArrayList<ChargingRequest>[] result=new ArrayList[this.kValue];
 		//coding here
@@ -158,12 +159,36 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			tSelect++;
 			tMark[tChooseJ]=1;
 			mstEdge[tChooseI][tChooseJ]=originEdge[tChooseI][tChooseJ];
+			mstEdge[tChooseJ][tChooseI]=originEdge[tChooseJ][tChooseI];
 			System.out.println(total[tChooseJ]);
 		}
 		
+		Stack<Integer> gStack=new Stack<Integer>();
+		gStack.push(0);
+		
+		while(!gStack.empty())
+		{
+			int tChoose=gStack.pop();
+			out.add(total[tChoose]);
+			for(int i=0; i<total.length;i++)
+			{
+				if(mstEdge[tChoose][i]>0)
+				{
+					if(!out.contains(total[i]))
+					{
+						gStack.push(i);
+					}
+				}
+			}
+		}
 		
 		
-		//coding here
+		for(ChargingRequest c:out)
+		{
+			System.out.println(c);  //for test
+		}
+		
+
 		return result;
 	}
 	
