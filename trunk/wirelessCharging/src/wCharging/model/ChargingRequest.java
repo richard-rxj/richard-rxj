@@ -235,5 +235,11 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 		return "ChargingRequest [id="+ id +", xAxis=" + xAxis + ", yAxis=" + yAxis
 				+ ", releaseTime=" + releaseTime + ", travelTime=" + travelTime + ", travelPlusBackTime=" + travelPlusBackTime +"]";
 	}
+	
+	
+	public static double distance(ChargingRequest c1, ChargingRequest c2)
+	{
+		return Math.sqrt(Math.pow(c1.xAxis-c2.xAxis, 2)+Math.pow(c1.yAxis-c2.yAxis, 2));
+	}
 
 }
