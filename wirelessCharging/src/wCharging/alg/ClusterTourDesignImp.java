@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
+import wCharging.test.SimulationSetting;
 
 /**
  * @author u4964526
@@ -92,8 +93,11 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		return result;
 	}
 	
-	private double clusterEvaluation(ArrayList<ChargingRequest> in, ArrayList<ChargingRequest> out, double leftTimeLimit, double currentX, double currentY, double endX, double endY)
-	// construct a MST-tour and evaluate it;
+	/*
+	 * @return  the ratio of cluster size and the total time consumed in this cluster
+	 */
+	private double clusterEvaluation(ArrayList<ChargingRequest> in, ArrayList<ChargingRequest> out, double leftTimeLimit, double speed, double currentX, double currentY, double endX, double endY)
+	// construct a MST-tour and evaluate it;  
 	{
 		double result=0;
 
@@ -133,7 +137,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		tMark[0]=1;        //first node
 		int tSelect=1;     //how many in tree
 		
-		while(tSelect<=total.length)
+		while(tSelect<total.length)
 		{
 			int tChooseI=0;    //in tree
 			int tChooseJ=0;    //not in tree
@@ -160,21 +164,26 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			tMark[tChooseJ]=1;
 			mstEdge[tChooseI][tChooseJ]=originEdge[tChooseI][tChooseJ];
 			mstEdge[tChooseJ][tChooseI]=originEdge[tChooseJ][tChooseI];
-			System.out.println(total[tChooseJ]);
+			System.out.println("<"+tChooseI+","+tChooseJ+">--"+total[tChooseJ]);
 		}
-		
+		System.out.println("Show the tours");
 		Stack<Integer> gStack=new Stack<Integer>();
 		gStack.push(0);
 		
+		ArrayList<ChargingRequest> tOut=new ArrayList<ChargingRequest>();
 		while(!gStack.empty())
 		{
 			int tChoose=gStack.pop();
-			out.add(total[tChoose]);
+			tOut.add(total[tChoose]);
+			if(total[tChoose].getId()>0)
+			{
+				out.add(total[tChoose]);
+			}
 			for(int i=0; i<total.length;i++)
 			{
 				if(mstEdge[tChoose][i]>0)
 				{
-					if(!out.contains(total[i]))
+					if(!tOut.contains(total[i]))
 					{
 						gStack.push(i);
 					}
@@ -183,11 +192,27 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		}
 		
 		
-		for(ChargingRequest c:out)
+		for(ChargingRequest c:tOut)
 		{
 			System.out.println(c);  //for test
 		}
+		System.out.println("***********outlist*******");   //for test
 		
+		ChargingRequest previous=total[0];
+		for(ChargingRequest c:out)
+		{
+			System.out.println(c);    //for test
+			result=result+ChargingRequest.distance(previous, c)/speed;
+			previous=c;
+		}
+		result=result+ChargingRequest.distance(previous, total[1])/speed;   //back to depot
+		
+		if(result>leftTimeLimit)
+		{
+			return 0;
+		}
+		
+		result=out.size()/result;
 
 		return result;
 	}
@@ -205,7 +230,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		for(ArrayList<ChargingRequest> in:kList)
 		{   
 			ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
-			double tMaxValue=this.clusterEvaluation(in, out, leftTimeLimit, currentX, currentY, this.startX, this.startY);
+			double tMaxValue=this.clusterEvaluation(in, out, leftTimeLimit, SimulationSetting.travelSpeed, currentX, currentY, this.startX, this.startY);
 			if(tMaxValue>gMaxValue)
 			{
 				gMax=out;
@@ -220,6 +245,23 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
+		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
+		for(int i=1;i<=5;i++)
+		{
+			ChargingRequest c=new ChargingRequest();
+			c.setId(i);
+			c.setxAxis(Math.random()*100);
+			c.setyAxis(Math.random()*100);
+			c.setReleaseTime(i*10);
+			in.add(c);
+		}
+		
+		ClusterTourDesignImp tour=new ClusterTourDesignImp();
+		tour.setStartX(0);
+		tour.setStartY(0);
+		tour.clusterEvaluation(in, out, 100, Math.random()*100, Math.random()*100, 0, 0);
+		
 	}
 
 }
