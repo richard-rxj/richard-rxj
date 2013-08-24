@@ -10,6 +10,7 @@ package wCharging.test;
 public class SimulationSetting {
 	
 	public static final int kValue=0;
+	public static final double kMeanThreshold=0.05;
 	public static final double timeLimit=0;
 	public static final double travelSpeed=0;
     public static final double chargingConstant=0;

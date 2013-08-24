@@ -3,6 +3,8 @@
  */
 package wCharging.model;
 
+import java.util.ArrayList;
+
 import wCharging.test.SimulationSetting;
 
 /**
@@ -241,5 +243,60 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	{
 		return Math.sqrt(Math.pow(c1.xAxis-c2.xAxis, 2)+Math.pow(c1.yAxis-c2.yAxis, 2));
 	}
+	
+	public static double varience(ChargingRequest[] c1, ChargingRequest[] c2)
+	{
+		double result=0;
+		
+		for(int i=0; i<c1.length;i++)
+		{
+			result=result+ChargingRequest.distance(c1[i], c2[i]);
+		}
+		
+		return result;
+	}
+	
+	public static int findNearest(ChargingRequest c, ChargingRequest[] cSet)
+	{
+		int nearestIndex=0;
+		double minDistance=Double.MAX_VALUE;
+		for(int i=0;i<cSet.length;i++)
+		{
+			double tDistance=ChargingRequest.distance(c, cSet[i]);
+			if(tDistance<minDistance)
+			{
+				minDistance=tDistance;
+				nearestIndex=i;
+			}
+		}
+		return nearestIndex;
+	}
 
+	public static ChargingRequest calculateCenterPoint(ArrayList<ChargingRequest> tList)
+	{
+		ChargingRequest result=null;
+		double tX=0;
+		double tY=0;
+		for(ChargingRequest c :tList)
+		{
+			tX=tX+c.getxAxis();
+			tY=tY+c.getyAxis();
+		}
+		tX=tX/tList.size();
+		tY=tY/tList.size();
+		ChargingRequest tC=new ChargingRequest();
+		tC.setxAxis(tX);
+		tC.setyAxis(tY);
+		double tMin=Double.MAX_VALUE;
+		for(ChargingRequest c:tList)
+		{
+			double tDis=ChargingRequest.distance(c, tC);
+			if(tDis<tMin)
+			{
+				tMin=tDis;
+				result=c;
+			}
+		}
+		return result;
+	}
 }

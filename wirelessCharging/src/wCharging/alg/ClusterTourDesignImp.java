@@ -4,6 +4,7 @@
 package wCharging.alg;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 import wCharging.model.ChargingRequest;
@@ -85,11 +86,63 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	}
 
 	
-	private ArrayList<ChargingRequest>[] kCluster(ChargingRequestQueue currentQueue)
+	private ArrayList<ChargingRequest>[] kCluster(ChargingRequestQueue currentQueue, int kCount)
 	//  divide into K cluster
 	{
-		ArrayList<ChargingRequest>[] result=new ArrayList[this.kValue];
-		//coding here
+		ArrayList<ChargingRequest>[] result=new ArrayList[kCount];
+		for(int i=0;i<result.length;i++)
+		{
+			result[i]=new ArrayList<ChargingRequest>();
+		}
+		
+		
+		ChargingRequest[] current=new ChargingRequest[kCount];   //store centre point
+		ChargingRequest[] previous=new ChargingRequest[kCount];
+		for(int i=0;i<result.length;i++)   //random choose  K central nodes
+		{
+			current[i]=currentQueue.get(new Random().nextInt(currentQueue.size()));
+		}
+		
+		for(ChargingRequest c: currentQueue)   //initial partition
+		{
+			int clusterIndex=ChargingRequest.findNearest(c, current);
+			result[clusterIndex].add(c);
+		}
+		
+		double gVarience=Double.MAX_VALUE;
+		
+		while(gVarience>SimulationSetting.kMeanThreshold)
+		{
+			for(int tIndex=0;tIndex<result.length;tIndex++)
+			{
+				ArrayList<ChargingRequest> tList=result[tIndex];
+				for(ChargingRequest c: tList)   
+				{
+					int clusterIndex=ChargingRequest.findNearest(c, current);
+					if((clusterIndex!=tIndex)&&(tList.size()>1))
+					{
+						tList.remove(c);
+						result[clusterIndex].add(c);
+					}
+				}
+			}
+			
+			
+			for(int i=0;i<current.length;i++)
+			{
+				previous[i]=current[i];
+			}
+			
+			//recalculate central point
+			for(int i=0;i<result.length;i++)
+			{
+				current[i]=ChargingRequest.calculateCenterPoint(result[i]);
+			}
+			
+			gVarience=ChargingRequest.varience(current, previous);
+		}
+		
+	
 		return result;
 	}
 	
@@ -222,7 +275,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	{
 		
 		//divide currentQueue to K clusters
-		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue);
+		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue,this.kValue);
 		
 		//evaluate every cluster and choose the largest cluster
 		ArrayList<ChargingRequest>  gMax=null;
