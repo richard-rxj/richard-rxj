@@ -6,7 +6,9 @@ package wCharging.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
+import wCharging.test.SimulationSetting;
 import wCharging.util.TravelTimeComparator;
 
 /**
@@ -94,6 +96,8 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		Logger log=SimulationSetting.gLog;
+		
 		ChargingRequestQueue q=new ChargingRequestQueue();
 		
 		ChargingRequest[] cSet=new ChargingRequest[10];
@@ -124,10 +128,10 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 		
 		for(ChargingRequest c:sub)
 		{
-			System.out.println(c);
+			log.info(c.toString());
 		}
 		
-		System.out.println("***************");
+		log.info("***************");
 		
 	    
 		ArrayList<ChargingRequest> rList=new ArrayList<ChargingRequest>();
@@ -138,14 +142,14 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 		
 		for(ChargingRequest c:sub2)
 		{
-			System.out.println(c);
+			log.info(c.toString());
 		}
 		
-		System.out.println("~~~~~~~~~~~~~~~~~~~~");
+		log.info("~~~~~~~~~~~~~~~~~~~~");
 		
 		for(ChargingRequest c:q)
 		{
-			System.out.println(c);
+			log.info(c.toString());
 		}
 	    
 //	    Collections.sort(q,new TravelTimeComparator(true));

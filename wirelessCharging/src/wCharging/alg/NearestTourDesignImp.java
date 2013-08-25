@@ -24,7 +24,6 @@ public class NearestTourDesignImp extends BaseTourDesign {
 	public ArrayList<ChargingRequest> design() {
 		// TODO Auto-generated method stub
 		
-		
 		ArrayList<ChargingRequest> result=new ArrayList<ChargingRequest>();
 		
 		double currentX=this.startX;
@@ -32,12 +31,16 @@ public class NearestTourDesignImp extends BaseTourDesign {
 		
 		while(currentTime<=this.timeLimit)
 		{
+			SimulationSetting.gLog.info("**********new choice again*********");
+			
 			ChargingRequest target=this.subDesign(currentX, currentY, this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
 			if(target==null)
 			{
 				target=new ChargingRequest();
 				target.setId(-1);
 				target.setProcessTime(SimulationSetting.stepWaitingConstant);
+				SimulationSetting.gLog.info("current time "+currentTime
+						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
 			}
 			else
 			{
@@ -45,6 +48,8 @@ public class NearestTourDesignImp extends BaseTourDesign {
 				this.requestQueue.removeById(target.getId());      //update the queue
 				currentX=target.getxAxis();
 				currentY=target.getyAxis();
+				SimulationSetting.gLog.info("current time "+currentTime
+						+"charging "+target.toString());
 			}
 			this.currentTime=this.currentTime+target.getProcessTime();       //update time
 			result.add(target);
