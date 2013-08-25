@@ -116,8 +116,9 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			for(int tIndex=0;tIndex<result.length;tIndex++)
 			{
 				ArrayList<ChargingRequest> tList=result[tIndex];
-				for(ChargingRequest c: tList)   
+				for(int i=0;i<tList.size();i++)   
 				{
+					ChargingRequest c=tList.get(i);
 					int clusterIndex=ChargingRequest.findNearest(c, current);
 					if((clusterIndex!=tIndex)&&(tList.size()>1))
 					{
@@ -300,7 +301,8 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 
 		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
 		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
-		for(int i=1;i<=5;i++)
+		ChargingRequestQueue tQueue=new ChargingRequestQueue();
+		for(int i=1;i<=10;i++)
 		{
 			ChargingRequest c=new ChargingRequest();
 			c.setId(i);
@@ -308,13 +310,29 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			c.setyAxis(Math.random()*100);
 			c.setReleaseTime(i*10);
 			in.add(c);
+			tQueue.add(c);
 		}
 		
 		ClusterTourDesignImp tour=new ClusterTourDesignImp();
 		tour.setStartX(0);
 		tour.setStartY(0);
-		tour.clusterEvaluation(in, out, 100, Math.random()*100, Math.random()*100, 0, 0);
+		tour.setkValue(3);
 		
+		ArrayList<ChargingRequest>[] tClusters=tour.kCluster(tQueue, 3);
+		
+		for(int i=0;i<tClusters.length;i++)
+		{
+			ArrayList<ChargingRequest> tCluster=tClusters[i];
+			System.out.println("****the "+i+"th cluster*******");
+			for(ChargingRequest c:tCluster)
+			{
+				System.out.println(c);
+			}
+		}
+		
+		
+		
+		//tour.clusterEvaluation(in, out, 100,SimulationSetting.travelSpeed, Math.random()*100, Math.random()*100, 0, 0);
 	}
 
 }
