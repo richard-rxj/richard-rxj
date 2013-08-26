@@ -34,20 +34,25 @@ public class HtmlLogFormatter extends Formatter {
 	    buf.append("<td>");
 
 	    if (rec.getLevel().intValue() >= Level.WARNING.intValue()) {
-	      buf.append("<b>");
+	      buf.append("<b color='red'>");
 	      buf.append(rec.getLevel());
 	      buf.append("</b>");
+		  buf.append("</td>");
+		  buf.append("<td><font color='red'>");
+		  buf.append(formatMessage(rec));
+		  buf.append('\n');
+		  buf.append("</font></td>");
+		  buf.append("</tr>\n");
 	    } else {
 	      buf.append(rec.getLevel());
+		  buf.append("</td>");
+		  buf.append("<td>");
+		  buf.append(formatMessage(rec));
+		  buf.append('\n');
+		  buf.append("</td>");
+		  buf.append("</tr>\n");
 	    }
-	    buf.append("</td>");
-	    buf.append("<td>");
-//	    buf.append(calcDate(rec.getMillis()));
-//	    buf.append(' ');
-	    buf.append(formatMessage(rec));
-	    buf.append('\n');
-	    buf.append("<td>");
-	    buf.append("</tr>\n");
+
 	    return buf.toString();
 	}
 

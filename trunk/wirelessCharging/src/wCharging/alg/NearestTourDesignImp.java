@@ -3,12 +3,17 @@
  */
 package wCharging.alg;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
 import wCharging.test.SimulationSetting;
+import wCharging.util.HtmlLogFormatter;
 import wCharging.util.TravelTimeComparator;
 
 /**
@@ -17,6 +22,26 @@ import wCharging.util.TravelTimeComparator;
  */
 public class NearestTourDesignImp extends BaseTourDesign {
 
+	public static final Logger gLog=Logger.getLogger(NearestTourDesignImp.class.getName());  
+    static
+    {
+    	gLog.setLevel(Level.ALL);
+    	//gLog.addHandler(new ConsoleHandler());
+    	try {
+    		FileHandler htmlHandler=new FileHandler(NearestTourDesignImp.class.getName()+".html");
+    		htmlHandler.setFormatter(new HtmlLogFormatter());
+			gLog.addHandler(htmlHandler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
+	
+	
 	/* (non-Javadoc)
 	 * @see wCharging.alg.BaseTourDesign#design()
 	 */
@@ -31,7 +56,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 		
 		while(currentTime<=this.timeLimit)
 		{
-			SimulationSetting.gLog.info("**********new choice again*********");
+			gLog.info("**********new choice again*********");
 			
 			ChargingRequest target=this.subDesign(currentX, currentY, this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
 			if(target==null)
@@ -39,7 +64,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 				target=new ChargingRequest();
 				target.setId(-1);
 				target.setProcessTime(SimulationSetting.stepWaitingConstant);
-				SimulationSetting.gLog.info("current time "+currentTime
+				gLog.info("current time "+currentTime
 						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
 			}
 			else
@@ -48,7 +73,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 				this.requestQueue.removeById(target.getId());      //update the queue
 				currentX=target.getxAxis();
 				currentY=target.getyAxis();
-				SimulationSetting.gLog.info("current time "+currentTime
+				gLog.info("current time "+currentTime
 						+"charging "+target.toString());
 			}
 			this.currentTime=this.currentTime+target.getProcessTime();       //update time
@@ -82,7 +107,13 @@ public class NearestTourDesignImp extends BaseTourDesign {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(100);
+		NearestTourDesignImp testSolution=new NearestTourDesignImp();
+		testSolution.setRequestQueue(testQueue);
+		testSolution.setTimeLimit(SimulationSetting.timeLimit);
+		testSolution.setStartX(SimulationSetting.startX);
+		testSolution.setStartY(SimulationSetting.startY);
+		testSolution.design();
 	}
 
 }

@@ -3,13 +3,18 @@
  */
 package wCharging.alg;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
 import wCharging.test.SimulationSetting;
+import wCharging.util.HtmlLogFormatter;
 
 /**
  * @author u4964526
@@ -17,6 +22,25 @@ import wCharging.test.SimulationSetting;
  */
 public class ClusterTourDesignImp extends BaseTourDesign {
 
+	public static final Logger gLog=Logger.getLogger(ClusterTourDesignImp.class.getName());  
+    static
+    {
+    	gLog.setLevel(Level.ALL);
+    	//gLog.addHandler(new ConsoleHandler());
+    	try {
+    		FileHandler htmlHandler=new FileHandler(ClusterTourDesignImp.class.getName()+".html");
+    		htmlHandler.setFormatter(new HtmlLogFormatter());
+			gLog.addHandler(htmlHandler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
+	
 	private int kValue=0;
 	
 	
@@ -44,13 +68,16 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		
 		while(this.currentTime<=this.timeLimit)
 		{
+			gLog.info("choose cluster again");
 			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
 			if(tList.size()==0)
 			{
+				gLog.info("no feasible found!");
 				break;
 			}
 			else
 			{
+				gLog.warning("the choosing cluster detail is:");
 				ChargingRequest c=null;
 				for(int i=0;i<tList.size();i++)
 				{
@@ -59,6 +86,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 					result.add(c);		
 					this.requestQueue.removeById(c.getId());     //update the queue
 					this.currentTime=this.currentTime+c.getProcessTime();  //update the time
+					gLog.info(c.toString());
 				}
 				currentX=c.getxAxis();
 				currentY=c.getyAxis();
@@ -67,6 +95,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		
 		// for the residual requests, apply nearest rule
 		{
+			gLog.warning("Change to nearest strategy");
 			NearestTourDesignImp nImp=new NearestTourDesignImp();
 			nImp.setRequestQueue(this.requestQueue);
 			nImp.setTimeLimit(this.timeLimit);
@@ -77,6 +106,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			for(ChargingRequest c:tList)
 			{
 				result.add(c);
+				gLog.info(c.toString());
 			}
 		}
 		

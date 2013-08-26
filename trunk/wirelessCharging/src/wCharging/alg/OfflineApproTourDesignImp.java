@@ -3,18 +3,42 @@
  */
 package wCharging.alg;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
 import wCharging.test.SimulationSetting;
+import wCharging.util.HtmlLogFormatter;
 
 /**
  * @author u4964526
  *
  */
-public class OfflineApproTourDesign extends BaseTourDesign {
+public class OfflineApproTourDesignImp extends BaseTourDesign {
 
+	public static final Logger gLog=Logger.getLogger(OfflineApproTourDesignImp.class.getName());  
+    static
+    {
+    	gLog.setLevel(Level.ALL);
+    	//gLog.addHandler(new ConsoleHandler());
+    	try {
+    		FileHandler htmlHandler=new FileHandler(OfflineApproTourDesignImp.class.getName()+".html");
+    		htmlHandler.setFormatter(new HtmlLogFormatter());
+			gLog.addHandler(htmlHandler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
+	
 	/* (non-Javadoc)
 	 * @see wCharging.alg.BaseTourDesign#design()
 	 */
@@ -32,14 +56,22 @@ public class OfflineApproTourDesign extends BaseTourDesign {
 		end.setxAxis(this.startX);
 		end.setyAxis(this.startY);
 		
-		return this.recursiveDesign(start, end, this.currentTime, this.timeLimit, this.requestQueue, this.requestQueue.size());
+		ArrayList<ChargingRequest> result=this.recursiveDesign(start, end, this.currentTime, this.timeLimit, this.requestQueue, this.requestQueue.size());
 		
+		gLog.info("***********The result is***************");
+		for(ChargingRequest c: result)
+		{
+			gLog.info(c.toString());
+		}
+		return result;
 	}
 
 	
 	@SuppressWarnings("unchecked")
 	private ArrayList<ChargingRequest> recursiveDesign(ChargingRequest start, ChargingRequest end, double currentTime, double relativeTimeLimit, ChargingRequestQueue subQueue, double recursiveLimit)
 	{
+		gLog.info("current time: "+currentTime+"  relativeTimeLimit: "+relativeTimeLimit+" recursiveLimit: "+recursiveLimit);
+		
 		ArrayList<ChargingRequest> result=new ArrayList<ChargingRequest>();
 		double tTime=Math.sqrt(Math.pow(start.getxAxis()-end.getxAxis(), 2)+Math.pow(start.getyAxis()-end.getyAxis(), 2))/SimulationSetting.travelSpeed;
 		if((tTime>relativeTimeLimit)||(currentTime+tTime<end.getReleaseTime())) 

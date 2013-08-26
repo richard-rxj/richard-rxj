@@ -37,13 +37,13 @@ public class SimulationSetting {
     public static final double chargingConstant=20;    //second
 
 	
-    public static final Logger gLog=Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);  
+    public static final Logger gLog=Logger.getLogger(SimulationSetting.class.getName());  
     static
     {
     	gLog.setLevel(Level.ALL);
     	//gLog.addHandler(new ConsoleHandler());
     	try {
-    		FileHandler htmlHandler=new FileHandler("gLog.html");
+    		FileHandler htmlHandler=new FileHandler(SimulationSetting.class.getName()+".html");
     		htmlHandler.setFormatter(new HtmlLogFormatter());
 			gLog.addHandler(htmlHandler);
 		} catch (SecurityException e) {
@@ -57,6 +57,7 @@ public class SimulationSetting {
     
     public static ChargingRequestQueue generateRequest(int totalRequest)
     {
+    	gLog.warning("request generating details:");
     	ChargingRequestQueue resultQueue=new ChargingRequestQueue();
     	for(int i=1;i<=totalRequest;i++)
     	{
@@ -64,7 +65,9 @@ public class SimulationSetting {
     		c.setId(i);
     		c.setxAxis(Math.random()*SimulationSetting.xRange);
     		c.setyAxis(Math.random()*SimulationSetting.yRange);
-    		c.setReleaseTime(Math.random()*SimulationSetting.timeLimit);   		
+    		c.setReleaseTime(Math.random()*SimulationSetting.timeLimit);   	
+    		resultQueue.add(c);
+    		gLog.info(c.toString());
     	}
     	return resultQueue;
     }
@@ -74,7 +77,7 @@ public class SimulationSetting {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		SimulationSetting.generateRequest(100);
 	}
 
 }
