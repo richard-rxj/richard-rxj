@@ -107,7 +107,15 @@ public class OfflineApproTourDesignImp extends BaseTourDesign {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(50);
+		gLog.warning("the total requests are: "+testQueue.size());
+		OfflineApproTourDesignImp testSolution=new OfflineApproTourDesignImp();
+		testSolution.setRequestQueue(testQueue);
+		testSolution.setTimeLimit(SimulationSetting.timeLimit);
+		testSolution.setStartX(SimulationSetting.startX);
+		testSolution.setStartY(SimulationSetting.startY);
+		testSolution.setCurrentTime(0);
+		testSolution.design();
 	}
 
 }
