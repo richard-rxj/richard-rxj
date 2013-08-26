@@ -80,6 +80,8 @@ public class NearestTourDesignImp extends BaseTourDesign {
 			result.add(target);
 		}
 		
+		gLog.warning("the total service served: "+result.size());
+		
 		return result;
 	}
 
@@ -108,6 +110,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(100);
+		gLog.warning("the total requests are: "+testQueue.size());
 		NearestTourDesignImp testSolution=new NearestTourDesignImp();
 		testSolution.setRequestQueue(testQueue);
 		testSolution.setTimeLimit(SimulationSetting.timeLimit);
