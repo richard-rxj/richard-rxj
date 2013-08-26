@@ -69,7 +69,23 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		while(this.currentTime<=this.timeLimit)
 		{
 			gLog.info("choose cluster again");
-			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
+			
+			ChargingRequestQueue currentQueue=this.requestQueue.getSubQueueByReleaseTime(currentTime);
+			
+			if(currentQueue.size()<this.kValue)
+			{
+				ChargingRequest fake=new ChargingRequest();
+				fake.setId(-1);
+				fake.setProcessTime(SimulationSetting.stepWaitingConstant);
+				result.add(fake);
+				gLog.info("current time "+currentTime
+						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
+				this.currentTime=this.currentTime+fake.getProcessTime();
+				continue;
+			}
+			
+			
+			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, currentQueue);
 			if(tList.size()==0)
 			{
 				gLog.info("no feasible found!");
@@ -110,6 +126,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			}
 		}
 		
+		gLog.warning("the request served is: "+result.size());
 		return result;
 		
 		
@@ -136,6 +153,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		for(ChargingRequest c: currentQueue)   //initial partition
 		{
 			int clusterIndex=ChargingRequest.findNearest(c, current);
+			gLog.info("clusterindex---"+clusterIndex);
 			result[clusterIndex].add(c);
 		}
 		
@@ -309,7 +327,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue,this.kValue);
 		
 		//evaluate every cluster and choose the largest cluster
-		ArrayList<ChargingRequest>  gMax=null;
+		ArrayList<ChargingRequest>  gMax=new ArrayList<ChargingRequest>();
 		double gMaxValue=0;
 		for(ArrayList<ChargingRequest> in:kList)
 		{   
@@ -329,36 +347,48 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
-		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
-		ChargingRequestQueue tQueue=new ChargingRequestQueue();
-		for(int i=1;i<=10;i++)
-		{
-			ChargingRequest c=new ChargingRequest();
-			c.setId(i);
-			c.setxAxis(Math.random()*100);
-			c.setyAxis(Math.random()*100);
-			c.setReleaseTime(i*10);
-			in.add(c);
-			tQueue.add(c);
-		}
+		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(100);
+		gLog.warning("the total requests are: "+testQueue.size());
+		ClusterTourDesignImp testSolution=new ClusterTourDesignImp();
+		testSolution.setRequestQueue(testQueue);
+		testSolution.setTimeLimit(SimulationSetting.timeLimit);
+		testSolution.setStartX(SimulationSetting.startX);
+		testSolution.setStartY(SimulationSetting.startY);
+		testSolution.setCurrentTime(0);
+		testSolution.setkValue(SimulationSetting.kValue);
+		testSolution.design();
 		
-		ClusterTourDesignImp tour=new ClusterTourDesignImp();
-		tour.setStartX(0);
-		tour.setStartY(0);
-		tour.setkValue(3);
 		
-		ArrayList<ChargingRequest>[] tClusters=tour.kCluster(tQueue, 3);
-		
-		for(int i=0;i<tClusters.length;i++)
-		{
-			ArrayList<ChargingRequest> tCluster=tClusters[i];
-			System.out.println("****the "+i+"th cluster*******");
-			for(ChargingRequest c:tCluster)
-			{
-				System.out.println(c);
-			}
-		}
+//		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
+//		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
+//		ChargingRequestQueue tQueue=new ChargingRequestQueue();
+//		for(int i=1;i<=10;i++)
+//		{
+//			ChargingRequest c=new ChargingRequest();
+//			c.setId(i);
+//			c.setxAxis(Math.random()*100);
+//			c.setyAxis(Math.random()*100);
+//			c.setReleaseTime(i*10);
+//			in.add(c);
+//			tQueue.add(c);
+//		}
+//		
+//		ClusterTourDesignImp tour=new ClusterTourDesignImp();
+//		tour.setStartX(0);
+//		tour.setStartY(0);
+//		tour.setkValue(3);
+//		
+//		ArrayList<ChargingRequest>[] tClusters=tour.kCluster(tQueue, 3);
+//		
+//		for(int i=0;i<tClusters.length;i++)
+//		{
+//			ArrayList<ChargingRequest> tCluster=tClusters[i];
+//			System.out.println("****the "+i+"th cluster*******");
+//			for(ChargingRequest c:tCluster)
+//			{
+//				System.out.println(c);
+//			}
+//		}
 		
 		
 		
