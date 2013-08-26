@@ -299,4 +299,6 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 		}
 		return result;
 	}
+	
+	
 }

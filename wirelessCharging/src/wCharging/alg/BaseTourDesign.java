@@ -17,7 +17,7 @@ public abstract class BaseTourDesign {
 
 	protected ChargingRequestQueue  requestQueue;
 	protected double timeLimit;
-	protected double currentTime;
+	protected double currentTime=0;
     protected double startX;
     protected double startY;
 
