@@ -59,7 +59,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 			gLog.info("**********new choice again*********");
 			
 			ChargingRequest target=this.subDesign(currentX, currentY, this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
-			if(target==null)
+			if(target==null)   //if no feasible, then stay still
 			{
 				target=new ChargingRequest();
 				target.setId(-1);
@@ -75,9 +75,10 @@ public class NearestTourDesignImp extends BaseTourDesign {
 				currentY=target.getyAxis();
 				gLog.info("current time "+currentTime
 						+"charging "+target.toString());
+				
+				result.add(target);
 			}
 			this.currentTime=this.currentTime+target.getProcessTime();       //update time
-			result.add(target);
 		}
 		
 		gLog.warning("the total service served: "+result.size());
@@ -116,6 +117,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 		testSolution.setTimeLimit(SimulationSetting.timeLimit);
 		testSolution.setStartX(SimulationSetting.startX);
 		testSolution.setStartY(SimulationSetting.startY);
+		testSolution.setCurrentTime(0);
 		testSolution.design();
 	}
 

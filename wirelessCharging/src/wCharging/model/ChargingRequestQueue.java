@@ -83,11 +83,13 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
    {
 	   ChargingRequestQueue subQueue=(ChargingRequestQueue) this.clone();
 	   
-	   for(int index=0;index<rList.size();index++)
+	   if(rList!=null)
 	   {
-		   subQueue.removeById(rList.get(index).getId());
+		   for(int index=0;index<rList.size();index++)
+		   {
+			   subQueue.removeById(rList.get(index).getId());
+		   }
 	   }
-	   
 	   return subQueue;
    }
    

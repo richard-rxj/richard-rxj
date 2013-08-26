@@ -235,7 +235,7 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	@Override
 	public String toString() {
 		return "ChargingRequest [id="+ id +", xAxis=" + xAxis + ", yAxis=" + yAxis
-				+ ", releaseTime=" + releaseTime + ", travelTime=" + travelTime + ", travelPlusBackTime=" + travelPlusBackTime +"]";
+				+ ", releaseTime=" + releaseTime + ", travelTime=" + travelTime + ", travelPlusBackTime=" + travelPlusBackTime + ", processTime=" + processTime+"]";
 	}
 	
 	

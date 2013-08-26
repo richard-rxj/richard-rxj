@@ -21,20 +21,20 @@ import wCharging.util.HtmlLogFormatter;
 public class SimulationSetting {
 	
 	//k-mean
-	public static final int kValue=10;
+	public static final int kValue=5;
 	public static final double kMeanThreshold=0.05;     //used to stop k-mean
 	
 	//charger
-	public static final double timeLimit=1800;             //second
+	public static final double timeLimit=300;             //s   1800
     public static final double stepWaitingConstant=5;   //if no feasible then keep still and wait
 	public static final double startX=0;                //depot of the charger
 	public static final double startY=0;
 	
 	//network topology
-	public static final double xRange=500;
-	public static final double yRange=500;
-	public static final double travelSpeed=5;          //m/s
-    public static final double chargingConstant=20;    //second
+	public static final double xRange=100;              //500
+	public static final double yRange=100;              //500
+	public static final double travelSpeed=10;          //m/s
+    public static final double chargingConstant=10;    //second
 
 	
     public static final Logger gLog=Logger.getLogger(SimulationSetting.class.getName());  

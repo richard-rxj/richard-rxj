@@ -77,7 +77,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				ChargingRequest fake=new ChargingRequest();
 				fake.setId(-1);
 				fake.setProcessTime(SimulationSetting.stepWaitingConstant);
-				result.add(fake);
+				//result.add(fake);
 				gLog.info("current time "+currentTime
 						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
 				this.currentTime=this.currentTime+fake.getProcessTime();
@@ -93,7 +93,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			}
 			else
 			{
-				gLog.warning("the choosing cluster detail is:");
+				gLog.warning("current time "+this.currentTime+": the choosing cluster detail is:");
 				ChargingRequest c=null;
 				for(int i=0;i<tList.size();i++)
 				{
@@ -147,13 +147,13 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		ChargingRequest[] previous=new ChargingRequest[kCount];
 		for(int i=0;i<result.length;i++)   //random choose  K central nodes
 		{
-			current[i]=currentQueue.get(new Random().nextInt(currentQueue.size()));
+			current[i]=currentQueue.get(i);
 		}
 		
 		for(ChargingRequest c: currentQueue)   //initial partition
 		{
 			int clusterIndex=ChargingRequest.findNearest(c, current);
-			gLog.info("clusterindex---"+clusterIndex);
+			//gLog.info("clusterindex---"+clusterIndex);
 			result[clusterIndex].add(c);
 		}
 		
@@ -273,13 +273,21 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		gStack.push(0);
 		
 		ArrayList<ChargingRequest> tOut=new ArrayList<ChargingRequest>();
+		double tCurrentX=currentX;
+		double tCurrentY=currentY;
+		int tChoose=0;
 		while(!gStack.empty())
 		{
-			int tChoose=gStack.pop();
+			tChoose=gStack.pop();
 			tOut.add(total[tChoose]);
 			if(total[tChoose].getId()>0)
 			{
 				out.add(total[tChoose]);
+				total[tChoose].ComputeBothTime(tCurrentX, tCurrentY, endX, endY);   //only care travel time
+				total[tChoose].setProcessTime(total[tChoose].getTravelTime());
+				tCurrentX=total[tChoose].getxAxis();
+				tCurrentY=total[tChoose].getyAxis();
+				result=result+total[tChoose].getProcessTime();
 			}
 			for(int i=0; i<total.length;i++)
 			{
@@ -292,22 +300,23 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				}
 			}
 		}
+		result=result-total[tChoose].getProcessTime()+total[tChoose].getTravelPlusBackTime(); //last node to consider back time
 		
 		
-		for(ChargingRequest c:tOut)
-		{
-			System.out.println(c);  //for test
-		}
-		System.out.println("***********outlist*******");   //for test
-		
-		ChargingRequest previous=total[0];
-		for(ChargingRequest c:out)
-		{
-			System.out.println(c);    //for test
-			result=result+ChargingRequest.distance(previous, c)/speed;
-			previous=c;
-		}
-		result=result+ChargingRequest.distance(previous, total[1])/speed;   //back to depot
+//		for(ChargingRequest c:tOut)
+//		{
+//			System.out.println(c);  //for test
+//		}
+//		System.out.println("***********outlist*******");   //for test
+//		
+//		ChargingRequest previous=total[0];
+//		for(ChargingRequest c:out)
+//		{
+//			System.out.println(c);    //for test
+//			result=result+ChargingRequest.distance(previous, c)/speed;
+//			previous=c;
+//		}
+//		result=result+ChargingRequest.distance(previous, total[1])/speed;   //back to depot
 		
 		if(result>leftTimeLimit)
 		{
