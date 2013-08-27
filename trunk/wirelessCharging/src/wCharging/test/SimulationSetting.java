@@ -21,20 +21,20 @@ import wCharging.util.HtmlLogFormatter;
 public class SimulationSetting {
 	
 	//k-mean
-	public static final int kValue=5;
-	public static final double kMeanThreshold=0.05;     //used to stop k-mean
+	public static  int kValue=3;
+	public static  double kMeanThreshold=0.05;     //used to stop k-mean
 	
 	//charger
-	public static final double timeLimit=300;             //s   1800
-    public static final double stepWaitingConstant=5;   //if no feasible then keep still and wait
-	public static final double startX=0;                //depot of the charger
-	public static final double startY=0;
+	public static  double timeLimit=60;             //s   1800
+    public static  double stepWaitingConstant=1;   //if no feasible then keep still and wait
+	public static  double startX=0;                //depot of the charger
+	public static  double startY=0;
 	
 	//network topology
-	public static final double xRange=100;              //500
-	public static final double yRange=100;              //500
-	public static final double travelSpeed=10;          //m/s
-    public static final double chargingConstant=10;    //second
+	public static  double xRange=50;              //500
+	public static  double yRange=50;              //500
+	public static  double travelSpeed=5;          //m/s    5
+    public static  double chargingConstant=3;    //second  10
 
 	
     public static final Logger gLog=Logger.getLogger(SimulationSetting.class.getName());  
@@ -69,6 +69,7 @@ public class SimulationSetting {
     		resultQueue.add(c);
     		gLog.info(c.toString());
     	}
+    	gLog.warning("the total requests are: "+resultQueue.size());
     	return resultQueue;
     }
     
