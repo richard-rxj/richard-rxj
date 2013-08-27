@@ -41,7 +41,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
     }
 	
 	
-	private int kValue=0;
+	private int kValue=SimulationSetting.kValue;
 	
 	
 	
