@@ -37,6 +37,10 @@ public class SimulationSetting {
     public static  double chargingConstant=3;    //second  10
 
 	
+    //test
+    public static  int ciShu=20;
+    
+    
     public static final Logger gLog=Logger.getLogger(SimulationSetting.class.getName());  
     static
     {
