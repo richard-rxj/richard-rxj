@@ -42,7 +42,7 @@ public class LargeScaleTest {
 	{
 		SimulationSetting.xRange=500;
 		SimulationSetting.yRange=500;
-		SimulationSetting.kValue=6;
+		SimulationSetting.kValue=20;
 		SimulationSetting.timeLimit=1800;
 		
 		

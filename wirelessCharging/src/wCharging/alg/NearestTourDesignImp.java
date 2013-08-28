@@ -14,6 +14,7 @@ import wCharging.model.ChargingRequest;
 import wCharging.model.ChargingRequestQueue;
 import wCharging.test.SimulationSetting;
 import wCharging.util.HtmlLogFormatter;
+import wCharging.util.TimeCostComparator;
 import wCharging.util.TravelTimeComparator;
 
 /**
@@ -58,6 +59,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 		{
 			gLog.info("**********new choice again*********");
 			
+			
 			ChargingRequest target=this.subDesign(currentX, currentY, this.currentTime, this.requestQueue.getSubQueueByReleaseTime(currentTime));
 			if(target==null)   //if no feasible, then stay still
 			{
@@ -77,6 +79,7 @@ public class NearestTourDesignImp extends BaseTourDesign {
 						+"charging "+target.toString());
 				
 				result.add(target);
+
 			}
 			this.currentTime=this.currentTime+target.getProcessTime();       //update time
 		}
@@ -91,16 +94,18 @@ public class NearestTourDesignImp extends BaseTourDesign {
 	{
 		ChargingRequest result=null;
 		
+		
+		
 		for(ChargingRequest c:currentQueue)
 		{
-			c.ComputeBothTime(currentX, currentY, this.startX, this.startY);
+			c.ComputeAllTimes(currentX, currentY, this.startX, this.startY);
 		}
 		
 		ChargingRequestQueue  feasibleQueue=currentQueue.getSubQueueByTimeLimit(this.timeLimit-currentTime);
 		
-		Collections.sort(feasibleQueue, new TravelTimeComparator(true));
+		Collections.sort(feasibleQueue, new TimeCostComparator(true));
 		
-		result=currentQueue.peek();
+		result=feasibleQueue.peek();
 		
 		return result;
 		

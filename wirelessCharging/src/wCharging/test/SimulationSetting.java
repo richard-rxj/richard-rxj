@@ -38,7 +38,7 @@ public class SimulationSetting {
 
 	
     //test
-    public static  int ciShu=20;
+    public static  int ciShu=5;
     
     
     public static final Logger gLog=Logger.getLogger(SimulationSetting.class.getName());  

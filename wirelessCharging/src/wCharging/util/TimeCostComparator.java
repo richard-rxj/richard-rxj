@@ -11,11 +11,11 @@ import wCharging.model.ChargingRequest;
  * @author user
  *
  */
-public class TravelPlusBackTimeComparator implements Comparator<ChargingRequest> {
+public class TimeCostComparator implements Comparator<ChargingRequest> {
 
 private boolean ascendingOrder;
 	
-	public TravelPlusBackTimeComparator(boolean b)
+	public TimeCostComparator(boolean b)
 	{
 		this.ascendingOrder=b;
 	}
@@ -32,13 +32,13 @@ private boolean ascendingOrder;
 	@Override
 	public int compare(ChargingRequest arg0, ChargingRequest arg1) {
 		// TODO Auto-generated method stub
-		if((arg0.getTravelPlusBackTime()>arg1.getTravelPlusBackTime()&& this.ascendingOrder)
-				|| (arg0.getTravelPlusBackTime()<arg1.getTravelPlusBackTime()&& !this.ascendingOrder))
+		if(((arg0.getTimeCost()>arg1.getTimeCost())&& this.ascendingOrder)
+				|| ((arg0.getTimeCost()<arg1.getTimeCost())&& !this.ascendingOrder))
 			{
 				return  1;
 			}
-			else if((arg0.getTravelPlusBackTime()<arg1.getTravelPlusBackTime()&& this.ascendingOrder)
-					|| (arg0.getTravelPlusBackTime()>arg1.getTravelPlusBackTime()&& !this.ascendingOrder))
+			else if(((arg0.getTimeCost()<arg1.getTimeCost())&& this.ascendingOrder)
+					|| ((arg0.getTimeCost()>arg1.getTimeCost())&& !this.ascendingOrder))
 			{
 				return  -1;
 			}
