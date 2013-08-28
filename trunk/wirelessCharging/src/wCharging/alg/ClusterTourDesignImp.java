@@ -202,6 +202,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	// construct a MST-tour and evaluate it;  
 	{
 		double result=0;
+		double previousBackTime=Math.sqrt(Math.pow(currentX-endX, 2)+Math.pow(currentY-endY, 2))/SimulationSetting.travelSpeed;
 
 		ChargingRequest[] total=new ChargingRequest[in.size()+2];
 		
@@ -283,7 +284,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			if(total[tChoose].getId()>0)
 			{
 				out.add(total[tChoose]);
-				total[tChoose].ComputeBothTime(tCurrentX, tCurrentY, endX, endY);   //only care travel time
+				total[tChoose].ComputeAllTimes(tCurrentX, tCurrentY, endX, endY);   //only care travel time
 				total[tChoose].setProcessTime(total[tChoose].getTravelTime());
 				tCurrentX=total[tChoose].getxAxis();
 				tCurrentY=total[tChoose].getyAxis();
@@ -300,8 +301,6 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				}
 			}
 		}
-		result=result-total[tChoose].getProcessTime()+total[tChoose].getTravelPlusBackTime(); //last node to consider back time
-		
 		
 //		for(ChargingRequest c:tOut)
 //		{
@@ -318,14 +317,19 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 //		}
 //		result=result+ChargingRequest.distance(previous, total[1])/speed;   //back to depot
 		
+
+		result=result-total[tChoose].getProcessTime()+total[tChoose].getTravelPlusBackTime(); //last node to consider back time		
 		if(result>leftTimeLimit)
 		{
 			return 0;
 		}
 		
+		result=result-previousBackTime;
 		result=out.size()/result;
 
 		return result;
+		
+		
 	}
 	
 

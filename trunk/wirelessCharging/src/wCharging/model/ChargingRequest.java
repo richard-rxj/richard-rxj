@@ -23,6 +23,7 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	
 	private double travelTime;   //  nearest
 	private double travelPlusBackTime;   //  including backing time
+	private double timeCost;    //
 	
 	private double processTime;
 	
@@ -168,11 +169,24 @@ public class ChargingRequest implements Comparable<ChargingRequest> {
 	}
 
 
-	public void ComputeBothTime(double currentX, double currentY, double startX, double startY) {
+	public double getTimeCost() {
+		return timeCost;
+	}
+
+
+	public void setTimeCost(double timeCost) {
+		this.timeCost = timeCost;
+	}
+
+
+	public void ComputeAllTimes(double currentX, double currentY, double startX, double startY) {
 		double tTime=Math.sqrt(Math.pow(currentX-this.xAxis, 2)+Math.pow(currentY-this.yAxis, 2))/SimulationSetting.travelSpeed;
 		double bTime=Math.sqrt(Math.pow(startX-this.xAxis, 2)+Math.pow(startY-this.yAxis, 2))/SimulationSetting.travelSpeed;
+		double previousBackTime=Math.sqrt(Math.pow(currentX-startX, 2)+Math.pow(currentY, startY));
 		this.travelTime = tTime+SimulationSetting.chargingConstant;
 		this.travelPlusBackTime = tTime+bTime+SimulationSetting.chargingConstant;
+		this.processTime=travelTime;
+		this.timeCost=this.travelPlusBackTime-previousBackTime;
 	}
 
 

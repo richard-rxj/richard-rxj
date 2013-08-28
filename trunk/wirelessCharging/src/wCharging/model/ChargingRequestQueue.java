@@ -70,11 +70,11 @@ public class ChargingRequestQueue extends LinkedList<ChargingRequest>{
 	   for(int index=0;index<this.size();index++)
 	   {
 		   ChargingRequest current=this.get(index);
-		   if(current.getTravelPlusBackTime()>time)
+		   if(current.getTravelPlusBackTime()<=time)
 		   {
-			   break;
+			   subQueue.add(current);
 		   }
-		   subQueue.add(current);
+
 	   }
 	   return subQueue;
    }

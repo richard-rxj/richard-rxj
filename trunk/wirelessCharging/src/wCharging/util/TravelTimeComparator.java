@@ -20,13 +20,7 @@ public class TravelTimeComparator implements Comparator<ChargingRequest> {
 		this.ascendingOrder=b;
 	}
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	@Override
 	public int compare(ChargingRequest arg0, ChargingRequest arg1) {
@@ -47,4 +41,13 @@ public class TravelTimeComparator implements Comparator<ChargingRequest> {
 			}
 	}
 
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
 }
