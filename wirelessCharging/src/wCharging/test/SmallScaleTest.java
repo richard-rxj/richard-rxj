@@ -51,10 +51,14 @@ public class SmallScaleTest {
 		SimulationSetting.yRange=50;
 		SimulationSetting.kValue=3;
 		SimulationSetting.timeLimit=30;
+		SimulationSetting.ciShu=3;
+		SimulationSetting.chargingConstant=2;
+		SimulationSetting.travelSpeed=8;
+
 		
 		
 		
-		int[] requestNumSet={10,20,30,40,50};
+		int[] requestNumSet={10,15,20,25,30};
 		int cishu=SimulationSetting.ciShu;
 		String[] algSet={"Nearest","Cluster","Appro"};
 		
@@ -72,6 +76,7 @@ public class SmallScaleTest {
 		{
 			int requestNum=requestNumSet[requestNumIndex];
 			pwAlg.print(requestNum+" ");
+			pwAlg.flush();
 			
 			int nearestResult=0;
 			int clusterResult=0;
@@ -94,7 +99,11 @@ public class SmallScaleTest {
 				ArrayList<ChargingRequest> tList=nearestSolution.design();
 				nearestResult=nearestResult+tList.size();
 				
-				gLog.info("nearestSolution: "+tList.size());
+				gLog.warning("nearestSolution: "+tList.size());
+				for(ChargingRequest c:tList)
+				{
+					gLog.info(c.toString());
+				}
 				
 				ClusterTourDesignImp clusterSolution=new ClusterTourDesignImp();
 				clusterSolution.setRequestQueue(testQueue2);
@@ -106,7 +115,11 @@ public class SmallScaleTest {
 				tList=clusterSolution.design();
 				clusterResult=clusterResult+tList.size();
 				
-				gLog.info("clusterSolution: "+tList.size());
+				gLog.warning("clusterSolution: "+tList.size());
+				for(ChargingRequest c:tList)
+				{
+					gLog.info(c.toString());
+				}
 				
 				OfflineApproTourDesignImp approSolution=new OfflineApproTourDesignImp();
 				approSolution.setRequestQueue(testQueue3);
@@ -117,14 +130,20 @@ public class SmallScaleTest {
 				tList=approSolution.design();
 				approResult=approResult+tList.size();
 				
-				gLog.info("approSolution: "+tList.size());
+				gLog.warning("approSolution: "+tList.size());
+				for(ChargingRequest c:tList)
+				{
+					gLog.info(c.toString());
+				}
+				
 			}
 			nearestResult=nearestResult/cishu;
 			clusterResult=clusterResult/cishu;
 			approResult=approResult/cishu;
 			pwAlg.println(nearestResult+" "+clusterResult+" "+approResult);
+			pwAlg.flush();
 			
-			gLog.warning("average: <nearestSolution: "+nearestResult+">"
+			gLog.severe("average: <nearestSolution: "+nearestResult+">"
 					     +" <clusterSolution: "+clusterResult+">"
 					     +" <approSolution: "+approResult+">");
 		}
