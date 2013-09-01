@@ -18,8 +18,9 @@ public class TestWork {
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		//LargeScaleTest.test();
-		//KvalueTest.test();
-		SmallScaleTest.test();
+		KvalueTest.test(1800);
+		KvalueTest.test(3600);
+		//SmallScaleTest.test();
 		
 	}
 
