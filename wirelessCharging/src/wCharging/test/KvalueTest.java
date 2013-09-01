@@ -37,11 +37,14 @@ public class KvalueTest {
 		}
     }
 	
-	public static void test() throws FileNotFoundException
+	public static void test(int tTimeLimit) throws FileNotFoundException
 	{
 		SimulationSetting.xRange=500;
 		SimulationSetting.yRange=500;
-		SimulationSetting.timeLimit=1800;
+		SimulationSetting.timeLimit=tTimeLimit;
+		SimulationSetting.ciShu=20;
+		SimulationSetting.chargingConstant=2;
+		SimulationSetting.travelSpeed=8;
 		
 		
 		
@@ -57,7 +60,7 @@ public class KvalueTest {
 			tf.mkdirs();
 		}
 		
-		PrintWriter  pwAlg=new PrintWriter(new OutputStreamWriter(new FileOutputStream("kvalue.txt",true)));
+		PrintWriter  pwAlg=new PrintWriter(new OutputStreamWriter(new FileOutputStream("kvalue_"+tTimeLimit+".txt",true)));
 		
 		
 		for(int requestNumIndex=0;requestNumIndex<requestNumSet.length;requestNumIndex++)
