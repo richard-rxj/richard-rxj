@@ -2,8 +2,8 @@ cd D:\PhDWork\Jspace\wirelessCharging\test\data;
 
 
     C = load('small.txt');
-    N = C(1:4,1);
-    RB = C(1:4,2);
+    N = C(:,1);
+    RB = C(:,2);
     h=plot(N,RB,'-dr');
     set(h,'MarkerSize',12);
     
@@ -14,12 +14,12 @@ cd D:\PhDWork\Jspace\wirelessCharging\test\data;
     hold on;
     
     
-    RB = C(1:4,3);
+    RB = C(:,3);
     h=plot(N,RB,'-ob');
     set(h,'MarkerSize',12);
     
 
-    RB = C(1:4,4);
+    RB = C(:,4);
     h=plot(N,RB,'-sk');
     set(h,'MarkerSize',12);
     
@@ -43,7 +43,7 @@ cd D:\PhDWork\Jspace\wirelessCharging\test\data;
     
     
     
-    axis([10 25 0 20]);
+    axis([10 30 0 20]);
     legend('Online\_SPT','Online\_K\_Cluster','Offline\_Appro',2);
    % legend('Impro\_Max\_Throu','Max\_Throu','Random\_Throu','Dis\_NSTT\_Throu','Dis\_TT\_Throu','Dis\_T\_Throu',2);
     %
