@@ -65,6 +65,8 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		
 		double currentX=this.startX;
 		double currentY=this.startY;
+		int kCurrent=this.kValue;
+
 		
 		while(this.currentTime<=this.timeLimit)
 		{
@@ -72,7 +74,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			
 			ChargingRequestQueue currentQueue=this.requestQueue.getSubQueueByReleaseTime(currentTime);
 			
-			if(currentQueue.size()<this.kValue)
+			if(currentQueue.size()<kCurrent)
 			{
 				ChargingRequest fake=new ChargingRequest();
 				fake.setId(-1);
@@ -81,15 +83,26 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				gLog.info("current time "+currentTime
 						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
 				this.currentTime=this.currentTime+fake.getProcessTime();
+				kCurrent=this.kValue;   //reset kCurrent
 				continue;
+				
+//				gLog.info("kCurrent too large! adjust kValue");
+//				kCurrent=currentQueue.size();            //adjust kValue				
+
 			}
 			
 			
-			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, currentQueue);
+			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, currentQueue, kCurrent);
 			if(tList.size()==0)
 			{
-				gLog.info("no feasible found!");
-				break;
+				gLog.info("no feasible found! adjust kValue");
+				if(kCurrent==currentQueue.size())
+				{
+					gLog.warning("current time-"+this.currentTime+" : return to depot");
+					break;    //should return;
+				}
+				kCurrent=Math.min(2*kCurrent, currentQueue.size());     //adjust kValue
+				continue;
 			}
 			else
 			{
@@ -106,25 +119,26 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				}
 				currentX=c.getxAxis();
 				currentY=c.getyAxis();
+				kCurrent=this.kValue;  //reset kCurrent
 			}
 		}
 		
 		// for the residual requests, apply nearest rule
-		{
-			gLog.warning("Change to nearest strategy");
-			NearestTourDesignImp nImp=new NearestTourDesignImp();
-			nImp.setRequestQueue(this.requestQueue);
-			nImp.setTimeLimit(this.timeLimit);
-			nImp.setCurrentTime(this.currentTime);
-			nImp.setStartX(currentX);
-			nImp.setStartY(currentY);
-			ArrayList<ChargingRequest> tList=nImp.design();
-			for(ChargingRequest c:tList)
-			{
-				result.add(c);
-				gLog.info(c.toString());
-			}
-		}
+//		{
+//			gLog.warning("Change to nearest strategy");
+//			NearestTourDesignImp nImp=new NearestTourDesignImp();
+//			nImp.setRequestQueue(this.requestQueue);
+//			nImp.setTimeLimit(this.timeLimit);
+//			nImp.setCurrentTime(this.currentTime);
+//			nImp.setStartX(currentX);
+//			nImp.setStartY(currentY);
+//			ArrayList<ChargingRequest> tList=nImp.design();
+//			for(ChargingRequest c:tList)
+//			{
+//				result.add(c);
+//				gLog.info(c.toString());
+//			}
+//		}
 		
 		gLog.warning("the request served is: "+result.size());
 		return result;
@@ -333,11 +347,11 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	}
 	
 
-	private ArrayList<ChargingRequest> subClusterDesign(double currentX, double currentY, double leftTimeLimit, ChargingRequestQueue currentQueue)
+	private ArrayList<ChargingRequest> subClusterDesign(double currentX, double currentY, double leftTimeLimit, ChargingRequestQueue currentQueue, int kCurrent)
 	{
 		
 		//divide currentQueue to K clusters
-		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue,this.kValue);
+		ArrayList<ChargingRequest>[] kList=this.kCluster(currentQueue,kCurrent);
 		
 		//evaluate every cluster and choose the largest cluster
 		ArrayList<ChargingRequest>  gMax=new ArrayList<ChargingRequest>();
