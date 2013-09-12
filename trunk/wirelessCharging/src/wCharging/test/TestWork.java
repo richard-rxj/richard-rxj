@@ -20,7 +20,7 @@ public class TestWork {
 		//LargeScaleTest.test();
 		KvalueTest.test(1800);
 		KvalueTest.test(3600);
-		//SmallScaleTest.test();
+		SmallScaleTest.test();
 		
 	}
 
