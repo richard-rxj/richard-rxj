@@ -1,7 +1,7 @@
-cd D:\PhDWork\Jspace\wirelessCharging\test\data;
+cd F:\PhDWork\papers\richard\wireless-energy-transfer\data;
 
 
-    C = load('kvalue_3600.txt');
+    C = load('kvalue_1800.txt');
     N = C(1:10,1);
     RB = C(1:10,3);
     h=plot(N,RB,'-dr');
@@ -43,7 +43,7 @@ cd D:\PhDWork\Jspace\wirelessCharging\test\data;
     
     
     
-    axis([100 1000 0 500]);
+    axis([100 1000 0 550]);
     legend('Online\_K\_Cluster (K=5)','Online\_K\_Cluster (K=10)','Online\_K\_Cluster (K=20)','Online\_K\_Cluster (K=30)',2);
    % legend('Impro\_Max\_Throu','Max\_Throu','Random\_Throu','Dis\_NSTT\_Throu','Dis\_TT\_Throu','Dis\_T\_Throu',2);
     %
