@@ -76,18 +76,21 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			
 			if(currentQueue.size()<kCurrent)
 			{
-				ChargingRequest fake=new ChargingRequest();
-				fake.setId(-1);
-				fake.setProcessTime(SimulationSetting.stepWaitingConstant);
-				//result.add(fake);
-				gLog.info("current time "+currentTime
-						+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
-				this.currentTime=this.currentTime+fake.getProcessTime();
-				kCurrent=this.kValue;   //reset kCurrent
-				continue;
+				if(currentQueue.size()==0)
+				{
+					ChargingRequest fake=new ChargingRequest();
+					fake.setId(-1);
+					fake.setProcessTime(SimulationSetting.stepWaitingConstant);
+					gLog.info("current time "+currentTime
+							+": stay still wait "+SimulationSetting.stepWaitingConstant+" s");
+					this.currentTime=this.currentTime+fake.getProcessTime();
+					kCurrent=this.kValue;   //reset kCurrent
+					continue;
+				}
 				
-//				gLog.info("kCurrent too large! adjust kValue");
-//				kCurrent=currentQueue.size();            //adjust kValue				
+				gLog.warning("kCurrent too large! adjust kValue---kCurrent is"+ kCurrent);
+				kCurrent=currentQueue.size();            //adjust kValue	
+				continue;
 
 			}
 			
@@ -95,18 +98,22 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 			ArrayList<ChargingRequest> tList=this.subClusterDesign(currentX, currentY, this.timeLimit-this.currentTime, currentQueue, kCurrent);
 			if(tList.size()==0)
 			{
-				gLog.info("no feasible found! adjust kValue");
+				gLog.info("no feasible found! adjust kValue ---kCurrent is"+ kCurrent);
 				if(kCurrent==currentQueue.size())
 				{
-					gLog.warning("current time-"+this.currentTime+" : return to depot");
+					gLog.warning("current time-"+this.currentTime+" : return to depot---kCurrent is"+ kCurrent);
 					break;    //should return;
 				}
-				kCurrent=Math.min(2*kCurrent, currentQueue.size());     //adjust kValue
+				kCurrent=2*kCurrent;             //adjust kValue
+				if(kCurrent>currentQueue.size())     
+				{
+					kCurrent=currentQueue.size();
+				}
 				continue;
 			}
 			else
 			{
-				gLog.warning("current time "+this.currentTime+": the choosing cluster detail is:");
+				gLog.warning("current time "+this.currentTime+": the choosing cluster detail is:---kCurrent is"+ kCurrent);
 				ChargingRequest c=null;
 				for(int i=0;i<tList.size();i++)
 				{
@@ -291,6 +298,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 		double tCurrentX=currentX;
 		double tCurrentY=currentY;
 		int tChoose=0;
+		int tLastChoose=0;
 		while(!gStack.empty())
 		{
 			tChoose=gStack.pop();
@@ -303,6 +311,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 				tCurrentX=total[tChoose].getxAxis();
 				tCurrentY=total[tChoose].getyAxis();
 				result=result+total[tChoose].getProcessTime();
+				tLastChoose=tChoose;
 			}
 			for(int i=0; i<total.length;i++)
 			{
@@ -332,7 +341,7 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 //		result=result+ChargingRequest.distance(previous, total[1])/speed;   //back to depot
 		
 
-		result=result-total[tChoose].getProcessTime()+total[tChoose].getTravelPlusBackTime(); //last node to consider back time		
+		result=result-total[tLastChoose].getProcessTime()+total[tLastChoose].getTravelPlusBackTime(); //last node to consider back time		
 		if(result>leftTimeLimit)
 		{
 			return 0;
@@ -374,52 +383,53 @@ public class ClusterTourDesignImp extends BaseTourDesign {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(100);
-		gLog.warning("the total requests are: "+testQueue.size());
-		ClusterTourDesignImp testSolution=new ClusterTourDesignImp();
-		testSolution.setRequestQueue(testQueue);
-		testSolution.setTimeLimit(SimulationSetting.timeLimit);
-		testSolution.setStartX(SimulationSetting.startX);
-		testSolution.setStartY(SimulationSetting.startY);
-		testSolution.setCurrentTime(0);
-		testSolution.setkValue(SimulationSetting.kValue);
-		testSolution.design();
+//		ChargingRequestQueue testQueue=SimulationSetting.generateRequest(100);
+//		gLog.warning("the total requests are: "+testQueue.size());
+//		ClusterTourDesignImp testSolution=new ClusterTourDesignImp();
+//		testSolution.setRequestQueue(testQueue);
+//		testSolution.setTimeLimit(SimulationSetting.timeLimit);
+//		testSolution.setStartX(SimulationSetting.startX);
+//		testSolution.setStartY(SimulationSetting.startY);
+//		testSolution.setCurrentTime(0);
+//		testSolution.setkValue(SimulationSetting.kValue);
+//		testSolution.design();
 		
 		
-//		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
-//		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
-//		ChargingRequestQueue tQueue=new ChargingRequestQueue();
-//		for(int i=1;i<=10;i++)
-//		{
-//			ChargingRequest c=new ChargingRequest();
-//			c.setId(i);
-//			c.setxAxis(Math.random()*100);
-//			c.setyAxis(Math.random()*100);
-//			c.setReleaseTime(i*10);
-//			in.add(c);
-//			tQueue.add(c);
-//		}
-//		
-//		ClusterTourDesignImp tour=new ClusterTourDesignImp();
-//		tour.setStartX(0);
-//		tour.setStartY(0);
-//		tour.setkValue(3);
-//		
-//		ArrayList<ChargingRequest>[] tClusters=tour.kCluster(tQueue, 3);
-//		
-//		for(int i=0;i<tClusters.length;i++)
-//		{
-//			ArrayList<ChargingRequest> tCluster=tClusters[i];
-//			System.out.println("****the "+i+"th cluster*******");
-//			for(ChargingRequest c:tCluster)
-//			{
-//				System.out.println(c);
-//			}
-//		}
+		ArrayList<ChargingRequest> in=new ArrayList<ChargingRequest>();
+		ArrayList<ChargingRequest> out=new ArrayList<ChargingRequest>();
+		ChargingRequestQueue tQueue=new ChargingRequestQueue();
+		for(int i=1;i<=10;i++)
+		{
+			ChargingRequest c=new ChargingRequest();
+			c.setId(i);
+			c.setxAxis(Math.random()*100);
+			c.setyAxis(Math.random()*100);
+			c.setReleaseTime(i*10);
+			in.add(c);
+			tQueue.add(c);
+		}
+		
+		ClusterTourDesignImp tour=new ClusterTourDesignImp();
+		tour.setStartX(0);
+		tour.setStartY(0);
+		tour.setkValue(tQueue.size());
+		
+		ArrayList<ChargingRequest>[] tClusters=tour.kCluster(tQueue, tQueue.size());
+		
+		for(int i=0;i<tClusters.length;i++)
+		{
+			ArrayList<ChargingRequest> tCluster=tClusters[i];
+			System.out.println("****the "+i+"th cluster*******");
+			for(ChargingRequest c:tCluster)
+			{
+				System.out.println(c);
+			}
+		}
 		
 		
 		
-		//tour.clusterEvaluation(in, out, 100,SimulationSetting.travelSpeed, Math.random()*100, Math.random()*100, 0, 0);
+		double result=tour.clusterEvaluation(tClusters[3], out, 100,SimulationSetting.travelSpeed, 80, 80, 0, 0);
+		System.out.println(result);
 	}
 
 }
