@@ -49,7 +49,7 @@ public class KvalueTest {
 		
 		
 		int[] requestNumSet={100,200,300,400,500,600,700,800,900,1000};
-		int[] kValueSet={5,10,15,20,25,30};
+		int[] kValueSet={1,5,10,20,30};
 		int cishu=SimulationSetting.ciShu;
 		String[] algSet={"Nearest","Cluster"};
 		
