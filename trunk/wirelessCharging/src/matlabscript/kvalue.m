@@ -19,9 +19,9 @@ cd F:\PhDWork\papers\richard\wireless-energy-transfer\data;
     set(h,'MarkerSize',12);
     
 
-%     RB = C(1:10,5);
-%     h=plot(N,RB,'-sk');
-%     set(h,'MarkerSize',12);
+    RB = C(1:10,5);
+    h=plot(N,RB,'-sk');
+    set(h,'MarkerSize',12);
     
 
     RB = C(:,6);
@@ -35,7 +35,7 @@ cd F:\PhDWork\papers\richard\wireless-energy-transfer\data;
 %     set(h,'MarkerSize',12);
     
 
-    RB = C(:,8);
+    RB = C(:,7);
     E(:,5)=RB;
     h=plot(N,RB,'-pm');
     set(h,'MarkerSize',12);
@@ -43,8 +43,8 @@ cd F:\PhDWork\papers\richard\wireless-energy-transfer\data;
     
     
     
-    axis([100 1000 0 550]);
-    legend('Online\_K\_Cluster (K=5)','Online\_K\_Cluster (K=10)','Online\_K\_Cluster (K=20)','Online\_K\_Cluster (K=30)',2);
+    axis([100 1000 0 600]);
+    legend('Online\_K\_Cluster (K=1)','Online\_K\_Cluster (K=5)','Online\_K\_Cluster (K=10)','Online\_K\_Cluster (K=20)','Online\_K\_Cluster (K=30)',2);
    % legend('Impro\_Max\_Throu','Max\_Throu','Random\_Throu','Dis\_NSTT\_Throu','Dis\_TT\_Throu','Dis\_T\_Throu',2);
     %
     %for t=(1:1:m-1)
