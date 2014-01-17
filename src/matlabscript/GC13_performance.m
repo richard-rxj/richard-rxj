@@ -1,7 +1,7 @@
-cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
+cd F:\PhDWork\papers\richard\mobilesink\ms\GLOBECOM2013\data\not_enough_data(mspeed=2);
 
 
-    C = load('T100.txt');
+    C = load('T1600.txt');
     N = C(:,1);
     RB = C(:,2);
     h=plot(N,RB,'-dr');
@@ -17,7 +17,7 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     
     hold on;
    
-    RB = C(:,7);
+    RB = C(:,8);
     h=plot(N,RB,'-ob');
     set(h,'MarkerSize',12);
     
@@ -45,7 +45,7 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     
     
     
-    axis([100 1000 0 350]);
+    axis([100 1000 0 400]);
     legend('Max\_Utility','Dis\_Max\_Utility','Random\_Utility',2);
   
     set(gca,'fontsize',16,'fontname','Times');
@@ -67,3 +67,8 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
 %   end
 % end
 %   fclose(fid); 
+
+% cd F:\PhDWork\papers\richard\mobilesink\ms\GLOBECOM2013\data\not_enough_data(mspeed=2);
+% C = load('T400.txt');
+% N = C(:,1);
+% RB1 = C(:,2); RB2= C(:,8); RB3= C(:,5);
