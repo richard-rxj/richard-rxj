@@ -1,11 +1,12 @@
-cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
+cd F:\PhDWork\papers\richard\mobilesink\ms\GLOBECOM2013\data\not_enough_data(mspeed=2);
     
     %trb=2;   %max
-    trb=7;   %dis
+    %trb=8;   %dis
+    trb=5;   %random
     
     
 
-    C = load('T100.txt');
+    C = load('T200.txt');
     N = C(:,1);
     RB = C(:,trb);
     h=plot(N,RB,'-dr');
@@ -21,17 +22,17 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     
     hold on;
    
-    C = load('T200.txt');
+    C = load('T400.txt');
     RB = C(:,trb);
     h=plot(N,RB,'-ob');
     set(h,'MarkerSize',12);
     
-    C = load('T400.txt');
+    C = load('T800.txt');
     RB = C(:,trb);
     h=plot(N,RB,'-sk');
     set(h,'MarkerSize',12);
     
-    C = load('T800.txt');
+    C = load('T1600.txt');
     RB = C(:,trb);
     h=plot(N,RB,'-^m');
     set(h,'MarkerSize',12);
@@ -51,7 +52,7 @@ cd D:\PhDWork\Jspace\globecom2013\test\ImpactPerformance(no enough data);
     
     
     axis([100 1000 0 500]);
-    legend('T = 100','T = 200','T = 400','T = 800','T = 3200','T = 6400',2);
+    legend('T = 200','T = 400','T = 800','T = 1600','T = 3200','T = 6400',2);
   
     set(gca,'fontsize',16,'fontname','Times');
     set(get(gca,'xlabel'),'fontsize',18);
