@@ -144,7 +144,8 @@ public class SensorNode extends Node {
 		AllocationPair temp=new AllocationPair(slotID,slotData,energyCost);
 		this.allocation.add(temp);
 		
-		
+		ExperimentSetting.log.info("add   slot-"+slotID+"  to  sensor-"+this.getId()+ " <"+slotData+"--"+energyCost+">");   //for debug
+
 
 		this.residualBudget=this.residualBudget-energyCost;
 		
@@ -171,6 +172,10 @@ public class SensorNode extends Node {
 		}
 		
 
+		ExperimentSetting.log.info("remove   slot-"+slotID+"  from  sensor-"+this.getId()+ " <"+slotData+"--"+energyCost+">");   //for debug
+ 
+		
+		
 		this.residualBudget=this.residualBudget+energyCost;
 		
 		this.throughput=this.throughput-slotData;
@@ -185,32 +190,37 @@ public class SensorNode extends Node {
 	}
 	
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	@Override
 	public String toString() {
-		return super.toString()+"SensorNode [batteryCapacity=" + batteryCapacity
-				+ ", energyBudget=" + energyBudget + ", throughput="
-				+ throughput + ", utility=" + utility + ", utilityGain="
-				+ utilityGain + ", residualBudget="
-				+ residualBudget +"]";
+		StringBuilder sb=new StringBuilder();
+		sb.append("sensor  ID-"+this.getId()+"  X-"+this.getX()+"  Y-"+this.getY()+" Budget-"+this.getResidualBudget());
+		return sb.toString();
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	@Override
+//	public String toString() {
+//		return super.toString1()+"SensorNode [batteryCapacity=" + batteryCapacity
+//				+ ", energyBudget=" + energyBudget + ", throughput="
+//				+ throughput + ", utility=" + utility + ", utilityGain="
+//				+ utilityGain + ", residualBudget="
+//				+ residualBudget +"]";
+//	}
 
 
 

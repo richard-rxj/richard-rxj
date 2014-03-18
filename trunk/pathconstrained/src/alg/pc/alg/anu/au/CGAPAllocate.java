@@ -25,7 +25,9 @@ public class CGAPAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
+		ExperimentSetting.log.info("CGAPAllocate  start---------------------------------------");
 		gapAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
+		ExperimentSetting.log.info("CGAPAllocate  end---------------------------------------");
 	}
 
 	

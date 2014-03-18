@@ -31,6 +31,8 @@ public class DistributeAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
+		ExperimentSetting.log.info("DistributedAllocate  start---------------------------------------");
+		
 		ArrayList<SensorNode> gSensorSet=super.getgNet().getSensorSet();
 		ArrayList<TimeSlotNode>  gSlotSet=super.getgNet().getTimeSlotSet();
 		
@@ -70,6 +72,8 @@ public class DistributeAllocate extends Allocate {
 			 * allocate for this interval
 			 */
 			CentralAllocate.maxGainAllocate(tSensorSet, tSlotSet);
+			
+			ExperimentSetting.log.info("DistributedAllocate  end---------------------------------------");
 		}
 		
 	}

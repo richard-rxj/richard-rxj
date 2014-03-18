@@ -38,9 +38,9 @@ public class JTestWork_N_Speed {
 		int tau=ExperimentSetting.unitSlot;
         //int cishu=1;
 		int cishu=ExperimentSetting.cishu;
-		String[] algSet={"CGAP","DGAP"};
+		String[] algSet={"CGAP","DGAP","CGreedy","DGreedy"};
 		
-		String tFileName="test/journal-data/GAP/";
+		String tFileName="test/journal-data/general/reliable/";
 		File tf=new File(tFileName);
 		if(!tf.exists())
 		{

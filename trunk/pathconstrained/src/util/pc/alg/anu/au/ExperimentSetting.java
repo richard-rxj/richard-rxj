@@ -4,9 +4,16 @@ package util.pc.alg.anu.au;
  */
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import model.pc.alg.anu.au.AllocationPair;
 import model.pc.alg.anu.au.SensorNode;
@@ -29,16 +36,44 @@ public class ExperimentSetting {
 	public static double batteryCapacity=10000;
 	public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022
 	//public static double[] mSpeed={5,10,20};   // m/s   
-	//public static double[] transPowerSet={0.17,0.22,0.3,0.33};    //general case
-	public static double[] transPowerSet={0.3,0.3,0.3,0.3};    //special case
+	public static double[] transPowerSet={0.17,0.22,0.3,0.33};    //general case
+	//public static double[] transPowerSet={0.3,0.3,0.3,0.3};    //special case
 	public static double[] transRateSet={250000,19200,9600,4800};     //bps
 	public static Random ran=new Random();
-	public static int cishu=50;    //50
+	public static int cishu=1;        //50
 	public static int unitSlot=1;     //s
 	public static int interval=10;    //fixed interval for distributed
 	public static int rateFactor=1;   //used for eastimate the profit of a time slot
 	public static double epsilon=0.2;     //1+alpha---->alpha=0.25
-	public static double[] linkReliable={0,1};   //unreliable link reliability
+	public static double[] linkReliable={1,1};   //unreliable link reliability
+	
+	public static Logger log=Logger.getLogger("Experiment.class");
+
+	static {
+		log.setLevel(Level.INFO);
+		try {
+			FileHandler tHandler=new FileHandler("Logging.txt");
+			tHandler.setFormatter(new Formatter() {
+
+				@Override
+				public String format(LogRecord record) {
+					// TODO Auto-generated method stub
+					StringBuffer sb=new StringBuffer();
+					sb.append(record.getMessage()+"\n");
+					return sb.toString();
+				}
+				
+			});
+			log.addHandler(tHandler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 	
 	
 	private static double getTransRateByDistance(double distance)
