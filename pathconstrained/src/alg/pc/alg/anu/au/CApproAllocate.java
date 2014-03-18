@@ -41,7 +41,9 @@ public class CApproAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
+		ExperimentSetting.log.info("CApproAllocate  start---------------------------------------");
 		approAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
+		ExperimentSetting.log.info("CApproAllocate  end---------------------------------------");
 	}
 
 	

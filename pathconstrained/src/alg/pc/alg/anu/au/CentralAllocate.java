@@ -26,7 +26,11 @@ public class CentralAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
+		ExperimentSetting.log.info("CentralAllocate  start---------------------------------------");
+		
 		maxGainAllocate(super.getgNet().getSensorSet(), super.getgNet().getTimeSlotSet());
+		
+		ExperimentSetting.log.info("CentralAllocate  end---------------------------------------");
 	}
 
 	

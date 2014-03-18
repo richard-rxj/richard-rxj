@@ -44,6 +44,9 @@ public class DApproAllocate extends Allocate {
 	@Override
 	public void schedule() {
 		// TODO Auto-generated method stub
+		
+		ExperimentSetting.log.info("DApproAllocate  start---------------------------------------");
+		
 		ArrayList<SensorNode> gSensorSet=super.getgNet().getSensorSet();
 		ArrayList<TimeSlotNode>  gSlotSet=super.getgNet().getTimeSlotSet();
 		
@@ -83,6 +86,8 @@ public class DApproAllocate extends Allocate {
 			 * allocate for this interval
 			 */
 			CApproAllocate.approAllocate(tSensorSet, tSlotSet);
+			
+			ExperimentSetting.log.info("DApproAllocate  end---------------------------------------");
 		}
 	}
 

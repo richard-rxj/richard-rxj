@@ -34,6 +34,9 @@ public class CommonFacility {
 		/*
 		 * initial sensorSet
 		 */
+		
+		ExperimentSetting.log.info("initial sensorSet---------------------------");
+		
 		String tempString=null;
 		BufferedReader nReader=new BufferedReader(new InputStreamReader(new FileInputStream(sensorTxt)));
 	    
@@ -49,6 +52,8 @@ public class CommonFacility {
 			tSensor.setEnergyBudget(Double.parseDouble(b[2])*(ExperimentSetting.roadEndX-ExperimentSetting.roadBeginX)/speed);
 			sensorSet.add(tSensor);
 			i++;
+			
+			ExperimentSetting.log.info(tSensor.toString());
 		}
 		
 		
@@ -56,9 +61,14 @@ public class CommonFacility {
 		
 		
 		
+		
+		
 		/*
 		 * initial timeSlotSet
 		 */
+		
+		ExperimentSetting.log.info("initial timeSlotSet---------------------------");
+		
 		i=0;
 		double x=ExperimentSetting.roadBeginX;
 		double y=ExperimentSetting.roadY;
@@ -85,6 +95,8 @@ public class CommonFacility {
 			tSlot.setX2(x2);
 			tSlot.setY(y);
 			timeSlotSet.add(tSlot);
+			
+			ExperimentSetting.log.info(tSlot.toString());
 		}
 		
 		
