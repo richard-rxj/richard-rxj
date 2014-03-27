@@ -1,0 +1,1 @@
+java -cp /Tdata/public/SDC/current/libs/jchart2d-2.1.1.jar:/Tdata/public/SDC/current/bin_solaris10 SDC
