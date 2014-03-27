@@ -1,0 +1,131 @@
+Seismic Data Centre v1.6
+Research School of Earth Sciences
+Australian National University
+All rights reserved.
+
+README
+
+1. What does it do
+
+The seismic data centre (RSES_SDC) is a java-based graphical interface for users to extract continuous seismic data collected by the Research School of Earth Sciences (RSES) at the Australian National University (ANU).
+
+It is developed at the RSES-ANU under the direction of Dr. Hrvoje Tkalcic (Hrvoje.Tkalcic@anu.edu.au). The development team includes Jason Jingshi Li (Jason.Li@anu.edu.au), Armando Arcidiaco (armando@rses.anu.edu.au) and Cristo Tarlowski (Cristo.Tarlowski@anu.edu.au). We welcome and value any questions or feedbacks.
+
+
+###########################################
+
+2. What is in it
+
+The RSES_SDC consists of a unified graphical interface split in two parts: the displayed seismogram and the control interface.
+
+
+2.1 Seismogram
+
+The seismogram is located at the upper half the of the interface. It is to display the data selected by the user. The x-axis represents time in seconds and the y-axis the magnitude of the sensor output. 
+
+In the current version (v1.6), it can only display one component of one station's data at any one time. 
+
+
+2.2 Control interface
+
+The continuous seismic data archive at RSES-ANU is sorted by various networks. Each network has its list of stations. Each station data has three components: Z, NS and EW, which stands for the vertical, North-South and East-West components separately. 
+
+In the middle of the control interface, there is a display showing the approximate dates of which the selected networks was commenced / decommissioned. This would let the user know whether the desired dates are within the operational timeframe of the network.
+
+On the right, the user specifies the starting and ending date and time of the desired data. Each date entry consists of Day of Month, Month of Year, and Year in this order, followed by hour of day, minute, second, and millisecond.
+
+
+2.3 Summary of Components
+
+2.3.1 Seismogram - To visualize the selected data.
+
+2.3.2 Available Networks - List of networks available. User must select one network.
+
+2.3.3 Available Stations - List of stations available. User is allowed to make multiple selections.
+
+2.3.4 Component - Vertical / North-South / East-West component of the sensor.
+
+2.3.5 Network Information - Network name and duration of its operation.
+
+2.3.6 Extraction Format - Decide whether the data would be extracted to SAC or ZDF format.
+
+2.3.7 Multiple Event Option - Choose whether to load and extract a single event specified on the User Interace, or multiple events specified from a file.
+
+2.3.8 Starting Date - The date and time of the start of the desired data.
+
+2.3.9 Ending Date - The date and time of the end of the desired data.
+
+2.3.10 Display Button - To display / visualize the selected data.
+
+2.3.11 Discard Button - To clear the data that are currently on display.
+
+2.3.12 Extract Button - To extract the selected data into a user-specified directory.
+
+2.3.13 Quit Button - To terminate the program.
+
+
+###########################################
+
+3. How does it work
+
+There are two main functions for RSES_SDC: visualization and extraction of seismic data from the continuous data archive at the RSES-ANU. 
+
+
+3.1 Selecting the data
+
+Seismic data is visualized via the seismogram at the upper half of the interface. The user first selects one network from the list of available networks. The available stations list would be updated for the user to select the available station. Once the station selection is made, the user then selects one component which she/he wants to visualize. 
+
+The user specifies the starting and ending date of the event by entering the date using the keyboard on the right. 
+
+This would enable the user to specify precisely pieces of data of a spedific time frame.
+
+
+3.1.1 Multiple station/component selection
+
+One is able to select multiple stations by selecting the stations while holding on "CTRL" key. Another option is to selected the entry "All Stations", which will select all stations in the network. However in data visualization, the current version only supports displaying one component of one station at any one time. So if multiple stations/components are selected, the program will visualize the first component of the first station in the selected list. 
+
+3.1.2 Multiple format extraction
+
+One is able to extract the data to either or both SAC or ZDF format by selection the check-box on the "Extraction Format".
+
+3.2 Visualize the data
+
+The selected data can be visualized by clicking the button "Display". The program would subsequently look into the archives and display the seismogram on the top half of the interface. 
+
+If the whole/part of the data selected were missing, the user would be notified by a message prompt. 
+
+The seismogram can be discarded by pressing the "Discard" button.
+
+
+3.3 Load and Extract the data
+
+The main purpose of SDC is to extract continuous data archived at RSES. The selected data can consist of multiple files (more than one station/component/event). The user starts the process by pressing the "Load and Extract" button.
+
+3.3.1 Load and Extract a Single Event
+
+If the user select this option in the User Interface then press "Load and Extract", SDC will take the starting and ending dates on the panel to be the beginning and end of the event. The user will be asked to provide an event name, and have the option of using the default name which is based on the event starting time. 
+
+After the user made a selection on the event name, SDC will prompt user to select a directory to receive the data. The data will be saved in the SAC format within the chosen directory.
+
+3.3.2 Load and Extract Multiple Event from File
+
+If the user select this option in the User Interface then press "Load and Extract", SDC will prompt the user to select a file containing information about starting and ending times of events. The file is required to be in ascii format, each line describing the starting and ending time of a desired event. 
+
+There are two possible formats to interpret. One is the basic format showing event start and ending time, the other contains more information about the event, including event latitude, longitude, depth, magnitude and source.
+
+Format 1: (BASIC, 14 columns)
+yyyy mm dd hh mm ss mls yyyy mm dd hh mm ss mls
+
+Format 2: (EXTENDED, 19 columns)
+yyyy mm dd hh mm ss mls yyyy mm dd hh mm ss mls lat lon dep mag source
+
+The event name will be set to default setting, which is based on the event starting time. SDC will prompt user to select a directory to receive the data. The data will be saved in the SAC format within the chosen directory.
+
+WARNING: User cannot load multiple events that has the same starting time. The earlier events will be over-written by the last event that has the same starting time.
+
+
+3.4 Terminating the program
+
+The program can be terminated by either pressing the "Quit" button, or closing the window.
+
+ 
