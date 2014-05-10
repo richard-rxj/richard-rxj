@@ -9,12 +9,14 @@
 /************************************************/
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -35,6 +37,10 @@ public class SDC extends JFrame {
 	/** Current status information */
 	public String curNetwork;
 	public String curStation[];
+	
+	
+	//merge  by Richard Ren
+	private Process SMAP=null;
 
 	// public String curComponent;
 	/** The components currently selected for displaying the seismograms. */
@@ -644,12 +650,14 @@ public class SDC extends JFrame {
 		JButton ExtractButton = new JButton("Load and Extract");
 		JButton AboutButton = new JButton("SDC Manual");
 		JButton quitButton = new JButton("Quit");
+		JButton sMapButton=new JButton("Seismomap");      //merge  by richard ren
 
 		/** Add buttons to the panel */
 		opPanel.add(DisplayButton);
 		opPanel.add(disButton);
 		opPanel.add(ExtractButton);
 		opPanel.add(AboutButton);
+		opPanel.add(sMapButton);            //merge  by richard ren
 		opPanel.add(quitButton);
 
 		/** Add action listener to buttons (a private sub-class of SDC) */
@@ -658,6 +666,28 @@ public class SDC extends JFrame {
 		ExtractButton.addActionListener(new MainButtonListener());
 		AboutButton.addActionListener(new MainButtonListener());
 		quitButton.addActionListener(new MainButtonListener());
+		sMapButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+				    					
+					if(SMAP!=null) {
+						SMAP.destroy();
+					}
+					{
+						URL location = SDC.class.getProtectionDomain().getCodeSource().getLocation();
+						System.out.println(location.getFile());
+				    
+						SMAP=Runtime.getRuntime().exec("java -jar "+location.getFile()+"/../SMAP.jar "+location.getFile()+"/../SMAP.txt");
+					} 
+				}catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+		});     //merge  by richard ren
 
 		/** Paint color */
 		opPanel.setBackground(background);
@@ -2196,6 +2226,7 @@ public class SDC extends JFrame {
 				int i = JOptionPane.showConfirmDialog(null, "Exit Now?",
 						"Exit", JOptionPane.OK_CANCEL_OPTION);
 				if (i == JOptionPane.OK_OPTION) {
+					SMAP.destroy();    //merge by Richard Ren
 					dispose();
 					System.exit(0);
 				}
