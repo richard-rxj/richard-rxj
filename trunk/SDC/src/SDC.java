@@ -115,6 +115,9 @@ public class SDC extends JFrame {
 
 	private boolean displaying = false;
 	private ExtractionManager em = new ExtractionManager();
+	
+	
+	private PassWordDialog  passDialog=null;     //access control by Richard Ren
 
 	/** SDC Constructor */
 	public SDC() {
@@ -126,6 +129,18 @@ public class SDC extends JFrame {
 		archiveRootDir = "/Tdata/lacie1/data/";
 		instrCoordFile = "/Tdata/public/SDC/instr.coord";
 		/*********************************************/
+		
+		
+		/** access control  
+		 *  by Richard Ren
+		 */
+		passDialog = new PassWordDialog(this, true);
+		//passDialog.setMinimumSize(new Dimension(500,500));
+		passDialog.setSize(300, 200);
+        passDialog.setResizable(false);
+		//passDialog.pack();
+        passDialog.setVisible(true);
+		
 
 		/** Set frame background */
 		getContentPane().setLayout(new BorderLayout());
@@ -2226,7 +2241,7 @@ public class SDC extends JFrame {
 				int i = JOptionPane.showConfirmDialog(null, "Exit Now?",
 						"Exit", JOptionPane.OK_CANCEL_OPTION);
 				if (i == JOptionPane.OK_OPTION) {
-					SMAP.destroy();    //merge by Richard Ren
+					if(SMAP!=null) SMAP.destroy();    //merge by Richard Ren
 					dispose();
 					System.exit(0);
 				}
