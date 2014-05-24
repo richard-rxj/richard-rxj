@@ -1,0 +1,4 @@
+CLASSPATH=/Tdata/public/SDC/jchart2d-2.1.1.jar\:/Tdata/public/SDC
+export CLASSPATH
+java SDC
+
