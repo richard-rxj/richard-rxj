@@ -101,6 +101,8 @@ public class PassWordDialog extends JDialog {
             }  
         });
 
+        
+
 
         jbtOk.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -122,6 +124,7 @@ public class PassWordDialog extends JDialog {
         });
         
         
+        this.getRootPane().setDefaultButton(jbtOk);
     }
 
 }

@@ -136,7 +136,7 @@ public class SDC extends JFrame {
 		 */
 		passDialog = new PassWordDialog(this, true);
 		//passDialog.setMinimumSize(new Dimension(500,500));
-		passDialog.setSize(300, 200);
+		passDialog.setSize(350, 200);
         passDialog.setResizable(false);
 		//passDialog.pack();
         passDialog.setVisible(true);
