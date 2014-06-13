@@ -8,12 +8,19 @@ package coverage.model;
  *
  */
 public abstract class Node {
+	public final int id;
 	public final double x;
 	public final double y;
 	
-	public Node (double xValue, double yValue) {
+	public Node (int idValue, double xValue, double yValue) {
+		id=idValue;
 		x=xValue;
 		y=yValue;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%d %.2f %.2f", id, x, y);
 	}
 
 }
