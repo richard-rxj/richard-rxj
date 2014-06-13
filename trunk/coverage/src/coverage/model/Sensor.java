@@ -4,7 +4,7 @@ public class Sensor extends Node {
 
 	private double transRange;
 	private double batteryCapacity;
-	private double EnergyBudget;
+	private double energyBudget;
 	private double residualEnergy;
 	
 	
@@ -29,12 +29,12 @@ public class Sensor extends Node {
 
 
 	public double getEnergyBudget() {
-		return EnergyBudget;
+		return energyBudget;
 	}
 
 
 	public void setEnergyBudget(double energyBudget) {
-		EnergyBudget = energyBudget;
+		energyBudget = energyBudget;
 	}
 
 
@@ -48,9 +48,14 @@ public class Sensor extends Node {
 	}
 
 
-	public Sensor(double xValue, double yValue) {
-		super(xValue, yValue);
+	public Sensor(int id, double xValue, double yValue) {
+		super(id, xValue, yValue);
 		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.batteryCapacity, this.energyBudget, this.residualEnergy);
 	}
 
 }
