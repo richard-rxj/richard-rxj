@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import coverage.util.ExperimentSetting;
+
 public class Network {
 
 	BaseStation base;
@@ -23,19 +25,66 @@ public class Network {
 	
 	Map<Sensor, Set<Target>>  s2TMap;
 	Map<Target, Set<Sensor>>  t2SMap;
+	Map<Node, Set<Sensor>> connMap;
 	
 	public Network() {
 		sensors=new HashSet<Sensor>();
 		targets=new HashSet<Target>();
 		s2TMap=new HashMap<Sensor, Set<Target>>();
 		t2SMap=new HashMap<Target, Set<Sensor>>();
+		connMap=new HashMap<Node, Set<Sensor>>();
 	}
 	
 	/*
 	 * fill s2TMap and t2SMap
 	 */
 	private void combine() {
-		//TBD
+		//construct s2TMap
+		for(Sensor sensor:sensors) {
+			Set<Target> tSet=new HashSet<Target>();
+			s2TMap.put(sensor, tSet);
+			for(Target target:targets) {
+				double dis=sensor.getDistance(target);
+				if(dis<=ExperimentSetting.senseRange) {
+					tSet.add(target);
+				}
+			}
+		}
+		
+		//construct t2SMap
+		for(Target target: targets) {
+			Set<Sensor> tSet=new HashSet<Sensor>();
+			t2SMap.put(target, tSet);
+			for(Sensor sensor:sensors) {
+				double dis=sensor.getDistance(target);
+				if(dis<=ExperimentSetting.senseRange) {
+					tSet.add(sensor);
+				}
+			}
+		}
+		
+		//construct connMap
+		Set<Sensor> bSet=new HashSet<Sensor>();
+		connMap.put(this.base, bSet);
+		for(Sensor sensor:sensors) {
+			double dis=this.base.getDistance(sensor);
+			if(dis<=ExperimentSetting.transRange) {
+				bSet.add(sensor);
+			}
+		}
+		
+		for(Sensor sensor:sensors) {
+			Set<Sensor> tSet=new HashSet<Sensor>();
+			connMap.put(sensor, tSet);
+			for(Sensor tSensor:sensors) {
+				if(tSensor==sensor) continue;
+				double dis=this.base.getDistance(sensor);
+				if(dis<=ExperimentSetting.transRange) {
+					tSet.add(sensor);
+				}
+			}
+		}
+		
 	}
 	
 	

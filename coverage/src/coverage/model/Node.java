@@ -23,4 +23,8 @@ public abstract class Node {
 		return String.format("%d %.2f %.2f", id, x, y);
 	}
 
+	
+	public double getDistance (Node b) {
+		return Math.sqrt(Math.pow(this.x-b.x, 2)+Math.pow(this.y-b.y, 2));
+	}
 }

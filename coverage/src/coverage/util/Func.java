@@ -15,7 +15,7 @@ class SQRFunc extends Func {
 
 class LOGFunc extends Func{
 	public double getResult(int input) {
-		return Math.log10(input);
+		return Math.log10(input+1);
 	}
 }
 
