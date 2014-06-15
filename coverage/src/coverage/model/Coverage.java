@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import coverage.util.Func;
+
 /**
  * @author u4964526
  *
@@ -15,7 +17,22 @@ import java.util.Set;
 public class Coverage {
 	Map<Target, Map<TimeSlot, Set<Sensor>>> targetBased;
 	Map<TimeSlot, Set<Sensor>> timeslotBased;
+	Func func;
 	
+	/**
+	 * @return the func
+	 */
+	public Func getFunc() {
+		return func;
+	}
+
+	/**
+	 * @param func the func to set
+	 */
+	public void setFunc(Func func) {
+		this.func = func;
+	}
+
 	public Coverage() {
 		targetBased=new HashMap<Target, Map<TimeSlot, Set<Sensor>>>();
 		timeslotBased=new HashMap<TimeSlot, Set<Sensor>>();
@@ -48,6 +65,10 @@ public class Coverage {
 	
 	
 	public double computeCoverageGain(Sensor sensor, TimeSlot timeslot) {
+		//TBD
+	}
+	
+	public double computeCoverage() {
 		//TBD
 	}
 }

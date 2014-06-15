@@ -51,6 +51,7 @@ public class Sensor extends Node {
 
 	
 	public void update() {
+	// update energy 
 		this.residualEnergy-=ExperimentSetting.energyCost;
 	}
 	
