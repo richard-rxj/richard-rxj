@@ -1,5 +1,7 @@
 package coverage.model;
 
+import coverage.util.ExperimentSetting;
+
 public class Sensor extends Node {
 
 	private double transRange;
@@ -47,6 +49,11 @@ public class Sensor extends Node {
 		this.residualEnergy = residualEnergy;
 	}
 
+	
+	public void update() {
+		this.residualEnergy-=ExperimentSetting.energyCost;
+	}
+	
 
 	public Sensor(int id, double xValue, double yValue) {
 		super(id, xValue, yValue);
