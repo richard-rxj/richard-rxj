@@ -9,6 +9,9 @@ package coverage.util;
  */
 public class ExperimentSetting {
      
+	public static final double energyCost=0;       //pre timeslot
+	
+	
 	/**
 	 * @param args
 	 */
