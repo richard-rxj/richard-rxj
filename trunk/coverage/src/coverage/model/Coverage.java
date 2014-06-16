@@ -6,6 +6,7 @@ package coverage.model;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class Coverage {
 		connMap=new HashMap<TimeSlot, Set<Sensor>>();
 	}
 	
-	public void initial(Network network, Collection<TimeSlot> timeslots, Func criterion) {
+	public void initial(Network network, List<TimeSlot> timeslots, Func criterion) {
 	//initial empty trees and set function
 		for(TimeSlot timeslot: timeslots) {
 			Set<Sensor> tSet=new HashSet<Sensor>();
