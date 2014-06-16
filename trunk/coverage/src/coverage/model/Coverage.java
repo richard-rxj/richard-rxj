@@ -3,6 +3,7 @@
  */
 package coverage.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,27 +16,27 @@ import coverage.util.Func;
  *
  */
 public class Coverage {
-	Map<Target, Map<TimeSlot, Set<Sensor>>> targetBased;
-	Map<TimeSlot, Set<Sensor>> timeslotBased;
-	Func func;
+	private Map<Target, Map<TimeSlot, Set<Sensor>>> targetBased;
+	private Map<TimeSlot, Set<Sensor>> timeslotBased;
+	private Map<TimeSlot, Set<Sensor>> connMap;
+	private Func func;
 	
-	/**
-	 * @return the func
-	 */
-	public Func getFunc() {
-		return func;
-	}
-
-	/**
-	 * @param func the func to set
-	 */
-	public void setFunc(Func func) {
-		this.func = func;
-	}
+	
 
 	public Coverage() {
 		targetBased=new HashMap<Target, Map<TimeSlot, Set<Sensor>>>();
 		timeslotBased=new HashMap<TimeSlot, Set<Sensor>>();
+		connMap=new HashMap<TimeSlot, Set<Sensor>>();
+	}
+	
+	public void initial(Network network, Collection<TimeSlot> timeslots, Func criterion) {
+	//initial empty trees and set function
+		for(TimeSlot timeslot: timeslots) {
+			Set<Sensor> tSet=new HashSet<Sensor>();
+			tSet.addAll(network.connMap.get(network.base));
+			this.connMap.put(timeslot, tSet);
+		}
+		this.func=criterion;
 	}
 	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
@@ -60,16 +61,56 @@ public class Coverage {
 			}
 		}
 		
-		timeslotBased.get(timeslot).add(sensor);
+		if(timeslotBased.containsKey(timeslot)) {
+			timeslotBased.get(timeslot).add(sensor);
+		} else {
+			Set<Sensor> tSet=new HashSet<Sensor>();
+			tSet.add(sensor);
+			timeslotBased.put(timeslot, tSet);
+		}
+		
+		
+		connMap.get(timeslot).addAll(network.connMap.get(sensor));
 	}
 	
 	
-	public double computeCoverageGain(Sensor sensor, TimeSlot timeslot) {
-		//TBD
+	public double computeCoverageGain(Network network, Sensor sensor, TimeSlot timeslot) {
+		double result=0;
+		
+		if(null==this.connMap.get(timeslot)||!this.connMap.get(timeslot).contains(sensor)) {
+			return 0;
+		}
+		if(null!=this.timeslotBased.get(timeslot)&&this.timeslotBased.get(timeslot).contains(sensor)) {
+			return 0;
+		}
+		
+		for(Target target: network.s2TMap.get(sensor)) {
+			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
+			if(null==tMap.get(timeslot)) {
+				result+=this.func.getResult(tMap.keySet().size()+1)-this.func.getResult(tMap.keySet().size());
+				result+=this.func.getResult(1)-this.func.getResult(0);
+			} else {
+				Set<Sensor> tSet=tMap.get(timeslot);
+				result+=this.func.getResult(tSet.size()+1)-this.func.getResult(tSet.size());
+			}
+			
+		}
+		
+		return result;
 	}
 	
 	public double computeCoverage() {
-		//TBD
+		double result=0;
+		
+		for(Target target: this.targetBased.keySet()) {
+			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
+			result+=this.func.getResult(tMap.keySet().size());
+			for(TimeSlot timeslot:tMap.keySet()) {
+				result+=this.func.getResult(tMap.get(timeslot).size());
+			}
+		}
+		
+		return result;
 	}
 }
 
