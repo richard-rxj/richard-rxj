@@ -9,11 +9,26 @@ package coverage.model;
  */
 public class BaseStation extends Node {
 
-	private final double transRange;
+	private double transRange;
 	
-	public BaseStation(int id, double xValue, double yValue, double range) {
+	/**
+	 * @return the transRange
+	 */
+	public double getTransRange() {
+		return transRange;
+	}
+
+
+	/**
+	 * @param transRange the transRange to set
+	 */
+	public void setTransRange(double transRange) {
+		this.transRange = transRange;
+	}
+
+
+	public BaseStation(int id, double xValue, double yValue) {
 		super(id, xValue, yValue);
-		this.transRange=range;
 	}
 
 	

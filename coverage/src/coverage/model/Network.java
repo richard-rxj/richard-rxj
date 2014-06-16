@@ -19,13 +19,64 @@ import coverage.util.ExperimentSetting;
 
 public class Network {
 
-	BaseStation base;
-	Set<Sensor> sensors;
-	Set<Target> targets;
+	private BaseStation base;
+	private Set<Sensor> sensors;
+	private Set<Target> targets;
 	
-	Map<Sensor, Set<Target>>  s2TMap;
-	Map<Target, Set<Sensor>>  t2SMap;
-	Map<Node, Set<Sensor>> connMap;
+	private Map<Sensor, Set<Target>>  s2TMap;
+	/**
+	 * @return the base
+	 */
+	public BaseStation getBase() {
+		return base;
+	}
+
+	/**
+	 * @param base the base to set
+	 */
+	public void setBase(BaseStation base) {
+		this.base = base;
+	}
+
+	/**
+	 * @return the sensors
+	 */
+	public Set<Sensor> getSensors() {
+		return sensors;
+	}
+	
+
+	/**
+	 * @return the targets
+	 */
+	public Set<Target> getTargets() {
+		return targets;
+	}
+
+	/**
+	 * @return the s2TMap
+	 */
+	public Map<Sensor, Set<Target>> getS2TMap() {
+		return s2TMap;
+	}
+
+	/**
+	 * @return the t2SMap
+	 */
+	public Map<Target, Set<Sensor>> getT2SMap() {
+		return t2SMap;
+	}
+
+	/**
+	 * @return the connMap
+	 */
+	public Map<Node, Set<Sensor>> getConnMap() {
+		return connMap;
+	}
+
+
+	private Map<Target, Set<Sensor>>  t2SMap;
+	private Map<Node, Set<Sensor>> connMap;
 	
 	public Network() {
 		sensors=new HashSet<Sensor>();
@@ -36,9 +87,9 @@ public class Network {
 	}
 	
 	/*
-	 * fill s2TMap and t2SMap
+	 * fill s2TMap, t2SMap, connMap
 	 */
-	private void combine() {
+	public void combine() {
 		//construct s2TMap
 		for(Sensor sensor:sensors) {
 			Set<Target> tSet=new HashSet<Target>();
@@ -116,8 +167,8 @@ public class Network {
 			String[] paras=line.split("\\s+");
 			this.base=new BaseStation(Integer.parseInt(paras[0]), 
 					Double.parseDouble(paras[1]), 
-					Double.parseDouble(paras[2]), 
-					Double.parseDouble(paras[3]));
+					Double.parseDouble(paras[2]));
+			this.base.setTransRange(Double.parseDouble(paras[3]));
 			
 			//construct sensors
 			line=br.readLine();
@@ -129,9 +180,10 @@ public class Network {
 						Double.parseDouble(paras[1]), 
 						Double.parseDouble(paras[2]));
 				tmp.setTransRange(Double.parseDouble(paras[3]));
-				tmp.setBatteryCapacity(Double.parseDouble(paras[4]));
-				tmp.setEnergyBudget(Double.parseDouble(paras[5]));
-				tmp.setResidualEnergy(Double.parseDouble(paras[6]));
+				tmp.setSenseRange(Double.parseDouble(paras[4]));
+				tmp.setBatteryCapacity(Double.parseDouble(paras[5]));
+				tmp.setEnergyBudget(Double.parseDouble(paras[6]));
+				tmp.setResidualEnergy(Double.parseDouble(paras[7]));
 				this.sensors.add(tmp);
 			}
 			
