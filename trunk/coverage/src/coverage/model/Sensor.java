@@ -5,6 +5,7 @@ import coverage.util.ExperimentSetting;
 public class Sensor extends Node {
 
 	private double transRange;
+	private double senseRange;
 	private double batteryCapacity;
 	private double energyBudget;
 	private double residualEnergy;
@@ -17,6 +18,22 @@ public class Sensor extends Node {
 
 	public void setTransRange(double transRange) {
 		this.transRange = transRange;
+	}
+
+	
+	/**
+	 * @return the senseRange
+	 */
+	public double getSenseRange() {
+		return senseRange;
+	}
+
+
+	/**
+	 * @param senseRange the senseRange to set
+	 */
+	public void setSenseRange(double senseRange) {
+		this.senseRange = senseRange;
 	}
 
 
@@ -36,7 +53,7 @@ public class Sensor extends Node {
 
 
 	public void setEnergyBudget(double energyBudget) {
-		energyBudget = energyBudget;
+		this.energyBudget = energyBudget;
 	}
 
 
@@ -63,7 +80,7 @@ public class Sensor extends Node {
 	
 	@Override
 	public String toString() {
-		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.batteryCapacity, this.energyBudget, this.residualEnergy);
+		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.senseRange, this.batteryCapacity, this.energyBudget, this.residualEnergy);
 	}
 
 }

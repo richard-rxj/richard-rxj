@@ -34,7 +34,7 @@ public class Coverage {
 	//initial empty trees and set function
 		for(TimeSlot timeslot: timeslots) {
 			Set<Sensor> tSet=new HashSet<Sensor>();
-			tSet.addAll(network.connMap.get(network.base));
+			tSet.addAll(network.getConnMap().get(network.getBase()));
 			this.connMap.put(timeslot, tSet);
 		}
 		this.func=criterion;
@@ -42,7 +42,7 @@ public class Coverage {
 	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
 		sensor.update();
-		Set<Target> targets=network.s2TMap.get(sensor);
+		Set<Target> targets=network.getS2TMap().get(sensor);
 		for(Target target:targets) {
 			if(targetBased.containsKey(target)) {
 				Map<TimeSlot, Set<Sensor>> tMap=targetBased.get(target);
@@ -71,7 +71,7 @@ public class Coverage {
 		}
 		
 		
-		connMap.get(timeslot).addAll(network.connMap.get(sensor));
+		connMap.get(timeslot).addAll(network.getConnMap().get(sensor));
 	}
 	
 	
@@ -85,7 +85,7 @@ public class Coverage {
 			return 0;
 		}
 		
-		for(Target target: network.s2TMap.get(sensor)) {
+		for(Target target: network.getS2TMap().get(sensor)) {
 			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
 			if(null==tMap.get(timeslot)) {
 				result+=this.func.getResult(tMap.keySet().size()+1)-this.func.getResult(tMap.keySet().size());
