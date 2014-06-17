@@ -8,6 +8,7 @@ import java.util.List;
 import coverage.model.Coverage;
 import coverage.model.Network;
 import coverage.model.TimeSlot;
+import coverage.util.Func;
 
 /**
  * @author user
@@ -15,9 +16,17 @@ import coverage.model.TimeSlot;
  */
 public abstract class Solution {
 	Network network;
-	Coverage coverage;
 	List<TimeSlot> timeslots;
+	Func func;
 	
+	/**
+	 * @param func the func to set
+	 */
+	public void setFunc(Func func) {
+		this.func = func;
+	}
+
+
 	/**
 	 * @param network the network to set
 	 */
@@ -25,12 +34,6 @@ public abstract class Solution {
 		this.network = network;
 	}
 
-	/**
-	 * @param coverage the coverage to set
-	 */
-	public void setCoverage(Coverage coverage) {
-		this.coverage = coverage;
-	}
 
 	/**
 	 * @param timeslots the timeslots to set
