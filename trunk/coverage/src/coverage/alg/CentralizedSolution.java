@@ -3,11 +3,16 @@
  */
 package coverage.alg;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.PriorityQueue;
 import java.util.Set;
 
+import coverage.model.ChoicePair;
 import coverage.model.Coverage;
 import coverage.model.Sensor;
+import coverage.model.TimeSlot;
+import coverage.util.ExperimentSetting;
 
 /**
  * @author user
@@ -24,11 +29,40 @@ public class CentralizedSolution extends Solution {
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
 		
-		Set<Sensor> visitSet=new HashSet<Sensor>();
+
+		
+		PriorityQueue<ChoicePair> queue=new PriorityQueue<ChoicePair>(this.network.getSensors().size()*this.timeslots.size(),Collections.reverseOrder());
+
+		while(true) {
+			queue.clear();
+			
+			for(Sensor sensor:this.network.getSensors()) {
+				
+				if(sensor.getActualBudget()<ExperimentSetting.energyCost) continue;
+				
+				for (TimeSlot timeslot:this.timeslots) {
+					double gain=coverage.computeCoverageGain(this.network, sensor, timeslot, true);
+					if(gain>0) {
+						ChoicePair pair=new ChoicePair();
+						pair.setSensor(sensor);
+						pair.setTimeslot(timeslot);
+						pair.setCoverageGain(gain);
+						queue.offer(pair);
+					}
+				}
+			}
+			
+			if(null!=queue.peek()) {
+				ChoicePair selected=queue.peek();
+				coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
+			} else {
+				break;
+			}
+		}
 		
 		
 		
-		return 0;
+		return coverage.computeCoverage();
 	}
 
 	/**
@@ -36,7 +70,8 @@ public class CentralizedSolution extends Solution {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		double t=0;
+		System.out.println(t==0);
 	}
 
 }

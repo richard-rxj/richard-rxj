@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import coverage.util.ExperimentSetting;
 import coverage.util.Func;
 
 /**
@@ -41,7 +42,8 @@ public class Coverage {
 	}
 	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
-		sensor.update();
+		sensor.setActualBudget(sensor.getActualBudget()-ExperimentSetting.energyCost);
+		
 		Set<Target> targets=network.getS2TMap().get(sensor);
 		for(Target target:targets) {
 			if(targetBased.containsKey(target)) {
@@ -75,12 +77,15 @@ public class Coverage {
 	}
 	
 	
-	public double computeCoverageGain(Network network, Sensor sensor, TimeSlot timeslot) {
+	public double computeCoverageGain(Network network, Sensor sensor, TimeSlot timeslot, boolean connectedReq) {
 		double result=0;
 		
-		if(null==this.connMap.get(timeslot)||!this.connMap.get(timeslot).contains(sensor)) {
-			return 0;
+		if(connectedReq) {
+			if(null==this.connMap.get(timeslot)||!this.connMap.get(timeslot).contains(sensor)) {
+				return 0;
+			}
 		}
+		
 		if(null!=this.timeslotBased.get(timeslot)&&this.timeslotBased.get(timeslot).contains(sensor)) {
 			return 0;
 		}
