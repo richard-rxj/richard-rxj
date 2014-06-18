@@ -7,7 +7,8 @@ public class Sensor extends Node {
 	private double transRange;
 	private double senseRange;
 	private double batteryCapacity;
-	private double energyBudget;
+	private double actualBudget;
+	private double predictBudget;
 	private double residualEnergy;
 	
 	
@@ -47,13 +48,22 @@ public class Sensor extends Node {
 	}
 
 
-	public double getEnergyBudget() {
-		return energyBudget;
+	public double getActualBudget() {
+		return actualBudget;
 	}
 
 
-	public void setEnergyBudget(double energyBudget) {
-		this.energyBudget = energyBudget;
+	public void setActualBudget(double energyBudget) {
+		this.actualBudget = energyBudget;
+	}
+	
+	public double getPredictBudget() {
+		return predictBudget;
+	}
+
+
+	public void setPredictBudget(double energyBudget) {
+		this.predictBudget = energyBudget;
 	}
 
 
@@ -67,12 +77,7 @@ public class Sensor extends Node {
 	}
 
 	
-	public void update() {
-	// update energy 
-		this.residualEnergy-=ExperimentSetting.energyCost;
-	}
 	
-
 	public Sensor(int id, double xValue, double yValue) {
 		super(id, xValue, yValue);
 		// TODO Auto-generated constructor stub
@@ -80,7 +85,7 @@ public class Sensor extends Node {
 	
 	@Override
 	public String toString() {
-		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.senseRange, this.batteryCapacity, this.energyBudget, this.residualEnergy);
+		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.senseRange, this.batteryCapacity, this.actualBudget, this.predictBudget, this.residualEnergy);
 	}
 
 }

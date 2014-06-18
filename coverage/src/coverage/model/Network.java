@@ -182,8 +182,9 @@ public class Network {
 				tmp.setTransRange(Double.parseDouble(paras[3]));
 				tmp.setSenseRange(Double.parseDouble(paras[4]));
 				tmp.setBatteryCapacity(Double.parseDouble(paras[5]));
-				tmp.setEnergyBudget(Double.parseDouble(paras[6]));
-				tmp.setResidualEnergy(Double.parseDouble(paras[7]));
+				tmp.setActualBudget(Double.parseDouble(paras[6]));
+				tmp.setPredictBudget(Double.parseDouble(paras[7]));
+				tmp.setResidualEnergy(Double.parseDouble(paras[8]));
 				this.sensors.add(tmp);
 			}
 			

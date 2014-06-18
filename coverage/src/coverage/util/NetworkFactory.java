@@ -53,8 +53,9 @@ public class NetworkFactory {
 			tSensor.setTransRange(ExperimentSetting.transRange);
 			tSensor.setSenseRange(ExperimentSetting.senseRange);
 			tSensor.setBatteryCapacity(ExperimentSetting.batteryCapacity);
-			tSensor.setEnergyBudget(ExperimentSetting.getEnergyBudget());
-			tSensor.setResidualEnergy(ExperimentSetting.getEnergyBudget());
+			tSensor.setActualBudget(ExperimentSetting.getActualBudget());
+			tSensor.setPredictBudget(ExperimentSetting.getPredictBudget());
+			tSensor.setResidualEnergy(0);
 			
 			result.getSensors().add(tSensor);
 		}

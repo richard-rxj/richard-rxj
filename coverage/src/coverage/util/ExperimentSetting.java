@@ -32,7 +32,11 @@ public class ExperimentSetting {
 		return new Random().nextDouble()*yRange;
 	}
 	
-	public static double getEnergyBudget() {
+	public static double getActualBudget() {
+		//TBD
+	}
+	
+	public static double getPredictBudget() {
 		//TBD
 	}
 	
