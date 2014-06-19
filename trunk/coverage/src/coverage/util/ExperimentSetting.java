@@ -18,6 +18,7 @@ public class ExperimentSetting {
 	public static final double coverageWeight=0.5;           
 	public static final double accuracyThreshold=0.1;
 	public static final double tuningWeight=0.8;
+	public static final double intervalInitial=0.2;
 	
 	public static final int xRange=100;
 	public static final int yRange=100;
@@ -32,11 +33,23 @@ public class ExperimentSetting {
 		return new Random().nextDouble()*yRange;
 	}
 	
-	public static double getActualBudget() {
+	//get total ActualBudget 
+	public static double getActualBudget(int id) {
 		//TBD
 	}
 	
-	public static double getPredictBudget() {
+	//get ActualBudget of an Interval 
+	public static double getActualBudget(int id, int start, int end) {
+		//TBD
+	}
+	
+	//get total PredictBudget
+	public static double getPredictBudget(int id) {
+		//TBD
+	}
+	
+	//get total PredictBudget of an Interval
+	public static double getPredictBudget(int id, int start, int end) {
 		//TBD
 	}
 	

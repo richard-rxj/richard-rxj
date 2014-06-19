@@ -31,8 +31,8 @@ public class Coverage {
 		connMap=new HashMap<TimeSlot, Set<Sensor>>();
 	}
 	
+	// initial empty trees and set function
 	public void initial(Network network, List<TimeSlot> timeslots, Func criterion) {
-	//initial empty trees and set function
 		for(TimeSlot timeslot: timeslots) {
 			Set<Sensor> tSet=new HashSet<Sensor>();
 			tSet.addAll(network.getConnMap().get(network.getBase()));
@@ -41,8 +41,14 @@ public class Coverage {
 		this.func=criterion;
 	}
 	
+	//return sensors in this coverage
+	public Set<Sensor> getSensors() {
+		
+	}
+	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
-		sensor.setActualBudget(sensor.getActualBudget()-ExperimentSetting.energyCost);
+		//only update predictBudget
+		sensor.setPredictBudget(sensor.getPredictBudget()-ExperimentSetting.energyCost);
 		
 		Set<Target> targets=network.getS2TMap().get(sensor);
 		for(Target target:targets) {
@@ -76,6 +82,10 @@ public class Coverage {
 		connMap.get(timeslot).addAll(network.getConnMap().get(sensor));
 	}
 	
+	//for sensor and relevant sensors to make it connected
+	public void addPath(Network network, Sensor sensor, TimeSlot timeslot) {
+		TBD
+	}
 	
 	public double computeCoverageGain(Network network, Sensor sensor, TimeSlot timeslot, boolean connectedReq) {
 		double result=0;
@@ -105,6 +115,7 @@ public class Coverage {
 		return result;
 	}
 	
+	//compute coverage based on predict budget
 	public double computeCoverage() {
 		double result=0;
 		
@@ -117,6 +128,12 @@ public class Coverage {
 		}
 		
 		return result;
+	}
+	
+	//compute coverage based on actual budget
+	//also update residual energy  !!
+	public double computeCoverageWithoutAccuracy() {
+		
 	}
 }
 

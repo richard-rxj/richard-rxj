@@ -24,7 +24,7 @@ public class DistributedSolution extends Solution {
 	 * @see coverage.alg.Solution#schedule()
 	 */
 	@Override
-	public double schedule() {
+	public Coverage schedule() {
 		// TODO Auto-generated method stub
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
@@ -40,7 +40,7 @@ public class DistributedSolution extends Solution {
 			stop=true;
 			for(Sensor sensor:this.network.getSensors()) {
 				
-				if(sensor.getActualBudget()<ExperimentSetting.energyCost) continue;
+				if(sensor.getPredictBudget()<ExperimentSetting.energyCost) continue;
 				
 
 				queue.clear();
@@ -67,7 +67,7 @@ public class DistributedSolution extends Solution {
 		
 		
 		
-		return coverage.computeCoverage();
+		return coverage;
 	}
 
 	/**

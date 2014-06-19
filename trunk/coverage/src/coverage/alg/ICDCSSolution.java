@@ -22,7 +22,7 @@ public class ICDCSSolution extends Solution {
 	 * @see coverage.alg.Solution#schedule()
 	 */
 	@Override
-	public double schedule() {
+	public Coverage schedule() {
 		// TODO Auto-generated method stub
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
@@ -36,7 +36,7 @@ public class ICDCSSolution extends Solution {
 			
 			for(Sensor sensor:this.network.getSensors()) {
 				
-				if(sensor.getActualBudget()<ExperimentSetting.energyCost) continue;
+				if(sensor.getPredictBudget()<ExperimentSetting.energyCost) continue;
 				
 				for (TimeSlot timeslot:this.timeslots) {
 					double gain=coverage.computeCoverageGain(this.network, sensor, timeslot, false);
@@ -52,7 +52,7 @@ public class ICDCSSolution extends Solution {
 			
 			if(null!=queue.peek()) {
 				ChoicePair selected=queue.peek();
-				coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
+				coverage.addPath(this.network, selected.getSensor(), selected.getTimeslot());
 			} else {
 				break;
 			}
@@ -60,7 +60,7 @@ public class ICDCSSolution extends Solution {
 		
 		
 		
-		return coverage.computeCoverage();
+		return coverage;
 	}
 
 	/**

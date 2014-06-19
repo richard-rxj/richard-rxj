@@ -42,5 +42,5 @@ public abstract class Solution {
 		this.timeslots = timeslots;
 	}
 
-	public abstract double schedule();
+	public abstract Coverage schedule();
 }
