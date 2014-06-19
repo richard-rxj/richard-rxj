@@ -8,10 +8,31 @@ package coverage.model;
  *
  */
 public abstract class Node {
-	public final int id;
-	public final double x;
-	public final double y;
+	final int id;
+	final double x;
+	final double y;
 	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @return the x
+	 */
+	public double getX() {
+		return x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public double getY() {
+		return y;
+	}
+
 	public Node (int idValue, double xValue, double yValue) {
 		id=idValue;
 		x=xValue;

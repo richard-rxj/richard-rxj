@@ -24,7 +24,7 @@ public class CentralizedSolution extends Solution {
 	 * @see coverage.alg.Solution#schedule()
 	 */
 	@Override
-	public double schedule() {
+	public Coverage schedule() {
 		// TODO Auto-generated method stub
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
@@ -38,7 +38,7 @@ public class CentralizedSolution extends Solution {
 			
 			for(Sensor sensor:this.network.getSensors()) {
 				
-				if(sensor.getActualBudget()<ExperimentSetting.energyCost) continue;
+				if(sensor.getPredictBudget()<ExperimentSetting.energyCost) continue;
 				
 				for (TimeSlot timeslot:this.timeslots) {
 					double gain=coverage.computeCoverageGain(this.network, sensor, timeslot, true);
@@ -62,7 +62,7 @@ public class CentralizedSolution extends Solution {
 		
 		
 		
-		return coverage.computeCoverage();
+		return coverage;
 	}
 
 	/**

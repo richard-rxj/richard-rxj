@@ -10,6 +10,7 @@ public class Sensor extends Node {
 	private double actualBudget;
 	private double predictBudget;
 	private double residualEnergy;
+	private double accuracy;
 	
 	
 	public double getTransRange() {
@@ -76,6 +77,18 @@ public class Sensor extends Node {
 		this.residualEnergy = residualEnergy;
 	}
 
+	
+	/**
+	 * @return the accuracy
+	 */
+	public double getAccuracy() {
+		return accuracy;
+	}
+
+
+	public void updateAccuracy() {
+		this.accuracy=Math.abs(this.actualBudget-this.predictBudget)/this.actualBudget;
+	}
 	
 	
 	public Sensor(int id, double xValue, double yValue) {
