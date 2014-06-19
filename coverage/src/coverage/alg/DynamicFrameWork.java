@@ -65,7 +65,7 @@ public class DynamicFrameWork {
 				double residualEnergy=sensor.getResidualEnergy();
 				double actualBudget=ExperimentSetting.getActualBudget(sensor.getId(), start, end);
 				double predictBudget=ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
-				sensor.setResidualEnergy(0);
+				sensor.setResidualEnergy(actualBudget);
 				sensor.setActualBudget(actualBudget);
 				sensor.setPredictBudget(predictBudget);
 				sensor.updateAccuracy();
