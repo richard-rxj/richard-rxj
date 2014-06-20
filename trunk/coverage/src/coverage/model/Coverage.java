@@ -6,8 +6,10 @@ package coverage.model;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import coverage.util.ExperimentSetting;
@@ -22,7 +24,8 @@ public class Coverage {
 	private Map<TimeSlot, Set<Sensor>> timeslotBased;
 	private Map<TimeSlot, Set<Sensor>> connMap;
 	private Func func;
-	
+	private Network network;
+	private List<TimeSlot> timeslots;
 	
 
 	public Coverage() {
@@ -39,11 +42,19 @@ public class Coverage {
 			this.connMap.put(timeslot, tSet);
 		}
 		this.func=criterion;
+		this.network=network;
+		this.timeslots=timeslots;
 	}
 	
 	//return sensors in this coverage
 	public Set<Sensor> getSensors() {
+		Set<Sensor> result=new HashSet<Sensor>();
 		
+		for(Set<Sensor> set:this.timeslotBased.values()) {
+			result.addAll(set);
+		}
+		
+		return result;
 	}
 	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
@@ -84,7 +95,47 @@ public class Coverage {
 	
 	//for sensor and relevant sensors to make it connected
 	public void addPath(Network network, Sensor sensor, TimeSlot timeslot) {
-		TBD
+		Set<Sensor> selectedSensors=new HashSet<Sensor>();
+		
+		// get relevent sensors through  BFS approach
+		Set<Sensor> needToReach = this.connMap.get(timeslot);
+		Set<Sensor> visited = new HashSet<Sensor>();
+		visited.add(sensor);
+		Queue<Sensor> queue=new LinkedList<Sensor>();
+		Queue<Set<Sensor>> queueSet=new LinkedList<Set<Sensor>>();
+		queue.add(sensor);
+		Set<Sensor> tSelectedSensors=new HashSet<Sensor>();
+		tSelectedSensors.add(sensor);
+		queueSet.add(tSelectedSensors);
+		while(!queue.isEmpty()) {
+			Sensor tSensor=queue.poll();
+			tSelectedSensors=queueSet.poll();
+			
+			if(needToReach.contains(tSensor)) {
+				selectedSensors=tSelectedSensors;
+				break;
+			}
+			
+			for(Sensor neighSensor: this.network.getConnMap().get(tSensor)) {
+				if(visited.contains(neighSensor)) {
+					continue;
+				}
+				
+				Set<Sensor> neighSet = new HashSet<Sensor> (tSelectedSensors);
+				neighSet.add(neighSensor);
+				visited.add(neighSensor);
+				queue.offer(neighSensor);
+				queueSet.offer(neighSet);							
+			}
+			
+		}
+		
+		
+		
+		for(Sensor tSensor:selectedSensors) {
+			this.add(network, tSensor, timeslot);
+		}
+			
 	}
 	
 	public double computeCoverageGain(Network network, Sensor sensor, TimeSlot timeslot, boolean connectedReq) {
@@ -133,7 +184,61 @@ public class Coverage {
 	//compute coverage based on actual budget
 	//also update residual energy  !!
 	public double computeCoverageWithoutAccuracy() {
+		//actual schedule 
+		Map<Target, Map<TimeSlot, Set<Sensor>>> tTargetBased=new HashMap<Target, Map<TimeSlot, Set<Sensor>>>();
 		
+		for(TimeSlot timeslot: this.timeslotBased.keySet()) {
+			 Set<Sensor> chosedSensors=this.timeslotBased.get(timeslot);
+			 Set<Sensor> connSensors=new HashSet<Sensor>();
+			 connSensors.addAll(this.network.getConnMap().get(this.network.getBase()));
+			 boolean stop=false;
+			 while(!stop) {
+				 stop=true;
+				 Set<Sensor> tConnSensors=new HashSet<Sensor>();
+				 for(Sensor sensor:connSensors) {
+					 if(connSensors.contains(sensor)) {
+						 if(sensor.getActualBudget()>=ExperimentSetting.energyCost) {
+							 stop=false;
+							 sensor.setActualBudget(sensor.getActualBudget()-ExperimentSetting.energyCost);
+		
+							 Set<Target> targets=network.getS2TMap().get(sensor);
+								for(Target target:targets) {
+									if(tTargetBased.containsKey(target)) {
+										Map<TimeSlot, Set<Sensor>> tMap=tTargetBased.get(target);
+										if(tMap.containsKey(timeslot)) {
+											tMap.get(timeslot).add(sensor);
+										} else {
+											Set<Sensor> tSet=new HashSet<Sensor>();
+											tSet.add(sensor);
+											tMap.put(timeslot, tSet);
+										}
+									} else {
+										Map<TimeSlot, Set<Sensor>> tMap=new HashMap<TimeSlot, Set<Sensor>>();
+										Set<Sensor> tSet=new HashSet<Sensor>();
+										tSet.add(sensor);
+										tMap.put(timeslot, tSet);
+										tTargetBased.put(target, tMap);
+									}
+								}
+							 
+						 }
+					 }
+				 }
+			 }
+		 }
+		
+		
+		double result=0;
+		
+		for(Target target: tTargetBased.keySet()) {
+			Map<TimeSlot, Set<Sensor>> tMap=tTargetBased.get(target);
+			result+=this.func.getResult(tMap.keySet().size());
+			for(TimeSlot timeslot:tMap.keySet()) {
+				result+=this.func.getResult(tMap.get(timeslot).size());
+			}
+		}
+		
+		return result;
 	}
 }
 
