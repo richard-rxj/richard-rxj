@@ -4,6 +4,7 @@
 package coverage.util;
 
 import java.io.File;
+import java.io.IOException;
 
 import coverage.model.BaseStation;
 import coverage.model.Network;
@@ -81,19 +82,37 @@ public class NetworkFactory {
 	
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		int cishu=1;  
+		int cishu=ExperimentSetting.cishu;  
 		
-		String outputBase="test"+File.separator+"data"+File.separator+"topology";
+		String outputBase="data"+File.separator+"topology";
 		File tf=new File(outputBase);
 		if(!tf.exists()) {
 			tf.mkdirs();
 		}
 		
+		NetworkFactory generator=new NetworkFactory();
+		for(int nI=0; nI<networkSizes.length; nI++) {
+			int networkSize=networkSizes[nI];
+			for(int tI=0; tI<targetSizes.length; tI++) {
+				int targetSize=targetSizes[tI];
+				for(int cI=0; cI<cishu; cI++) {
+					String outputFile=outputBase+File.separator+"topology_"
+				                     +networkSize+"_"+targetSize+"_"+cI+".txt";
+					generator.setSensorSize(networkSize);
+					generator.setTargetSize(targetSize);
+					Network tNetwork=generator.getNetwork();
+					tNetwork.saveToFile(outputFile);
+					System.out.println("topology_"
+		                     +networkSize+"_"+targetSize+"_"+cI+" generated!");
+				}
+			}
+		}
 		
 	}
 
