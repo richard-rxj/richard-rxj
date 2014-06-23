@@ -3,6 +3,8 @@
  */
 package coverage.util;
 
+import java.io.File;
+
 import coverage.model.BaseStation;
 import coverage.model.Network;
 import coverage.model.Sensor;
@@ -82,7 +84,17 @@ public class NetworkFactory {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		int[] targetSizes={25,50};
+		int[] networkSizes={100, 200, 300, 400, 500};
+		int cishu=1;  
+		
+		String outputBase="test"+File.separator+"data"+File.separator+"topology";
+		File tf=new File(outputBase);
+		if(!tf.exists()) {
+			tf.mkdirs();
+		}
+		
+		
 	}
 
 }

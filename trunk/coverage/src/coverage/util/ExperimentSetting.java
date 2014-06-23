@@ -24,6 +24,7 @@ public class ExperimentSetting {
 	public static final double accuracyThreshold=0.1;
 	public static final double tuningWeight=0.8;
 	public static final double intervalInitial=0.2;
+	public static final int cishu=15;
 	
 	
 	public static final int xRange=100;
@@ -46,7 +47,7 @@ public class ExperimentSetting {
 	//initial actual energy
 	static {
 		try {
-			BufferedReader  in=new BufferedReader(new InputStreamReader(new FileInputStream("data/energyBudget.txt")));
+			BufferedReader  in=new BufferedReader(new InputStreamReader(new FileInputStream("data/energy/energyBudget.txt")));
 			
 			try{
 				int row=0;
