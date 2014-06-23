@@ -17,7 +17,7 @@ public class ExperimentSetting {
      
 	public static final double solarPanel=0.01*0.01;
 	public static final double energyCost=0.00006*1800;       //pre timeslot(30mins)
-	public static final double senseRange=10;
+	public static final double senseRange=15;
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
 	public static final double coverageWeight=0.5;           
@@ -52,9 +52,9 @@ public class ExperimentSetting {
 			try{
 				int row=0;
 				String line=null;
-				
+				//System.out.println(in.readLine());
 				while((line=in.readLine())!=null) {
-					String[] sSet=line.split("//s+");
+					String[] sSet=line.split("\\s+");
 					for(int i=1; i<sSet.length; i++) {
 						String[] values=sSet[i].split(":");
 						predictEnergy[row][i-1]=Double.parseDouble(values[0]);
@@ -68,7 +68,7 @@ public class ExperimentSetting {
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 	
@@ -115,7 +115,8 @@ public class ExperimentSetting {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		for(int i=0; i<48; i++)
+		System.out.println(actualEnergy[0][i]);
 	}
 
 }
