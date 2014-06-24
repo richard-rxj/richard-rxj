@@ -59,6 +59,9 @@ public class Coverage {
 	
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
 		//only update predictBudget
+		
+		ExperimentSetting.gLog.info(String.format("AddSensor!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
+		
 		sensor.setPredictBudget(sensor.getPredictBudget()-ExperimentSetting.energyCost);
 		
 		Set<Target> targets=network.getS2TMap().get(sensor);
@@ -96,6 +99,8 @@ public class Coverage {
 	//for sensor and relevant sensors to make it connected
 	public void addPath(Network network, Sensor sensor, TimeSlot timeslot) {
 		Set<Sensor> selectedSensors=new HashSet<Sensor>();
+		
+		ExperimentSetting.gLog.info(String.format("AddPath!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
 		
 		// get relevent sensors through  BFS approach
 		Set<Sensor> needToReach = this.connMap.get(timeslot);
@@ -157,7 +162,11 @@ public class Coverage {
 			double result1=0;
 			double result2=0;
 			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
-			if(null==tMap.get(timeslot)) {
+			if (null==tMap) {
+				result1=this.func.getResult(1)-this.func.getResult(0);
+				result2=this.func.getResult(1)-this.func.getResult(0);
+			}
+			else if(null==tMap.get(timeslot)) {
 				result1=this.func.getResult(tMap.keySet().size()+1)-this.func.getResult(tMap.keySet().size());
 				result2=this.func.getResult(1)-this.func.getResult(0);
 			} else {

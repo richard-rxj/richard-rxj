@@ -6,11 +6,14 @@ package coverage.util;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import coverage.model.TimeSlot;
 
 /**
@@ -44,6 +47,23 @@ public class ExperimentSetting {
 	public static double getY() {
 		return new Random().nextDouble()*yRange;
 	}
+	
+	
+	public static final Logger gLog=Logger.getLogger(ExperimentSetting.class.getName());  
+    static
+    {
+    	gLog.setLevel(Level.ALL);
+    	//gLog.addHandler(new ConsoleHandler());
+    	try {
+ //   		FileHandler htmlHandler=new FileHandler(SimulationSetting.class.getName()+".html");
+ //   		htmlHandler.setFormatter(new HtmlLogFormatter());
+ //			gLog.addHandler(htmlHandler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
 	
 	public static double[][] actualEnergy=new double[500][48];
 	public static double[][] predictEnergy=new double[500][48];

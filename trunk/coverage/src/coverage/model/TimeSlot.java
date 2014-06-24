@@ -8,8 +8,12 @@ package coverage.model;
  *
  */
 public class TimeSlot {
-	int id;
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+
 	public TimeSlot(int id) {
 		this.id=id;
 	}

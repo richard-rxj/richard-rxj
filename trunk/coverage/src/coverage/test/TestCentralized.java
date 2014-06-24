@@ -60,7 +60,7 @@ public class TestCentralized {
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								coverage=solution.schedule();
-							} else if(algs[algI].equals("Centralized")) {
+							} else if(algs[algI].equals("ICDCS")) {
 								Solution solution=new ICDCSSolution();
 								solution.setFunc(func);
 								solution.setNetwork(network);
@@ -69,6 +69,8 @@ public class TestCentralized {
 							}
 							
 							result[fI][algI]+=coverage.computeCoverage();
+							
+							ExperimentSetting.gLog.info(String.format("Result<%.2f>-Cishu<%d>-%s-%s-finished", result[fI][algI], cI, algs[algI], funcs[fI]));
 						}
 					}
 				}
