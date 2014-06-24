@@ -159,7 +159,7 @@ public class Network {
 		}
 	}
 	
-	public void getFromFile (String fileName) throws IOException {
+	public void restoreFromFile (String fileName) throws IOException {
 		BufferedReader br=new BufferedReader(new FileReader(fileName));
 		try {
 			//construct basestation

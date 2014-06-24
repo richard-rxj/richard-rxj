@@ -7,7 +7,11 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import coverage.model.TimeSlot;
 
 /**
  * @author u4964526
@@ -25,6 +29,7 @@ public class ExperimentSetting {
 	public static final double tuningWeight=0.8;
 	public static final double intervalInitial=0.2;
 	public static final int cishu=15;
+	public static final int timeSlotSize=48;
 	
 	
 	public static final int xRange=100;
@@ -108,6 +113,18 @@ public class ExperimentSetting {
 			sum+=predictEnergy[id-1][i];
 		}
 		return sum;
+	}
+	
+	
+	public static List<TimeSlot> getTimeSlots() {
+		List<TimeSlot> timeslots=new ArrayList<TimeSlot>();
+		
+		
+		for(int id=1; id<=ExperimentSetting.timeSlotSize; id++) {
+			timeslots.add(new TimeSlot(id));
+		}
+		
+		return timeslots;
 	}
 	
 	/**
