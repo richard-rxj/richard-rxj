@@ -151,16 +151,22 @@ public class Coverage {
 			return 0;
 		}
 		
+		
+		
 		for(Target target: network.getS2TMap().get(sensor)) {
+			double result1=0;
+			double result2=0;
 			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
 			if(null==tMap.get(timeslot)) {
-				result+=this.func.getResult(tMap.keySet().size()+1)-this.func.getResult(tMap.keySet().size());
-				result+=this.func.getResult(1)-this.func.getResult(0);
+				result1=this.func.getResult(tMap.keySet().size()+1)-this.func.getResult(tMap.keySet().size());
+				result2=this.func.getResult(1)-this.func.getResult(0);
 			} else {
 				Set<Sensor> tSet=tMap.get(timeslot);
-				result+=this.func.getResult(tSet.size()+1)-this.func.getResult(tSet.size());
+				result2=this.func.getResult(tSet.size()+1)-this.func.getResult(tSet.size());
 			}
 			
+			result+=ExperimentSetting.coverageWeight*result1+(1-ExperimentSetting.coverageWeight)*result2;
+
 		}
 		
 		return result;
@@ -172,10 +178,13 @@ public class Coverage {
 		
 		for(Target target: this.targetBased.keySet()) {
 			Map<TimeSlot, Set<Sensor>> tMap=this.targetBased.get(target);
-			result+=this.func.getResult(tMap.keySet().size());
+			double result1 =this.func.getResult(tMap.keySet().size());
+			double result2 = 0;
 			for(TimeSlot timeslot:tMap.keySet()) {
-				result+=this.func.getResult(tMap.get(timeslot).size());
+				result2+=this.func.getResult(tMap.get(timeslot).size());
 			}
+			result+=ExperimentSetting.coverageWeight*result1+(1-ExperimentSetting.coverageWeight)*result2;
+
 		}
 		
 		return result;
@@ -232,11 +241,15 @@ public class Coverage {
 		
 		for(Target target: tTargetBased.keySet()) {
 			Map<TimeSlot, Set<Sensor>> tMap=tTargetBased.get(target);
-			result+=this.func.getResult(tMap.keySet().size());
+			double result1=this.func.getResult(tMap.keySet().size());
+			double result2=0;
 			for(TimeSlot timeslot:tMap.keySet()) {
-				result+=this.func.getResult(tMap.get(timeslot).size());
+				result2+=this.func.getResult(tMap.get(timeslot).size());
 			}
+			
+			result+=ExperimentSetting.coverageWeight*result1+(1-ExperimentSetting.coverageWeight)*result2;
 		}
+		
 		
 		return result;
 	}
