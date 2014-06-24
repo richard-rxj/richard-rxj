@@ -97,6 +97,7 @@ public class NetworkFactory {
 		}
 		
 		NetworkFactory generator=new NetworkFactory();
+		while(true){
 		for(int nI=0; nI<networkSizes.length; nI++) {
 			int networkSize=networkSizes[nI];
 			for(int tI=0; tI<targetSizes.length; tI++) {
@@ -107,12 +108,12 @@ public class NetworkFactory {
 					generator.setSensorSize(networkSize);
 					generator.setTargetSize(targetSize);
 					Network tNetwork=generator.getNetwork();
-					tNetwork.saveToFile(outputFile);
+					//tNetwork.saveToFile(outputFile);
 					System.out.println("topology_"
 		                     +networkSize+"_"+targetSize+"_"+cI+" generated!");
 				}
 			}
-		}
+		}}
 		
 	}
 
