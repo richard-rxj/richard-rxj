@@ -27,6 +27,7 @@ public class ICDCSSolution extends Solution {
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
 		
+		ExperimentSetting.gLog.info(String.format("*****ICDCS-%s-network<%d>-target<%d> begin", this.func.getClass().getName(), this.network.getSensors().size(), this.network.getTargets().size()));
 
 		
 		PriorityQueue<ChoicePair> queue=new PriorityQueue<ChoicePair>(this.network.getSensors().size()*this.timeslots.size(),Collections.reverseOrder());
