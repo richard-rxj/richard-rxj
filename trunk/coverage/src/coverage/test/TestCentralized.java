@@ -26,8 +26,9 @@ public class TestCentralized {
 		int[] targetSizes={25};//{25,50};
 		int[] networkSizes={100};//{100, 200, 300, 400, 500};
 		String[] algs={"Centralized", "Distributed","ICDCS"};
-		String[] funcs={"SQR","LOG"};
+		String[] funcs={"Linear"};//{"SQR","LOG"};
 		int cishu=1;//ExperimentSetting.cishu;
+
 		
 		String outputBase="data"+File.separator+"result";
 		File tf=new File(outputBase);
@@ -84,7 +85,7 @@ public class TestCentralized {
 				
 				for(int rI=0; rI<result.length; rI++) {
 					for(int rJ=0; rJ<result[rI].length; rJ++) {
-						pw.print(String.format(" %.2f", result[rI][rJ]/networkSize));
+						pw.print(String.format(" %.2f", result[rI][rJ]/cishu));
 					}
 				}
 				pw.println();

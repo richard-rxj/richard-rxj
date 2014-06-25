@@ -12,8 +12,10 @@ public class FunctionFactory {
 	public static Func getFunc(String name) {
 		if("SQR".equals(name)) {
 			return new SQRFunc();
-		} else {
+		} else if ("LOG".equals(name)) {
 			return new LOGFunc();
+		} else {
+			return new LinearFunc();
 		}
 	}
 	

@@ -3,6 +3,7 @@
  */
 package coverage.util;
 
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import coverage.model.TimeSlot;
 
 /**
@@ -22,12 +24,13 @@ import coverage.model.TimeSlot;
  */
 public class ExperimentSetting {
      
+	public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022   only for debug
 	public static final double solarPanel=0.01*0.01;
 	public static final double energyCost=0.0564*1800;       //pre timeslot(30mins)
-	public static final double senseRange=15;
+	public static final double senseRange=40;
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
-	public static final double coverageWeight=0.5;           
+	public static final double coverageWeight=0;        //0.5;           
 	public static final double accuracyThreshold=0.1;
 	public static final double tuningWeight=0.8;
 	public static final double intervalInitial=0.2;
@@ -85,8 +88,11 @@ public class ExperimentSetting {
 					String[] sSet=line.split("\\s+");
 					for(int i=1; i<sSet.length; i++) {
 						String[] values=sSet[i].split(":");
-						predictEnergy[row][i-1]=Double.parseDouble(values[0]);
+						//predictEnergy[row][i-1]=Double.parseDouble(values[0]);
 						actualEnergy[row][i-1]=Double.parseDouble(values[1]);
+						predictEnergy[row][i-1]= ExperimentSetting.harvestRate[0]+Math.random()
+					            *(ExperimentSetting.harvestRate[1]-ExperimentSetting.harvestRate[0])
+					            *3600*24*2;
 					}
 					row++;
 				}
@@ -122,6 +128,7 @@ public class ExperimentSetting {
 	
 	//get total PredictBudget
 	public static double getPredictBudget(int id) {
+		
 		double sum=0;
 		for(int i=0;i<48; i++) {
 			sum+=predictEnergy[id-1][i];

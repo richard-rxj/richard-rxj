@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,8 +21,8 @@ import coverage.util.ExperimentSetting;
 public class Network {
 
 	private BaseStation base;
-	private Set<Sensor> sensors;
-	private Set<Target> targets;
+	private ArrayList<Sensor> sensors;
+	private ArrayList<Target> targets;
 	
 	private Map<Sensor, Set<Target>>  s2TMap;
 	/**
@@ -41,7 +42,7 @@ public class Network {
 	/**
 	 * @return the sensors
 	 */
-	public Set<Sensor> getSensors() {
+	public ArrayList<Sensor> getSensors() {
 		return sensors;
 	}
 	
@@ -49,7 +50,7 @@ public class Network {
 	/**
 	 * @return the targets
 	 */
-	public Set<Target> getTargets() {
+	public ArrayList<Target> getTargets() {
 		return targets;
 	}
 
@@ -79,8 +80,8 @@ public class Network {
 	private Map<Node, Set<Sensor>> connMap;
 	
 	public Network() {
-		sensors=new HashSet<Sensor>();
-		targets=new HashSet<Target>();
+		sensors=new ArrayList<Sensor>();
+		targets=new ArrayList<Target>();
 		s2TMap=new HashMap<Sensor, Set<Target>>();
 		t2SMap=new HashMap<Target, Set<Sensor>>();
 		connMap=new HashMap<Node, Set<Sensor>>();
