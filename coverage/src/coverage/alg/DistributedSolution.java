@@ -38,6 +38,9 @@ public class DistributedSolution extends Solution {
 		while(!stop) {
 			
 			stop=true;
+			
+			Set<ChoicePair> selectedSet=new HashSet<ChoicePair>();
+			
 			for(Sensor sensor:this.network.getSensors()) {
 				
 				if(sensor.getPredictBudget()<ExperimentSetting.energyCost) continue;
@@ -58,8 +61,12 @@ public class DistributedSolution extends Solution {
 				if(null!=queue.peek()) {
 					stop=false;
 					ChoicePair selected=queue.peek();
-					coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
+					selectedSet.add(selected);
 				} 
+			}
+			
+			for(ChoicePair selected: selectedSet) {
+				coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
 			}
 			
 			

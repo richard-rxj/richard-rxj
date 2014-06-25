@@ -19,8 +19,16 @@ class LOGFunc extends Func{
 	}
 }
 
+class LinearFunc extends Func{
+	public double getResult(int input) {
+		return input;
+	}
+}
+
 public abstract class Func {
 	public double getResult(int input) {
 		return 0;
 	}
 }
+
+
