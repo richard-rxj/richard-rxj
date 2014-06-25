@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import coverage.alg.CentralizedSolution;
+import coverage.alg.DistributedSolution;
 import coverage.alg.ICDCSSolution;
 import coverage.alg.Solution;
 import coverage.model.Coverage;
@@ -22,11 +23,11 @@ public class TestCentralized {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		int[] targetSizes={25,50};
-		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "ICDCS"};
+		int[] targetSizes={25};//{25,50};
+		int[] networkSizes={100};//{100, 200, 300, 400, 500};
+		String[] algs={"Centralized", "Distributed","ICDCS"};
 		String[] funcs={"SQR","LOG"};
-		int cishu=1;  //ExperimentSetting.cishu;
+		int cishu=1;//ExperimentSetting.cishu;
 		
 		String outputBase="data"+File.separator+"result";
 		File tf=new File(outputBase);
@@ -66,11 +67,17 @@ public class TestCentralized {
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								coverage=solution.schedule();
+							} else if (algs[algI].equals("Distributed")) {
+								Solution solution=new DistributedSolution();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								coverage=solution.schedule();
 							}
 							
 							result[fI][algI]+=coverage.computeCoverage();
 							
-							ExperimentSetting.gLog.info(String.format("Result<%.2f>-Cishu<%d>-%s-%s-finished", result[fI][algI], cI, algs[algI], funcs[fI]));
+							ExperimentSetting.gLog.severe(String.format("Result<%.2f>-Cishu<%d>-%s-%s-finished", result[fI][algI], cI, algs[algI], funcs[fI]));
 						}
 					}
 				}
