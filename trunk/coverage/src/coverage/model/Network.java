@@ -129,9 +129,9 @@ public class Network {
 			connMap.put(sensor, tSet);
 			for(Sensor tSensor:sensors) {
 				if(tSensor==sensor) continue;
-				double dis=this.base.getDistance(sensor);
+				double dis=sensor.getDistance(tSensor);
 				if(dis<=ExperimentSetting.transRange) {
-					tSet.add(sensor);
+					tSet.add(tSensor);
 				}
 			}
 		}

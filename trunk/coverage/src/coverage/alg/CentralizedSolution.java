@@ -33,6 +33,7 @@ public class CentralizedSolution extends Solution {
 		
 		PriorityQueue<ChoicePair> queue=new PriorityQueue<ChoicePair>(this.network.getSensors().size()*this.timeslots.size(),Collections.reverseOrder());
 
+		
 		while(true) {
 			queue.clear();
 			

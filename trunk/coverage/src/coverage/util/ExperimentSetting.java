@@ -23,7 +23,7 @@ import coverage.model.TimeSlot;
 public class ExperimentSetting {
      
 	public static final double solarPanel=0.01*0.01;
-	public static final double energyCost=0.00006*1800;       //pre timeslot(30mins)
+	public static final double energyCost=0.0564*1800;       //pre timeslot(30mins)
 	public static final double senseRange=15;
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
@@ -55,10 +55,13 @@ public class ExperimentSetting {
     	gLog.setLevel(Level.ALL);
     	//gLog.addHandler(new ConsoleHandler());
     	try {
- //   		FileHandler htmlHandler=new FileHandler(SimulationSetting.class.getName()+".html");
- //   		htmlHandler.setFormatter(new HtmlLogFormatter());
- //			gLog.addHandler(htmlHandler);
+   		FileHandler htmlHandler=new FileHandler(ExperimentSetting.class.getName()+".html");
+   		htmlHandler.setFormatter(new HtmlLogFormatter());			
+   		gLog.addHandler(htmlHandler);
 		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

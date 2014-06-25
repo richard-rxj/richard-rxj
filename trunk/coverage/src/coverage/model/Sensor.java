@@ -11,6 +11,7 @@ public class Sensor extends Node {
 	private double predictBudget;
 	private double residualEnergy;
 	private double accuracy;
+	private boolean connectedToBaseStation;
 	
 	
 	public double getTransRange() {
@@ -91,8 +92,19 @@ public class Sensor extends Node {
 	}
 	
 	
+	public boolean isConnectedToBaseStation() {
+		return connectedToBaseStation;
+	}
+
+
+	public void setConnectedToBaseStation(boolean connectedToBaseStation) {
+		this.connectedToBaseStation = connectedToBaseStation;
+	}
+
+
 	public Sensor(int id, double xValue, double yValue) {
 		super(id, xValue, yValue);
+		this.connectedToBaseStation=true;
 		// TODO Auto-generated constructor stub
 	}
 	

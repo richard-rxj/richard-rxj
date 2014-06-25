@@ -38,6 +38,7 @@ public class ICDCSSolution extends Solution {
 			for(Sensor sensor:this.network.getSensors()) {
 				
 				if(sensor.getPredictBudget()<ExperimentSetting.energyCost) continue;
+				if(!sensor.isConnectedToBaseStation()) continue;
 				
 				for (TimeSlot timeslot:this.timeslots) {
 					double gain=coverage.computeCoverageGain(this.network, sensor, timeslot, false);

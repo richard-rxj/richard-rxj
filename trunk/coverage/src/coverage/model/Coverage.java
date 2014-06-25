@@ -100,7 +100,7 @@ public class Coverage {
 	public void addPath(Network network, Sensor sensor, TimeSlot timeslot) {
 		Set<Sensor> selectedSensors=new HashSet<Sensor>();
 		
-		ExperimentSetting.gLog.info(String.format("AddPath!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
+		//ExperimentSetting.gLog.info(String.format("AddPath!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
 		
 		// get relevent sensors through  BFS approach
 		Set<Sensor> needToReach = this.connMap.get(timeslot);
@@ -135,7 +135,11 @@ public class Coverage {
 			
 		}
 		
-		
+		//topologically not connected with basestation
+		if(selectedSensors.isEmpty()) {
+			sensor.setConnectedToBaseStation(false);
+			//ExperimentSetting.gLog.info(String.format("sensor<%s> is not connected with basestation", sensor));
+		}
 		
 		for(Sensor tSensor:selectedSensors) {
 			this.add(network, tSensor, timeslot);
