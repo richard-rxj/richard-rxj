@@ -141,7 +141,7 @@ public class Network {
 	
 	
 	public void saveToFile(String fileName) throws IOException {
-		PrintWriter bw=new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+		PrintWriter bw=new PrintWriter(new BufferedWriter(new FileWriter(fileName,false)));
 		try  {
 			bw.println(this.base);
 			bw.println(this.sensors.size());

@@ -32,8 +32,14 @@ public class ICDCSSolution extends Solution {
 		
 		PriorityQueue<ChoicePair> queue=new PriorityQueue<ChoicePair>(this.network.getSensors().size()*this.timeslots.size(),Collections.reverseOrder());
 
+		int loop=0;
+		double debugGain=0;
+		
 		while(true) {
 			queue.clear();
+			
+			loop++;
+			ExperimentSetting.gLog.severe(String.format("ICDCS-Iteration<%d>----begin", loop));
 			
 			for(Sensor sensor:this.network.getSensors()) {
 				
@@ -54,6 +60,10 @@ public class ICDCSSolution extends Solution {
 			
 			if(null!=queue.peek()) {
 				ChoicePair selected=queue.peek();
+				ExperimentSetting.gLog.info(String.format("Add Path: sensor<%d,%.2f>---->timeslot<%d>----Gain<%.4f>", 
+						selected.getSensor().getId(), selected.getSensor().getPredictBudget(), 
+						selected.getTimeslot().getId(), selected.getCoverageGain()));
+				debugGain+=selected.getCoverageGain();
 				coverage.addPath(this.network, selected.getSensor(), selected.getTimeslot());
 			} else {
 				break;
@@ -61,7 +71,7 @@ public class ICDCSSolution extends Solution {
 		}
 		
 		
-		
+		ExperimentSetting.gLog.severe(String.format("Debug Gain is %.2f", debugGain));
 		return coverage;
 	}
 

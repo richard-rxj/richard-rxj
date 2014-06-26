@@ -23,11 +23,11 @@ public class TestCentralized {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		int[] targetSizes={25};//{25,50};
-		int[] networkSizes={100};//{100, 200, 300, 400, 500};
+		int[] targetSizes={25,50};
+		int[] networkSizes={100, 200, 300, 400, 500};
 		String[] algs={"Centralized", "Distributed","ICDCS"};
-		String[] funcs={"Linear"};//{"SQR","LOG"};
-		int cishu=1;//ExperimentSetting.cishu;
+		String[] funcs={"Linear","SQR","LOG"};
+		int cishu=ExperimentSetting.cishu;
 
 		
 		String outputBase="data"+File.separator+"result";
@@ -45,7 +45,7 @@ public class TestCentralized {
 				pw.print(networkSize);
 				double[][] result=new double[funcs.length][algs.length];
 				
-				for(int cI=0; cI<cishu; cI++) {
+				for(int cI=1; cI<cishu; cI++) {
 					String topologyFile="data"+File.separator+"topology"+File.separator
 							 +"topology_"+networkSize+"_"+targetSize+"_"+cI+".txt";
 					for(int fI=0; fI<funcs.length; fI++) {
