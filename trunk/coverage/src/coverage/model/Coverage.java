@@ -220,7 +220,7 @@ public class Coverage {
 				 stop=true;
 				 Set<Sensor> tConnSensors=new HashSet<Sensor>();
 				 for(Sensor sensor:connSensors) {
-					 if(connSensors.contains(sensor)) {
+					 if(chosedSensors.contains(sensor)) {
 						 if(sensor.getActualBudget()>=ExperimentSetting.energyCost) {
 							 stop=false;
 							 sensor.setActualBudget(sensor.getActualBudget()-ExperimentSetting.energyCost);
@@ -244,10 +244,14 @@ public class Coverage {
 										tTargetBased.put(target, tMap);
 									}
 								}
-							 
+							
+							tConnSensors.addAll(this.network.getConnMap().get(sensor));							
+							chosedSensors.remove(sensor);
 						 }
 					 }
 				 }
+				 
+				 connSensors=tConnSensors;
 			 }
 		 }
 		

@@ -31,8 +31,8 @@ public class ExperimentSetting {
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
 	public static final double coverageWeight=0.5;        //0.5;           
-	public static final double accuracyThreshold=0.1;
-	public static final double tuningWeight=0.8;
+	public static  double accuracyThreshold=0.1;
+	public static  double tuningWeight=0.8;
 	public static final double intervalInitial=0.2;
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;

@@ -59,6 +59,9 @@ public class DynamicFrameWork {
 
 		
 		while(end<this.timeslots.size()) {
+			
+			ExperimentSetting.gLog.severe(String.format("Current Interval: <%d>----<%d>", start, end));
+			
 			List<TimeSlot> interval=this.timeslots.subList(start, end+1);
 			//getBudget for each sensor based on residual energy
 			for(Sensor sensor: this.network.getSensors()) {
@@ -76,7 +79,11 @@ public class DynamicFrameWork {
 			cSolution.setTimeslots(interval);
 			cSolution.setFunc(this.func);
 			Coverage coverage=cSolution.schedule();
-			result+=coverage.computeCoverageWithoutAccuracy();
+			
+			ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", coverage.computeCoverage()));
+			double tResult=coverage.computeCoverageWithoutAccuracy();
+			ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", coverage.computeCoverage()));
+			result+=tResult;
 			
 			//calculate accuracy and adjust next interval
 			double accuracy=0;
@@ -85,6 +92,7 @@ public class DynamicFrameWork {
 				accuracy+=sensor.getAccuracy();
 			}
 			accuracy=selectedSensors.size()==0 ? 0:accuracy/selectedSensors.size();
+			ExperimentSetting.gLog.info(String.format("Prediction Accuray of current interval---<%.2f>", accuracy));
 			
 			if(accuracy<=ExperimentSetting.accuracyThreshold) {
 				intervalSize=Math.min(initialSize, Math.min((int) (intervalSize/ExperimentSetting.tuningWeight), this.timeslots.size()-end));
