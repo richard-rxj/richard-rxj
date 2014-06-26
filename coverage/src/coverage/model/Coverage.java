@@ -60,7 +60,7 @@ public class Coverage {
 	public void add(Network network, Sensor sensor, TimeSlot timeslot) {
 		//only update predictBudget
 		
-		ExperimentSetting.gLog.info(String.format("AddSensor!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
+		//ExperimentSetting.gLog.info(String.format("AddSensor!!!sensor<%s>---timeslot<%d>", sensor.toString(),timeslot.getId()));
 		
 		sensor.setPredictBudget(sensor.getPredictBudget()-ExperimentSetting.energyCost);
 		
@@ -142,6 +142,8 @@ public class Coverage {
 		}
 		
 		for(Sensor tSensor:selectedSensors) {
+			ExperimentSetting.gLog.info(String.format("sensor<%d, %.2f> --> timeslot<%d,", 
+					tSensor.getId(), tSensor.getPredictBudget(), timeslot.getId()));
 			this.add(network, tSensor, timeslot);
 		}
 			

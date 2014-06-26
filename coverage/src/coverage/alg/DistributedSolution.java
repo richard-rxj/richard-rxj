@@ -34,10 +34,15 @@ public class DistributedSolution extends Solution {
 		PriorityQueue<ChoicePair> queue=new PriorityQueue<ChoicePair>(this.network.getSensors().size()*this.timeslots.size(),Collections.reverseOrder());
 		boolean stop=false;
 		
+		int loop=0;
+		double debugGain=0;
 		
 		while(!stop) {
 			
 			stop=true;
+			
+			loop++;
+			ExperimentSetting.gLog.severe(String.format("Distributed-Iteration<%d>-----begin", loop));
 			
 			Set<ChoicePair> selectedSet=new HashSet<ChoicePair>();
 			
@@ -66,6 +71,10 @@ public class DistributedSolution extends Solution {
 			}
 			
 			for(ChoicePair selected: selectedSet) {
+				ExperimentSetting.gLog.info(String.format("sensor<%d,%.2f>---->timeslot<%d>----Gain<%.4f>", 
+						selected.getSensor().getId(), selected.getSensor().getPredictBudget(), 
+						selected.getTimeslot().getId(), selected.getCoverageGain()));
+				debugGain+=selected.getCoverageGain();
 				coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
 			}
 			
@@ -73,7 +82,7 @@ public class DistributedSolution extends Solution {
 		}
 		
 		
-		
+		ExperimentSetting.gLog.severe(String.format("Debug Gain is %.2f", debugGain));
 		return coverage;
 	}
 
