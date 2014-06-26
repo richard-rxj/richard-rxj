@@ -27,7 +27,7 @@ public class ExperimentSetting {
 	public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022   only for debug
 	public static final double solarPanel=0.01*0.01;
 	public static final double energyCost=0.0564*1800;       //pre timeslot(30mins)
-	public static final double senseRange=20;
+	public static final double senseRange=25;
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
 	public static final double coverageWeight=0.5;        //0.5;           
@@ -83,7 +83,6 @@ public class ExperimentSetting {
 			try{
 				int row=0;
 				String line=null;
-				//System.out.println(in.readLine());
 				while((line=in.readLine())!=null) {
 					String[] sSet=line.split("\\s+");
 					for(int i=1; i<sSet.length; i++) {
