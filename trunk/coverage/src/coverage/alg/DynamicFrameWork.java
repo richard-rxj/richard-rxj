@@ -65,10 +65,13 @@ public class DynamicFrameWork {
 			List<TimeSlot> interval=this.timeslots.subList(start, end+1);
 			//getBudget for each sensor based on residual energy
 			for(Sensor sensor: this.network.getSensors()) {
-				double residualEnergy=sensor.getResidualEnergy();
-				double actualBudget=ExperimentSetting.getActualBudget(sensor.getId(), start, end);
-				double predictBudget=ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
-				sensor.setResidualEnergy(actualBudget);
+				double residualEnergy=sensor.getActualBudget();   //residual energy from last time slot
+				double actualBudget=residualEnergy+ExperimentSetting.getActualBudget(sensor.getId(), start, end);
+				double predictBudget=residualEnergy+ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
+				if(predictBudget>sensor.getPredictBudgetAverage()) {
+					predictBudget=sensor.getPredictBudgetAverage();
+				}
+				//sensor.setResidualEnergy(actualBudget);
 				sensor.setActualBudget(actualBudget);
 				sensor.setPredictBudget(predictBudget);
 				sensor.updateAccuracy();
