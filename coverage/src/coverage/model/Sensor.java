@@ -9,9 +9,11 @@ public class Sensor extends Node {
 	private double batteryCapacity;
 	private double actualBudget;
 	private double predictBudget;
-	private double residualEnergy;
+	private double predictBudgetAverage;
+	//private double residualEnergy;
 	private double accuracy;
 	private boolean connectedToBaseStation;
+	
 	
 	
 	public double getTransRange() {
@@ -69,14 +71,24 @@ public class Sensor extends Node {
 	}
 
 
-	public double getResidualEnergy() {
-		return residualEnergy;
+	public double getPredictBudgetAverage() {
+		return predictBudgetAverage;
 	}
 
 
-	public void setResidualEnergy(double residualEnergy) {
-		this.residualEnergy = residualEnergy;
+	public void setPredictBudgetAverage(double predictBudgetAverage) {
+		this.predictBudgetAverage = predictBudgetAverage;
 	}
+
+
+//	public double getResidualEnergy() {
+//		return residualEnergy;
+//	}
+//
+//
+//	public void setResidualEnergy(double residualEnergy) {
+//		this.residualEnergy = residualEnergy;
+//	}
 
 	
 	/**
@@ -110,7 +122,7 @@ public class Sensor extends Node {
 	
 	@Override
 	public String toString() {
-		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.senseRange, this.batteryCapacity, this.actualBudget, this.predictBudget, this.residualEnergy);
+		return String.format("%d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f", this.id, this.x, this.y, this.transRange, this.senseRange, this.batteryCapacity, this.actualBudget, this.predictBudget, 0);
 	}
 
 }

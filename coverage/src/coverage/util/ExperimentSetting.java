@@ -37,6 +37,9 @@ public class ExperimentSetting {
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;
 	
+	public static final int offsetForEnergyBudget=20;
+	
+	
 	
 	public static final int xRange=100;
 	public static final int yRange=100;
@@ -121,7 +124,8 @@ public class ExperimentSetting {
 	public static double getActualBudget(int id, int start, int end) {
 		double sum=0;
 		for(int i=start;i<=end; i++) {
-			sum+=actualEnergy[id-1][i];
+			int index=(i+ExperimentSetting.offsetForEnergyBudget)%ExperimentSetting.timeSlotSize;
+			sum+=actualEnergy[id-1][index];
 		}
 		return sum;
 	}
@@ -140,7 +144,8 @@ public class ExperimentSetting {
 	public static double getPredictBudget(int id, int start, int end) {
 		double sum=0;
 		for(int i=start;i<=end; i++) {
-			sum+=predictEnergy[id-1][i];
+			int index=(i+ExperimentSetting.offsetForEnergyBudget)%ExperimentSetting.timeSlotSize;
+			sum+=predictEnergy[id-1][index];
 		}
 		return sum;
 	}
@@ -162,8 +167,11 @@ public class ExperimentSetting {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		for(int i=0; i<48; i++)
-		System.out.println(actualEnergy[0][i]);
+		for(int id=0; id<actualEnergy.length; id++) {
+			for(int i=0; i<48; i++) {
+				System.out.print(actualEnergy[id][i]+" ");
+			}
+			System.out.println();
+		}
 	}
-
 }
