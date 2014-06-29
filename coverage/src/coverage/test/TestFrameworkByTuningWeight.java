@@ -34,7 +34,7 @@ public class TestFrameworkByTuningWeight {
 		String[] algs={"Centralized", "Framework-beta-0.8", "Framework-beta-0.5", "Framework-beta-0.2"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
-		ExperimentSetting.accuracyThreshold=0.15;
+		ExperimentSetting.accuracyThreshold=0.25;
 
 		
 		String outputBase="data"+File.separator+"result";

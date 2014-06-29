@@ -28,7 +28,7 @@ public class TestFrameworkByThreshold {
 	public static void test() throws IOException {
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Framework-threshold-0.25", "Framework-threshold-0.15", "Framework-threshold-0.05"};
+		String[] algs={"Centralized", "Framework-threshold-0.35", "Framework-threshold-0.25", "Framework-threshold-0.15"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
 		ExperimentSetting.tuningWeight=0.5;
@@ -70,6 +70,13 @@ public class TestFrameworkByThreshold {
 								ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", tResult));
 								tResult=coverage.computeCoverageWithoutAccuracy();
 								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult));
+							} else if(algs[algI].equals("Framework-threshold-0.35")) {
+								ExperimentSetting.accuracyThreshold=0.35;
+								DynamicFrameWork solution=new DynamicFrameWork();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								tResult=solution.schedule();
 							} else if(algs[algI].equals("Framework-threshold-0.25")) {
 								ExperimentSetting.accuracyThreshold=0.25;
 								DynamicFrameWork solution=new DynamicFrameWork();
@@ -79,13 +86,6 @@ public class TestFrameworkByThreshold {
 								tResult=solution.schedule();
 							} else if(algs[algI].equals("Framework-threshold-0.15")) {
 								ExperimentSetting.accuracyThreshold=0.15;
-								DynamicFrameWork solution=new DynamicFrameWork();
-								solution.setFunc(func);
-								solution.setNetwork(network);
-								solution.setTimeslots(timeslots);
-								tResult=solution.schedule();
-							} else if(algs[algI].equals("Framework-threshold-0.05")) {
-								ExperimentSetting.accuracyThreshold=0.05;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);

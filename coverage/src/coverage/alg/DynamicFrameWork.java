@@ -80,9 +80,9 @@ public class DynamicFrameWork {
 					predictBudget=sensor.getPredictBudgetAverage()*(end-start+1);
 				}
 				
-//				if(predictBudget<ExperimentSetting.energyCost) {
-//					predictBudget=ExperimentSetting.energyCost;
-//				}
+				if(predictBudget<ExperimentSetting.energyCost) {
+					predictBudget=ExperimentSetting.energyCost+10;
+				}
 				
 				//predictBudget*=ExperimentSetting.budgetFactor;
 				
