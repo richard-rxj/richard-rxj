@@ -58,6 +58,12 @@ public class DynamicFrameWork {
 		int end=start+intervalSize-1;
 
 		
+		for(Sensor sensor: this.network.getSensors()) {
+			sensor.setActualBudget(0);
+			sensor.setPredictBudget(0);
+		}
+		
+		
 		while(end<this.timeslots.size()) {
 			
 			ExperimentSetting.gLog.severe(String.format("Current Interval: <%d>----<%d>", start, end));
@@ -66,15 +72,20 @@ public class DynamicFrameWork {
 			//getBudget for each sensor based on residual energy
 			for(Sensor sensor: this.network.getSensors()) {
 				double residualEnergy=sensor.getActualBudget();   //residual energy from last time slot
-				double actualBudget=residualEnergy+ExperimentSetting.getActualBudget(sensor.getId(), start, end);
+				//double actualBudget=residualEnergy+ExperimentSetting.getActualBudget(sensor.getId(), start, end);
 				double predictBudget=residualEnergy+ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
-				if(predictBudget>sensor.getPredictBudgetAverage()) {
-					predictBudget=sensor.getPredictBudgetAverage();
+				if(predictBudget>sensor.getPredictBudgetAverage()*(end-start+1)) {
+					predictBudget=sensor.getPredictBudgetAverage()*(end-start+1);
 				}
 				//sensor.setResidualEnergy(actualBudget);
-				sensor.setActualBudget(actualBudget);
+				//sensor.setActualBudget(actualBudget);
 				sensor.setPredictBudget(predictBudget);
-				sensor.updateAccuracy();
+				
+				
+				//calculate  PredictionAccracy for this interval
+				double tActualBudget=ExperimentSetting.getActualBudget(sensor.getId(), start, end);
+				double tPredictBudget=ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
+				sensor.setAccuracy(Math.abs(tActualBudget-tPredictBudget)/(tActualBudget+0.0001));  //divider may be zero???
 			}
 			
 			Solution cSolution=new CentralizedSolution();

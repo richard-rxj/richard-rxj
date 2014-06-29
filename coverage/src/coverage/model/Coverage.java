@@ -205,13 +205,23 @@ public class Coverage {
 		return result;
 	}
 	
-	//compute coverage based on actual budget
-	//also update residual energy  !!
+	//compute coverage based on actual budget slot by slot
+	//acturalBudget only update at here !!!!!!!!!!!!!!!!!!!!!
 	public double computeCoverageWithoutAccuracy() {
 		//actual schedule 
 		Map<Target, Map<TimeSlot, Set<Sensor>>> tTargetBased=new HashMap<Target, Map<TimeSlot, Set<Sensor>>>();
 		
-		for(TimeSlot timeslot: this.timeslotBased.keySet()) {
+		for(TimeSlot timeslot: this.timeslots) {
+			
+			//update ActualBudget for each sensor
+			for(Sensor sensor: this.network.getSensors()) {
+				double residualEnergy=sensor.getActualBudget();
+				double harvestEnergyThisSlot=ExperimentSetting.getActualBudget(sensor.getId(), timeslot.getId()-1, timeslot.getId()-1);			
+				sensor.setActualBudget(residualEnergy+harvestEnergyThisSlot);
+			}
+			
+			 if(!timeslotBased.containsKey(timeslot)) continue;
+			 
 			 Set<Sensor> chosedSensors=this.timeslotBased.get(timeslot);
 			 Set<Sensor> connSensors=new HashSet<Sensor>();
 			 connSensors.addAll(this.network.getConnMap().get(this.network.getBase()));

@@ -24,7 +24,7 @@ import coverage.model.TimeSlot;
  */
 public class ExperimentSetting {
      
-	public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022   only for debug
+	//public static double[] harvestRate={0.0011,0.0022}; // J/s   0.0011--0.0022   only for debug
 	public static final double solarPanel=0.01*0.01;
 	public static final double energyCost=0.0564*1800;       //pre timeslot(30mins)
 	public static final double senseRange=25;
@@ -32,12 +32,12 @@ public class ExperimentSetting {
 	public static final double batteryCapacity=10000;
 	public static final double coverageWeight=0.5;        //0.5;           
 	public static  double accuracyThreshold=0.1;
-	public static  double tuningWeight=0.8;
+	public static  double tuningWeight=0.5;
 	public static final double intervalInitial=0.2;
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;
 	
-	public static final int offsetForEnergyBudget=20;
+	public static final int offsetForEnergyBudget=14;
 	
 	
 	
@@ -58,12 +58,11 @@ public class ExperimentSetting {
 	public static final Logger gLog=Logger.getLogger(ExperimentSetting.class.getName());  
     static
     {
-    	gLog.setLevel(Level.ALL);
-    	//gLog.addHandler(new ConsoleHandler());
+    	gLog.setLevel(Level.SEVERE);
     	try {
    		FileHandler htmlHandler=new FileHandler(ExperimentSetting.class.getName()+".html");
    		htmlHandler.setFormatter(new HtmlLogFormatter());			
-   		gLog.addHandler(htmlHandler);
+   		//gLog.addHandler(htmlHandler);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

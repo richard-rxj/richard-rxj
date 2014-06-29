@@ -99,8 +99,8 @@ public class Sensor extends Node {
 	}
 
 
-	public void updateAccuracy() {
-		this.accuracy=Math.abs(this.actualBudget-this.predictBudget)/this.actualBudget;
+	public void setAccuracy(double accuracyValue) {
+		this.accuracy=accuracyValue;
 	}
 	
 	
