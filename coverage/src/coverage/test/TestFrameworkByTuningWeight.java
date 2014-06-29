@@ -29,11 +29,11 @@ public class TestFrameworkByTuningWeight {
 
 	
 	public static void test() throws IOException {
-		int[] targetSizes={25,50};
+		int[] targetSizes={25};//{25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
 		String[] algs={"Centralized", "Framework-beta-0.8", "Framework-beta-0.5", "Framework-beta-0.2"};
 		String[] funcs={"SQR","LOG"};
-		int cishu=ExperimentSetting.cishu;
+		int cishu=1;//ExperimentSetting.cishu;
 		ExperimentSetting.accuracyThreshold=0.05;
 
 		
