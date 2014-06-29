@@ -8,7 +8,7 @@ public class TestSuite {
 		// TODO Auto-generated method stub
 		//TestCentralized.test();
 		TestFrameworkByTuningWeight.test();
-		//TestFrameworkByThreshold.test();
+		TestFrameworkByThreshold.test();
 	}
 
 }
