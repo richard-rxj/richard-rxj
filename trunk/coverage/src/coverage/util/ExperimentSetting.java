@@ -38,7 +38,7 @@ public class ExperimentSetting {
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;
 	
-	public static final int offsetForEnergyBudget=14;
+	public static final int offsetForEnergyBudget=10;
 	
 	
 	
