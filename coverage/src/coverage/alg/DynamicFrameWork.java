@@ -72,13 +72,20 @@ public class DynamicFrameWork {
 			//getBudget for each sensor based on residual energy
 			for(Sensor sensor: this.network.getSensors()) {
 				double residualEnergy=sensor.getActualBudget();   //residual energy from last time slot
-				//double actualBudget=residualEnergy+ExperimentSetting.getActualBudget(sensor.getId(), start, end);
 				double predictBudget=residualEnergy+ExperimentSetting.getPredictBudget(sensor.getId(), start, end);
+				
+				
+				//allocate predictBudget of current interval
 				if(predictBudget>sensor.getPredictBudgetAverage()*(end-start+1)) {
 					predictBudget=sensor.getPredictBudgetAverage()*(end-start+1);
 				}
-				//sensor.setResidualEnergy(actualBudget);
-				//sensor.setActualBudget(actualBudget);
+				
+//				if(predictBudget<ExperimentSetting.energyCost) {
+//					predictBudget=ExperimentSetting.energyCost;
+//				}
+				
+				//predictBudget*=ExperimentSetting.budgetFactor;
+				
 				sensor.setPredictBudget(predictBudget);
 				
 				
@@ -94,12 +101,7 @@ public class DynamicFrameWork {
 			cSolution.setFunc(this.func);
 			Coverage coverage=cSolution.schedule();
 			
-			ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", coverage.computeCoverage()));
-			double tResult=coverage.computeCoverageWithoutAccuracy();
-			ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", coverage.computeCoverage()));
-			result+=tResult;
-			
-			//calculate accuracy and adjust next interval
+			//calculate accuracy of current interval
 			double accuracy=0;
 			Set<Sensor> selectedSensors=coverage.getSensors();
 			for(Sensor sensor: selectedSensors) {
@@ -108,6 +110,15 @@ public class DynamicFrameWork {
 			accuracy=selectedSensors.size()==0 ? 0:accuracy/selectedSensors.size();
 			ExperimentSetting.gLog.info(String.format("Prediction Accuray of current interval---<%.2f>", accuracy));
 			
+			
+			//compute gain of current interval
+			ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", coverage.computeCoverage()));
+			double tResult=coverage.computeCoverageWithoutAccuracy();
+			ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", coverage.computeCoverage()));
+			result+=tResult;
+			
+			
+			//adjust next interval
 			if(accuracy<=ExperimentSetting.accuracyThreshold) {
 				intervalSize=Math.min(initialSize, Math.min((int) (intervalSize/ExperimentSetting.tuningWeight), this.timeslots.size()-end));
 			} else {

@@ -31,9 +31,10 @@ public class ExperimentSetting {
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
 	public static final double coverageWeight=0.5;        //0.5;           
-	public static  double accuracyThreshold=0.1;
+	public static  double accuracyThreshold=0.15;
 	public static  double tuningWeight=0.5;
-	public static final double intervalInitial=1;
+	public static  double budgetFactor=0.3;
+	public static final double intervalInitial=0.2;
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;
 	
@@ -58,18 +59,16 @@ public class ExperimentSetting {
 	public static final Logger gLog=Logger.getLogger(ExperimentSetting.class.getName());  
     static
     {
-    	gLog.setLevel(Level.SEVERE);
-    	try {
-   		FileHandler htmlHandler=new FileHandler(ExperimentSetting.class.getName()+".html");
-   		htmlHandler.setFormatter(new HtmlLogFormatter());			
-   		//gLog.addHandler(htmlHandler);
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	gLog.setLevel(Level.ALL);
+//    	try {
+//   		FileHandler htmlHandler=new FileHandler(ExperimentSetting.class.getName()+".html");
+//   		htmlHandler.setFormatter(new HtmlLogFormatter());			
+//   		gLog.addHandler(htmlHandler);
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
     }
 	
 	
