@@ -33,7 +33,7 @@ public class ExperimentSetting {
 	public static final double coverageWeight=0.5;        //0.5;           
 	public static  double accuracyThreshold=0.1;
 	public static  double tuningWeight=0.5;
-	public static final double intervalInitial=0.2;
+	public static final double intervalInitial=1;
 	public static final int cishu=15;
 	public static final int timeSlotSize=48;
 	
