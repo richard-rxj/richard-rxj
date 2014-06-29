@@ -10,6 +10,7 @@ import java.util.List;
 
 import coverage.alg.CentralizedSolution;
 import coverage.alg.DistributedSolution;
+import coverage.alg.DynamicFrameWork;
 import coverage.alg.ICDCSSolution;
 import coverage.alg.Solution;
 import coverage.model.Coverage;
@@ -19,11 +20,10 @@ import coverage.util.ExperimentSetting;
 import coverage.util.Func;
 import coverage.util.FunctionFactory;
 
-public class TestCentralized {
+public class TestFrameworkByTuningWeight {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
 		
 	}
 
@@ -31,9 +31,10 @@ public class TestCentralized {
 	public static void test() throws IOException {
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Distributed","ICDCS"};
+		String[] algs={"Centralized", "Framework-beta-0.8", "Framework-beta-0.5", "Framework-beta-0.2"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
+		ExperimentSetting.accuracyThreshold=0.05;
 
 		
 		String outputBase="data"+File.separator+"result";
@@ -44,14 +45,14 @@ public class TestCentralized {
 		
 		for(int tI=0; tI<targetSizes.length; tI++) {
 			int targetSize=targetSizes[tI];
-			String outputFile=outputBase+File.separator+"CentralizedTest-Target-"+targetSize+".txt";
+			String outputFile=outputBase+File.separator+"FrameworkTestByTuningWeight-Target-"+targetSize+".txt";
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile, false)), true);
 			for(int nI=0; nI<networkSizes.length; nI++) {
 				int networkSize=networkSizes[nI];
 				pw.print(networkSize);
 				double[][] result=new double[funcs.length][algs.length];
 				
-				for(int cI=1; cI<cishu; cI++) {
+				for(int cI=0; cI<cishu; cI++) {
 					String topologyFile="data"+File.separator+"topology"+File.separator
 							 +"topology_"+networkSize+"_"+targetSize+"_"+cI+".txt";
 					for(int fI=0; fI<funcs.length; fI++) {
@@ -61,28 +62,41 @@ public class TestCentralized {
 							Network network=new Network();
 							network.restoreFromFile(topologyFile);
 							
-							Coverage coverage=null;
+							double tResult=0;
 							if(algs[algI].equals("Centralized")) {
 								Solution solution=new CentralizedSolution();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
-								coverage=solution.schedule();
-							} else if(algs[algI].equals("ICDCS")) {
-								Solution solution=new ICDCSSolution();
+								Coverage coverage=solution.schedule();
+								tResult=coverage.computeCoverage();
+								ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", tResult));
+								tResult=coverage.computeCoverageWithoutAccuracy();
+								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult));
+							} else if(algs[algI].equals("Framework-beta-0.8")) {
+								ExperimentSetting.tuningWeight=0.8;
+								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
-								coverage=solution.schedule();
-							} else if (algs[algI].equals("Distributed")) {
-								Solution solution=new DistributedSolution();
+								tResult=solution.schedule();
+							} else if(algs[algI].equals("Framework-beta-0.5")) {
+								ExperimentSetting.tuningWeight=0.5;
+								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
-								coverage=solution.schedule();
-							}
+								tResult=solution.schedule();
+							} else if(algs[algI].equals("Framework-beta-0.2")) {
+								ExperimentSetting.tuningWeight=0.2;
+								DynamicFrameWork solution=new DynamicFrameWork();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								tResult=solution.schedule();
+							} 
 							
-							result[fI][algI]+=coverage.computeCoverage();
+							result[fI][algI]+=tResult;
 							
 							ExperimentSetting.gLog.severe(String.format("Result<%.2f>-Cishu<%d>-%s-%s-finished", result[fI][algI], cI, algs[algI], funcs[fI]));
 						}
@@ -99,7 +113,5 @@ public class TestCentralized {
 			
 			pw.close();
 		}
-		
 	}
-	
 }

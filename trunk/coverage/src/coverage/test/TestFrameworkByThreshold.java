@@ -9,9 +9,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import coverage.alg.CentralizedSolution;
-import coverage.alg.DistributedSolution;
 import coverage.alg.DynamicFrameWork;
-import coverage.alg.ICDCSSolution;
 import coverage.alg.Solution;
 import coverage.model.Coverage;
 import coverage.model.Network;
@@ -20,15 +18,20 @@ import coverage.util.ExperimentSetting;
 import coverage.util.Func;
 import coverage.util.FunctionFactory;
 
-public class TestFramework {
+public class TestFrameworkByThreshold {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int[] targetSizes={25};//{25,50};
-		int[] networkSizes={200};//{100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Framework-beta-0.8", "Framework-beta-0.5", "Framework-beta-0.2"};
+
+	}
+
+	public static void test() throws IOException {
+		int[] targetSizes={25,50};
+		int[] networkSizes={100, 200, 300, 400, 500};
+		String[] algs={"Centralized", "Framework-threshold-0.15", "Framework-threshold-0.10", "Framework-threshold-0.05"};
 		String[] funcs={"SQR","LOG"};
-		int cishu=1;//ExperimentSetting.cishu;
+		int cishu=ExperimentSetting.cishu;
+		ExperimentSetting.tuningWeight=0.5;
 
 		
 		String outputBase="data"+File.separator+"result";
@@ -39,7 +42,7 @@ public class TestFramework {
 		
 		for(int tI=0; tI<targetSizes.length; tI++) {
 			int targetSize=targetSizes[tI];
-			String outputFile=outputBase+File.separator+"FrameworkTest-Target-"+targetSize+".txt";
+			String outputFile=outputBase+File.separator+"FrameworkTestByThreshold-Target-"+targetSize+".txt";
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile, false)), true);
 			for(int nI=0; nI<networkSizes.length; nI++) {
 				int networkSize=networkSizes[nI];
@@ -67,8 +70,22 @@ public class TestFramework {
 								ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", tResult));
 								tResult=coverage.computeCoverageWithoutAccuracy();
 								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult));
-							} else if(algs[algI].equals("Framework-beta-0.8")) {
-								ExperimentSetting.tuningWeight=0.8;
+							} else if(algs[algI].equals("Framework-threshold-0.15")) {
+								ExperimentSetting.accuracyThreshold=0.15;
+								DynamicFrameWork solution=new DynamicFrameWork();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								tResult=solution.schedule();
+							} else if(algs[algI].equals("Framework-threshold-0.10")) {
+								ExperimentSetting.accuracyThreshold=0.10;
+								DynamicFrameWork solution=new DynamicFrameWork();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								tResult=solution.schedule();
+							} else if(algs[algI].equals("Framework-threshold-0.05")) {
+								ExperimentSetting.accuracyThreshold=0.05;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
@@ -94,5 +111,4 @@ public class TestFramework {
 			pw.close();
 		}
 	}
-
 }

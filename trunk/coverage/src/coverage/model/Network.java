@@ -185,7 +185,7 @@ public class Network {
 				tmp.setBatteryCapacity(Double.parseDouble(paras[5]));
 				//tmp.setActualBudget(Double.parseDouble(paras[6]));
 				//tmp.setPredictBudget(Double.parseDouble(paras[7]));
-				tmp.setActualBudget(ExperimentSetting.getActualBudget(tmp.getId()));
+				//tmp.setActualBudget(ExperimentSetting.getActualBudget(tmp.getId()));
 				tmp.setPredictBudget(ExperimentSetting.getPredictBudget(tmp.getId()));
 				tmp.setPredictBudgetAverage(tmp.getPredictBudget()/ExperimentSetting.timeSlotSize);
 				//tmp.setResidualEnergy(Double.parseDouble(paras[8]));
