@@ -43,7 +43,7 @@ public class TestFrameworkByBudgetFactor {
 		
 		for(int tI=0; tI<targetSizes.length; tI++) {
 			int targetSize=targetSizes[tI];
-			String outputFile=outputBase+File.separator+"FrameworkTestByTuningWeight-Target-"+targetSize+".txt";
+			String outputFile=outputBase+File.separator+"FrameworkTestByBudgetFactor-Target-"+targetSize+".txt";
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile, false)), true);
 			for(int nI=0; nI<networkSizes.length; nI++) {
 				int networkSize=networkSizes[nI];

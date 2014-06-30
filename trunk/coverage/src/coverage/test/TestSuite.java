@@ -6,7 +6,7 @@ public class TestSuite {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		//TestCentralized.test();
+		TestCentralized.test();
 		TestFrameworkByTuningWeight.test();
 		TestFrameworkByThreshold.test();
 		TestFrameworkByBudgetFactor.test();
