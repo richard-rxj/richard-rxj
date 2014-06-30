@@ -28,10 +28,11 @@ public class TestFrameworkByThreshold {
 	public static void test() throws IOException {
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Framework-threshold-0.35", "Framework-threshold-0.25", "Framework-threshold-0.15"};
+		String[] algs={"Centralized", "Framework-threshold-0.30", "Framework-threshold-0.20", "Framework-threshold-0.10"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
 		ExperimentSetting.tuningWeight=0.5;
+		ExperimentSetting.budgetFactor=0.5;
 
 		
 		String outputBase="data"+File.separator+"result";
@@ -70,22 +71,22 @@ public class TestFrameworkByThreshold {
 								ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", tResult));
 								tResult=coverage.computeCoverageWithoutAccuracy();
 								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult));
-							} else if(algs[algI].equals("Framework-threshold-0.35")) {
-								ExperimentSetting.accuracyThreshold=0.35;
+							} else if(algs[algI].equals("Framework-threshold-0.30")) {
+								ExperimentSetting.accuracyThreshold=0.30;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								tResult=solution.schedule();
-							} else if(algs[algI].equals("Framework-threshold-0.25")) {
-								ExperimentSetting.accuracyThreshold=0.25;
+							} else if(algs[algI].equals("Framework-threshold-0.20")) {
+								ExperimentSetting.accuracyThreshold=0.20;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								tResult=solution.schedule();
-							} else if(algs[algI].equals("Framework-threshold-0.15")) {
-								ExperimentSetting.accuracyThreshold=0.15;
+							} else if(algs[algI].equals("Framework-threshold-0.10")) {
+								ExperimentSetting.accuracyThreshold=0.10;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);

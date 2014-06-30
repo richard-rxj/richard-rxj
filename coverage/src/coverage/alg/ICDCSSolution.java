@@ -13,7 +13,7 @@ import coverage.model.TimeSlot;
 import coverage.util.ExperimentSetting;
 
 /**
- * @author user
+ * @author u4964526
  *
  */
 public class ICDCSSolution extends Solution {
@@ -23,7 +23,7 @@ public class ICDCSSolution extends Solution {
 	 */
 	@Override
 	public Coverage schedule() {
-		// TODO Auto-generated method stub
+		
 		Coverage coverage=new Coverage();
 		coverage.initial(this.network, this.timeslots, this.func);
 		
@@ -60,11 +60,11 @@ public class ICDCSSolution extends Solution {
 			
 			if(null!=queue.peek()) {
 				ChoicePair selected=queue.peek();
-				ExperimentSetting.gLog.info(String.format("Add Path: sensor<%d,%.2f>---->timeslot<%d>----Gain<%.4f>", 
+				ExperimentSetting.gLog.info(String.format("Add Sensor: sensor<%d,%.2f>---->timeslot<%d>----Gain<%.4f>", 
 						selected.getSensor().getId(), selected.getSensor().getPredictBudget(), 
 						selected.getTimeslot().getId(), selected.getCoverageGain()));
 				debugGain+=selected.getCoverageGain();
-				coverage.addPath(this.network, selected.getSensor(), selected.getTimeslot());
+				coverage.add(this.network, selected.getSensor(), selected.getTimeslot());
 			} else {
 				break;
 			}
@@ -72,15 +72,16 @@ public class ICDCSSolution extends Solution {
 		
 		
 		ExperimentSetting.gLog.severe(String.format("Debug Gain is %.2f", debugGain));
+		
+		//recheck coverage by connecting them
+		ExperimentSetting.gLog.severe(String.format("-----recheck coverage by connecting them------------"));
+		coverage.filterByConnectivity();
+		
+		
+		
+		
 		return coverage;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

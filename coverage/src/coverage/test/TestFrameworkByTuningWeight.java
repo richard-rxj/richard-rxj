@@ -11,7 +11,7 @@ import java.util.List;
 import coverage.alg.CentralizedSolution;
 import coverage.alg.DistributedSolution;
 import coverage.alg.DynamicFrameWork;
-import coverage.alg.ICDCSSolution;
+import coverage.alg.PathBasedCentralizedSolution;
 import coverage.alg.Solution;
 import coverage.model.Coverage;
 import coverage.model.Network;
@@ -34,7 +34,8 @@ public class TestFrameworkByTuningWeight {
 		String[] algs={"Centralized", "Framework-beta-0.8", "Framework-beta-0.5", "Framework-beta-0.2"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
-		ExperimentSetting.accuracyThreshold=0.25;
+		ExperimentSetting.accuracyThreshold=0.20;
+		ExperimentSetting.budgetFactor=0.5;
 
 		
 		String outputBase="data"+File.separator+"result";

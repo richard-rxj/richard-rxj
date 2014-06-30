@@ -76,15 +76,15 @@ public class DynamicFrameWork {
 				
 				
 				//allocate predictBudget of current interval
-				if(predictBudget>sensor.getPredictBudgetAverage()*(end-start+1)) {
-					predictBudget=sensor.getPredictBudgetAverage()*(end-start+1);
-				}
+//				if(predictBudget>sensor.getPredictBudgetAverage()*(end-start+1)) {
+//					predictBudget=sensor.getPredictBudgetAverage()*(end-start+1);
+//				}
+//				
+//				if(predictBudget<ExperimentSetting.energyCost) {
+//					predictBudget=ExperimentSetting.energyCost+10;
+//				}
 				
-				if(predictBudget<ExperimentSetting.energyCost) {
-					predictBudget=ExperimentSetting.energyCost+10;
-				}
-				
-				//predictBudget*=ExperimentSetting.budgetFactor;
+				predictBudget*=ExperimentSetting.budgetFactor;
 				
 				sensor.setPredictBudget(predictBudget);
 				

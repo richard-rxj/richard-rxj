@@ -282,6 +282,62 @@ public class Coverage {
 		
 		return result;
 	}
+	
+	//unconsistense involved !!!!!!!!!!!!!!!!!!
+	//remove unconnected sensors 
+	//only used for ICDSCSolution
+	public void filterByConnectivity() {
+		Map<Target, Map<TimeSlot, Set<Sensor>>> tTargetBased=new HashMap<Target, Map<TimeSlot, Set<Sensor>>>();
+		
+		for(TimeSlot timeslot: this.timeslots) {
+					
+			 if(!timeslotBased.containsKey(timeslot)) continue;
+			 
+			 Set<Sensor> chosedSensors=this.timeslotBased.get(timeslot);
+			 Set<Sensor> connSensors=new HashSet<Sensor>();
+			 connSensors.addAll(this.network.getConnMap().get(this.network.getBase()));
+			 boolean stop=false;
+			 while(!stop) {
+				 stop=true;
+				 Set<Sensor> tConnSensors=new HashSet<Sensor>();
+				 for(Sensor sensor:connSensors) {
+					 if(chosedSensors.contains(sensor)) {
+						 
+							 stop=false;
+							 
+		
+							 Set<Target> targets=network.getS2TMap().get(sensor);
+								for(Target target:targets) {
+									if(tTargetBased.containsKey(target)) {
+										Map<TimeSlot, Set<Sensor>> tMap=tTargetBased.get(target);
+										if(tMap.containsKey(timeslot)) {
+											tMap.get(timeslot).add(sensor);
+										} else {
+											Set<Sensor> tSet=new HashSet<Sensor>();
+											tSet.add(sensor);
+											tMap.put(timeslot, tSet);
+										}
+									} else {
+										Map<TimeSlot, Set<Sensor>> tMap=new HashMap<TimeSlot, Set<Sensor>>();
+										Set<Sensor> tSet=new HashSet<Sensor>();
+										tSet.add(sensor);
+										tMap.put(timeslot, tSet);
+										tTargetBased.put(target, tMap);
+									}
+								}
+							
+							tConnSensors.addAll(this.network.getConnMap().get(sensor));							
+							chosedSensors.remove(sensor);
+						 
+					 }
+				 }
+				 
+				 connSensors=tConnSensors;
+			 }
+		 }
+		
+		this.targetBased=tTargetBased;
+	}
 }
 
 

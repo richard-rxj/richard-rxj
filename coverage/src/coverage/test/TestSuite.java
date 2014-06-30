@@ -9,6 +9,7 @@ public class TestSuite {
 		//TestCentralized.test();
 		TestFrameworkByTuningWeight.test();
 		TestFrameworkByThreshold.test();
+		TestFrameworkByBudgetFactor.test();
 	}
 
 }
