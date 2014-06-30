@@ -72,8 +72,8 @@ public class TestFrameworkByTuningWeight {
 								Coverage coverage=solution.schedule();
 								tResult=coverage.computeCoverage();
 								ExperimentSetting.gLog.info(String.format("CoverageGain---<%.2f>", tResult));
-								tResult=coverage.computeCoverageWithoutAccuracy();
-								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult));
+								double tResult2=coverage.computeCoverageWithoutAccuracy();
+								ExperimentSetting.gLog.info(String.format("CoverageGainWithAccuracy---<%.2f>", tResult2));
 							} else if(algs[algI].equals("Framework-beta-0.8")) {
 								ExperimentSetting.tuningWeight=0.8;
 								DynamicFrameWork solution=new DynamicFrameWork();
