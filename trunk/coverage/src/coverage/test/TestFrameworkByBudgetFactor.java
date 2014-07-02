@@ -28,7 +28,7 @@ public class TestFrameworkByBudgetFactor {
 	public static void test() throws IOException {
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Framework-gama-0.8", "Framework-gama-0.7","Framework-gama-0.6", "Framework-gama-0.5"};
+		String[] algs={"Centralized", "Framework-gama-0.8", "Framework-gama-0.6","Framework-gama-0.4", "Framework-gama-0.2"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
 		ExperimentSetting.accuracyThreshold=0.20;
@@ -43,7 +43,7 @@ public class TestFrameworkByBudgetFactor {
 		
 		for(int tI=0; tI<targetSizes.length; tI++) {
 			int targetSize=targetSizes[tI];
-			String outputFile=outputBase+File.separator+"FrameworkTestByBudgetFactor-Target-"+targetSize+".txt";
+			String outputFile=outputBase+File.separator+"FrameworkTestByBudgetFactor(new)-Target-"+targetSize+".txt";
 			PrintWriter pw=new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile, false)), true);
 			for(int nI=0; nI<networkSizes.length; nI++) {
 				int networkSize=networkSizes[nI];
@@ -78,13 +78,6 @@ public class TestFrameworkByBudgetFactor {
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								tResult=solution.schedule();
-							} else if(algs[algI].equals("Framework-gama-0.7")) {
-								ExperimentSetting.budgetFactor=0.7;
-								DynamicFrameWork solution=new DynamicFrameWork();
-								solution.setFunc(func);
-								solution.setNetwork(network);
-								solution.setTimeslots(timeslots);
-								tResult=solution.schedule();
 							} else if(algs[algI].equals("Framework-gama-0.6")) {
 								ExperimentSetting.budgetFactor=0.6;
 								DynamicFrameWork solution=new DynamicFrameWork();
@@ -92,8 +85,15 @@ public class TestFrameworkByBudgetFactor {
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								tResult=solution.schedule();
-							} else if(algs[algI].equals("Framework-gama-0.5")) {
-								ExperimentSetting.budgetFactor=0.5;
+							} else if(algs[algI].equals("Framework-gama-0.4")) {
+								ExperimentSetting.budgetFactor=0.4;
+								DynamicFrameWork solution=new DynamicFrameWork();
+								solution.setFunc(func);
+								solution.setNetwork(network);
+								solution.setTimeslots(timeslots);
+								tResult=solution.schedule();
+							} else if(algs[algI].equals("Framework-gama-0.2")) {
+								ExperimentSetting.budgetFactor=0.2;
 								DynamicFrameWork solution=new DynamicFrameWork();
 								solution.setFunc(func);
 								solution.setNetwork(network);
