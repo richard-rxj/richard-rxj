@@ -6,10 +6,10 @@ public class TestSuite {
 
 	public static void main(String[] args) throws IOException {
 		
-		//TestCentralized.test();
+		TestCentralized.test();
 		//TestFrameworkByTuningWeight.test();
 		//TestFrameworkByThreshold.test();
-		TestFrameworkByBudgetFactor.test();
+		//TestFrameworkByBudgetFactor.test();
 		//PerformanceTest.test();
 		
 	}
