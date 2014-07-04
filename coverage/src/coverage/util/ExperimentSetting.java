@@ -30,7 +30,7 @@ public class ExperimentSetting {
 	public static final double senseRange=25;
 	public static final double transRange=20;
 	public static final double batteryCapacity=10000;
-	public static final double coverageWeight=0.5;        //0.5;           
+	public static  double coverageWeight=0.5;        //0.5;           
 	public static  double accuracyThreshold=0.15;
 	public static  double tuningWeight=0.5;
 	public static  double budgetFactor=0.5;

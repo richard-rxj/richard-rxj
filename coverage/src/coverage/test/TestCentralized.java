@@ -11,6 +11,7 @@ import java.util.List;
 import coverage.alg.CentralizedSolution;
 import coverage.alg.DistributedSolution;
 import coverage.alg.ICDCSSolution;
+import coverage.alg.MobiHocSolution;
 import coverage.alg.PathBasedCentralizedSolution;
 import coverage.alg.Solution;
 import coverage.model.Coverage;
@@ -32,7 +33,7 @@ public class TestCentralized {
 	public static void test() throws IOException {
 		int[] targetSizes={25,50};
 		int[] networkSizes={100, 200, 300, 400, 500};
-		String[] algs={"Centralized", "Distributed","ICDCS"};
+		String[] algs={"Centralized", "Distributed","MobiHoc"};
 		String[] funcs={"SQR","LOG"};
 		int cishu=ExperimentSetting.cishu;
 
@@ -69,8 +70,8 @@ public class TestCentralized {
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);
 								coverage=solution.schedule();
-							} else if(algs[algI].equals("ICDCS")) {
-								Solution solution=new ICDCSSolution();
+							} else if(algs[algI].equals("MobiHoc")) {
+								Solution solution=new MobiHocSolution();
 								solution.setFunc(func);
 								solution.setNetwork(network);
 								solution.setTimeslots(timeslots);

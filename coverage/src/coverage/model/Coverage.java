@@ -126,6 +126,10 @@ public class Coverage {
 					continue;
 				}
 				
+				if(neighSensor.getPredictBudget()<ExperimentSetting.energyCost) {
+					continue;
+				}
+				
 				Set<Sensor> neighSet = new HashSet<Sensor> (tSelectedSensors);
 				neighSet.add(neighSensor);
 				visited.add(neighSensor);
