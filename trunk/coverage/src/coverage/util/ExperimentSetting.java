@@ -35,7 +35,7 @@ public class ExperimentSetting {
 	public static  double tuningWeight=0.5;
 	public static  double budgetFactor=0.5;
 	public static final double intervalInitial=0.2;
-	public static final int cishu=15;
+	public static final int cishu=15;  //30
 	public static final int timeSlotSize=48;
 	
 	public static final int offsetForEnergyBudget=10;
