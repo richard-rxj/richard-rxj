@@ -117,33 +117,30 @@ public class SDCApplet extends JApplet {
 	private ExtractionManager em = new ExtractionManager();
 	
 	
-	private PassWordDialog  passDialog=null;     //access control by Richard Ren
 
+
+	
+		
+	
 	/** SDC Constructor */
 	public void guiInit() {
 
 		
 		System.out.println("first step!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		
-		System.out.println(getCodeBase());
+		System.out.println(this.getCodeBase()+"/n/t"+this.getDocumentBase());
+		
+		
 		
 		/*********************************************/
 		/** this would be done through a control file later */
 		archiveRootDir = "/Tdata/lacie1/data/";
-		instrCoordFile = "/Tdata/public/SDC/instr.coord";
+		
+		//this file is included in SDC.jar---------------Richard Ren
+		instrCoordFile = "instr.coord";  //"/Tdata/public/SDC/instr.coord";
 		/*********************************************/
 		
-		
-//		/** access control  
-//		 *  by Richard Ren
-//		 */
-//		passDialog = new PassWordDialog(this, true);
-//		//passDialog.setMinimumSize(new Dimension(500,500));
-//		passDialog.setSize(350, 200);
-//        passDialog.setResizable(false);
-//		//passDialog.pack();
-//        passDialog.setVisible(true);
-		
+	
 		/** set size */
 		setSize(900, 1000);
 		
@@ -177,6 +174,7 @@ public class SDCApplet extends JApplet {
 		 * Note: this is only effective after the split pane has been displayed.
 		 */
 		theMainPanel.setDividerLocation(620);
+		
 	}
 
 	/** To restart the GUI after "Discard" */
@@ -934,8 +932,11 @@ public class SDCApplet extends JApplet {
 		ArrayList<String> nnames = new ArrayList<String>();
 
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					instrCoordFile));
+			//change to getResourse reading file from server    by Richard Ren
+			BufferedReader in = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(
+					instrCoordFile)));
+			
+			
 			NetworkInfo n;
 
 			/** Reading instrument coordinate information */
@@ -2356,9 +2357,57 @@ public class SDCApplet extends JApplet {
 		// because Swing components are not all thread-safe.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				guiInit();
+//				if (!login()) {
+//				     try {
+//				         getAppletContext().showDocument
+//				           (new URL(getCodeBase()+"accessdenied.html"),"_top");
+//				         }
+//				     catch (Exception e) {e.printStackTrace(); }
+//				} 
+					guiInit();				
 			}
 		});
 	}
+	
+	
+//	/*
+//	 *  begin: test for login------------------------Richard Ren
+//	 */
+//	
+//	private String username;
+//	private String password;
+//	
+//	public boolean login() {
+//		  boolean userValid = false;
+//		  MyLogin login = new MyLogin (new Frame(""));
+//		  requestFocus();
+//		  if (login.id) {
+//		    username = login.username.getText();
+//		    password = login.password.getText();
+//		    userValid = validateUser(username , password);
+//		    System.out.println
+//		      ("The password for " + username 
+//		        +  " is " + (userValid?"valid":"invalid"));
+//		    }
+//		  else
+//		    System.out.println
+//		      ("Cancel was pressed.");
+//		    
+//		  login.dispose();
+//		  return userValid;
+//		  
+//		  }
+//		     
+//		 private boolean validateUser(String usr, String pwd) {
+//		   // here you will code some logic to validate the username
+//		   // password... for testing purpose :
+//		   //                 username = test  password = test
+//		   return (usr.equals("test") && pwd.equals("test"));
+//		   }
+//	
+//	
+//	   /*
+//		* End: test for login
+//		*/
 
 }
