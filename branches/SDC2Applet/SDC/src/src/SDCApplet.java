@@ -9,6 +9,8 @@
 /************************************************/
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -134,7 +136,7 @@ public class SDCApplet extends JApplet {
 		
 		/*********************************************/
 		/** this would be done through a control file later */
-		archiveRootDir = "/Tdata/lacie1/data/";
+		archiveRootDir = "file:///Tdata/lacie1/data/";
 		
 		//this file is included in SDC.jar---------------Richard Ren
 		instrCoordFile = "instr.coord";  //"/Tdata/public/SDC/instr.coord";
@@ -1416,11 +1418,13 @@ public class SDCApplet extends JApplet {
 		 * @param stationIndex
 		 * @param componentIndex
 		 * @return A list of matching file names.
+		 * @throws URISyntaxException 
+		 * @throws MalformedURLException 
 		 * 
 		 * 
 		 */
 		public ArrayList<String> getLoadFileList(int stationIndex,
-				String componentIndex) {
+				String componentIndex)  {
             
 			
 			
@@ -1482,8 +1486,20 @@ public class SDCApplet extends JApplet {
 				else
 					curhourString = "" + curHour;
 
-				File archiveDir = new File(archiveRootDir + networkDir
-						+ curyearString + "/" + curjDayString + "/");
+				{
+					System.out.println("Debug: 1486 ----"+this.getClass().getName());
+				}
+				
+				
+				//change to URL  reading----------------------Richard Ren
+				File archiveDir=null; 
+				try {
+					archiveDir = new File(new URL(archiveRootDir + networkDir
+						+ curyearString + "/" + curjDayString + "/").toURI());
+				}catch (Exception e) {
+					System.out.println(e);
+				}
+				
 				
 				// File archiveDir = new File("/");				
 				String hourFileHead = curStation[stationIndex]
@@ -1579,11 +1595,11 @@ public class SDCApplet extends JApplet {
 
 			// Read data from the input file list
 			for (String msFileName : loadFileList) {
-				System.out.println(msFileName);
+				System.out.println("msFileName:---------"+msFileName);   //Debug Richard Ren
 
 				// Append the current file to the previous one
 				// if they are continuous or return -1 if there is a time gap.
-				rd = msReader.readFile(msFileName, curCalendar, displaying
+				rd = msReader.readServerFile(msFileName, curCalendar, displaying
 						|| zdfBox.isSelected());
 
 				// if there is a time gap between the current file
@@ -1598,10 +1614,10 @@ public class SDCApplet extends JApplet {
 							endCalendar, statInfo, curEventInfo);
 
 					// re-set the current time to read data from
-					curCalendar = msReader.readFileStartTime(msFileName);
+					curCalendar = msReader.readServerFileStartTime(msFileName);
 
 					// re-read the file
-					rd = msReader.readFile(msFileName, curCalendar, displaying
+					rd = msReader.readServerFile(msFileName, curCalendar, displaying
 							|| zdfBox.isSelected());
 				}
 				// update the current time after processing a continuous file.
@@ -2243,18 +2259,22 @@ public class SDCApplet extends JApplet {
 	private class ReadmeFrame extends JFrame {
 		//String ReadmeFilePath = "/Tdata/public/SDC/SDC_MANUAL.txt";    //v1.6
 		
-		String ReadmeFilePath = "/home/seis2/richardr/workspace/projects/SDC/SDC_MANUAL.txt";    //v1.7
+		//for SDCApplet Richard Ren
+		String ReadmeFilePath = "SDC_MANUAL.txt";   
+				//"/home/seis2/richardr/workspace/projects/SDC/SDC_MANUAL.txt";    //v1.7
 		
 		
 
-		/** Constructor */
+		/** Constructor 
+		 * @throws  */
 		public ReadmeFrame() {
 
 			getContentPane().setLayout(new BorderLayout());
 			getContentPane().setBackground(background);
 
 			// read the README file
-			String readmeContent = getContents(new File(ReadmeFilePath));
+			String readmeContent =getContents(this.getClass().getResourceAsStream(ReadmeFilePath));
+			
 
 			// Create an instance of JTextArea
 			JTextArea textArea = new JTextArea(readmeContent);
@@ -2285,7 +2305,7 @@ public class SDCApplet extends JApplet {
 		}
 
 		/** Load contents of the manual */
-		public String getContents(File aFile) {
+		public String getContents(InputStream aFile) {
 			// ...checks on aFile are elided
 			StringBuffer contents = new StringBuffer();
 
@@ -2294,7 +2314,7 @@ public class SDCApplet extends JApplet {
 			try {
 				// use buffering, reading one line at a time
 				// FileReader always assumes default encoding is OK!
-				input = new BufferedReader(new FileReader(aFile));
+				input = new BufferedReader(new InputStreamReader(aFile));
 				String line = null; // not declared within while loop
 				/*
 				 * readLine is a bit quirky : it returns the content of a line
