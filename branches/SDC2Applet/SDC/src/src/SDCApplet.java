@@ -136,7 +136,9 @@ public class SDCApplet extends JApplet {
 		
 		/*********************************************/
 		/** this would be done through a control file later */
-		archiveRootDir = "file:///Tdata/lacie1/data/";
+		archiveRootDir = this.getCodeBase()+"Tlink/lacie1/data/";  //"file:///Tdata/lacie1/data/";
+		System.out.println(archiveRootDir);
+		
 		
 		//this file is included in SDC.jar---------------Richard Ren
 		instrCoordFile = "instr.coord";  //"/Tdata/public/SDC/instr.coord";
@@ -203,8 +205,10 @@ public class SDCApplet extends JApplet {
 	}
 
 	public void stationChanged() {
+		networkInfoPanel.setVisible(false);
 		networkInfoPanel.removeAll();
 		networkInfoPanel.add(getNetworkInfoPanel());
+		networkInfoPanel.setVisible(true);
 		this.setVisible(true);
 	}
 
@@ -1487,7 +1491,7 @@ public class SDCApplet extends JApplet {
 					curhourString = "" + curHour;
 
 				{
-					System.out.println("Debug: 1486 ----"+this.getClass().getName());
+					System.out.println("Debug: 1494 ----"+this.getClass().getName());
 				}
 				
 				
