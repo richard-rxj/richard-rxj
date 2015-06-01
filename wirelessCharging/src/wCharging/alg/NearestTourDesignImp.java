@@ -90,25 +90,23 @@ public class NearestTourDesignImp extends BaseTourDesign {
 	}
 
 	
-	private ChargingRequest subDesign(double currentX, double currentY, double currentTime, ChargingRequestQueue currentQueue)
-	{
-		ChargingRequest result=null;
-		
-		
-		
-		for(ChargingRequest c:currentQueue)
-		{
+	private ChargingRequest subDesign(double currentX, double currentY,
+			double currentTime, ChargingRequestQueue currentQueue) {
+		ChargingRequest result = null;
+
+		for (ChargingRequest c : currentQueue) {
 			c.ComputeAllTimes(currentX, currentY, this.startX, this.startY);
 		}
-		
-		ChargingRequestQueue  feasibleQueue=currentQueue.getSubQueueByTimeLimit(this.timeLimit-currentTime);
-		
+
+		ChargingRequestQueue feasibleQueue = currentQueue
+				.getSubQueueByTimeLimit(this.timeLimit - currentTime);
+
 		Collections.sort(feasibleQueue, new TimeCostComparator(true));
-		
-		result=feasibleQueue.peek();
-		
+
+		result = feasibleQueue.peek();
+
 		return result;
-		
+
 	}
 	/**
 	 * @param args
