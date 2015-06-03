@@ -55,7 +55,7 @@ public class ChargingTour {
 		}
 	}
 
-	public double getTotalTime(int startX, int startY) {
+	public double getTotalTime(double startX, double startY) {
 		if (this.sequence.size() == 0)
 			return 0;
 		ChargingRequest first = this.sequence.get(0);
